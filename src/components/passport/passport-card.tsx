@@ -1,11 +1,9 @@
 "use client";
 
-import { 
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer, Tooltip
-} from "recharts";
 import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, GitBranch, Award, CheckCircle2, UserCircle2 } from "lucide-react";
+import { ShieldCheck, GitBranch, Award, UserCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EvidenceGrid } from "./evidence-grid";
 
 interface PassportCardProps {
   data: any; // The JSON snapshot data
@@ -89,42 +87,11 @@ export function PassportCard({ data, className }: PassportCardProps) {
           </div>
         </div>
 
-        {/* Right Column: Skill Chart */}
+        {/* Right Column: Evidence Grid */}
         <div className="md:col-span-3 p-8 flex flex-col bg-background/40">
-          <h3 className="text-sm font-semibold mb-6 text-foreground/80 uppercase tracking-wider">Skill Proficiency Matrix</h3>
-          
-          <div className="flex-1 min-h-[300px] w-full -ml-4">
-            {skills && skills.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skills}>
-                  <PolarGrid stroke="hsl(var(--border))" />
-                  <PolarAngleAxis dataKey="name" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: "hsl(var(--card))", borderColor: "hsl(var(--border))", borderRadius: 8 }}
-                    itemStyle={{ color: "hsl(var(--foreground))" }}
-                    formatter={(value: any) => [`${value}/100`, "Confidence"]}
-                  />
-                  <Radar name="Skills" dataKey="confidence" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.3} />
-                </RadarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                Not enough data to map skills.
-              </div>
-            )}
-          </div>
-
-          {/* Skill Tags */}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {(skills || []).map((skill: any, i: number) => (
-              <Badge key={i} variant="outline" className="bg-background/50 border-border/60 py-1.5 px-3">
-                <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-primary" />
-                {skill.name}
-              </Badge>
-            ))}
-          </div>
+          <h3 className="text-sm font-semibold mb-6 text-foreground/80 uppercase tracking-wider">Verified Skills</h3>
+          <EvidenceGrid skills={skills || []} />
         </div>
-
       </div>
     </div>
   );

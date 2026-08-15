@@ -55,7 +55,7 @@ export default async function PassportPage() {
           <GeneratePassportButton />
         </EmptyState>
       ) : (
-        <div className="mt-8 animate-fade-in-up">
+        <div id="passport-card-capture" className="mt-8 animate-fade-in-up p-4 -m-4">
           <PassportCard data={passport.snapshot_data} />
         </div>
       )}

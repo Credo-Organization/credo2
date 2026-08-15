@@ -53,17 +53,16 @@ export async function generatePassport() {
 
   // --- EVIDENCE ENGINE (Heuristic Simulation) ---
   
-  // Aggregate languages to compute proficiency
-  const skillMap = new Map<string, { bytes: number, certCount: number }>();
+  // Aggregate languages to compute proficiency based on repository count
+  const skillMap = new Map<string, { repoCount: number, certs: string[] }>();
   
   languages.forEach((l) => {
-    const current = skillMap.get(l.language) || { bytes: 0, certCount: 0 };
-    skillMap.set(l.language, { ...current, bytes: current.bytes + l.bytes });
+    const current = skillMap.get(l.language) || { repoCount: 0, certs: [] };
+    skillMap.set(l.language, { ...current, repoCount: current.repoCount + 1 });
   });
 
   // Add Certificates to skills
   (certificates || []).forEach((c) => {
-    // Basic heuristic: check if title contains a known tech keyword
     const titleLower = c.title.toLowerCase();
     const commonTech = ["aws", "azure", "gcp", "react", "node", "python", "javascript", "typescript", "java", "sql", "docker", "kubernetes"];
     
@@ -71,38 +70,53 @@ export async function generatePassport() {
     for (const tech of commonTech) {
       if (titleLower.includes(tech)) {
         const formattedTech = tech.charAt(0).toUpperCase() + tech.slice(1);
-        const current = skillMap.get(formattedTech) || { bytes: 0, certCount: 0 };
-        skillMap.set(formattedTech, { ...current, certCount: current.certCount + 1 });
+        const current = skillMap.get(formattedTech) || { repoCount: 0, certs: [] };
+        skillMap.set(formattedTech, { ...current, certs: [...current.certs, c.title] });
         matched = true;
       }
     }
     
     if (!matched) {
-      // If no match, add the issuer or generic "Certification" as a skill
       const name = c.issuer || "General Certification";
-      const current = skillMap.get(name) || { bytes: 0, certCount: 0 };
-      skillMap.set(name, { ...current, certCount: current.certCount + 1 });
+      const current = skillMap.get(name) || { repoCount: 0, certs: [] };
+      skillMap.set(name, { ...current, certs: [...current.certs, c.title] });
     }
   });
 
-  // Calculate scores (Max 100)
-  // Max bytes assumed to be ~500,000 for a score of 80. Cert adds 20.
-  const MAX_BYTES = 500000;
+  // Calculate scores and generate evidence cards
   const topSkills = Array.from(skillMap.entries())
     .map(([name, data]) => {
-      let score = Math.min((data.bytes / MAX_BYTES) * 80, 80);
-      score += Math.min(data.certCount * 20, 20);
+      // Determine Confidence Level
+      let confidence = "Low";
+      if ((data.repoCount > 0 && data.certs.length > 0) || data.repoCount > 5) {
+        confidence = "High";
+      } else if (data.repoCount >= 2 || data.certs.length > 0) {
+        confidence = "Medium";
+      }
+
+      // Generate Evidence Strings
+      const evidence = [];
+      if (data.repoCount > 0) {
+        evidence.push(`${data.repoCount} repositor${data.repoCount === 1 ? 'y' : 'ies'} using ${name}`);
+      }
+      data.certs.forEach(cert => {
+        evidence.push(`Verified certificate: ${cert}`);
+      });
+
+      // Internal score just for sorting purposes before slicing
+      const sortScore = data.repoCount + (data.certs.length * 3);
+
       return {
         name,
-        confidence: Math.round(score),
-        sources: [
-          ...(data.bytes > 0 ? ["GitHub"] : []),
-          ...(data.certCount > 0 ? ["Certificate"] : [])
-        ]
+        confidence,
+        evidence,
+        _sortScore: sortScore
       };
     })
-    .sort((a, b) => b.confidence - a.confidence)
-    .slice(0, 6); // Top 6 skills
+    .sort((a, b) => b._sortScore - a._sortScore)
+    .slice(0, 6)
+    .map(({ _sortScore, ...rest }) => rest); // Remove internal sort score before saving
+
 
   const snapshotData = {
     profile: {
