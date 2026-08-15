@@ -118,12 +118,12 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
+      <DialogTrigger render={
         <Button className="gap-2 bg-foreground text-background hover:bg-foreground/90">
           <Share2 className="w-4 h-4" />
           Share & Export
         </Button>
-      </DialogTrigger>
+      } />
       <DialogContent className="sm:max-w-md bg-card border-border/50">
         <DialogHeader>
           <DialogTitle>Share Your Skill Passport</DialogTitle>

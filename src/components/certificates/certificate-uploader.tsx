@@ -66,14 +66,16 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        {children || (
+      <DialogTrigger render={
+        children ? (
+          <div>{children}</div>
+        ) : (
           <Button className="gap-2">
             <UploadCloud className="w-4 h-4" />
             Upload Certificate
           </Button>
-        )}
-      </DialogTrigger>
+        )
+      } />
       <DialogContent className="sm:max-w-[425px] bg-card border-border/50">
         <DialogHeader>
           <DialogTitle>Upload Certificate</DialogTitle>

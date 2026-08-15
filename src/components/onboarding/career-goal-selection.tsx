@@ -29,11 +29,11 @@ export function CareerGoalSelection() {
       setIsSubmitting(true);
       await completeOnboarding(personalInfo, careerGoalSlug);
       toast.success("Profile setup complete!");
-      // Note: Revalidation inside the server action will handle redirecting the user
-      // from /onboarding to /dashboard since onboarding_completed is now true.
-    } catch (error) {
-      toast.error("Failed to save profile. Please try again.");
-      console.error(error);
+      // Redirect to dashboard after onboarding completed
+      window.location.href = "/dashboard";
+    } catch (error: any) {
+      toast.error(error.message || "Failed to save profile. Please try again.");
+      console.error("Onboarding error:", error);
       setIsSubmitting(false);
     }
   };

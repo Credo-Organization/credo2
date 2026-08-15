@@ -61,6 +61,44 @@ export async function uploadCertificate(formData: FormData) {
     throw new Error("Failed to save certificate record.");
   }
 
+  // 4. Trigger Automatic Skill Claim Extraction from title / metadata
+  try {
+    const { extractClaimsFromText } = await import("@/lib/extractor/document-extractor");
+    const extractionResult = await extractClaimsFromText(
+      `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${file.name}`,
+      "certificate"
+    );
+
+    if (extractionResult.claims.length > 0) {
+      const { data: evidence } = await supabase
+        .from("evidence")
+        .insert({
+          user_id: user.id,
+          source_type: "certificate",
+          raw_ref: publicUrlData.publicUrl,
+          status: "processed",
+          ingested_at: new Date().toISOString(),
+        })
+        .select("id")
+        .single();
+
+      if (evidence) {
+        const claimRecords = extractionResult.claims.map((claim) => ({
+          evidence_id: evidence.id,
+          extracted_text: claim.context_snippet,
+          skill_id: claim.skill_id,
+          unmapped_label: claim.unmapped_label,
+          match_confidence: claim.skill_id ? 1.0 : 0.5,
+          llm_model: process.env.AI_MODEL || "gemini-2.5-flash",
+        }));
+
+        await supabase.from("evidence_claims").insert(claimRecords);
+      }
+    }
+  } catch (extErr) {
+    console.error("Non-blocking claim extraction error:", extErr);
+  }
+
   revalidatePath("/certificates");
   return { success: true };
 }

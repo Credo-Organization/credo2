@@ -28,12 +28,12 @@ export function Header({ user }: HeaderProps) {
     <header className="flex h-14 items-center gap-4 border-b border-border/50 bg-background/80 backdrop-blur-sm px-4 lg:px-8">
       {/* Mobile menu trigger */}
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger render={
           <Button variant="ghost" size="icon" className="shrink-0 md:hidden">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
-        </SheetTrigger>
+        } />
         <SheetContent side="left" className="w-[280px] p-0">
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           <MobileNav user={user} />

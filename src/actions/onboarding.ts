@@ -23,10 +23,11 @@ export async function completeOnboarding(
     throw new Error("Invalid career goal");
   }
 
-  // 1. Update the user's profile
+  // 1. Upsert the user's profile
   const { error: profileError } = await supabase
     .from("profiles")
-    .update({
+    .upsert({
+      id: user.id,
       full_name: personalInfo.full_name,
       country: personalInfo.country,
       college_name: personalInfo.college_name,
@@ -34,12 +35,11 @@ export async function completeOnboarding(
       graduation_year: personalInfo.graduation_year,
       onboarding_completed: true,
       updated_at: new Date().toISOString(),
-    })
-    .eq("id", user.id);
+    }, { onConflict: "id" });
 
   if (profileError) {
     console.error("Error updating profile:", profileError);
-    throw new Error("Failed to update profile");
+    throw new Error(`Failed to update profile: ${profileError.message}`);
   }
 
   // 2. Fetch or create the career goal in the database (since we are using config as source of truth for now, we must ensure it exists in DB to satisfy foreign keys if profile_career_goals is used)

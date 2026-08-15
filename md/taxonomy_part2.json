@@ -1,0 +1,4497 @@
+{
+  "part": 2,
+  "categories": [
+    "OPS",
+    "MOB",
+    "QA",
+    "DES",
+    "PRD",
+    "SEC",
+    "TOOL"
+  ],
+  "skills": [
+    {
+      "id": "SK-OPS-001",
+      "canonical_name": "Docker",
+      "category": "OPS",
+      "subcategory": "containerisation",
+      "aliases": [
+        "docker",
+        "Docker Engine",
+        "containerization",
+        "containerisation",
+        "dockerized",
+        "docker containers"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "dockerode"
+        ],
+        "pip": [
+          "docker"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "docker-api"
+        ]
+      },
+      "file_hints": [
+        "Dockerfile",
+        "Dockerfile.dev",
+        ".dockerignore",
+        "docker/",
+        "docker-entrypoint.sh"
+      ],
+      "esco_hint": "use containerisation software",
+      "lightcast_hint": "Docker (Software)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-002",
+      "canonical_name": "Kubernetes",
+      "category": "OPS",
+      "subcategory": "container orchestration",
+      "aliases": [
+        "k8s",
+        "kubernetes",
+        "kube",
+        "kubectl",
+        "k8s orchestration"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@kubernetes/client-node"
+        ],
+        "pip": [
+          "kubernetes"
+        ],
+        "maven": [
+          "io.fabric8:kubernetes-client"
+        ],
+        "go": [
+          "k8s.io/client-go"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "k8s/",
+        "kubernetes/",
+        "deployment.yaml",
+        "service.yaml",
+        "ingress.yaml",
+        "kustomization.yaml",
+        "manifests/"
+      ],
+      "esco_hint": "manage container orchestration platforms",
+      "lightcast_hint": "Kubernetes",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-003",
+      "canonical_name": "Amazon Web Services",
+      "category": "OPS",
+      "subcategory": "cloud platform",
+      "aliases": [
+        "AWS",
+        "amazon web services",
+        "AWS Cloud",
+        "amazon aws",
+        "aws cloud practitioner"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "aws-sdk",
+          "@aws-sdk/client-s3",
+          "aws-cdk-lib"
+        ],
+        "pip": [
+          "boto3",
+          "botocore",
+          "awscli"
+        ],
+        "maven": [
+          "software.amazon.awssdk:s3",
+          "com.amazonaws:aws-java-sdk-s3"
+        ],
+        "go": [
+          "github.com/aws/aws-sdk-go-v2"
+        ],
+        "composer": [
+          "aws/aws-sdk-php"
+        ],
+        "gem": [
+          "aws-sdk-s3"
+        ]
+      },
+      "file_hints": [
+        ".aws/config",
+        ".aws/credentials",
+        "cdk.json",
+        "samconfig.toml",
+        "buildspec.yml",
+        "aws/"
+      ],
+      "esco_hint": "deploy and manage cloud computing resources",
+      "lightcast_hint": "Amazon Web Services (AWS)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-004",
+      "canonical_name": "Microsoft Azure",
+      "category": "OPS",
+      "subcategory": "cloud platform",
+      "aliases": [
+        "Azure",
+        "MS Azure",
+        "Azure Cloud",
+        "Windows Azure",
+        "az cloud"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@azure/identity",
+          "@azure/storage-blob"
+        ],
+        "pip": [
+          "azure-identity",
+          "azure-storage-blob",
+          "azure-mgmt-resource"
+        ],
+        "maven": [
+          "com.azure:azure-storage-blob",
+          "com.azure:azure-identity"
+        ],
+        "go": [
+          "github.com/Azure/azure-sdk-for-go"
+        ],
+        "composer": [
+          "microsoft/azure-storage-blob"
+        ],
+        "gem": []
+      },
+      "file_hints": [
+        "azuredeploy.json",
+        "main.bicep",
+        "*.bicep",
+        ".azure/",
+        "host.json",
+        "local.settings.json"
+      ],
+      "esco_hint": "deploy and manage cloud computing resources",
+      "lightcast_hint": "Microsoft Azure",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-005",
+      "canonical_name": "Google Cloud Platform",
+      "category": "OPS",
+      "subcategory": "cloud platform",
+      "aliases": [
+        "GCP",
+        "Google Cloud",
+        "google cloud platform",
+        "gcloud"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@google-cloud/storage",
+          "@google-cloud/firestore"
+        ],
+        "pip": [
+          "google-cloud-storage",
+          "google-cloud-bigquery",
+          "google-auth"
+        ],
+        "maven": [
+          "com.google.cloud:google-cloud-storage"
+        ],
+        "go": [
+          "cloud.google.com/go/storage"
+        ],
+        "composer": [
+          "google/cloud-storage"
+        ],
+        "gem": [
+          "google-cloud-storage"
+        ]
+      },
+      "file_hints": [
+        "app.yaml",
+        "cloudbuild.yaml",
+        ".gcloudignore",
+        "gcp/",
+        "service-account.json"
+      ],
+      "esco_hint": "deploy and manage cloud computing resources",
+      "lightcast_hint": "Google Cloud Platform (GCP)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-006",
+      "canonical_name": "Terraform",
+      "category": "OPS",
+      "subcategory": "infrastructure as code",
+      "aliases": [
+        "terraform",
+        "HashiCorp Terraform",
+        "IaC",
+        "infrastructure as code",
+        "tf",
+        "terraform scripts"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "python-terraform"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "main.tf",
+        "variables.tf",
+        "outputs.tf",
+        "terraform.tfvars",
+        ".terraform.lock.hcl",
+        "terraform/",
+        "modules/*.tf"
+      ],
+      "esco_hint": "automate infrastructure provisioning",
+      "lightcast_hint": "Terraform",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-007",
+      "canonical_name": "Ansible",
+      "category": "OPS",
+      "subcategory": "configuration management",
+      "aliases": [
+        "ansible",
+        "Ansible playbooks",
+        "ansible-playbook",
+        "configuration management"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "ansible",
+          "ansible-core",
+          "ansible-lint"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "playbook.yml",
+        "site.yml",
+        "ansible.cfg",
+        "inventory.ini",
+        "hosts",
+        "roles/",
+        "group_vars/"
+      ],
+      "esco_hint": "automate system configuration",
+      "lightcast_hint": "Ansible",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-008",
+      "canonical_name": "Jenkins",
+      "category": "OPS",
+      "subcategory": "CI/CD",
+      "aliases": [
+        "jenkins",
+        "Jenkins CI",
+        "jenkins pipeline",
+        "Jenkins CI/CD",
+        "hudson"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "python-jenkins",
+          "jenkinsapi"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "Jenkinsfile",
+        "jenkins/",
+        "Jenkinsfile.groovy",
+        "jenkins.yaml"
+      ],
+      "esco_hint": "apply continuous integration practices",
+      "lightcast_hint": "Jenkins (Software)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-009",
+      "canonical_name": "GitHub Actions",
+      "category": "OPS",
+      "subcategory": "CI/CD",
+      "aliases": [
+        "github actions",
+        "gh actions",
+        "GitHub Workflows",
+        "github ci",
+        "actions workflow"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@actions/core",
+          "@actions/github"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".github/workflows/",
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy.yml",
+        "action.yml",
+        "action.yaml"
+      ],
+      "esco_hint": "apply continuous integration practices",
+      "lightcast_hint": "Continuous Integration And Continuous Delivery (CI/CD)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-010",
+      "canonical_name": "GitLab CI/CD",
+      "category": "OPS",
+      "subcategory": "CI/CD",
+      "aliases": [
+        "gitlab ci",
+        "gitlab-ci",
+        "GitLab Pipelines",
+        "gitlab cicd",
+        "gitlab runner"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".gitlab-ci.yml",
+        ".gitlab/ci/",
+        ".gitlab-ci/"
+      ],
+      "esco_hint": "apply continuous integration practices",
+      "lightcast_hint": "GitLab CI/CD",
+      "demand_tier": "medium",
+      "notes": "Distinct from the GitLab hosting/SCM entry in TOOL; this one is pipeline authoring."
+    },
+    {
+      "id": "SK-OPS-011",
+      "canonical_name": "CircleCI",
+      "category": "OPS",
+      "subcategory": "CI/CD",
+      "aliases": [
+        "circleci",
+        "circle ci",
+        "CircleCI pipelines",
+        "circle-ci"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".circleci/config.yml",
+        ".circleci/"
+      ],
+      "esco_hint": "apply continuous integration practices",
+      "lightcast_hint": "CircleCI",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-012",
+      "canonical_name": "Linux System Administration",
+      "category": "OPS",
+      "subcategory": "operating systems",
+      "aliases": [
+        "linux",
+        "Linux admin",
+        "linux sysadmin",
+        "Ubuntu",
+        "unix administration",
+        "linux server management"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "systemd/*.service",
+        "*.service",
+        ".bashrc",
+        "crontab",
+        "etc/",
+        "scripts/setup.sh",
+        "install.sh"
+      ],
+      "esco_hint": "administer operating systems",
+      "lightcast_hint": "Linux",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-013",
+      "canonical_name": "Bash Scripting",
+      "category": "OPS",
+      "subcategory": "automation scripting",
+      "aliases": [
+        "bash",
+        "shell scripting",
+        "shell script",
+        "sh scripting",
+        "bash scripts",
+        "shell automation"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.sh",
+        "scripts/",
+        "deploy.sh",
+        "entrypoint.sh",
+        "run.sh",
+        "Makefile"
+      ],
+      "esco_hint": "use scripting programming",
+      "lightcast_hint": "Shell Script",
+      "demand_tier": "high",
+      "notes": "Possible overlap with a Bash/Shell entry in LANG (Part 1); this entry is framed as ops automation scripting, not general-purpose language proficiency."
+    },
+    {
+      "id": "SK-OPS-014",
+      "canonical_name": "Nginx",
+      "category": "OPS",
+      "subcategory": "web server / reverse proxy",
+      "aliases": [
+        "nginx",
+        "nginx reverse proxy",
+        "nginx server",
+        "engine-x"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "nginx.conf",
+        "default.conf",
+        "nginx/",
+        "sites-available/",
+        "conf.d/*.conf"
+      ],
+      "esco_hint": "configure web server software",
+      "lightcast_hint": "Nginx",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-015",
+      "canonical_name": "Apache HTTP Server",
+      "category": "OPS",
+      "subcategory": "web server",
+      "aliases": [
+        "apache",
+        "apache2",
+        "httpd",
+        "Apache Web Server",
+        "apache http"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "httpd.conf",
+        "apache2.conf",
+        ".htaccess",
+        "sites-enabled/",
+        "vhost.conf"
+      ],
+      "esco_hint": "configure web server software",
+      "lightcast_hint": "Apache HTTP Server",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-016",
+      "canonical_name": "Serverless Framework",
+      "category": "OPS",
+      "subcategory": "serverless deployment",
+      "aliases": [
+        "serverless",
+        "serverless framework",
+        "sls",
+        "serverless deployment"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "serverless",
+          "serverless-offline",
+          "serverless-http"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "serverless.yml",
+        "serverless.ts",
+        ".serverless/"
+      ],
+      "esco_hint": "deploy serverless applications",
+      "lightcast_hint": "Serverless Computing",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-017",
+      "canonical_name": "AWS Lambda",
+      "category": "OPS",
+      "subcategory": "serverless compute",
+      "aliases": [
+        "lambda",
+        "aws lambda",
+        "lambda functions",
+        "AWS serverless functions"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@types/aws-lambda",
+          "aws-lambda"
+        ],
+        "pip": [
+          "aws-lambda-powertools",
+          "chalice"
+        ],
+        "maven": [
+          "com.amazonaws:aws-lambda-java-core"
+        ],
+        "go": [
+          "github.com/aws/aws-lambda-go"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "lambda/",
+        "handler.py",
+        "handler.js",
+        "template.yaml",
+        "samconfig.toml"
+      ],
+      "esco_hint": "deploy serverless applications",
+      "lightcast_hint": "AWS Lambda",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-018",
+      "canonical_name": "Amazon EC2",
+      "category": "OPS",
+      "subcategory": "cloud compute",
+      "aliases": [
+        "EC2",
+        "aws ec2",
+        "elastic compute cloud",
+        "ec2 instances"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@aws-sdk/client-ec2"
+        ],
+        "pip": [
+          "boto3"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "user-data.sh",
+        "cloud-init.yml",
+        "ec2/",
+        "*.pem"
+      ],
+      "esco_hint": "manage cloud compute instances",
+      "lightcast_hint": "Amazon Elastic Compute Cloud (EC2)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-019",
+      "canonical_name": "Amazon S3",
+      "category": "OPS",
+      "subcategory": "cloud storage",
+      "aliases": [
+        "S3",
+        "aws s3",
+        "simple storage service",
+        "s3 buckets"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@aws-sdk/client-s3",
+          "multer-s3"
+        ],
+        "pip": [
+          "boto3",
+          "django-storages"
+        ],
+        "maven": [
+          "software.amazon.awssdk:s3"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "aws-sdk-s3"
+        ]
+      },
+      "file_hints": [
+        "s3/",
+        "bucket-policy.json",
+        "cors.json",
+        "upload.js"
+      ],
+      "esco_hint": "manage cloud data and storage",
+      "lightcast_hint": "Amazon S3",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-020",
+      "canonical_name": "Heroku",
+      "category": "OPS",
+      "subcategory": "PaaS deployment",
+      "aliases": [
+        "heroku",
+        "heroku deployment",
+        "heroku dynos",
+        "heroku cli"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "Procfile",
+        "app.json",
+        "runtime.txt",
+        ".buildpacks",
+        "heroku.yml"
+      ],
+      "esco_hint": "deploy applications to platform as a service",
+      "lightcast_hint": "Heroku",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-021",
+      "canonical_name": "Vercel",
+      "category": "OPS",
+      "subcategory": "PaaS deployment",
+      "aliases": [
+        "vercel",
+        "vercel deployment",
+        "deployed on vercel",
+        "zeit now",
+        "now.sh"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "vercel",
+          "@vercel/node",
+          "@vercel/analytics"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "vercel.json",
+        ".vercel/",
+        ".vercelignore",
+        "api/"
+      ],
+      "esco_hint": "deploy applications to platform as a service",
+      "lightcast_hint": "Vercel",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-022",
+      "canonical_name": "Netlify",
+      "category": "OPS",
+      "subcategory": "PaaS deployment",
+      "aliases": [
+        "netlify",
+        "netlify deploy",
+        "netlify functions",
+        "hosted on netlify"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "netlify-cli",
+          "@netlify/functions"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "netlify.toml",
+        "_redirects",
+        "netlify/functions/",
+        ".netlify/"
+      ],
+      "esco_hint": "deploy applications to platform as a service",
+      "lightcast_hint": "Netlify",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-023",
+      "canonical_name": "Render",
+      "category": "OPS",
+      "subcategory": "PaaS deployment",
+      "aliases": [
+        "render",
+        "render.com",
+        "render deployment",
+        "deployed on render"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "render.yaml",
+        ".render/",
+        "render-build.sh"
+      ],
+      "esco_hint": "deploy applications to platform as a service",
+      "lightcast_hint": "Cloud Application Deployment",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-024",
+      "canonical_name": "Firebase",
+      "category": "OPS",
+      "subcategory": "backend as a service",
+      "aliases": [
+        "firebase",
+        "google firebase",
+        "firebase console",
+        "fire base",
+        "firebase hosting"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "firebase",
+          "firebase-admin",
+          "firebase-tools"
+        ],
+        "pip": [
+          "firebase-admin"
+        ],
+        "maven": [
+          "com.google.firebase:firebase-admin"
+        ],
+        "go": [
+          "firebase.google.com/go"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "firebase.json",
+        ".firebaserc",
+        "firestore.rules",
+        "storage.rules",
+        "functions/index.js",
+        "google-services.json"
+      ],
+      "esco_hint": "use backend as a service platforms",
+      "lightcast_hint": "Firebase",
+      "demand_tier": "high",
+      "notes": "Overlaps with BE/DB (Firestore, Firebase Auth) handled in Part 1; kept here as the hosting/BaaS platform entry. De-duplicate at merge time."
+    },
+    {
+      "id": "SK-OPS-025",
+      "canonical_name": "Prometheus",
+      "category": "OPS",
+      "subcategory": "monitoring",
+      "aliases": [
+        "prometheus",
+        "prometheus monitoring",
+        "promql",
+        "prom metrics"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "prom-client"
+        ],
+        "pip": [
+          "prometheus-client"
+        ],
+        "maven": [
+          "io.micrometer:micrometer-registry-prometheus"
+        ],
+        "go": [
+          "github.com/prometheus/client_golang"
+        ],
+        "composer": [],
+        "gem": [
+          "prometheus-client"
+        ]
+      },
+      "file_hints": [
+        "prometheus.yml",
+        "alert.rules.yml",
+        "prometheus/",
+        "alertmanager.yml"
+      ],
+      "esco_hint": "monitor system performance",
+      "lightcast_hint": "Prometheus (Software)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-026",
+      "canonical_name": "Grafana",
+      "category": "OPS",
+      "subcategory": "observability dashboards",
+      "aliases": [
+        "grafana",
+        "grafana dashboards",
+        "grafana labs",
+        "grafana monitoring"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@grafana/data"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "grafana/",
+        "dashboards/*.json",
+        "grafana.ini",
+        "provisioning/dashboards/"
+      ],
+      "esco_hint": "visualise system monitoring data",
+      "lightcast_hint": "Grafana",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-027",
+      "canonical_name": "ELK Stack",
+      "category": "OPS",
+      "subcategory": "log management",
+      "aliases": [
+        "ELK",
+        "elk stack",
+        "Elasticsearch Logstash Kibana",
+        "Elastic Stack",
+        "kibana",
+        "logstash"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@elastic/elasticsearch",
+          "winston-elasticsearch"
+        ],
+        "pip": [
+          "elasticsearch",
+          "python-logstash"
+        ],
+        "maven": [
+          "co.elastic.clients:elasticsearch-java"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "logstash.conf",
+        "filebeat.yml",
+        "elasticsearch.yml",
+        "kibana.yml",
+        "elk/"
+      ],
+      "esco_hint": "manage log data and analysis",
+      "lightcast_hint": "Elastic Stack (ELK)",
+      "demand_tier": "medium",
+      "notes": "If Part 1 lists Elasticsearch as a datastore, keep that separate: this entry covers the logging/observability stack usage."
+    },
+    {
+      "id": "SK-OPS-028",
+      "canonical_name": "Datadog",
+      "category": "OPS",
+      "subcategory": "monitoring",
+      "aliases": [
+        "datadog",
+        "data dog",
+        "datadog apm",
+        "dd-trace"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "dd-trace",
+          "datadog-metrics"
+        ],
+        "pip": [
+          "ddtrace",
+          "datadog"
+        ],
+        "maven": [
+          "com.datadoghq:dd-trace-api"
+        ],
+        "go": [
+          "gopkg.in/DataDog/dd-trace-go.v1"
+        ],
+        "composer": [],
+        "gem": [
+          "ddtrace"
+        ]
+      },
+      "file_hints": [
+        "datadog.yaml",
+        "datadog-agent/",
+        "dd-trace config",
+        "datadog/"
+      ],
+      "esco_hint": "monitor application performance",
+      "lightcast_hint": "Datadog",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-029",
+      "canonical_name": "Helm",
+      "category": "OPS",
+      "subcategory": "container orchestration",
+      "aliases": [
+        "helm",
+        "helm charts",
+        "helm3",
+        "kubernetes helm"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [
+          "helm.sh/helm/v3"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "Chart.yaml",
+        "values.yaml",
+        "charts/",
+        "templates/deployment.yaml",
+        "helm/"
+      ],
+      "esco_hint": "package and deploy containerised applications",
+      "lightcast_hint": "Helm (Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-030",
+      "canonical_name": "Argo CD",
+      "category": "OPS",
+      "subcategory": "GitOps",
+      "aliases": [
+        "argocd",
+        "argo cd",
+        "argo",
+        "gitops",
+        "argo cd gitops"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "argocd/",
+        "argocd-app.yaml",
+        "applicationset.yaml",
+        "gitops/"
+      ],
+      "esco_hint": "apply continuous deployment practices",
+      "lightcast_hint": "Argo CD",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-031",
+      "canonical_name": "Cloudflare",
+      "category": "OPS",
+      "subcategory": "CDN and edge",
+      "aliases": [
+        "cloudflare",
+        "cloudflare workers",
+        "cloudflare pages",
+        "cf workers",
+        "CDN"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "wrangler",
+          "@cloudflare/workers-types"
+        ],
+        "pip": [
+          "cloudflare"
+        ],
+        "maven": [],
+        "go": [
+          "github.com/cloudflare/cloudflare-go"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "wrangler.toml",
+        "workers/",
+        "_headers",
+        "functions/",
+        ".cloudflare/"
+      ],
+      "esco_hint": "configure content delivery networks",
+      "lightcast_hint": "Cloudflare",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-032",
+      "canonical_name": "Docker Compose",
+      "category": "OPS",
+      "subcategory": "containerisation",
+      "aliases": [
+        "docker compose",
+        "docker-compose",
+        "compose file",
+        "multi-container setup"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "docker-compose.yml",
+        "docker-compose.yaml",
+        "compose.yaml",
+        "docker-compose.override.yml",
+        "docker-compose.prod.yml"
+      ],
+      "esco_hint": "orchestrate multi-container applications",
+      "lightcast_hint": "Docker Compose",
+      "demand_tier": "high",
+      "notes": "Subset of Docker but kept separate: multi-service orchestration is a distinguishable evidence signal. Bare token 'compose' deliberately excluded from aliases (collides with Jetpack Compose)."
+    },
+    {
+      "id": "SK-OPS-033",
+      "canonical_name": "AWS CloudFormation",
+      "category": "OPS",
+      "subcategory": "infrastructure as code",
+      "aliases": [
+        "cloudformation",
+        "aws cloudformation",
+        "cfn",
+        "AWS SAM",
+        "cfn templates"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "aws-cdk-lib"
+        ],
+        "pip": [
+          "cfn-lint",
+          "troposphere"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "template.yaml",
+        "template.yml",
+        "cloudformation/",
+        "*.cfn.yaml",
+        "stack.yml",
+        "samconfig.toml"
+      ],
+      "esco_hint": "automate infrastructure provisioning",
+      "lightcast_hint": "AWS CloudFormation",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-034",
+      "canonical_name": "DigitalOcean",
+      "category": "OPS",
+      "subcategory": "cloud platform",
+      "aliases": [
+        "digitalocean",
+        "digital ocean",
+        "DO droplets",
+        "do cloud",
+        "droplet"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "do-wrapper"
+        ],
+        "pip": [
+          "python-digitalocean"
+        ],
+        "maven": [],
+        "go": [
+          "github.com/digitalocean/godo"
+        ],
+        "composer": [],
+        "gem": [
+          "droplet_kit"
+        ]
+      },
+      "file_hints": [
+        ".do/app.yaml",
+        "doctl/",
+        "droplet-setup.sh"
+      ],
+      "esco_hint": "deploy and manage cloud computing resources",
+      "lightcast_hint": "DigitalOcean",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-OPS-035",
+      "canonical_name": "Azure DevOps",
+      "category": "OPS",
+      "subcategory": "CI/CD",
+      "aliases": [
+        "azure devops",
+        "ADO",
+        "azure pipelines",
+        "VSTS",
+        "TFS",
+        "azure boards"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "azure-devops-node-api"
+        ],
+        "pip": [
+          "azure-devops"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "azure-pipelines.yml",
+        ".azuredevops/",
+        "azure-pipelines/",
+        "pipelines/*.yml"
+      ],
+      "esco_hint": "apply continuous integration practices",
+      "lightcast_hint": "Azure DevOps",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-001",
+      "canonical_name": "Android Development",
+      "category": "MOB",
+      "subcategory": "native mobile",
+      "aliases": [
+        "android",
+        "android app development",
+        "native android",
+        "android sdk",
+        "android dev"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "androidx.appcompat:appcompat",
+          "com.google.android.material:material",
+          "androidx.core:core-ktx"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "AndroidManifest.xml",
+        "app/build.gradle",
+        "app/src/main/java/",
+        "res/layout/",
+        "gradle.properties",
+        "proguard-rules.pro"
+      ],
+      "esco_hint": "develop mobile applications for Android",
+      "lightcast_hint": "Android (Operating System)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-002",
+      "canonical_name": "iOS Development",
+      "category": "MOB",
+      "subcategory": "native mobile",
+      "aliases": [
+        "ios",
+        "iOS app development",
+        "native ios",
+        "iphone development",
+        "apple ios dev"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "cocoapods",
+          "fastlane"
+        ]
+      },
+      "file_hints": [
+        "Podfile",
+        "Podfile.lock",
+        "Info.plist",
+        "*.xcodeproj/",
+        "*.xcworkspace/",
+        "AppDelegate.swift",
+        "Package.swift"
+      ],
+      "esco_hint": "develop mobile applications for iOS",
+      "lightcast_hint": "iOS Development",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-003",
+      "canonical_name": "Flutter",
+      "category": "MOB",
+      "subcategory": "cross-platform framework",
+      "aliases": [
+        "flutter",
+        "flutter dev",
+        "flutter sdk",
+        "flutter app",
+        "google flutter"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "pubspec.yaml",
+        "pubspec.lock",
+        "lib/main.dart",
+        "android/app/build.gradle",
+        "ios/Runner/",
+        "test/widget_test.dart"
+      ],
+      "esco_hint": "develop cross-platform mobile applications",
+      "lightcast_hint": "Flutter (Software)",
+      "demand_tier": "high",
+      "notes": "Dependencies live in pubspec.yaml (pub.dev registry), which is not one of the six manifest types in this schema; detection relies on file_hints."
+    },
+    {
+      "id": "SK-MOB-004",
+      "canonical_name": "React Native",
+      "category": "MOB",
+      "subcategory": "cross-platform framework",
+      "aliases": [
+        "react native",
+        "react-native",
+        "RN",
+        "reactnative",
+        "react native app"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "react-native",
+          "@react-navigation/native",
+          "react-native-screens",
+          "react-native-gesture-handler"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "metro.config.js",
+        "App.js",
+        "App.tsx",
+        "android/app/build.gradle",
+        "ios/Podfile",
+        "react-native.config.js"
+      ],
+      "esco_hint": "develop cross-platform mobile applications",
+      "lightcast_hint": "React Native",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-005",
+      "canonical_name": "Jetpack Compose",
+      "category": "MOB",
+      "subcategory": "mobile UI toolkit",
+      "aliases": [
+        "jetpack compose",
+        "android compose",
+        "compose ui",
+        "androidx compose",
+        "android jetpack compose"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "androidx.compose.ui:ui",
+          "androidx.compose.material3:material3",
+          "androidx.activity:activity-compose"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "ui/theme/Theme.kt",
+        "ui/theme/Color.kt",
+        "MainActivity.kt",
+        "composables/",
+        "*.kt with @Composable"
+      ],
+      "esco_hint": "build declarative mobile user interfaces",
+      "lightcast_hint": "Jetpack Compose",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-006",
+      "canonical_name": "SwiftUI",
+      "category": "MOB",
+      "subcategory": "mobile UI toolkit",
+      "aliases": [
+        "swiftui",
+        "swift ui",
+        "apple swiftui",
+        "declarative swift ui"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "ContentView.swift",
+        "*App.swift",
+        "Views/",
+        "Package.swift",
+        "Preview Content/"
+      ],
+      "esco_hint": "build declarative mobile user interfaces",
+      "lightcast_hint": "SwiftUI",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-007",
+      "canonical_name": "Android Studio",
+      "category": "MOB",
+      "subcategory": "mobile IDE and build",
+      "aliases": [
+        "android studio",
+        "androidstudio",
+        "android ide",
+        "android studio IDE"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "local.properties",
+        ".idea/",
+        "gradlew",
+        "gradle/wrapper/gradle-wrapper.properties",
+        "settings.gradle"
+      ],
+      "esco_hint": "use integrated development environment software",
+      "lightcast_hint": "Android Studio",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-008",
+      "canonical_name": "Expo",
+      "category": "MOB",
+      "subcategory": "cross-platform tooling",
+      "aliases": [
+        "expo",
+        "expo go",
+        "expo cli",
+        "expo react native",
+        "eas build"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "expo",
+          "expo-router",
+          "expo-status-bar",
+          "eas-cli"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "app.json",
+        "app.config.js",
+        "eas.json",
+        ".expo/",
+        "expo-env.d.ts"
+      ],
+      "esco_hint": "develop cross-platform mobile applications",
+      "lightcast_hint": "Expo (Software)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-009",
+      "canonical_name": "Ionic",
+      "category": "MOB",
+      "subcategory": "hybrid framework",
+      "aliases": [
+        "ionic",
+        "ionic framework",
+        "ionic angular",
+        "ionic react",
+        "hybrid app"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@ionic/angular",
+          "@ionic/react",
+          "@ionic/core",
+          "@ionic/cli"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "ionic.config.json",
+        "capacitor.config.ts",
+        "src/app/",
+        "www/"
+      ],
+      "esco_hint": "develop hybrid mobile applications",
+      "lightcast_hint": "Ionic (Mobile Framework)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-010",
+      "canonical_name": "Capacitor",
+      "category": "MOB",
+      "subcategory": "hybrid framework",
+      "aliases": [
+        "capacitor",
+        "capacitorjs",
+        "capacitor js",
+        "ionic capacitor"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@capacitor/core",
+          "@capacitor/cli",
+          "@capacitor/android",
+          "@capacitor/ios"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "capacitor.config.ts",
+        "capacitor.config.json",
+        "android/app/src/main/assets/",
+        "ios/App/"
+      ],
+      "esco_hint": "develop hybrid mobile applications",
+      "lightcast_hint": "Capacitor (Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-011",
+      "canonical_name": "Retrofit",
+      "category": "MOB",
+      "subcategory": "mobile networking",
+      "aliases": [
+        "retrofit",
+        "retrofit2",
+        "retrofit android",
+        "square retrofit"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "com.squareup.retrofit2:retrofit",
+          "com.squareup.retrofit2:converter-gson",
+          "com.squareup.okhttp3:okhttp"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "ApiService.kt",
+        "ApiService.java",
+        "network/",
+        "RetrofitClient.kt",
+        "data/remote/"
+      ],
+      "esco_hint": "consume web services from mobile clients",
+      "lightcast_hint": "Retrofit (API Library)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-012",
+      "canonical_name": "Room Database",
+      "category": "MOB",
+      "subcategory": "mobile persistence",
+      "aliases": [
+        "room",
+        "room db",
+        "android room",
+        "androidx room",
+        "room persistence library"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "androidx.room:room-runtime",
+          "androidx.room:room-compiler",
+          "androidx.room:room-ktx"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "AppDatabase.kt",
+        "*Dao.kt",
+        "data/local/",
+        "entity/",
+        "schemas/"
+      ],
+      "esco_hint": "implement local data persistence on mobile",
+      "lightcast_hint": "Android Room Persistence Library",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-013",
+      "canonical_name": "Firebase Cloud Messaging",
+      "category": "MOB",
+      "subcategory": "push notifications",
+      "aliases": [
+        "FCM",
+        "firebase cloud messaging",
+        "push notifications",
+        "firebase push"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@react-native-firebase/messaging",
+          "firebase-admin"
+        ],
+        "pip": [
+          "pyfcm",
+          "firebase-admin"
+        ],
+        "maven": [
+          "com.google.firebase:firebase-messaging"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "fcm"
+        ]
+      },
+      "file_hints": [
+        "google-services.json",
+        "GoogleService-Info.plist",
+        "MyFirebaseMessagingService.kt",
+        "firebase-messaging-sw.js"
+      ],
+      "esco_hint": "implement push notification services",
+      "lightcast_hint": "Firebase Cloud Messaging (FCM)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-MOB-014",
+      "canonical_name": "Google Play Console",
+      "category": "MOB",
+      "subcategory": "app release management",
+      "aliases": [
+        "play console",
+        "google play console",
+        "play store deployment",
+        "play store publishing",
+        "app release"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "fastlane"
+        ]
+      },
+      "file_hints": [
+        "fastlane/Appfile",
+        "fastlane/Fastfile",
+        "app/release/*.aab",
+        "keystore.properties",
+        "play-store-listing/",
+        "signing config in build.gradle"
+      ],
+      "esco_hint": "publish and release mobile applications",
+      "lightcast_hint": "Google Play Console",
+      "demand_tier": "medium",
+      "notes": "Evidence is a published app listing plus release/signing configuration in the repo."
+    },
+    {
+      "id": "SK-MOB-015",
+      "canonical_name": "Kotlin Multiplatform",
+      "category": "MOB",
+      "subcategory": "cross-platform framework",
+      "aliases": [
+        "KMP",
+        "kotlin multiplatform",
+        "KMM",
+        "kotlin multiplatform mobile"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+          "io.ktor:ktor-client-core"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "shared/build.gradle.kts",
+        "shared/src/commonMain/",
+        "shared/src/androidMain/",
+        "shared/src/iosMain/",
+        "settings.gradle.kts"
+      ],
+      "esco_hint": "develop cross-platform mobile applications",
+      "lightcast_hint": "Kotlin Multiplatform",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-001",
+      "canonical_name": "Selenium",
+      "category": "QA",
+      "subcategory": "browser automation",
+      "aliases": [
+        "selenium",
+        "selenium webdriver",
+        "selenium automation",
+        "webdriver",
+        "selenium testing"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "selenium-webdriver"
+        ],
+        "pip": [
+          "selenium",
+          "webdriver-manager"
+        ],
+        "maven": [
+          "org.seleniumhq.selenium:selenium-java"
+        ],
+        "go": [],
+        "composer": [
+          "php-webdriver/webdriver"
+        ],
+        "gem": [
+          "selenium-webdriver"
+        ]
+      },
+      "file_hints": [
+        "tests/selenium/",
+        "*Test.java",
+        "conftest.py",
+        "drivers/chromedriver",
+        "pages/ (page object model)"
+      ],
+      "esco_hint": "execute automated software tests",
+      "lightcast_hint": "Selenium (Software)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-002",
+      "canonical_name": "Cypress",
+      "category": "QA",
+      "subcategory": "end-to-end testing",
+      "aliases": [
+        "cypress",
+        "cypress.io",
+        "cypress e2e",
+        "cypress testing"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "cypress",
+          "@cypress/react",
+          "cypress-axe"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "cypress.config.js",
+        "cypress.config.ts",
+        "cypress.json",
+        "cypress/e2e/",
+        "cypress/support/",
+        "cypress/fixtures/"
+      ],
+      "esco_hint": "execute automated software tests",
+      "lightcast_hint": "Cypress (Testing Framework)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-003",
+      "canonical_name": "Playwright",
+      "category": "QA",
+      "subcategory": "end-to-end testing",
+      "aliases": [
+        "playwright",
+        "ms playwright",
+        "playwright test",
+        "@playwright/test"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@playwright/test",
+          "playwright"
+        ],
+        "pip": [
+          "playwright",
+          "pytest-playwright"
+        ],
+        "maven": [
+          "com.microsoft.playwright:playwright"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "playwright.config.ts",
+        "playwright.config.js",
+        "tests/*.spec.ts",
+        "e2e/",
+        "playwright-report/"
+      ],
+      "esco_hint": "execute automated software tests",
+      "lightcast_hint": "Playwright (Testing Framework)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-004",
+      "canonical_name": "Jest",
+      "category": "QA",
+      "subcategory": "unit testing",
+      "aliases": [
+        "jest",
+        "jestjs",
+        "jest testing",
+        "jest unit tests"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "jest",
+          "ts-jest",
+          "@types/jest",
+          "babel-jest",
+          "jest-environment-jsdom"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "jest.config.js",
+        "jest.config.ts",
+        "jest.setup.js",
+        "__tests__/",
+        "*.test.js",
+        "*.spec.ts",
+        "coverage/"
+      ],
+      "esco_hint": "perform unit testing of software components",
+      "lightcast_hint": "Jest (JavaScript Testing Framework)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-005",
+      "canonical_name": "Vitest",
+      "category": "QA",
+      "subcategory": "unit testing",
+      "aliases": [
+        "vitest",
+        "vite test",
+        "vitest unit testing",
+        "vite-native testing"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "vitest",
+          "@vitest/ui",
+          "@vitest/coverage-v8"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "vitest.config.ts",
+        "vitest.setup.ts",
+        "*.test.ts",
+        "src/**/__tests__/"
+      ],
+      "esco_hint": "perform unit testing of software components",
+      "lightcast_hint": "Vitest (Testing Framework)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-006",
+      "canonical_name": "PyTest",
+      "category": "QA",
+      "subcategory": "unit testing",
+      "aliases": [
+        "pytest",
+        "py.test",
+        "pytest framework",
+        "python testing",
+        "pytest-cov"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "pytest",
+          "pytest-cov",
+          "pytest-django",
+          "pytest-asyncio",
+          "pytest-mock"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "pytest.ini",
+        "conftest.py",
+        "tox.ini",
+        "tests/test_*.py",
+        "setup.cfg",
+        "pyproject.toml [tool.pytest]"
+      ],
+      "esco_hint": "perform unit testing of software components",
+      "lightcast_hint": "PyTest",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-007",
+      "canonical_name": "JUnit",
+      "category": "QA",
+      "subcategory": "unit testing",
+      "aliases": [
+        "junit",
+        "junit5",
+        "junit 4",
+        "jupiter",
+        "junit testing"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "org.junit.jupiter:junit-jupiter",
+          "junit:junit",
+          "org.mockito:mockito-core"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "src/test/java/",
+        "*Test.java",
+        "*Tests.java",
+        "surefire-reports/",
+        "build/test-results/"
+      ],
+      "esco_hint": "perform unit testing of software components",
+      "lightcast_hint": "JUnit",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-008",
+      "canonical_name": "TestNG",
+      "category": "QA",
+      "subcategory": "test framework",
+      "aliases": [
+        "testng",
+        "test ng",
+        "testng framework",
+        "testng suite"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "org.testng:testng"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "testng.xml",
+        "suites/*.xml",
+        "src/test/java/",
+        "test-output/"
+      ],
+      "esco_hint": "execute automated software tests",
+      "lightcast_hint": "TestNG",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-009",
+      "canonical_name": "Mocha",
+      "category": "QA",
+      "subcategory": "unit testing",
+      "aliases": [
+        "mocha",
+        "mochajs",
+        "mocha chai",
+        "mocha testing"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "mocha",
+          "chai",
+          "supertest",
+          "sinon"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".mocharc.json",
+        ".mocharc.yml",
+        "test/",
+        "test/*.spec.js"
+      ],
+      "esco_hint": "perform unit testing of software components",
+      "lightcast_hint": "Mocha (JavaScript Framework)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-010",
+      "canonical_name": "React Testing Library",
+      "category": "QA",
+      "subcategory": "component testing",
+      "aliases": [
+        "react testing library",
+        "RTL",
+        "@testing-library/react",
+        "testing library",
+        "dom testing library"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@testing-library/react",
+          "@testing-library/jest-dom",
+          "@testing-library/user-event",
+          "@testing-library/dom"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "src/**/*.test.jsx",
+        "src/**/*.test.tsx",
+        "setupTests.js",
+        "__tests__/components/"
+      ],
+      "esco_hint": "test user interface components",
+      "lightcast_hint": "React Testing Library",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-011",
+      "canonical_name": "Appium",
+      "category": "QA",
+      "subcategory": "mobile testing",
+      "aliases": [
+        "appium",
+        "appium automation",
+        "mobile test automation",
+        "appium webdriver"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "appium",
+          "webdriverio"
+        ],
+        "pip": [
+          "Appium-Python-Client"
+        ],
+        "maven": [
+          "io.appium:java-client"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "appium_lib"
+        ]
+      },
+      "file_hints": [
+        "appium.config.js",
+        "capabilities.json",
+        "tests/mobile/",
+        "wdio.conf.js"
+      ],
+      "esco_hint": "execute automated mobile application tests",
+      "lightcast_hint": "Appium",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-012",
+      "canonical_name": "Postman",
+      "category": "QA",
+      "subcategory": "API testing",
+      "aliases": [
+        "postman",
+        "postman api testing",
+        "postman collection",
+        "newman",
+        "api testing with postman"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "newman"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.postman_collection.json",
+        "*.postman_environment.json",
+        "postman/",
+        "docs/api-collection.json"
+      ],
+      "esco_hint": "test application programming interfaces",
+      "lightcast_hint": "Postman (Software)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-013",
+      "canonical_name": "Apache JMeter",
+      "category": "QA",
+      "subcategory": "performance testing",
+      "aliases": [
+        "jmeter",
+        "apache jmeter",
+        "load testing",
+        "performance testing",
+        "jmeter scripts"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "org.apache.jmeter:ApacheJMeter_core"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.jmx",
+        "jmeter/",
+        "load-test-report.html",
+        "results.jtl"
+      ],
+      "esco_hint": "conduct software performance testing",
+      "lightcast_hint": "Apache JMeter",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-014",
+      "canonical_name": "Cucumber",
+      "category": "QA",
+      "subcategory": "behaviour-driven development",
+      "aliases": [
+        "cucumber",
+        "BDD",
+        "gherkin",
+        "cucumber bdd",
+        "behaviour driven development"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@cucumber/cucumber"
+        ],
+        "pip": [
+          "behave"
+        ],
+        "maven": [
+          "io.cucumber:cucumber-java",
+          "io.cucumber:cucumber-junit"
+        ],
+        "go": [],
+        "composer": [
+          "behat/behat"
+        ],
+        "gem": [
+          "cucumber"
+        ]
+      },
+      "file_hints": [
+        "features/",
+        "*.feature",
+        "step_definitions/",
+        "cucumber.js",
+        "src/test/resources/features/"
+      ],
+      "esco_hint": "apply behaviour-driven development practices",
+      "lightcast_hint": "Cucumber (Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-QA-015",
+      "canonical_name": "SonarQube",
+      "category": "QA",
+      "subcategory": "static code analysis",
+      "aliases": [
+        "sonarqube",
+        "sonar",
+        "sonarcloud",
+        "sonar scanner",
+        "static code analysis"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "sonarqube-scanner"
+        ],
+        "pip": [],
+        "maven": [
+          "org.sonarsource.scanner.maven:sonar-maven-plugin"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "sonar-project.properties",
+        ".sonarcloud.properties",
+        "sonar/",
+        ".github/workflows/sonar.yml"
+      ],
+      "esco_hint": "perform static code analysis for quality",
+      "lightcast_hint": "SonarQube",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-001",
+      "canonical_name": "Figma",
+      "category": "DES",
+      "subcategory": "UI design tool",
+      "aliases": [
+        "figma",
+        "figma design",
+        "figma ui",
+        "figjam",
+        "designed in figma"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "figma-js",
+          "@figma/plugin-typings",
+          "figma-api"
+        ],
+        "pip": [
+          "figma-py"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.fig",
+        "design/",
+        "figma/",
+        "manifest.json (figma plugin)",
+        "docs/figma-link.md",
+        "assets/exports/"
+      ],
+      "esco_hint": "use graphical user interface design software",
+      "lightcast_hint": "Figma (Design Software)",
+      "demand_tier": "high",
+      "notes": "Primary evidence is a shared Figma file or prototype link rather than a repo artefact."
+    },
+    {
+      "id": "SK-DES-002",
+      "canonical_name": "Adobe XD",
+      "category": "DES",
+      "subcategory": "UI design tool",
+      "aliases": [
+        "adobe xd",
+        "xd",
+        "experience design",
+        "adobe experience design"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.xd",
+        "design/*.xd",
+        "prototypes/"
+      ],
+      "esco_hint": "use graphical user interface design software",
+      "lightcast_hint": "Adobe XD",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-003",
+      "canonical_name": "Sketch",
+      "category": "DES",
+      "subcategory": "UI design tool",
+      "aliases": [
+        "sketch",
+        "sketch app",
+        "sketchapp",
+        "bohemian sketch"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.sketch",
+        "design/*.sketch",
+        "symbols/"
+      ],
+      "esco_hint": "use graphical user interface design software",
+      "lightcast_hint": "Sketch (Design Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-004",
+      "canonical_name": "Canva",
+      "category": "DES",
+      "subcategory": "graphic design tool",
+      "aliases": [
+        "canva",
+        "canva design",
+        "canva pro",
+        "made with canva"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "assets/posters/",
+        "branding/",
+        "design/*.pdf",
+        "social-media-creatives/"
+      ],
+      "esco_hint": "create graphic design material",
+      "lightcast_hint": "Canva (Design Software)",
+      "demand_tier": "high",
+      "notes": "Very common on Indian student resumes; evidence is exported creatives or a Canva portfolio link."
+    },
+    {
+      "id": "SK-DES-005",
+      "canonical_name": "Adobe Photoshop",
+      "category": "DES",
+      "subcategory": "raster graphics",
+      "aliases": [
+        "photoshop",
+        "adobe photoshop",
+        "ps",
+        "photo editing",
+        "adobe ps"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.psd",
+        "*.psb",
+        "assets/psd/",
+        "mockups/"
+      ],
+      "esco_hint": "use image editing software",
+      "lightcast_hint": "Adobe Photoshop",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-006",
+      "canonical_name": "Adobe Illustrator",
+      "category": "DES",
+      "subcategory": "vector graphics",
+      "aliases": [
+        "illustrator",
+        "adobe illustrator",
+        "AI vector",
+        "vector illustration",
+        "adobe ai"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.ai",
+        "*.eps",
+        "*.svg",
+        "logos/",
+        "assets/vector/"
+      ],
+      "esco_hint": "use vector graphics software",
+      "lightcast_hint": "Adobe Illustrator",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-007",
+      "canonical_name": "Framer",
+      "category": "DES",
+      "subcategory": "prototyping tool",
+      "aliases": [
+        "framer",
+        "framer.com",
+        "framer motion prototyping",
+        "framer sites"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "framer",
+          "framer-motion"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "framer.json",
+        "prototypes/",
+        "framer/",
+        "*.framerfx"
+      ],
+      "esco_hint": "create interactive design prototypes",
+      "lightcast_hint": "Framer (Design Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-008",
+      "canonical_name": "Webflow",
+      "category": "DES",
+      "subcategory": "no-code web design",
+      "aliases": [
+        "webflow",
+        "web flow",
+        "webflow designer",
+        "no-code website"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "webflow-api"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "css/webflow.css",
+        "js/webflow.js",
+        "webflow-export/",
+        "index.html (webflow export)"
+      ],
+      "esco_hint": "design and build websites with visual tools",
+      "lightcast_hint": "Webflow",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-009",
+      "canonical_name": "Wireframing",
+      "category": "DES",
+      "subcategory": "design method",
+      "aliases": [
+        "wireframe",
+        "wireframes",
+        "wireframing",
+        "lo-fi wireframes",
+        "low fidelity design"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "wireframes/",
+        "docs/wireframes/",
+        "lo-fi/",
+        "*.wireframe.png",
+        "design/wireframes.pdf"
+      ],
+      "esco_hint": "create user interface wireframes",
+      "lightcast_hint": "Wireframing",
+      "demand_tier": "high",
+      "notes": "Evidenceable via wireframe files or a documented low-fidelity design set."
+    },
+    {
+      "id": "SK-DES-010",
+      "canonical_name": "Prototyping",
+      "category": "DES",
+      "subcategory": "design method",
+      "aliases": [
+        "prototype",
+        "prototyping",
+        "interactive prototype",
+        "clickable prototype",
+        "hi-fi prototype"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "prototypes/",
+        "docs/prototype-link.md",
+        "*.fig",
+        "*.xd",
+        "clickthrough/"
+      ],
+      "esco_hint": "create interactive design prototypes",
+      "lightcast_hint": "Prototyping",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-011",
+      "canonical_name": "Design Systems",
+      "category": "DES",
+      "subcategory": "systems and tokens",
+      "aliases": [
+        "design system",
+        "design systems",
+        "component library",
+        "style guide",
+        "design tokens"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@storybook/react",
+          "style-dictionary",
+          "storybook"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "design-system/",
+        "tokens.json",
+        "style-dictionary.config.js",
+        ".storybook/",
+        "*.stories.tsx",
+        "docs/style-guide.md"
+      ],
+      "esco_hint": "define user interface design standards",
+      "lightcast_hint": "Design Systems",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-012",
+      "canonical_name": "User Research",
+      "category": "DES",
+      "subcategory": "UX research",
+      "aliases": [
+        "ux research",
+        "user research",
+        "user interviews",
+        "design research",
+        "contextual inquiry"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "research/",
+        "interview-guide.md",
+        "personas.pdf",
+        "survey-results.csv",
+        "docs/user-research.md"
+      ],
+      "esco_hint": "conduct user needs research",
+      "lightcast_hint": "User Research",
+      "demand_tier": "medium",
+      "notes": "Graded only against artefacts: research plan, interview scripts, synthesis doc or personas. Not a self-declared trait."
+    },
+    {
+      "id": "SK-DES-013",
+      "canonical_name": "Usability Testing",
+      "category": "DES",
+      "subcategory": "UX research",
+      "aliases": [
+        "usability testing",
+        "usability test",
+        "user testing",
+        "SUS score",
+        "moderated testing"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "usability-test-plan.md",
+        "test-findings.md",
+        "sus-scores.csv",
+        "research/usability/",
+        "session-recordings/"
+      ],
+      "esco_hint": "conduct usability evaluations",
+      "lightcast_hint": "Usability Testing",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-014",
+      "canonical_name": "Information Architecture",
+      "category": "DES",
+      "subcategory": "design method",
+      "aliases": [
+        "IA",
+        "information architecture",
+        "site structure",
+        "card sorting",
+        "navigation design"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "sitemap.xml",
+        "ia/",
+        "docs/sitemap.md",
+        "card-sort-results.csv",
+        "navigation-map.png"
+      ],
+      "esco_hint": "design information architecture",
+      "lightcast_hint": "Information Architecture",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-015",
+      "canonical_name": "Web Accessibility (WCAG)",
+      "category": "DES",
+      "subcategory": "accessibility",
+      "aliases": [
+        "accessibility",
+        "a11y",
+        "WCAG",
+        "wcag 2.1",
+        "web accessibility",
+        "ARIA"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "eslint-plugin-jsx-a11y",
+          "axe-core",
+          "@axe-core/react",
+          "pa11y"
+        ],
+        "pip": [
+          "axe-selenium-python"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".pa11yci",
+        "lighthouse-report.html",
+        "accessibility-audit.md",
+        "a11y/",
+        ".eslintrc with jsx-a11y"
+      ],
+      "esco_hint": "apply web accessibility standards",
+      "lightcast_hint": "Web Accessibility (WCAG)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-016",
+      "canonical_name": "Responsive Web Design",
+      "category": "DES",
+      "subcategory": "visual design",
+      "aliases": [
+        "responsive design",
+        "responsive web design",
+        "mobile-first design",
+        "RWD",
+        "adaptive layout"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "styles/responsive.css",
+        "breakpoints.scss",
+        "css/media-queries.css",
+        "docs/responsive-mockups/"
+      ],
+      "esco_hint": "design responsive user interfaces",
+      "lightcast_hint": "Responsive Web Design",
+      "demand_tier": "high",
+      "notes": "Overlaps the FE category if Part 1 lists CSS frameworks; this entry is the design-side breakpoint and layout skill."
+    },
+    {
+      "id": "SK-DES-017",
+      "canonical_name": "User Journey Mapping",
+      "category": "DES",
+      "subcategory": "design method",
+      "aliases": [
+        "journey map",
+        "user journey mapping",
+        "customer journey map",
+        "user flows",
+        "flow diagram"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "journey-map.png",
+        "user-flows/",
+        "docs/user-flow.md",
+        "flows/*.drawio",
+        "*.excalidraw"
+      ],
+      "esco_hint": "map user journeys and service flows",
+      "lightcast_hint": "Customer Journey Mapping",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-018",
+      "canonical_name": "Adobe After Effects",
+      "category": "DES",
+      "subcategory": "motion design",
+      "aliases": [
+        "after effects",
+        "adobe after effects",
+        "AE",
+        "motion graphics",
+        "motion design"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "lottie-react",
+          "lottie-web"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.aep",
+        "*.json (lottie export)",
+        "animations/",
+        "motion/",
+        "assets/lottie/"
+      ],
+      "esco_hint": "create motion graphics and animation",
+      "lightcast_hint": "Adobe After Effects",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-019",
+      "canonical_name": "Blender",
+      "category": "DES",
+      "subcategory": "3D modelling",
+      "aliases": [
+        "blender",
+        "blender 3d",
+        "3d modelling",
+        "3d modeling",
+        "blender rendering"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "three"
+        ],
+        "pip": [
+          "bpy"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.blend",
+        "*.blend1",
+        "*.glb",
+        "*.gltf",
+        "*.fbx",
+        "models/",
+        "assets/3d/"
+      ],
+      "esco_hint": "create three-dimensional models",
+      "lightcast_hint": "Blender (3D Graphics Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-DES-020",
+      "canonical_name": "Miro",
+      "category": "DES",
+      "subcategory": "whiteboarding tool",
+      "aliases": [
+        "miro",
+        "miro board",
+        "mural",
+        "figjam board",
+        "whiteboarding tool"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@mirohq/websdk-types"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "miro/",
+        "docs/miro-board-link.md",
+        "workshops/*.pdf",
+        "affinity-map.png"
+      ],
+      "esco_hint": "produce workshop and mapping artefacts with digital whiteboards",
+      "lightcast_hint": "Miro (Whiteboarding Software)",
+      "demand_tier": "niche",
+      "notes": "Evidence is an exported board (affinity map, journey map, sprint board), not the act of collaborating."
+    },
+    {
+      "id": "SK-PRD-001",
+      "canonical_name": "Jira",
+      "category": "PRD",
+      "subcategory": "project tracking",
+      "aliases": [
+        "jira",
+        "atlassian jira",
+        "jira software",
+        "jira board",
+        "jira tickets"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "jira-client"
+        ],
+        "pip": [
+          "jira",
+          "atlassian-python-api"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "jira-ruby"
+        ]
+      },
+      "file_hints": [
+        "jira/",
+        "jira-export.csv",
+        "docs/sprint-report.pdf",
+        "commit messages with PROJ-123 keys"
+      ],
+      "esco_hint": "use project management software",
+      "lightcast_hint": "Atlassian JIRA",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-002",
+      "canonical_name": "Trello",
+      "category": "PRD",
+      "subcategory": "project tracking",
+      "aliases": [
+        "trello",
+        "trello board",
+        "trello kanban",
+        "kanban board"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "trello"
+        ],
+        "pip": [
+          "py-trello"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "trello-board.json",
+        "docs/board-export.json",
+        "project-board/"
+      ],
+      "esco_hint": "use project management software",
+      "lightcast_hint": "Trello",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-003",
+      "canonical_name": "Asana",
+      "category": "PRD",
+      "subcategory": "project tracking",
+      "aliases": [
+        "asana",
+        "asana projects",
+        "asana tasks",
+        "asana board"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "asana"
+        ],
+        "pip": [
+          "asana"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "asana"
+        ]
+      },
+      "file_hints": [
+        "asana-export.csv",
+        "docs/project-plan.pdf",
+        "project-tracker/"
+      ],
+      "esco_hint": "use project management software",
+      "lightcast_hint": "Asana (Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-004",
+      "canonical_name": "Notion",
+      "category": "PRD",
+      "subcategory": "documentation and knowledge base",
+      "aliases": [
+        "notion",
+        "notion.so",
+        "notion workspace",
+        "notion docs",
+        "notion database"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@notionhq/client",
+          "notion-to-md"
+        ],
+        "pip": [
+          "notion-client"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "notion-export/",
+        "docs/notion-link.md",
+        "*.md (notion export)",
+        "notion/"
+      ],
+      "esco_hint": "maintain project documentation",
+      "lightcast_hint": "Notion (Software)",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-005",
+      "canonical_name": "Confluence",
+      "category": "PRD",
+      "subcategory": "documentation and knowledge base",
+      "aliases": [
+        "confluence",
+        "atlassian confluence",
+        "confluence wiki",
+        "confluence pages"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "atlassian-python-api"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "confluence-export/",
+        "docs/confluence-space.md",
+        "wiki/"
+      ],
+      "esco_hint": "maintain project documentation",
+      "lightcast_hint": "Atlassian Confluence",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-006",
+      "canonical_name": "Microsoft Excel",
+      "category": "PRD",
+      "subcategory": "spreadsheet analytics",
+      "aliases": [
+        "excel",
+        "ms excel",
+        "microsoft excel",
+        "advanced excel",
+        "pivot tables",
+        "vlookup"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "xlsx",
+          "exceljs"
+        ],
+        "pip": [
+          "openpyxl",
+          "xlrd",
+          "xlsxwriter"
+        ],
+        "maven": [
+          "org.apache.poi:poi-ooxml"
+        ],
+        "go": [
+          "github.com/xuri/excelize/v2"
+        ],
+        "composer": [
+          "phpoffice/phpspreadsheet"
+        ],
+        "gem": [
+          "roo"
+        ]
+      },
+      "file_hints": [
+        "*.xlsx",
+        "*.xlsm",
+        "*.xls",
+        "data/*.csv",
+        "analysis/",
+        "reports/*.xlsx"
+      ],
+      "esco_hint": "use spreadsheet software for data analysis",
+      "lightcast_hint": "Microsoft Excel",
+      "demand_tier": "high",
+      "notes": "Graded on artefacts such as pivot/dashboard workbooks or macro files, not on a resume mention."
+    },
+    {
+      "id": "SK-PRD-007",
+      "canonical_name": "Google Sheets",
+      "category": "PRD",
+      "subcategory": "spreadsheet analytics",
+      "aliases": [
+        "google sheets",
+        "gsheets",
+        "google spreadsheet",
+        "sheets",
+        "apps script"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "google-spreadsheet",
+          "googleapis"
+        ],
+        "pip": [
+          "gspread",
+          "google-api-python-client"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "google_drive"
+        ]
+      },
+      "file_hints": [
+        "*.gsheet",
+        "appsscript.json",
+        "*.gs",
+        "data/sheets-export.csv"
+      ],
+      "esco_hint": "use spreadsheet software for data analysis",
+      "lightcast_hint": "Google Sheets",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-008",
+      "canonical_name": "Power BI",
+      "category": "PRD",
+      "subcategory": "business intelligence",
+      "aliases": [
+        "power bi",
+        "powerbi",
+        "microsoft power bi",
+        "power bi desktop",
+        "DAX"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "powerbi-client"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.pbix",
+        "*.pbit",
+        "dashboards/",
+        "reports/*.pbix",
+        "measures.dax"
+      ],
+      "esco_hint": "create business intelligence dashboards",
+      "lightcast_hint": "Microsoft Power BI",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-009",
+      "canonical_name": "Tableau",
+      "category": "PRD",
+      "subcategory": "business intelligence",
+      "aliases": [
+        "tableau",
+        "tableau public",
+        "tableau desktop",
+        "tableau dashboard",
+        "tableau viz"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "tableauserverclient",
+          "tableauhyperapi"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.twb",
+        "*.twbx",
+        "*.hyper",
+        "tableau/",
+        "dashboards/"
+      ],
+      "esco_hint": "create business intelligence dashboards",
+      "lightcast_hint": "Tableau (Business Intelligence Software)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-010",
+      "canonical_name": "Looker Studio",
+      "category": "PRD",
+      "subcategory": "business intelligence",
+      "aliases": [
+        "looker studio",
+        "google data studio",
+        "data studio",
+        "gds dashboard",
+        "looker"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "reports/looker-studio-report.pdf",
+        "docs/dashboard-link.md",
+        "dashboards/"
+      ],
+      "esco_hint": "create business intelligence dashboards",
+      "lightcast_hint": "Google Looker Studio",
+      "demand_tier": "medium",
+      "notes": "Alias 'looker' is ambiguous with the separate Looker/LookML product; disambiguate at normalisation time."
+    },
+    {
+      "id": "SK-PRD-011",
+      "canonical_name": "Google Analytics",
+      "category": "PRD",
+      "subcategory": "product analytics",
+      "aliases": [
+        "google analytics",
+        "GA",
+        "GA4",
+        "google analytics 4",
+        "universal analytics"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "react-ga4",
+          "@analytics/google-analytics",
+          "react-ga"
+        ],
+        "pip": [
+          "google-analytics-data"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "gtag.js snippet in index.html",
+        "analytics.js",
+        "src/analytics/",
+        "docs/ga4-setup.md"
+      ],
+      "esco_hint": "analyse web usage data",
+      "lightcast_hint": "Google Analytics",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-012",
+      "canonical_name": "Google Tag Manager",
+      "category": "PRD",
+      "subcategory": "analytics instrumentation",
+      "aliases": [
+        "GTM",
+        "google tag manager",
+        "tag manager",
+        "gtm container",
+        "event tracking"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "react-gtm-module",
+          "@next/third-parties"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "gtm.js snippet in index.html",
+        "gtm-container-export.json",
+        "docs/tracking-plan.md"
+      ],
+      "esco_hint": "implement web tracking and tagging",
+      "lightcast_hint": "Google Tag Manager",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-013",
+      "canonical_name": "Mixpanel",
+      "category": "PRD",
+      "subcategory": "product analytics",
+      "aliases": [
+        "mixpanel",
+        "mix panel",
+        "mixpanel analytics",
+        "event analytics"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "mixpanel-browser",
+          "mixpanel"
+        ],
+        "pip": [
+          "mixpanel"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "mixpanel-ruby"
+        ]
+      },
+      "file_hints": [
+        "src/analytics/mixpanel.js",
+        "docs/event-taxonomy.md",
+        "tracking-plan.csv"
+      ],
+      "esco_hint": "analyse product usage data",
+      "lightcast_hint": "Mixpanel",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-014",
+      "canonical_name": "Amplitude",
+      "category": "PRD",
+      "subcategory": "product analytics",
+      "aliases": [
+        "amplitude",
+        "amplitude analytics",
+        "amplitude dashboards",
+        "product analytics"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@amplitude/analytics-browser",
+          "amplitude-js"
+        ],
+        "pip": [
+          "amplitude-analytics"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "src/analytics/amplitude.ts",
+        "docs/funnel-analysis.md",
+        "tracking-plan.csv"
+      ],
+      "esco_hint": "analyse product usage data",
+      "lightcast_hint": "Amplitude (Analytics Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-015",
+      "canonical_name": "Hotjar",
+      "category": "PRD",
+      "subcategory": "behavioural analytics",
+      "aliases": [
+        "hotjar",
+        "hot jar",
+        "heatmaps",
+        "session recording",
+        "clarity heatmaps"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@hotjar/browser",
+          "react-hotjar"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "hotjar snippet in index.html",
+        "docs/heatmap-findings.md",
+        "reports/heatmaps/"
+      ],
+      "esco_hint": "analyse user behaviour data",
+      "lightcast_hint": "Hotjar",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-PRD-016",
+      "canonical_name": "SQL for Analytics",
+      "category": "PRD",
+      "subcategory": "data querying",
+      "aliases": [
+        "sql analytics",
+        "analytical sql",
+        "sql queries",
+        "sql reporting",
+        "window functions",
+        "sql for data analysis"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "sqlalchemy",
+          "pandasql",
+          "duckdb"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.sql",
+        "queries/",
+        "analysis/*.sql",
+        "reports/queries.sql",
+        "dbt/models/"
+      ],
+      "esco_hint": "query databases for business reporting",
+      "lightcast_hint": "SQL (Programming Language)",
+      "demand_tier": "high",
+      "notes": "Overlaps a general SQL entry in the DB category (Part 1). Kept because analyst-style SQL (aggregation, joins, window functions for reporting) is a distinct resume claim; merge or cross-link at integration."
+    },
+    {
+      "id": "SK-PRD-017",
+      "canonical_name": "A/B Testing",
+      "category": "PRD",
+      "subcategory": "experimentation",
+      "aliases": [
+        "ab testing",
+        "a/b testing",
+        "split testing",
+        "experimentation",
+        "AB test",
+        "multivariate testing"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@growthbook/growthbook",
+          "posthog-js",
+          "@optimizely/optimizely-sdk",
+          "@vercel/flags"
+        ],
+        "pip": [
+          "growthbook",
+          "posthog"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "experiments/",
+        "docs/ab-test-results.md",
+        "feature-flags.json",
+        "analysis/experiment-analysis.ipynb"
+      ],
+      "esco_hint": "design and evaluate controlled experiments",
+      "lightcast_hint": "A/B Testing",
+      "demand_tier": "medium",
+      "notes": "Evidence is an experiment design plus a results write-up, not a claimed familiarity."
+    },
+    {
+      "id": "SK-PRD-018",
+      "canonical_name": "Product Requirements Documentation",
+      "category": "PRD",
+      "subcategory": "product specification",
+      "aliases": [
+        "PRD",
+        "product requirements document",
+        "product spec",
+        "requirement gathering",
+        "SRS",
+        "user stories"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "PRD.md",
+        "docs/product-requirements.md",
+        "SRS.pdf",
+        "specs/",
+        "requirements.md",
+        "docs/user-stories.md"
+      ],
+      "esco_hint": "define software requirements specifications",
+      "lightcast_hint": "Product Requirements Document (PRD)",
+      "demand_tier": "medium",
+      "notes": "Evidenceable via a written PRD/SRS artefact; excluded if the claim is only 'worked with stakeholders'."
+    },
+    {
+      "id": "SK-SEC-001",
+      "canonical_name": "Ethical Hacking",
+      "category": "SEC",
+      "subcategory": "offensive security",
+      "aliases": [
+        "ethical hacking",
+        "CEH",
+        "white hat hacking",
+        "ethical hacker",
+        "offensive security"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "ctf/",
+        "writeups/",
+        "tryhackme/",
+        "hackthebox/",
+        "docs/lab-report.md",
+        "exploits/"
+      ],
+      "esco_hint": "perform authorised security testing",
+      "lightcast_hint": "Ethical Hacking",
+      "demand_tier": "medium",
+      "notes": "Very common on Indian student resumes; strongest evidence is CTF write-ups, TryHackMe/HackTheBox profiles, or a CEH certificate."
+    },
+    {
+      "id": "SK-SEC-002",
+      "canonical_name": "Penetration Testing",
+      "category": "SEC",
+      "subcategory": "penetration testing",
+      "aliases": [
+        "pentest",
+        "pen testing",
+        "penetration testing",
+        "pentesting",
+        "red teaming",
+        "VAPT"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "impacket",
+          "pwntools"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "pentest-report.pdf",
+        "recon/",
+        "exploit.py",
+        "docs/findings.md",
+        "scans/"
+      ],
+      "esco_hint": "conduct penetration tests on systems",
+      "lightcast_hint": "Penetration Testing",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-003",
+      "canonical_name": "OWASP Top 10",
+      "category": "SEC",
+      "subcategory": "application security",
+      "aliases": [
+        "owasp",
+        "owasp top 10",
+        "web application security",
+        "appsec",
+        "secure coding"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "helmet",
+          "express-rate-limit",
+          "dompurify"
+        ],
+        "pip": [
+          "bandit",
+          "django-csp"
+        ],
+        "maven": [
+          "org.owasp:dependency-check-maven"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "rack-attack"
+        ]
+      },
+      "file_hints": [
+        "security/owasp-checklist.md",
+        "SECURITY.md",
+        "docs/threat-model.md",
+        "middleware/security.js"
+      ],
+      "esco_hint": "apply secure application development practices",
+      "lightcast_hint": "OWASP",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-004",
+      "canonical_name": "Burp Suite",
+      "category": "SEC",
+      "subcategory": "web security tooling",
+      "aliases": [
+        "burp",
+        "burpsuite",
+        "burp suite",
+        "burp proxy",
+        "portswigger burp"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.burp",
+        "burp-project.burp",
+        "burp-report.html",
+        "security/burp/"
+      ],
+      "esco_hint": "use web application security testing tools",
+      "lightcast_hint": "Burp Suite",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-005",
+      "canonical_name": "Wireshark",
+      "category": "SEC",
+      "subcategory": "network analysis",
+      "aliases": [
+        "wireshark",
+        "packet analysis",
+        "packet sniffing",
+        "tshark",
+        "network sniffer"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "pyshark",
+          "scapy"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.pcap",
+        "*.pcapng",
+        "captures/",
+        "docs/packet-analysis.md"
+      ],
+      "esco_hint": "analyse network traffic",
+      "lightcast_hint": "Wireshark",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-006",
+      "canonical_name": "Nmap",
+      "category": "SEC",
+      "subcategory": "reconnaissance",
+      "aliases": [
+        "nmap",
+        "network mapper",
+        "port scanning",
+        "nmap scanning",
+        "zenmap"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "python-nmap"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "*.nmap",
+        "*.gnmap",
+        "nmap-scan.xml",
+        "scans/",
+        "recon/nmap/"
+      ],
+      "esco_hint": "perform network reconnaissance and scanning",
+      "lightcast_hint": "Nmap",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-007",
+      "canonical_name": "Metasploit",
+      "category": "SEC",
+      "subcategory": "exploitation framework",
+      "aliases": [
+        "metasploit",
+        "msf",
+        "msfconsole",
+        "metasploit framework",
+        "msfvenom"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "pymetasploit3"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "metasploit-framework"
+        ]
+      },
+      "file_hints": [
+        "*.rc",
+        "msf-resource.rc",
+        "exploits/",
+        "docs/exploitation-report.md"
+      ],
+      "esco_hint": "use exploitation frameworks in controlled tests",
+      "lightcast_hint": "Metasploit",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-008",
+      "canonical_name": "Kali Linux",
+      "category": "SEC",
+      "subcategory": "security operating system",
+      "aliases": [
+        "kali",
+        "kali linux",
+        "kali os",
+        "backtrack",
+        "parrot os"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "Vagrantfile (kali box)",
+        "Dockerfile (kalilinux/kali-rolling)",
+        "docs/lab-setup.md",
+        "tools/"
+      ],
+      "esco_hint": "operate security testing distributions",
+      "lightcast_hint": "Kali Linux",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-009",
+      "canonical_name": "Network Security",
+      "category": "SEC",
+      "subcategory": "network defence",
+      "aliases": [
+        "network security",
+        "firewall configuration",
+        "IDS",
+        "intrusion detection",
+        "VPN configuration",
+        "iptables"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [
+          "scapy",
+          "paramiko"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "iptables.rules",
+        "firewall-rules.conf",
+        "snort.conf",
+        "suricata.yaml",
+        "wireguard.conf",
+        "network/"
+      ],
+      "esco_hint": "implement network security measures",
+      "lightcast_hint": "Network Security",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-010",
+      "canonical_name": "Applied Cryptography",
+      "category": "SEC",
+      "subcategory": "cryptography",
+      "aliases": [
+        "cryptography",
+        "encryption",
+        "AES encryption",
+        "RSA",
+        "hashing",
+        "crypto implementation"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "crypto-js",
+          "bcrypt",
+          "jsonwebtoken",
+          "node-forge"
+        ],
+        "pip": [
+          "cryptography",
+          "pycryptodome",
+          "passlib"
+        ],
+        "maven": [
+          "org.bouncycastle:bcprov-jdk18on"
+        ],
+        "go": [
+          "golang.org/x/crypto"
+        ],
+        "composer": [
+          "defuse/php-encryption"
+        ],
+        "gem": [
+          "bcrypt"
+        ]
+      },
+      "file_hints": [
+        "crypto/",
+        "encryption.py",
+        "keys/",
+        "*.pem",
+        "docs/crypto-design.md"
+      ],
+      "esco_hint": "apply cryptographic techniques",
+      "lightcast_hint": "Cryptography",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-011",
+      "canonical_name": "Vulnerability Assessment",
+      "category": "SEC",
+      "subcategory": "security assessment",
+      "aliases": [
+        "vulnerability assessment",
+        "vulnerability scanning",
+        "VA",
+        "nessus",
+        "OWASP ZAP",
+        "security audit"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "retire"
+        ],
+        "pip": [
+          "bandit",
+          "safety"
+        ],
+        "maven": [
+          "org.owasp:dependency-check-maven"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "brakeman"
+        ]
+      },
+      "file_hints": [
+        "zap-report.html",
+        "nessus-report.pdf",
+        ".zap/",
+        "security/scan-results/",
+        "dependency-check-report.html"
+      ],
+      "esco_hint": "identify ICT system vulnerabilities",
+      "lightcast_hint": "Vulnerability Assessment",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-SEC-012",
+      "canonical_name": "Snyk",
+      "category": "SEC",
+      "subcategory": "dependency and supply-chain security",
+      "aliases": [
+        "snyk",
+        "snyk scan",
+        "dependency scanning",
+        "SCA",
+        "software composition analysis",
+        "dependabot"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "snyk"
+        ],
+        "pip": [
+          "snyk"
+        ],
+        "maven": [
+          "io.snyk:snyk-maven-plugin"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".snyk",
+        "snyk-report.json",
+        ".github/workflows/snyk.yml",
+        ".github/dependabot.yml"
+      ],
+      "esco_hint": "manage software supply chain security",
+      "lightcast_hint": "Snyk (Security Software)",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-001",
+      "canonical_name": "Git",
+      "category": "TOOL",
+      "subcategory": "version control",
+      "aliases": [
+        "git",
+        "version control",
+        "git vcs",
+        "source control",
+        "git branching",
+        "git workflow"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "simple-git",
+          "husky"
+        ],
+        "pip": [
+          "GitPython",
+          "pre-commit"
+        ],
+        "maven": [],
+        "go": [
+          "github.com/go-git/go-git/v5"
+        ],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".git/",
+        ".gitignore",
+        ".gitattributes",
+        ".gitmodules",
+        ".husky/",
+        ".pre-commit-config.yaml"
+      ],
+      "esco_hint": "use software configuration management tools",
+      "lightcast_hint": "Git (Version Control System)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-002",
+      "canonical_name": "GitHub",
+      "category": "TOOL",
+      "subcategory": "code hosting and review workflow",
+      "aliases": [
+        "github",
+        "git hub",
+        "github repo",
+        "github profile",
+        "open source on github"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@octokit/rest"
+        ],
+        "pip": [
+          "PyGithub"
+        ],
+        "maven": [],
+        "go": [
+          "github.com/google/go-github"
+        ],
+        "composer": [],
+        "gem": [
+          "octokit"
+        ]
+      },
+      "file_hints": [
+        ".github/",
+        ".github/ISSUE_TEMPLATE/",
+        ".github/pull_request_template.md",
+        "CODEOWNERS",
+        "README.md",
+        "CONTRIBUTING.md"
+      ],
+      "esco_hint": "use code repository platforms",
+      "lightcast_hint": "GitHub",
+      "demand_tier": "high",
+      "notes": "Distinct from GitHub Actions (OPS); this entry is repository collaboration and open-source contribution evidence."
+    },
+    {
+      "id": "SK-TOOL-003",
+      "canonical_name": "GitLab",
+      "category": "TOOL",
+      "subcategory": "code hosting and review workflow",
+      "aliases": [
+        "gitlab",
+        "git lab",
+        "gitlab repo",
+        "self-hosted gitlab"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@gitbeaker/node"
+        ],
+        "pip": [
+          "python-gitlab"
+        ],
+        "maven": [],
+        "go": [
+          "github.com/xanzy/go-gitlab"
+        ],
+        "composer": [],
+        "gem": [
+          "gitlab"
+        ]
+      },
+      "file_hints": [
+        ".gitlab/",
+        ".gitlab/merge_request_templates/",
+        ".gitlab/issue_templates/",
+        "CODEOWNERS"
+      ],
+      "esco_hint": "use code repository platforms",
+      "lightcast_hint": "GitLab",
+      "demand_tier": "medium",
+      "notes": "Distinct from GitLab CI/CD (OPS); this entry is repository hosting and merge-request workflow."
+    },
+    {
+      "id": "SK-TOOL-004",
+      "canonical_name": "Bitbucket",
+      "category": "TOOL",
+      "subcategory": "code hosting and review workflow",
+      "aliases": [
+        "bitbucket",
+        "bit bucket",
+        "atlassian bitbucket",
+        "bitbucket pipelines"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "bitbucket"
+        ],
+        "pip": [
+          "atlassian-python-api"
+        ],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "bitbucket-pipelines.yml",
+        ".bitbucket/",
+        "bitbucket/"
+      ],
+      "esco_hint": "use code repository platforms",
+      "lightcast_hint": "Bitbucket",
+      "demand_tier": "niche",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-005",
+      "canonical_name": "Visual Studio Code",
+      "category": "TOOL",
+      "subcategory": "IDE and editor",
+      "aliases": [
+        "vscode",
+        "vs code",
+        "visual studio code",
+        "vscode ide",
+        "code editor"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "@types/vscode",
+          "vsce"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        ".vscode/settings.json",
+        ".vscode/launch.json",
+        ".vscode/extensions.json",
+        ".devcontainer/devcontainer.json",
+        "*.code-workspace"
+      ],
+      "esco_hint": "use integrated development environment software",
+      "lightcast_hint": "Visual Studio Code",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-006",
+      "canonical_name": "npm",
+      "category": "TOOL",
+      "subcategory": "package management",
+      "aliases": [
+        "npm",
+        "node package manager",
+        "yarn",
+        "pnpm",
+        "npm scripts",
+        "package management"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "npm-run-all",
+          "npm-check-updates"
+        ],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "package.json",
+        "package-lock.json",
+        "yarn.lock",
+        "pnpm-lock.yaml",
+        ".npmrc",
+        ".nvmrc"
+      ],
+      "esco_hint": "manage software dependencies",
+      "lightcast_hint": "npm (Package Manager)",
+      "demand_tier": "high",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-007",
+      "canonical_name": "Apache Maven",
+      "category": "TOOL",
+      "subcategory": "build tooling",
+      "aliases": [
+        "maven",
+        "apache maven",
+        "mvn",
+        "maven build",
+        "pom"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [
+          "org.apache.maven.plugins:maven-compiler-plugin",
+          "org.apache.maven.plugins:maven-surefire-plugin"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "pom.xml",
+        ".mvn/",
+        "mvnw",
+        "mvnw.cmd",
+        "settings.xml",
+        "target/"
+      ],
+      "esco_hint": "use software build automation tools",
+      "lightcast_hint": "Apache Maven",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-008",
+      "canonical_name": "Gradle",
+      "category": "TOOL",
+      "subcategory": "build tooling",
+      "aliases": [
+        "gradle",
+        "gradle build",
+        "gradlew",
+        "gradle kotlin dsl",
+        "build.gradle"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "build.gradle",
+        "build.gradle.kts",
+        "settings.gradle",
+        "gradle.properties",
+        "gradlew",
+        "gradle/wrapper/",
+        "libs.versions.toml"
+      ],
+      "esco_hint": "use software build automation tools",
+      "lightcast_hint": "Gradle",
+      "demand_tier": "medium",
+      "notes": ""
+    },
+    {
+      "id": "SK-TOOL-009",
+      "canonical_name": "Agile and Scrum",
+      "category": "TOOL",
+      "subcategory": "development methodology",
+      "aliases": [
+        "agile",
+        "scrum",
+        "agile methodology",
+        "sprint planning",
+        "scrum framework",
+        "kanban",
+        "CSM"
+      ],
+      "manifest_packages": {
+        "npm": [],
+        "pip": [],
+        "maven": [],
+        "go": [],
+        "composer": [],
+        "gem": []
+      },
+      "file_hints": [
+        "docs/sprint-backlog.md",
+        "docs/retrospective.md",
+        ".github/ISSUE_TEMPLATE/user_story.md",
+        "docs/sprint-report.pdf",
+        "ROADMAP.md"
+      ],
+      "esco_hint": "apply agile project management methods",
+      "lightcast_hint": "Agile Methodology",
+      "demand_tier": "high",
+      "notes": "Kept because it is evidenceable via sprint artefacts (backlogs, burndowns, retro notes) or a PSM/CSM certificate. Reject any resume claim with no such artefact."
+    },
+    {
+      "id": "SK-TOOL-010",
+      "canonical_name": "Code Review",
+      "category": "TOOL",
+      "subcategory": "engineering practice",
+      "aliases": [
+        "code review",
+        "peer review",
+        "pull request review",
+        "PR review",
+        "merge request review"
+      ],
+      "manifest_packages": {
+        "npm": [
+          "eslint",
+          "prettier",
+          "lint-staged"
+        ],
+        "pip": [
+          "flake8",
+          "black",
+          "ruff"
+        ],
+        "maven": [
+          "com.puppycrawl.tools:checkstyle"
+        ],
+        "go": [],
+        "composer": [],
+        "gem": [
+          "rubocop"
+        ]
+      },
+      "file_hints": [
+        ".github/pull_request_template.md",
+        "CODEOWNERS",
+        "CONTRIBUTING.md",
+        ".eslintrc.json",
+        ".github/workflows/lint.yml",
+        ".editorconfig"
+      ],
+      "esco_hint": "conduct ICT code review",
+      "lightcast_hint": "Code Review",
+      "demand_tier": "medium",
+      "notes": "Evidence is reviewed pull requests with substantive comments, plus repo-level review configuration."
+    }
+  ]
+}
