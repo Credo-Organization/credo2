@@ -42,36 +42,37 @@ export async function completeOnboarding(
     throw new Error(`Failed to update profile: ${profileError.message}`);
   }
 
-  // 2. Fetch or create the career goal in the database (since we are using config as source of truth for now, we must ensure it exists in DB to satisfy foreign keys if profile_career_goals is used)
-  // For simplicity and since we don't have seed data, let's just store the goal slug in the profile for now if profile_career_goals requires a seeded ID.
-  // Wait, let's look at the database schema. `profile_career_goals` uses `goal_id: number`.
-  // If the career_goals table isn't seeded, this will fail. Let's try to upsert the goal first to be safe.
-  
-  const { data: dbGoal, error: goalUpsertError } = await supabase
-    .from("career_goals")
-    .upsert({
-      slug: goal.slug,
-      title: goal.title,
-      description: goal.description,
-      icon: goal.icon,
-      category: goal.category,
-      required_skills: goal.requiredSkills,
-    }, { onConflict: "slug" })
-    .select("id")
-    .single();
+  // Update Auth user_metadata so middleware knows they finished onboarding
+  await supabase.auth.updateUser({
+    data: { onboarding_completed: true }
+  });
 
-  if (goalUpsertError) {
-    console.error("Error upserting career goal:", goalUpsertError);
-    // Proceed anyway, maybe we can just rely on the config
-  } else if (dbGoal) {
-    // 3. Link profile to career goal
-    await supabase
-      .from("profile_career_goals")
+  // 2. Safely link career goal if DB tables exist
+  try {
+    const { data: dbGoal, error: goalUpsertError } = await supabase
+      .from("career_goals")
       .upsert({
-        profile_id: user.id,
-        goal_id: dbGoal.id,
-        priority: 1,
-      }, { onConflict: "profile_id,goal_id" });
+        slug: goal.slug,
+        title: goal.title,
+        description: goal.description,
+        icon: goal.icon,
+        category: goal.category,
+        required_skills: goal.requiredSkills,
+      }, { onConflict: "slug" })
+      .select("id")
+      .single();
+
+    if (!goalUpsertError && dbGoal) {
+      await supabase
+        .from("profile_career_goals")
+        .upsert({
+          profile_id: user.id,
+          goal_id: dbGoal.id,
+          priority: 1,
+        }, { onConflict: "profile_id,goal_id" });
+    }
+  } catch (err) {
+    console.warn("Secondary career_goals table link skipped:", err);
   }
 
   revalidatePath("/dashboard");

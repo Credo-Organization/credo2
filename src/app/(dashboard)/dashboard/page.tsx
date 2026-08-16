@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/shared/page-header";
-import { LayoutDashboard, GitBranch, Award, Shield, Map, ArrowRight } from "lucide-react";
+import { LayoutDashboard, GitBranch, Award, Shield, Map, ArrowRight, Briefcase } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -34,10 +34,10 @@ export default async function DashboardPage() {
       color: "text-primary",
     },
     {
-      title: "Career Roadmap",
-      description: "Get your learning path",
-      icon: Map,
-      href: "/roadmap",
+      title: "Find Opportunities",
+      description: "Match with jobs and internships",
+      icon: Briefcase,
+      href: "/opportunities",
       color: "text-emerald-400",
     },
   ];

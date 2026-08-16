@@ -1,9 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useOnboardingStore } from "@/stores/onboarding-store";
 import { StepIndicator } from "@/components/onboarding/step-indicator";
 import { PersonalInfoForm } from "@/components/onboarding/personal-info-form";
 import { CareerGoalSelection } from "@/components/onboarding/career-goal-selection";
+import { createClient } from "@/lib/supabase/client";
+import { Loader2 } from "lucide-react";
 
 export default function OnboardingPage() {
   const { step } = useOnboardingStore();
