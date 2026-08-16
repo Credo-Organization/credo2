@@ -1,6 +1,11 @@
-import { GoogleGenAI } from "@google/genai";
+import { generateObject } from "ai";
+import { google } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
+import { z } from "zod";
 import { normalizeSkill } from "./taxonomy-normalizer";
 import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
+import crypto from "crypto";
 
 export interface ExtractedClaim {
   raw_phrase: string;
@@ -18,136 +23,150 @@ export interface ExtractionResult {
   raw_text?: string;
 }
 
-/**
- * Extract skill claims from raw text using Gemini AI structured output.
- * Enforces mechanical verbatim verification: context_snippet must exist in source_text.
- * Automatically normalizes claims against the 296-skill taxonomy.
- */
+const claimSchema = z.object({
+  raw_phrase: z.string().describe("The exact name of the skill as written"),
+  claimed_skill: z.string().describe("Standard technical name (e.g. React, Python)"),
+  context_snippet: z.string().describe("EXACT VERBATIM substring from the text proving this skill"),
+  source_section: z.enum(["education", "projects", "experience", "certifications", "skills_list", "other"]),
+  self_asserted: z.boolean().describe("true if just listed in a skills section, false if backed by a description")
+});
+
+const extractionSchema = z.object({
+  claims: z.array(claimSchema),
+  document_type: z.enum(["resume", "certificate", "project_description"])
+});
+
+// Helper for alphanumeric normalization (zero-dependency fuzzy match)
+function stripText(str: string): string {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+// Chunking helper
+function chunkText(text: string, maxLength: number = 3000): string[] {
+  const paragraphs = text.split(/\n\s*\n/);
+  const chunks: string[] = [];
+  let currentChunk = "";
+
+  for (const p of paragraphs) {
+    if (currentChunk.length + p.length > maxLength && currentChunk.length > 0) {
+      chunks.push(currentChunk.trim());
+      currentChunk = "";
+    }
+    currentChunk += p + "\n\n";
+  }
+  if (currentChunk.trim()) {
+    chunks.push(currentChunk.trim());
+  }
+  return chunks.length > 0 ? chunks : [text]; // Fallback if no newlines
+}
+
 export async function extractClaimsFromText(
   sourceText: string,
   documentType: "resume" | "certificate" | "project_description" = "resume"
 ): Promise<ExtractionResult> {
-  const apiKey = process.env.AI_API_KEY;
-  if (!apiKey || apiKey === "your-ai-api-key") {
-    throw new Error("Missing or invalid AI_API_KEY environment variable.");
+  const cookieStore = await cookies();
+  const provider = cookieStore.get("ai_provider")?.value || "gemini";
+  
+  // 1. Semantic Caching
+  const contentHash = crypto.createHash('sha256').update(sourceText + provider).digest('hex');
+  const supabase = await createClient();
+  
+  const { data: cached } = await supabase
+    .from("extraction_cache")
+    .select("extracted_data")
+    .eq("content_hash", contentHash)
+    .single();
+    
+  if (cached && cached.extracted_data) {
+    console.log("[DocumentExtractor] Cache Hit for document");
+    return cached.extracted_data as ExtractionResult;
   }
 
-  // Gemini is instantiated lazily below if needed
-
-  const prompt = `
-You are an evidence extraction engine for technical skill validation.
-Analyze the following ${documentType} text and extract ALL explicit skill claims, credentials, and technical project references.
-
-CRITICAL INSTRUCTIONS:
-1. For every claim, "context_snippet" MUST be an EXACT VERBATIM SUBSTRING copied directly from the text.
-2. "claimed_skill" should be the standard technical skill name (e.g. "React", "Python", "PostgreSQL", "Docker", "Machine Learning").
-3. "source_section" must be one of: "education", "projects", "experience", "certifications", "skills_list", "other".
-4. "self_asserted" is true if it's just listed in a skills section, false if backed by project/experience description.
-
-Document Text:
-"""
-${sourceText}
-"""
-
-Return strictly valid JSON matching this schema:
-{
-  "claims": [
-    {
-      "raw_phrase": "string",
-      "claimed_skill": "string",
-      "context_snippet": "string",
-      "source_section": "education" | "projects" | "experience" | "certifications" | "skills_list" | "other",
-      "self_asserted": boolean
-    }
-  ],
-  "document_type": "${documentType}"
-}
-
-Do not include markdown code blocks or explanatory text. Return ONLY the JSON object.
-`;
-
-  try {
-    const cookieStore = await cookies();
-    const provider = cookieStore.get("ai_provider")?.value || "gemini";
-    let responseText = "";
-
-    if (provider === "xai") {
-      const xaiKey = process.env.XAI_API_KEY;
-      if (!xaiKey) throw new Error("Missing XAI_API_KEY environment variable.");
-      
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${xaiKey}`,
-        },
-        body: JSON.stringify({
-          model: "grok-2",
-          messages: [
-            {
-              role: "system",
-              content: "You are an AI that strictly outputs valid JSON without markdown wrapping."
-            },
-            {
-              role: "user",
-              content: prompt
-            }
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.1
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`xAI API Error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      responseText = data.choices[0].message.content;
-    } else {
-      // Default to Gemini
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: process.env.AI_MODEL || "gemini-2.5-flash",
-        contents: prompt,
-      });
-      responseText = response.text || "";
-    }
-
-    responseText = responseText.replace(/```json/g, "").replace(/```/g, "").trim() || "{}";
-    const parsed = JSON.parse(responseText);
-
-    // 1. Mechanical anti-hallucination check: drop any claim where snippet isn't verbatim in text
-    // 2. Normalize every claim against the 296-skill taxonomy
-    const validatedClaims: ExtractedClaim[] = (parsed.claims || [])
-      .filter((claim: any) => {
-        if (!claim.context_snippet) return false;
-        const isVerbatim = sourceText.toLowerCase().includes(claim.context_snippet.toLowerCase().trim());
-        if (!isVerbatim) {
-          console.warn(`[DocumentExtractor] Dropped non-verbatim claim snippet: "${claim.context_snippet}"`);
-        }
-        return isVerbatim;
-      })
-      .map((claim: any) => {
-        const norm = normalizeSkill(claim.claimed_skill);
-        return {
-          raw_phrase: claim.raw_phrase,
-          claimed_skill: norm.canonical_name,
-          skill_id: norm.skill_id,
-          unmapped_label: norm.unmapped_label,
-          context_snippet: claim.context_snippet,
-          source_section: claim.source_section,
-          self_asserted: claim.self_asserted,
-        };
-      });
-
-    return {
-      document_type: parsed.document_type || documentType,
-      claims: validatedClaims,
-      raw_text: sourceText,
-    };
-  } catch (error: any) {
-    console.error("[DocumentExtractor] Extraction Error:", error);
-    throw new Error(`Extraction failed: ${error.message}`);
+  // 2. Setup AI Model
+  let model;
+  if (provider === "xai") {
+    const xai = createOpenAI({
+      baseURL: "https://api.x.ai/v1",
+      apiKey: process.env.XAI_API_KEY || "",
+    });
+    model = xai("grok-2");
+  } else {
+    model = google(process.env.AI_MODEL || "gemini-2.5-flash");
   }
+
+  // 3. Chunking & Concurrency
+  const chunks = chunkText(sourceText, 3000);
+  const strippedSource = stripText(sourceText);
+  
+  console.log(`[DocumentExtractor] Processing ${chunks.length} chunk(s) concurrently`);
+  
+  const chunkPromises = chunks.map(async (chunk) => {
+    const prompt = `You are an evidence extraction engine for technical skill validation.
+Analyze this portion of a ${documentType} and extract ALL explicit skill claims.
+CRITICAL: For every claim, "context_snippet" MUST be an EXACT VERBATIM SUBSTRING copied directly from the text.
+
+Text Chunk:
+"""
+${chunk}
+"""`;
+
+    try {
+      const { object } = await generateObject({
+        model,
+        schema: extractionSchema,
+        prompt
+      });
+      return object.claims;
+    } catch (e) {
+      console.error("[DocumentExtractor] Chunk extraction failed", e);
+      return [];
+    }
+  });
+  
+  const chunkResults = await Promise.all(chunkPromises);
+  const allClaims = chunkResults.flat();
+  
+  // 4. Verification & Deduplication
+  const uniqueClaims = new Map<string, ExtractedClaim>();
+  
+  for (const claim of allClaims) {
+    // Alphanumeric Verification
+    const strippedSnippet = stripText(claim.context_snippet);
+    if (!strippedSnippet || !strippedSource.includes(strippedSnippet)) {
+      console.warn(`[DocumentExtractor] Dropped hallucinated claim: "${claim.context_snippet}"`);
+      continue;
+    }
+    
+    // Normalization & Deduplication
+    const norm = normalizeSkill(claim.claimed_skill);
+    const dedupeKey = norm.skill_id || norm.unmapped_label || claim.claimed_skill;
+    
+    if (!uniqueClaims.has(dedupeKey)) {
+      uniqueClaims.set(dedupeKey, {
+        raw_phrase: claim.raw_phrase,
+        claimed_skill: norm.canonical_name,
+        skill_id: norm.skill_id,
+        unmapped_label: norm.unmapped_label,
+        context_snippet: claim.context_snippet,
+        source_section: claim.source_section,
+        self_asserted: claim.self_asserted
+      });
+    }
+  }
+
+  const result: ExtractionResult = {
+    claims: Array.from(uniqueClaims.values()),
+    document_type: documentType,
+    raw_text: sourceText
+  };
+  
+  // 5. Save to Cache (Fire & Forget)
+  supabase.from("extraction_cache").insert({
+    content_hash: contentHash,
+    extracted_data: result
+  }).then(({ error }) => {
+    if (error) console.error("[DocumentExtractor] Cache save error:", error);
+  });
+
+  return result;
 }

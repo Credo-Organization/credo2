@@ -191,3 +191,17 @@ CREATE POLICY "Users can manage own passports" ON public.passports FOR ALL USING
 CREATE INDEX IF NOT EXISTS idx_passports_profile_id ON public.passports(profile_id);
 CREATE INDEX IF NOT EXISTS idx_evidence_user_id ON public.evidence(user_id);
 CREATE INDEX IF NOT EXISTS idx_evidence_claims_evidence_id ON public.evidence_claims(evidence_id);
+
+-- ════════════════════════════════════════════════════════════════
+-- AI EXTRACTION CACHE
+-- ════════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.extraction_cache (
+  content_hash TEXT PRIMARY KEY,
+  extracted_data JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.extraction_cache ENABLE ROW LEVEL SECURITY;
+-- Internal table used by Server Actions, no public access required
+DROP POLICY IF EXISTS "Deny public access to extraction_cache" ON public.extraction_cache;
+CREATE POLICY "Deny public access to extraction_cache" ON public.extraction_cache FOR ALL USING (false);
