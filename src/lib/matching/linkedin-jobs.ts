@@ -27,7 +27,8 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
     try {
       // Create request url parameters for linkedin-job-search-api.p.rapidapi.com
       const searchUrl = new URL(LINKEDIN_API_URL);
-      // Remove time_frame to maximize the pool of available real jobs
+      // Use 6m (6 months) to maximize job availability and break the Next.js data cache
+      searchUrl.searchParams.append("time_frame", "6m");
       searchUrl.searchParams.append("limit", "10");
       searchUrl.searchParams.append("offset", "0");
       searchUrl.searchParams.append("description_format", "text");
@@ -38,13 +39,15 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
         : '"India"';
       searchUrl.searchParams.append("location", locationQuery);
 
-      const response = await fetch(searchUrl.toString(), {
+      const searchUrlStr = searchUrl.toString();
+      console.log(`[LinkedIn Jobs] Fetching URL: ${searchUrlStr}`);
+      const response = await fetch(searchUrlStr, {
         method: "GET",
         headers: {
           "x-rapidapi-key": rapidApiKey,
           "x-rapidapi-host": "linkedin-job-search-api.p.rapidapi.com" 
         },
-        next: { revalidate: 3600 } // Cache API responses for 1 hour to prevent RapidAPI rate limits
+        cache: 'no-store' // Completely disable caching to guarantee live data fetches for the demo
       });
 
       if (response.status === 429) {
@@ -55,7 +58,9 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
         throw new Error(`LinkedIn API Error: ${response.status} ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const rawText = await response.text();
+      console.log(`[LinkedIn Jobs] Raw Response snippet: ${rawText.substring(0, 150)}`);
+      const data = JSON.parse(rawText);
       rawJobs = data || []; 
       
       if (!Array.isArray(rawJobs) && data.jobs) {
