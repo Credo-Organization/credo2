@@ -27,7 +27,7 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
     try {
       // Create request url parameters for linkedin-job-search-api.p.rapidapi.com
       const searchUrl = new URL(LINKEDIN_API_URL);
-      searchUrl.searchParams.append("time_frame", "24h");
+      // Remove time_frame to maximize the pool of available real jobs
       searchUrl.searchParams.append("limit", "10");
       searchUrl.searchParams.append("offset", "0");
       searchUrl.searchParams.append("description_format", "text");
@@ -132,20 +132,22 @@ function transformLinkedInToOpportunities(linkedinJobs: any[]): Opportunity[] {
 }
 
 function getMockIndianJobsResponse(query: string) {
+  const topSkill = query.split(" ")[0] || "Software";
+  
   return [
     {
       job_id: "mock_ind_1",
-      job_title: `Senior ${query.split(" ")[0]} Developer`,
+      job_title: `Senior ${topSkill} Engineer`,
       company_name: "Flipkart",
       location: "Bengaluru, Karnataka, India",
-      job_description: "We are looking for a senior engineer with deep expertise in React, TypeScript, and Node.js. You should be comfortable building scalable microservices and deploying them via Docker and Kubernetes to serve millions of Indian customers.",
+      job_description: `We are looking for a senior engineer with deep expertise in ${topSkill}. You should be comfortable building scalable systems and deploying them via Docker and Kubernetes to serve millions of Indian customers. Familiarity with cloud architecture is a huge plus.`,
     },
     {
       job_id: "mock_ind_2",
-      job_title: "Full Stack Software Engineer",
+      job_title: `Core ${topSkill} Developer`,
       company_name: "Zomato",
       location: "Gurugram, Haryana, India",
-      job_description: "Join our fast-paced food delivery startup! Must have experience with Python, Django, PostgreSQL, and basic frontend skills including React and CSS. Familiarity with AWS is a huge plus.",
+      job_description: `Join our fast-paced startup! Must have strong experience with ${topSkill}, database optimization, and scalable backend infrastructure. Previous experience with payment gateways and real-time streaming is beneficial.`,
     },
     {
       job_id: "mock_ind_3",
