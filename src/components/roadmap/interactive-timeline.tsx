@@ -5,30 +5,51 @@ import { CheckCircle2, ChevronRight, Rocket, Code2, Loader2, Sparkles } from "lu
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { generateAiRoadmap } from "@/actions/generate-roadmap";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useObject } from "@ai-sdk/react";
+import { z } from "zod";
+
+const roadmapSchema = z.object({
+  learningOrder: z.array(z.object({
+    step: z.number(),
+    skill: z.string(),
+    description: z.string()
+  })),
+  suggestedProject: z.object({
+    title: z.string(),
+    description: z.string(),
+    features: z.array(z.string())
+  })
+});
+
 
 interface InteractiveTimelineProps {
   roadmapData: any;
   goalTitle: string;
   missingSkills: string[];
+  passportId?: string;
 }
 
-export function InteractiveTimeline({ roadmapData, goalTitle, missingSkills }: InteractiveTimelineProps) {
-  const [isGenerating, setIsGenerating] = useState(false);
+export function InteractiveTimeline({ roadmapData: initialRoadmapData, goalTitle, missingSkills, passportId }: InteractiveTimelineProps) {
   
-  const handleGenerate = async () => {
-    try {
-      setIsGenerating(true);
-      await generateAiRoadmap(goalTitle, missingSkills);
+  const { submit, isLoading, object, error } = useObject({
+    api: '/api/roadmap',
+    schema: roadmapSchema,
+    onError: (err) => {
+      toast.error(err.message || "Failed to generate roadmap.");
+    },
+    onFinish: () => {
       toast.success("AI Roadmap generated successfully!");
-    } catch (e: any) {
-      toast.error(e.message || "Failed to generate roadmap.");
-    } finally {
-      setIsGenerating(false);
     }
+  });
+
+  const handleGenerate = () => {
+    submit({ goalTitle, missingSkills, passportId });
   };
+
+  // Use the streaming object if it exists, otherwise fall back to the initial data
+  const roadmapData = object || initialRoadmapData;
 
   if (!roadmapData) {
     return (
@@ -40,10 +61,10 @@ export function InteractiveTimeline({ roadmapData, goalTitle, missingSkills }: I
         </p>
         <Button 
           onClick={handleGenerate} 
-          disabled={isGenerating || missingSkills.length === 0}
+          disabled={isLoading || missingSkills.length === 0}
           className="gap-2 h-11 px-8 bg-emerald-500 hover:bg-emerald-600 text-white"
         >
-          {isGenerating ? (
+          {isLoading ? (
             <><Loader2 className="w-5 h-5 animate-spin" /> Generating Path...</>
           ) : (
             <><Rocket className="w-5 h-5" /> Generate My Roadmap</>
@@ -57,13 +78,17 @@ export function InteractiveTimeline({ roadmapData, goalTitle, missingSkills }: I
   }
 
   const { learningOrder, suggestedProject } = roadmapData;
+  
+  // Provide safe defaults while streaming
+  const safeLearningOrder = learningOrder || [];
+  const safeSuggestedProject = suggestedProject || { title: "Drafting Project...", description: "", features: [] };
 
   return (
     <div className="max-w-3xl mx-auto py-8">
       
       {/* Timeline Steps */}
       <div className="relative border-l-2 border-primary/20 ml-6 md:ml-10 mb-12 space-y-12">
-        {learningOrder.map((item: any, i: number) => (
+        {safeLearningOrder.map((item: any, i: number) => (
           <div key={i} className="relative pl-8 md:pl-12 group">
             {/* Timeline Node */}
             <div className="absolute w-8 h-8 bg-background border-2 border-primary rounded-full -left-[17px] flex items-center justify-center top-0 shadow-sm shadow-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -96,8 +121,8 @@ export function InteractiveTimeline({ roadmapData, goalTitle, missingSkills }: I
             <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/20">
               <Code2 className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-2xl font-bold mb-2">{suggestedProject.title}</h3>
-            <p className="text-muted-foreground">{suggestedProject.description}</p>
+            <h3 className="text-2xl font-bold mb-2">{safeSuggestedProject.title}</h3>
+            <p className="text-muted-foreground">{safeSuggestedProject.description}</p>
           </div>
           
           <div className="p-8 bg-card/40">
@@ -106,7 +131,7 @@ export function InteractiveTimeline({ roadmapData, goalTitle, missingSkills }: I
               Key Features to Build
             </h4>
             <div className="grid sm:grid-cols-2 gap-4">
-              {suggestedProject.features.map((feature: string, i: number) => (
+              {safeSuggestedProject.features?.map((feature: string, i: number) => (
                 <div key={i} className="flex items-start gap-3 p-4 rounded-xl bg-background border border-border/40">
                   <ChevronRight className="w-4 h-4 mt-0.5 text-primary shrink-0" />
                   <span className="text-sm font-medium">{feature}</span>

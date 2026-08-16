@@ -13,17 +13,22 @@ export default async function RoadmapPage() {
   
   // Fetch passport to see if roadmap already exists
   let roadmapData = null;
+  let passportId = null;
   if (data?.hasPassport) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data: passport } = await supabase
         .from("passports")
-        .select("snapshot_data")
+        .select("id, snapshot_data")
         .eq("profile_id", user.id)
         .order("version", { ascending: false })
         .limit(1)
         .single();
+      
+      if (passport) {
+        passportId = passport.id;
+      }
       
       if (passport?.snapshot_data?.roadmap) {
         roadmapData = passport.snapshot_data.roadmap;
@@ -71,6 +76,7 @@ export default async function RoadmapPage() {
               roadmapData={roadmapData}
               goalTitle={data.targetGoal.title}
               missingSkills={data.analysis!.missingSkills}
+              passportId={passportId}
             />
           </div>
         </div>
