@@ -84,10 +84,15 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
  */
 function transformLinkedInToOpportunities(linkedinJobs: any[]): Opportunity[] {
   return linkedinJobs.map(job => {
+    // Safely extract fields from JSearch / Mock API format
+    const title = job.job_title || job.title || "";
+    const description = job.job_description || job.description_text || job.description || "";
+    const company = job.employer_name || job.company_name || job.organization || job.company || "Unknown Company";
+    
     // Combine description and title for maximum context
     const fullText = `
-      ${job.title || ""}
-      ${job.description_text || job.description || ""}
+      ${title}
+      ${description}
     `;
 
     // 1. Instantly scan the raw text for our 296 taxonomy skills
@@ -95,8 +100,7 @@ function transformLinkedInToOpportunities(linkedinJobs: any[]): Opportunity[] {
 
     // 2. Map them to our OpportunityRequirement format
     const requirements: OpportunityRequirement[] = extractedSkills.map(skill => {
-      const title = (job.title || "").toLowerCase();
-      const isCritical = title.includes(skill.canonical_name.toLowerCase());
+      const isCritical = title.toLowerCase().includes(skill.canonical_name.toLowerCase());
       return {
         skill_id: skill.id,
         skill_name: skill.canonical_name,
@@ -107,15 +111,15 @@ function transformLinkedInToOpportunities(linkedinJobs: any[]): Opportunity[] {
 
     const locationStr = Array.isArray(job.locations_derived) && job.locations_derived.length > 0 
       ? job.locations_derived[0] 
-      : "India";
+      : (job.job_city || job.location || "India");
 
     return {
-      id: job.id?.toString() || Math.random().toString(36).substring(7),
-      title: job.title || "Software Engineer",
-      org_name: job.organization || job.company || "Unknown Company",
+      id: (job.job_id || job.id || Math.random().toString(36).substring(7)).toString(),
+      title: title || "Software Engineer",
+      org_name: company,
       location: locationStr,
       duration: "FULLTIME", 
-      description: job.description_text ? job.description_text.substring(0, 300) + "..." : "No description provided.",
+      description: description ? description.substring(0, 300) + "..." : "No description provided.",
       is_demo: false, // These are fetched as live data
       requirements
     };
