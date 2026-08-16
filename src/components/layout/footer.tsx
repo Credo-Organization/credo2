@@ -9,9 +9,6 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Shield className="h-4 w-4 text-primary-foreground" />
-              </div>
               <span className="text-lg font-semibold">Credify</span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground max-w-[240px]">
@@ -62,18 +59,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-center gap-4">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Credify. All rights reserved.
           </p>
-          <a
-            href="https://github.com/soumxyz/credify"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <GitBranch className="h-5 w-5" />
-          </a>
         </div>
       </div>
     </footer>
