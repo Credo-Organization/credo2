@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════
--- CREDORA / PRAMAAN — Database Schema Migration File
+-- CREDORA / PRAMAAN — Idempotent Database Schema Migration File
 -- Run this in your Supabase SQL Editor:
 -- https://supabase.com/dashboard/project/wizuwacevushwlegfgyu/sql/new
 -- ════════════════════════════════════════════════════════════════
@@ -19,18 +19,13 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Enable RLS for profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public profiles are viewable by everyone" 
-  ON public.profiles FOR SELECT USING (true);
-
-CREATE POLICY "Users can insert own profile" 
-  ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
-
-CREATE POLICY "Users can update own profile" 
-  ON public.profiles FOR UPDATE USING (auth.uid() = id);
-
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON public.profiles;
+CREATE POLICY "Public profiles are viewable by everyone" ON public.profiles FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
+CREATE POLICY "Users can insert own profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
+CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
 
 -- 2. CAREER GOALS TABLE
 CREATE TABLE IF NOT EXISTS public.career_goals (
@@ -45,9 +40,8 @@ CREATE TABLE IF NOT EXISTS public.career_goals (
 );
 
 ALTER TABLE public.career_goals ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Career goals are viewable by everyone" 
-  ON public.career_goals FOR SELECT USING (true);
-
+DROP POLICY IF EXISTS "Career goals are viewable by everyone" ON public.career_goals;
+CREATE POLICY "Career goals are viewable by everyone" ON public.career_goals FOR SELECT USING (true);
 
 -- 3. PROFILE CAREER GOALS JUNCTION TABLE
 CREATE TABLE IF NOT EXISTS public.profile_career_goals (
@@ -60,12 +54,10 @@ CREATE TABLE IF NOT EXISTS public.profile_career_goals (
 );
 
 ALTER TABLE public.profile_career_goals ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own career goals" 
-  ON public.profile_career_goals FOR SELECT USING (auth.uid() = profile_id);
-
-CREATE POLICY "Users can manage own career goals" 
-  ON public.profile_career_goals FOR ALL USING (auth.uid() = profile_id);
-
+DROP POLICY IF EXISTS "Users can view own career goals" ON public.profile_career_goals;
+CREATE POLICY "Users can view own career goals" ON public.profile_career_goals FOR SELECT USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can manage own career goals" ON public.profile_career_goals;
+CREATE POLICY "Users can manage own career goals" ON public.profile_career_goals FOR ALL USING (auth.uid() = profile_id);
 
 -- 4. GITHUB CONNECTIONS TABLE
 CREATE TABLE IF NOT EXISTS public.github_connections (
@@ -78,11 +70,10 @@ CREATE TABLE IF NOT EXISTS public.github_connections (
 );
 
 ALTER TABLE public.github_connections ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own github connection" 
-  ON public.github_connections FOR SELECT USING (auth.uid() = profile_id);
-CREATE POLICY "Users can manage own github connection" 
-  ON public.github_connections FOR ALL USING (auth.uid() = profile_id);
-
+DROP POLICY IF EXISTS "Users can view own github connection" ON public.github_connections;
+CREATE POLICY "Users can view own github connection" ON public.github_connections FOR SELECT USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can manage own github connection" ON public.github_connections;
+CREATE POLICY "Users can manage own github connection" ON public.github_connections FOR ALL USING (auth.uid() = profile_id);
 
 -- 5. GITHUB REPOS TABLE
 CREATE TABLE IF NOT EXISTS public.github_repos (
@@ -99,9 +90,8 @@ CREATE TABLE IF NOT EXISTS public.github_repos (
 );
 
 ALTER TABLE public.github_repos ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public repos viewable by everyone" 
-  ON public.github_repos FOR SELECT USING (true);
-
+DROP POLICY IF EXISTS "Public repos viewable by everyone" ON public.github_repos;
+CREATE POLICY "Public repos viewable by everyone" ON public.github_repos FOR SELECT USING (true);
 
 -- 6. REPO LANGUAGES TABLE
 CREATE TABLE IF NOT EXISTS public.repo_languages (
@@ -112,9 +102,8 @@ CREATE TABLE IF NOT EXISTS public.repo_languages (
 );
 
 ALTER TABLE public.repo_languages ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Repo languages viewable by everyone" 
-  ON public.repo_languages FOR SELECT USING (true);
-
+DROP POLICY IF EXISTS "Repo languages viewable by everyone" ON public.repo_languages;
+CREATE POLICY "Repo languages viewable by everyone" ON public.repo_languages FOR SELECT USING (true);
 
 -- 7. CERTIFICATES TABLE
 CREATE TABLE IF NOT EXISTS public.certificates (
@@ -130,37 +119,35 @@ CREATE TABLE IF NOT EXISTS public.certificates (
 );
 
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own certificates" 
-  ON public.certificates FOR SELECT USING (auth.uid() = profile_id);
-CREATE POLICY "Users can manage own certificates" 
-  ON public.certificates FOR ALL USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can view own certificates" ON public.certificates;
+CREATE POLICY "Users can view own certificates" ON public.certificates FOR SELECT USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can manage own certificates" ON public.certificates;
+CREATE POLICY "Users can manage own certificates" ON public.certificates FOR ALL USING (auth.uid() = profile_id);
 
-
--- 8. EVIDENCE TABLE (Ingested Raw Documents / Credentials)
+-- 8. EVIDENCE TABLE
 CREATE TABLE IF NOT EXISTS public.evidence (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-  source_type TEXT NOT NULL, -- resume | github | certificate | manual | microtask
+  source_type TEXT NOT NULL,
   raw_ref TEXT,
   storage_path TEXT,
   issuer_id TEXT,
-  status TEXT DEFAULT 'pending', -- pending | processed | failed
+  status TEXT DEFAULT 'pending',
   ingested_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 ALTER TABLE public.evidence ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view own evidence" 
-  ON public.evidence FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Users can insert own evidence" 
-  ON public.evidence FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can view own evidence" ON public.evidence;
+CREATE POLICY "Users can view own evidence" ON public.evidence FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert own evidence" ON public.evidence;
+CREATE POLICY "Users can insert own evidence" ON public.evidence FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-
--- 9. EVIDENCE CLAIMS TABLE (Extracted & Taxonomy-Normalized Claims)
+-- 9. EVIDENCE CLAIMS TABLE
 CREATE TABLE IF NOT EXISTS public.evidence_claims (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   evidence_id UUID REFERENCES public.evidence(id) ON DELETE CASCADE,
   extracted_text TEXT NOT NULL,
-  skill_id TEXT, -- e.g. SK-FE-003 from 296-skill taxonomy
+  skill_id TEXT,
   unmapped_label TEXT,
   match_confidence NUMERIC DEFAULT 1.0,
   llm_model TEXT,
@@ -168,13 +155,19 @@ CREATE TABLE IF NOT EXISTS public.evidence_claims (
 );
 
 ALTER TABLE public.evidence_claims ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users can view evidence claims" 
-  ON public.evidence_claims FOR SELECT USING (true);
-CREATE POLICY "Users can insert evidence claims" 
-  ON public.evidence_claims FOR INSERT WITH CHECK (true);
+DROP POLICY IF EXISTS "Users can view evidence claims" ON public.evidence_claims;
+CREATE POLICY "Users can view evidence claims" ON public.evidence_claims FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can insert evidence claims" ON public.evidence_claims;
+-- Only allow inserting claims if the user owns the parent evidence record
+CREATE POLICY "Users can insert evidence claims" ON public.evidence_claims FOR INSERT WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.evidence
+    WHERE public.evidence.id = evidence_id
+    AND public.evidence.user_id = auth.uid()
+  )
+);
 
-
--- 10. PASSPORTS TABLE (Verifiable Skill Passport Snapshots)
+-- 10. PASSPORTS TABLE
 CREATE TABLE IF NOT EXISTS public.passports (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
@@ -187,7 +180,14 @@ CREATE TABLE IF NOT EXISTS public.passports (
 );
 
 ALTER TABLE public.passports ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public passports viewable by everyone" 
-  ON public.passports FOR SELECT USING (is_public OR auth.uid() = profile_id);
-CREATE POLICY "Users can manage own passports" 
-  ON public.passports FOR ALL USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Public passports viewable by everyone" ON public.passports;
+CREATE POLICY "Public passports viewable by everyone" ON public.passports FOR SELECT USING (is_public OR auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can manage own passports" ON public.passports;
+CREATE POLICY "Users can manage own passports" ON public.passports FOR ALL USING (auth.uid() = profile_id);
+
+-- ════════════════════════════════════════════════════════════════
+-- PERFORMANCE INDEXES (Prevents Sequential Scans)
+-- ════════════════════════════════════════════════════════════════
+CREATE INDEX IF NOT EXISTS idx_passports_profile_id ON public.passports(profile_id);
+CREATE INDEX IF NOT EXISTS idx_evidence_user_id ON public.evidence(user_id);
+CREATE INDEX IF NOT EXISTS idx_evidence_claims_evidence_id ON public.evidence_claims(evidence_id);
