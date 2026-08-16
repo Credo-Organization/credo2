@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Lock, MapPin, Building, Clock } from "lucide-react";
+import { AiCoachInsight } from "./ai-coach-insight";
 
-export function OpportunityCard({ result }: { result: MatchResult }) {
+export function OpportunityCard({ result, passportSnapshot }: { result: MatchResult, passportSnapshot: any }) {
   const { opportunity, matchScore, matchedSkills, missingSkills } = result;
   
   const isMatch = matchScore >= 75;
@@ -79,6 +80,9 @@ export function OpportunityCard({ result }: { result: MatchResult }) {
             </div>
           )}
         </div>
+        
+        {/* Elite Module 8: AI Coach RAG Insight */}
+        <AiCoachInsight result={result} passportSnapshot={passportSnapshot} />
       </CardContent>
       
       <CardFooter className="bg-muted/30 border-t pt-4">

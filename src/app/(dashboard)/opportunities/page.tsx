@@ -91,7 +91,7 @@ export default async function OpportunitiesPage() {
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
         {matches.map((result) => (
-          <OpportunityCard key={result.opportunity.id} result={result} />
+          <OpportunityCard key={result.opportunity.id} result={result} passportSnapshot={passport.snapshot_data} />
         ))}
         {matches.length === 0 && (
           <div className="text-muted-foreground text-center py-12 col-span-full">
