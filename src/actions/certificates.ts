@@ -43,13 +43,34 @@ export async function uploadCertificateMetadata({
     throw new Error("Failed to save certificate record.");
   }
 
-  // 4. Trigger Automatic Skill Claim Extraction from title / metadata
+  // 4. Trigger Automatic Skill Claim Extraction
   try {
-    const { extractClaimsFromText } = await import("@/lib/extractor/document-extractor");
-    const extractionResult = await extractClaimsFromText(
-      `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`,
-      "certificate"
-    );
+    const { extractClaimsFromMultimodal } = await import("@/lib/extractor/document-extractor");
+    
+    // Default fallback text using metadata
+    let extractionText = `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`;
+    
+    // [Elite Engineer Fix] Fetch the file and extract skills visually using Multimodal LLM
+    const response = await fetch(fileUrl);
+    let extractionResult = { claims: [] as any[] };
+    
+    if (response.ok) {
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      let mimeType = "application/pdf";
+      if (fileUrl.toLowerCase().endsWith(".png")) mimeType = "image/png";
+      else if (fileUrl.toLowerCase().endsWith(".jpg") || fileUrl.toLowerCase().endsWith(".jpeg")) mimeType = "image/jpeg";
+
+      extractionResult = await extractClaimsFromMultimodal(
+        buffer,
+        mimeType,
+        extractionText,
+        "certificate"
+      );
+    } else {
+      console.warn(`[Document Extractor] Failed to fetch file from storage. Status: ${response.status}`);
+    }
 
     if (extractionResult.claims.length > 0) {
       const { data: evidence } = await supabase
@@ -105,6 +126,17 @@ export async function deleteCertificate(id: number, fileUrl: string) {
 
   if (dbError) {
     throw new Error("Failed to delete certificate record.");
+  }
+
+  // Also delete the associated evidence record (cascade will handle evidence_claims)
+  const { error: evidenceError } = await supabase
+    .from("evidence")
+    .delete()
+    .eq("raw_ref", fileUrl)
+    .eq("user_id", user.id);
+    
+  if (evidenceError) {
+    console.error("Failed to delete evidence record, orphaned claims may exist:", evidenceError);
   }
 
   // 2. Extract path from public URL and delete from storage

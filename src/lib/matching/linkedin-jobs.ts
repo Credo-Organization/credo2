@@ -61,6 +61,11 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
       if (!Array.isArray(rawJobs) && data.jobs) {
          rawJobs = data.jobs;
       }
+
+      if (Array.isArray(rawJobs) && rawJobs.length === 0) {
+        console.warn("[LinkedIn Jobs] RapidAPI returned 0 jobs. Falling back to Mock India data for demo purposes.");
+        rawJobs = getMockIndianJobsResponse(query);
+      }
     } catch (error: any) {
       if (error.message === "RATE_LIMIT_EXCEEDED") {
         console.warn("[LinkedIn Jobs] Rate limit exceeded on RapidAPI. Falling back to Mock India data.");

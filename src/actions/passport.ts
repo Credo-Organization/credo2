@@ -98,7 +98,7 @@ export async function generatePassport() {
             skillMap.set(formatted, { 
               ...current, 
               certCitations: [...current.certCitations, `AI Extracted: "${claim.extracted_text}"`],
-              skill_id: claim.skill_id || current.skill_id // preserve skill_id
+              skill_id: claim.skill_id || current.skill_id
             });
           }
         });

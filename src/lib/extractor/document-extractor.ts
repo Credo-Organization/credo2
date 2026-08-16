@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { z } from "zod";
 import { normalizeSkill } from "./taxonomy-normalizer";
@@ -104,7 +104,10 @@ export async function extractClaimsFromText(
     });
     model = xai("grok-2");
   } else {
-    model = google(process.env.AI_MODEL || "gemini-2.5-flash");
+    const googleAuth = createGoogleGenerativeAI({
+      apiKey: process.env.AI_API_KEY || "",
+    });
+    model = googleAuth(process.env.AI_MODEL || "gemini-2.5-flash");
   }
 
   // 3. Chunking & Concurrency
@@ -183,4 +186,72 @@ ${chunk}
   });
 
   return result;
+}
+
+export async function extractClaimsFromMultimodal(
+  fileBuffer: Buffer,
+  mimeType: string,
+  fallbackText: string,
+  documentType: "resume" | "certificate" | "project_description" = "certificate"
+): Promise<ExtractionResult> {
+  const cookieStore = await cookies();
+  const provider = cookieStore.get("ai_provider")?.value || "gemini";
+  
+  let model;
+  if (provider === "xai") {
+    // xAI does not support multimodal file uploads via the standard Vercel AI SDK structure yet,
+    // so we fallback to the text extraction pipeline if the user forced xAI.
+    return extractClaimsFromText(fallbackText, documentType);
+  } else {
+    const googleAuth = createGoogleGenerativeAI({
+      apiKey: process.env.AI_API_KEY || "",
+    });
+    model = googleAuth(process.env.AI_MODEL || "gemini-2.5-flash");
+  }
+
+  const systemInstruction = `You are an elite evidence extraction engine for technical skill validation.
+Analyze the attached ${documentType} (which could be a scanned image or PDF).
+Extract ALL explicit technical skill claims.
+For every claim, "context_snippet" MUST be an EXACT VERBATIM SUBSTRING copied directly from the document.
+If you cannot extract exact text, describe the visual context as closely as possible.`;
+
+  try {
+    const { object } = await generateObject({
+      model,
+      schema: extractionSchema,
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: systemInstruction },
+            { type: "text", text: `Metadata Fallback: ${fallbackText}` },
+            { type: "file", data: fileBuffer, mediaType: mimeType }
+          ]
+        }
+      ]
+    });
+    
+    // Normalize logic
+    const uniqueClaims = new Map<string, ExtractedClaim>();
+    object.claims.forEach(claim => {
+      const norm = normalizeSkill(claim.claimed_skill);
+      const key = norm.canonical_name;
+      if (!uniqueClaims.has(key)) {
+        uniqueClaims.set(key, {
+          ...claim,
+          skill_id: norm.skill_id,
+          unmapped_label: norm.skill_id ? null : norm.canonical_name
+        });
+      }
+    });
+
+    return {
+      claims: Array.from(uniqueClaims.values()),
+      document_type: documentType
+    };
+  } catch (e) {
+    console.error("[DocumentExtractor] Multimodal extraction failed:", e);
+    // Fallback to text extraction if the model rejected the file
+    return extractClaimsFromText(fallbackText, documentType);
+  }
 }

@@ -42,6 +42,10 @@ CREATE TABLE IF NOT EXISTS public.career_goals (
 ALTER TABLE public.career_goals ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Career goals are viewable by everyone" ON public.career_goals;
 CREATE POLICY "Career goals are viewable by everyone" ON public.career_goals FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Authenticated users can insert career goals" ON public.career_goals;
+CREATE POLICY "Authenticated users can insert career goals" ON public.career_goals FOR INSERT TO authenticated WITH CHECK (true);
+DROP POLICY IF EXISTS "Authenticated users can update career goals" ON public.career_goals;
+CREATE POLICY "Authenticated users can update career goals" ON public.career_goals FOR UPDATE TO authenticated USING (true);
 
 -- 3. PROFILE CAREER GOALS JUNCTION TABLE
 CREATE TABLE IF NOT EXISTS public.profile_career_goals (
@@ -123,6 +127,29 @@ DROP POLICY IF EXISTS "Users can view own certificates" ON public.certificates;
 CREATE POLICY "Users can view own certificates" ON public.certificates FOR SELECT USING (auth.uid() = profile_id);
 DROP POLICY IF EXISTS "Users can manage own certificates" ON public.certificates;
 CREATE POLICY "Users can manage own certificates" ON public.certificates FOR ALL USING (auth.uid() = profile_id);
+
+-- ════════════════════════════════════════════════════════════════
+-- DATABASE TRIGGERS
+-- ════════════════════════════════════════════════════════════════
+
+-- Auto-create profile on user signup
+CREATE OR REPLACE FUNCTION public.handle_new_user() 
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, username)
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data->>'full_name',
+    NEW.raw_user_meta_data->>'user_name'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 -- 8. EVIDENCE TABLE
 CREATE TABLE IF NOT EXISTS public.evidence (
