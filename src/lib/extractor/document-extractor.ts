@@ -57,7 +57,20 @@ function chunkText(text: string, maxLength: number = 3000): string[] {
   if (currentChunk.trim()) {
     chunks.push(currentChunk.trim());
   }
-  return chunks.length > 0 ? chunks : [text]; // Fallback if no newlines
+
+  // Fallback: If there were no newlines and the chunk is STILL too massive, slice it forcefully
+  const finalChunks: string[] = [];
+  for (const chunk of chunks) {
+    if (chunk.length > maxLength) {
+      for (let i = 0; i < chunk.length; i += maxLength) {
+        finalChunks.push(chunk.substring(i, i + maxLength));
+      }
+    } else {
+      finalChunks.push(chunk);
+    }
+  }
+
+  return finalChunks.length > 0 ? finalChunks : [text];
 }
 
 export async function extractClaimsFromText(
@@ -68,7 +81,7 @@ export async function extractClaimsFromText(
   const provider = cookieStore.get("ai_provider")?.value || "gemini";
   
   // 1. Semantic Caching
-  const contentHash = crypto.createHash('sha256').update(sourceText + provider).digest('hex');
+  const contentHash = crypto.createHash('sha256').update(sourceText + provider + documentType).digest('hex');
   const supabase = await createClient();
   
   const { data: cached } = await supabase
@@ -139,7 +152,8 @@ ${chunk}
     
     // Normalization & Deduplication
     const norm = normalizeSkill(claim.claimed_skill);
-    const dedupeKey = norm.skill_id || norm.unmapped_label || claim.claimed_skill;
+    let dedupeKey = norm.skill_id || norm.unmapped_label || claim.claimed_skill;
+    dedupeKey = dedupeKey.toLowerCase();
     
     if (!uniqueClaims.has(dedupeKey)) {
       uniqueClaims.set(dedupeKey, {
