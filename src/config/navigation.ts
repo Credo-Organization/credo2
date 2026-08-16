@@ -3,6 +3,7 @@ import {
   GitBranch,
   Award,
   Shield,
+  Briefcase,
   Map,
   Settings,
   type LucideIcon,
@@ -36,6 +37,11 @@ export const dashboardNav: NavItem[] = [
     title: "Passport",
     href: "/passport",
     icon: Shield,
+  },
+  {
+    title: "Opportunities",
+    href: "/opportunities",
+    icon: Briefcase,
   },
   {
     title: "Roadmap",
