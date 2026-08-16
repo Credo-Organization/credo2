@@ -85,23 +85,35 @@ export async function generatePassport() {
   });
 
   // 2. Process AI Extracted Claims
+  const validCertUrls = new Set((certificates || []).map(c => c.file_url));
+
   if (evidenceData) {
     evidenceData.forEach((ev: any) => {
-      if (ev.source_type === "certificate" && ev.evidence_claims) {
-        ev.evidence_claims.forEach((claim: any) => {
-          // Use skill_id if mapped, else fallback
-          const name = claim.unmapped_label || claim.skill_id;
-          if (name) {
-            // Capitalize for display consistency
-            const formatted = name.charAt(0).toUpperCase() + name.slice(1);
-            const current = skillMap.get(formatted) || { repoCount: 0, certCitations: [] };
-            skillMap.set(formatted, { 
-              ...current, 
-              certCitations: [...current.certCitations, `AI Extracted: "${claim.extracted_text}"`],
-              skill_id: claim.skill_id || current.skill_id
-            });
-          }
-        });
+      if (ev.source_type === "certificate") {
+        // [Elite Self-Healing] Auto-delete orphaned evidence from legacy data leaks
+        if (!validCertUrls.has(ev.raw_ref)) {
+          console.warn(`[Passport] Self-healing orphaned evidence: ${ev.raw_ref}`);
+          // Fire and forget delete
+          supabase.from("evidence").delete().eq("id", ev.id).then();
+          return;
+        }
+
+        if (ev.evidence_claims) {
+          ev.evidence_claims.forEach((claim: any) => {
+            // Use skill_id if mapped, else fallback
+            const name = claim.unmapped_label || claim.skill_id;
+            if (name) {
+              // Capitalize for display consistency
+              const formatted = name.charAt(0).toUpperCase() + name.slice(1);
+              const current = skillMap.get(formatted) || { repoCount: 0, certCitations: [] };
+              skillMap.set(formatted, { 
+                ...current, 
+                certCitations: [...current.certCitations, `AI Extracted: "${claim.extracted_text}"`],
+                skill_id: claim.skill_id || current.skill_id
+              });
+            }
+          });
+        }
       }
     });
   }
