@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { uploadCertificate } from "@/actions/certificates";
+import { uploadCertificateMetadata } from "@/actions/certificates";
 import { toast } from "sonner";
 import { Loader2, UploadCloud, FileType2 } from "lucide-react";
 import {
@@ -44,12 +44,41 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
 
     try {
       setIsUploading(true);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("title", title);
-      formData.append("issuer", issuer);
+      
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) throw new Error("Please log in to upload certificates");
 
-      await uploadCertificate(formData);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+      // Upload directly to Supabase Storage from the browser!
+      const { error: uploadError } = await supabase.storage
+        .from("certificates")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) {
+        throw new Error(uploadError.message || "Failed to upload file to storage.");
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from("certificates")
+        .getPublicUrl(fileName);
+
+      // Now call server action just for the DB inserts & AI extraction
+      await uploadCertificateMetadata({
+        title,
+        issuer,
+        fileUrl: publicUrlData.publicUrl,
+        fileType: file.type,
+        fileName
+      });
+
       toast.success("Certificate uploaded successfully!");
       setIsOpen(false);
       
@@ -68,7 +97,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger render={
         children ? (
-          <div>{children}</div>
+          children as React.ReactElement
         ) : (
           <Button className="gap-2">
             <UploadCloud className="w-4 h-4" />

@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { normalizeSkill } from "@/lib/extractor/taxonomy-normalizer";
 import { revalidatePath } from "next/cache";
 
 export async function generatePassport() {
@@ -51,63 +52,91 @@ export async function generatePassport() {
     .select("*")
     .eq("profile_id", user.id);
 
-  // --- EVIDENCE ENGINE (Heuristic Simulation) ---
+  // --- EVIDENCE GRADING ENGINE (Module 3) ---
   
-  // Aggregate languages to compute proficiency based on repository count
-  const skillMap = new Map<string, { repoCount: number, certs: string[] }>();
+  const { data: evidenceData } = await supabase
+    .from("evidence")
+    .select(`
+      id,
+      source_type,
+      raw_ref,
+      evidence_claims (
+        extracted_text,
+        unmapped_label,
+        skill_id,
+        match_confidence
+      )
+    `)
+    .eq("user_id", user.id);
+
+  const skillMap = new Map<string, { repoCount: number, certCitations: string[], skill_id?: string }>();
   
+  // 1. Process GitHub Languages
   languages.forEach((l) => {
-    const current = skillMap.get(l.language) || { repoCount: 0, certs: [] };
-    skillMap.set(l.language, { ...current, repoCount: current.repoCount + 1 });
+    // Format to canonical name and get skill_id
+    const normalized = normalizeSkill(l.language);
+    const formatted = normalized.canonical_name;
+    const current = skillMap.get(formatted) || { repoCount: 0, certCitations: [] };
+    skillMap.set(formatted, { 
+      ...current, 
+      repoCount: current.repoCount + 1,
+      skill_id: normalized.skill_id || current.skill_id 
+    });
   });
 
-  // Add Certificates to skills
-  (certificates || []).forEach((c) => {
-    const titleLower = c.title.toLowerCase();
-    const commonTech = ["aws", "azure", "gcp", "react", "node", "python", "javascript", "typescript", "java", "sql", "docker", "kubernetes"];
-    
-    let matched = false;
-    for (const tech of commonTech) {
-      if (titleLower.includes(tech)) {
-        const formattedTech = tech.charAt(0).toUpperCase() + tech.slice(1);
-        const current = skillMap.get(formattedTech) || { repoCount: 0, certs: [] };
-        skillMap.set(formattedTech, { ...current, certs: [...current.certs, c.title] });
-        matched = true;
+  // 2. Process AI Extracted Claims
+  if (evidenceData) {
+    evidenceData.forEach((ev: any) => {
+      if (ev.source_type === "certificate" && ev.evidence_claims) {
+        ev.evidence_claims.forEach((claim: any) => {
+          // Use skill_id if mapped, else fallback
+          const name = claim.unmapped_label || claim.skill_id;
+          if (name) {
+            // Capitalize for display consistency
+            const formatted = name.charAt(0).toUpperCase() + name.slice(1);
+            const current = skillMap.get(formatted) || { repoCount: 0, certCitations: [] };
+            skillMap.set(formatted, { 
+              ...current, 
+              certCitations: [...current.certCitations, `AI Extracted: "${claim.extracted_text}"`],
+              skill_id: claim.skill_id || current.skill_id // preserve skill_id
+            });
+          }
+        });
       }
-    }
-    
-    if (!matched) {
-      const name = c.issuer || "General Certification";
-      const current = skillMap.get(name) || { repoCount: 0, certs: [] };
-      skillMap.set(name, { ...current, certs: [...current.certs, c.title] });
-    }
-  });
+    });
+  }
 
-  // Calculate scores and generate evidence cards
+  // 3. Compute Grading Levels (Level 1 - 3)
   const topSkills = Array.from(skillMap.entries())
     .map(([name, data]) => {
-      // Determine Confidence Level
+      // Evidence Grading Engine Logic
+      // Level 1: Low (Single repo or unverified cert)
+      // Level 2: Medium (2+ repos or multiple certs)
+      // Level 3: High (GitHub + Cert corroboration, or highly active GitHub)
+      
       let confidence = "Low";
-      if ((data.repoCount > 0 && data.certs.length > 0) || data.repoCount > 5) {
+      if ((data.repoCount > 0 && data.certCitations.length > 0) || data.repoCount > 5) {
         confidence = "High";
-      } else if (data.repoCount >= 2 || data.certs.length > 0) {
+      } else if (data.repoCount >= 2 || data.certCitations.length > 1) {
         confidence = "Medium";
       }
 
-      // Generate Evidence Strings
       const evidence = [];
       if (data.repoCount > 0) {
         evidence.push(`${data.repoCount} repositor${data.repoCount === 1 ? 'y' : 'ies'} using ${name}`);
       }
-      data.certs.forEach(cert => {
-        evidence.push(`Verified certificate: ${cert}`);
+      
+      // Push specific AI extracted citations
+      data.certCitations.forEach(citation => {
+        evidence.push(citation);
       });
 
-      // Internal score just for sorting purposes before slicing
-      const sortScore = data.repoCount + (data.certs.length * 3);
+      // Internal score for sorting
+      const sortScore = data.repoCount + (data.certCitations.length * 3);
 
       return {
         name,
+        skill_id: data.skill_id, // Add skill_id for the Opportunity Matcher
         confidence,
         evidence,
         _sortScore: sortScore
@@ -115,7 +144,7 @@ export async function generatePassport() {
     })
     .sort((a, b) => b._sortScore - a._sortScore)
     .slice(0, 6)
-    .map(({ _sortScore, ...rest }) => rest); // Remove internal sort score before saving
+    .map(({ _sortScore, ...rest }) => rest);
 
 
   const snapshotData = {

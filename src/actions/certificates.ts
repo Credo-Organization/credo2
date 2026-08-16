@@ -3,7 +3,19 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function uploadCertificate(formData: FormData) {
+export async function uploadCertificateMetadata({
+  title,
+  issuer,
+  fileUrl,
+  fileType,
+  fileName
+}: {
+  title: string;
+  issuer: string;
+  fileUrl: string;
+  fileType: string;
+  fileName: string;
+}) {
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -11,46 +23,16 @@ export async function uploadCertificate(formData: FormData) {
     throw new Error("Unauthorized");
   }
 
-  const file = formData.get("file") as File;
-  const title = formData.get("title") as string;
-  const issuer = formData.get("issuer") as string;
-
-  if (!file || !title) {
-    throw new Error("Missing required fields");
-  }
-
-  // Generate unique filename to avoid collisions
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${user.id}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-
-  // 1. Upload to Storage
-  const { error: uploadError } = await supabase.storage
-    .from("certificates")
-    .upload(fileName, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-
-  if (uploadError) {
-    console.error("Storage upload error:", uploadError);
-    throw new Error("Failed to upload file to storage.");
-  }
-
-  // 2. Get Public URL
-  const { data: publicUrlData } = supabase.storage
-    .from("certificates")
-    .getPublicUrl(fileName);
-
-  // 3. Insert into Database
+  // 1. Insert into Database
   const { error: dbError } = await supabase
     .from("certificates")
     .insert({
       profile_id: user.id,
       title: title.trim(),
       issuer: issuer ? issuer.trim() : null,
-      issue_date: new Date().toISOString(), // Use current date for now as upload date
-      file_url: publicUrlData.publicUrl,
-      file_type: file.type,
+      issue_date: new Date().toISOString(),
+      file_url: fileUrl,
+      file_type: fileType,
       parsed: false,
     });
 
@@ -65,7 +47,7 @@ export async function uploadCertificate(formData: FormData) {
   try {
     const { extractClaimsFromText } = await import("@/lib/extractor/document-extractor");
     const extractionResult = await extractClaimsFromText(
-      `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${file.name}`,
+      `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`,
       "certificate"
     );
 
@@ -75,7 +57,7 @@ export async function uploadCertificate(formData: FormData) {
         .insert({
           user_id: user.id,
           source_type: "certificate",
-          raw_ref: publicUrlData.publicUrl,
+          raw_ref: fileUrl,
           status: "processed",
           ingested_at: new Date().toISOString(),
         })
@@ -87,12 +69,15 @@ export async function uploadCertificate(formData: FormData) {
           evidence_id: evidence.id,
           extracted_text: claim.context_snippet,
           skill_id: claim.skill_id,
-          unmapped_label: claim.unmapped_label,
+          unmapped_label: claim.unmapped_label || claim.claimed_skill,
           match_confidence: claim.skill_id ? 1.0 : 0.5,
           llm_model: process.env.AI_MODEL || "gemini-2.5-flash",
         }));
 
-        await supabase.from("evidence_claims").insert(claimRecords);
+        const { error: claimsError } = await supabase.from("evidence_claims").insert(claimRecords);
+        if (claimsError) {
+          console.error("[uploadCertificateMetadata] Failed to insert evidence claims:", claimsError);
+        }
       }
     }
   } catch (extErr) {

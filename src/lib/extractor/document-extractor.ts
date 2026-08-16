@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { normalizeSkill } from "./taxonomy-normalizer";
+import { cookies } from "next/headers";
 
 export interface ExtractedClaim {
   raw_phrase: string;
@@ -31,7 +32,7 @@ export async function extractClaimsFromText(
     throw new Error("Missing or invalid AI_API_KEY environment variable.");
   }
 
-  const ai = new GoogleGenAI({ apiKey });
+  // Gemini is instantiated lazily below if needed
 
   const prompt = `
 You are an evidence extraction engine for technical skill validation.
@@ -66,12 +67,54 @@ Do not include markdown code blocks or explanatory text. Return ONLY the JSON ob
 `;
 
   try {
-    const response = await ai.models.generateContent({
-      model: process.env.AI_MODEL || "gemini-2.5-flash",
-      contents: prompt,
-    });
+    const cookieStore = await cookies();
+    const provider = cookieStore.get("ai_provider")?.value || "gemini";
+    let responseText = "";
 
-    const responseText = response.text?.replace(/```json/g, "").replace(/```/g, "").trim() || "{}";
+    if (provider === "xai") {
+      const xaiKey = process.env.XAI_API_KEY;
+      if (!xaiKey) throw new Error("Missing XAI_API_KEY environment variable.");
+      
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${xaiKey}`,
+        },
+        body: JSON.stringify({
+          model: "grok-2",
+          messages: [
+            {
+              role: "system",
+              content: "You are an AI that strictly outputs valid JSON without markdown wrapping."
+            },
+            {
+              role: "user",
+              content: prompt
+            }
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.1
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`xAI API Error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      responseText = data.choices[0].message.content;
+    } else {
+      // Default to Gemini
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: process.env.AI_MODEL || "gemini-2.5-flash",
+        contents: prompt,
+      });
+      responseText = response.text || "";
+    }
+
+    responseText = responseText.replace(/```json/g, "").replace(/```/g, "").trim() || "{}";
     const parsed = JSON.parse(responseText);
 
     // 1. Mechanical anti-hallucination check: drop any claim where snippet isn't verbatim in text

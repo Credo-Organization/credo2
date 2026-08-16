@@ -46,7 +46,7 @@ export function PassportCard({ data, className }: PassportCardProps) {
             Verified Profile
           </Badge>
           <div className="text-xs text-muted-foreground">
-            ID: CRED-{Math.random().toString(36).substring(2, 10).toUpperCase()}
+            ID: CRED-VERIFIED
           </div>
         </div>
       </div>
