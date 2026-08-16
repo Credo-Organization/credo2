@@ -35,7 +35,7 @@ Do NOT be overly positive. Be realistic, sharp, and highly strategic.`;
 
   try {
     const { text } = await generateText({
-      model: google("gemini-1.5-flash"),
+      model: google(process.env.AI_MODEL || "gemini-2.5-flash"),
       prompt: prompt,
       temperature: 0.2, // Low temperature for factual, analytical reasoning
     });
