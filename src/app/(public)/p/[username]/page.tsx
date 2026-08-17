@@ -38,7 +38,7 @@ export default async function PublicPassportPage({ params }: PageProps) {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background">
         <Shield className="h-12 w-12 text-muted-foreground mb-4" />
         <h1 className="text-2xl font-bold mb-2">Passport Private or Not Found</h1>
-        <p className="text-muted-foreground mb-8">This user's skill passport is currently private.</p>
+        <p className="text-muted-foreground mb-8">This user&apos;s skill passport is currently private.</p>
         <Link href="/" className="text-primary hover:underline font-medium">
           Create your own on Credify
         </Link>

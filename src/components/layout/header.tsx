@@ -25,7 +25,7 @@ export function Header({ user }: HeaderProps) {
   const title = getPageTitle(pathname);
 
   return (
-    <header className="flex h-14 items-center gap-4 border-b border-border/50 bg-background/80 backdrop-blur-sm px-4 lg:px-8">
+    <header className="flex h-14 items-center gap-4 border-b border-white/5 bg-background/40 backdrop-blur-md px-4 lg:px-8 shadow-sm">
       {/* Mobile menu trigger */}
       <Sheet>
         <SheetTrigger render={

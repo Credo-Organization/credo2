@@ -28,6 +28,7 @@ import {
   Users,
   FileBadge,
   CreditCard,
+  CheckCircle2,
 } from "lucide-react";
 
 function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -94,7 +95,6 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ShimmerText } from "@/components/ui/shimmer-text";
 import { Highlighter } from "@/components/ui/highlighter";
-import { StarButtonDemo } from "@/components/ui/star-button-demo";
 import { StackedFeatureCards } from "@/components/unlumen-ui/stacked-feature-cards";
 import SlicedText from "@/components/ui/sliced-text";
 import Marquee from "@/components/animata/container/marquee";
@@ -131,7 +131,11 @@ function HeroSection() {
 
         {/* CTAs */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
-          <StarButtonDemo />
+          <Link href="/dashboard">
+            <Button size="lg" className="h-12 px-8 text-base font-semibold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition-shadow">
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         {/* Hero visual — floating passport preview */}

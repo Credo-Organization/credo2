@@ -21,12 +21,12 @@ export function Sidebar({ user }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col border-r border-border/50 bg-sidebar transition-all duration-300",
+        "hidden lg:flex flex-col border-r border-white/5 bg-background/50 backdrop-blur-md transition-all duration-300 relative z-20",
         collapsed ? "w-[68px]" : "w-[260px]"
       )}
     >
       {/* Logo */}
-      <div className="flex h-14 items-center gap-2 border-b border-border/50 px-4">
+      <div className="flex h-14 items-center gap-2 border-b border-white/5 px-4">
         <Link href="/dashboard" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <Shield className="h-4 w-4 text-primary-foreground" />
@@ -85,7 +85,7 @@ export function Sidebar({ user }: SidebarProps) {
       </nav>
 
       {/* User section */}
-      <div className="border-t border-border/50 p-3">
+      <div className="border-t border-white/5 p-3">
         <UserMenu user={user} collapsed={collapsed} />
       </div>
     </aside>

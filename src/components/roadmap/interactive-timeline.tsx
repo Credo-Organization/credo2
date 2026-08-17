@@ -57,7 +57,7 @@ export function InteractiveTimeline({ roadmapData: initialRoadmapData, goalTitle
         <Sparkles className="w-10 h-10 text-emerald-500 mb-4" />
         <h3 className="text-xl font-bold mb-2">Generate AI Curriculum</h3>
         <p className="text-muted-foreground max-w-md mb-8">
-          Ready to bridge your skill gap? We'll use Google Gemini to generate a personalized, step-by-step learning path and a custom capstone project designed for you.
+          Ready to bridge your skill gap? We&apos;ll use Google Gemini to generate a personalized, step-by-step learning path and a custom capstone project designed for you.
         </p>
         <Button 
           onClick={handleGenerate} 
