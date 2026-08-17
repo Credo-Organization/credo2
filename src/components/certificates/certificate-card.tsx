@@ -4,7 +4,9 @@ import { Certificate } from "@/types/database";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { Award, Building2, Calendar, Download, Eye, Trash2, Loader2 } from "lucide-react";
+import { Award, Building2, Calendar, Download, Eye, Trash2, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { deleteCertificate } from "@/actions/certificates";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -45,6 +47,43 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
       {/* Top Banner indicating file type or generic graphic */}
       <div className="h-24 bg-zinc-900 flex items-center justify-center relative transition-colors group-hover:bg-zinc-800">
         <Award className="w-8 h-8 text-white/30 group-hover:text-white/50 transition-colors" />
+        
+        <div className="absolute top-2 left-2">
+          {certificate.integrity_status === "verified" && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-bold border-emerald-500/50 text-emerald-400 bg-emerald-500/10 cursor-help px-2 py-0.5">
+                    <ShieldCheck className="w-3 h-3 mr-1 inline" /> Verified
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Integrity Score: {certificate.integrity_score}%</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {certificate.integrity_status === "flagged" && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-bold border-rose-500/50 text-rose-400 bg-rose-500/10 cursor-help px-2 py-0.5">
+                    <ShieldAlert className="w-3 h-3 mr-1 inline" /> Flagged
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="font-medium mb-1">Integrity Score: {certificate.integrity_score}%</p>
+                  <ul className="list-disc pl-4 text-xs space-y-1">
+                    {certificate.integrity_flags?.map((flag, idx) => (
+                      <li key={idx}>{flag}</li>
+                    ))}
+                  </ul>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+
         {certificate.file_type?.includes("pdf") && (
           <span className="absolute bottom-2 right-2 text-[10px] uppercase tracking-wider font-bold bg-white/10 text-white/80 px-2 py-0.5 rounded">
             PDF

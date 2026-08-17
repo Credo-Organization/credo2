@@ -74,6 +74,9 @@ export interface GitHubRepo {
   created_at: string | null;
   updated_at: string | null;
   synced_at: string;
+  integrity_score?: number | null;
+  integrity_flags?: string[] | null;
+  integrity_status?: "pending" | "verified" | "flagged" | null;
 }
 
 export interface RepoLanguage {
@@ -100,6 +103,9 @@ export interface Certificate {
   parsed_data: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
+  integrity_score?: number | null;
+  integrity_flags?: string[] | null;
+  integrity_status?: "pending" | "verified" | "flagged" | null;
 }
 
 export interface Skill {

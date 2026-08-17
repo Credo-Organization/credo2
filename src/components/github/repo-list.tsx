@@ -1,8 +1,9 @@
 import { GitHubRepo } from "@/types/database";
 import { Card } from "@/components/ui/card";
-import { Star, GitFork, BookOpen } from "lucide-react";
+import { Star, GitFork, BookOpen, ShieldCheck, ShieldAlert } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface RepoListProps {
   repos: GitHubRepo[];
@@ -38,11 +39,46 @@ export function RepoList({ repos }: RepoListProps) {
                 {repo.name}
               </a>
             </h4>
-            {repo.primary_language && (
-              <Badge variant="outline" className="text-xs shrink-0 font-medium border-zinc-200 text-zinc-600 bg-zinc-50">
-                {repo.primary_language}
-              </Badge>
-            )}
+            <div className="flex items-center gap-2">
+              {repo.integrity_status === "verified" && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="text-xs shrink-0 font-medium border-emerald-200 text-emerald-700 bg-emerald-50 cursor-help">
+                        <ShieldCheck className="w-3 h-3 mr-1" /> Verified
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Integrity Score: {repo.integrity_score}%</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              {repo.integrity_status === "flagged" && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="text-xs shrink-0 font-medium border-rose-200 text-rose-700 bg-rose-50 cursor-help">
+                        <ShieldAlert className="w-3 h-3 mr-1" /> Flagged ({repo.integrity_score}%)
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="font-medium mb-1">Flags detected:</p>
+                      <ul className="list-disc pl-4 text-xs space-y-1">
+                        {repo.integrity_flags?.map((flag, idx) => (
+                          <li key={idx}>{flag}</li>
+                        ))}
+                      </ul>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              {repo.primary_language && (
+                <Badge variant="outline" className="text-xs shrink-0 font-medium border-zinc-200 text-zinc-600 bg-zinc-50">
+                  {repo.primary_language}
+                </Badge>
+              )}
+            </div>
           </div>
           
           <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1">

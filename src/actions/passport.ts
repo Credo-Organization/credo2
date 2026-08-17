@@ -129,6 +129,13 @@ export async function generatePassport() {
   }
 
   // 3. Compute Grading Levels (Level 1 - 3)
+  const flaggedReposCount = (repoDataRaw || []).filter((r: any) => r.integrity_status === "flagged").length;
+  let flaggedEvidenceCount = 0;
+  if (evidenceData) {
+    flaggedEvidenceCount = evidenceData.filter((ev: any) => ev.integrity_status === "flagged").length;
+  }
+  const has_flagged_items = (flaggedReposCount + flaggedEvidenceCount) > 0;
+
   const topSkills = Array.from(skillMap.entries())
     .map(([name, data]) => {
       // Evidence Grading Engine Logic
@@ -183,6 +190,7 @@ export async function generatePassport() {
     },
     certificates: (certificates || []).length,
     skills: topSkills,
+    has_flagged_items,
     top_projects: repos.sort((a, b) => b.stars_count - a.stars_count).slice(0, 2).map(r => ({
       name: r.name,
       description: r.description,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { ShieldCheck, GitBranch, Award, UserCircle2 } from "lucide-react";
+import { ShieldCheck, ShieldAlert, GitBranch, Award, UserCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { EvidenceGrid } from "./evidence-grid";
 
@@ -13,7 +13,7 @@ interface PassportCardProps {
 export function PassportCard({ data, className }: PassportCardProps) {
   if (!data) return null;
 
-  const { profile, github, certificates, skills, top_projects } = data;
+  const { profile, github, certificates, skills, top_projects, has_flagged_items } = data;
 
   return (
     <div className={cn("glass overflow-hidden rounded-3xl border border-border/50 relative shadow-2xl w-full max-w-4xl mx-auto", className)}>
@@ -31,7 +31,11 @@ export function PassportCard({ data, className }: PassportCardProps) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <h2 className="text-2xl font-bold tracking-tight">{profile.name}</h2>
-              <ShieldCheck className="w-5 h-5 text-primary" />
+              {has_flagged_items ? (
+                <ShieldAlert className="w-5 h-5 text-rose-500" />
+              ) : (
+                <ShieldCheck className="w-5 h-5 text-primary" />
+              )}
             </div>
             <p className="text-muted-foreground font-medium">{profile.headline}</p>
             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
@@ -42,11 +46,17 @@ export function PassportCard({ data, className }: PassportCardProps) {
         </div>
         
         <div className="flex flex-col gap-2 shrink-0 md:items-end">
-          <Badge variant="outline" className="px-3 py-1 font-semibold text-xs border-border bg-muted/50 text-foreground">
-            Verified Profile
-          </Badge>
+          {has_flagged_items ? (
+            <Badge variant="outline" className="px-3 py-1 font-semibold text-xs border-rose-500/50 bg-rose-500/10 text-rose-500">
+              <ShieldAlert className="w-3 h-3 mr-1 inline" /> Under Review
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="px-3 py-1 font-semibold text-xs border-emerald-500/50 bg-emerald-500/10 text-emerald-500">
+              <ShieldCheck className="w-3 h-3 mr-1 inline" /> Verified Profile
+            </Badge>
+          )}
           <div className="text-xs text-muted-foreground">
-            ID: CRED-VERIFIED
+            ID: CRED-{has_flagged_items ? "REVIEW" : "VERIFIED"}
           </div>
         </div>
       </div>
