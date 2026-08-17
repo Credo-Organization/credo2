@@ -92,6 +92,7 @@ function CustomUsersIcon(props: React.SVGProps<SVGSVGElement>) {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { StarButtonDemo } from "@/components/ui/star-button-demo";
 import { cn } from "@/lib/utils";
 import { ShimmerText } from "@/components/ui/shimmer-text";
 import { Highlighter } from "@/components/ui/highlighter";
@@ -131,11 +132,7 @@ function HeroSection() {
 
         {/* CTAs */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
-          <Link href="/dashboard">
-            <Button size="lg" className="h-12 px-8 text-base font-semibold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition-shadow">
-              Get Started
-            </Button>
-          </Link>
+          <StarButtonDemo />
         </div>
 
         {/* Hero visual — floating passport preview */}
@@ -292,9 +289,9 @@ function HowItWorksSection() {
         <div className="relative" ref={lineRef}>
           {/* Faded background line */}
           <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border/40 hidden lg:block" />
-          
+
           {/* Animated active line */}
-          <motion.div 
+          <motion.div
             className="absolute left-[calc(50%-0.5px)] top-0 bottom-0 w-[2px] bg-zinc-300 hidden lg:block shadow-[0_0_15px_rgba(255,255,255,0.4)] z-0"
             style={{ height: lineHeight, originY: 0 }}
           />
@@ -421,14 +418,14 @@ function FeaturesSection() {
                   "group relative w-80 sm:w-96 shrink-0 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-border/80 transition-all duration-300 overflow-hidden"
                 )}
               >
-              <div className="relative">
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
+                <div className="relative">
+                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </Marquee>
         </div>
       </div>
