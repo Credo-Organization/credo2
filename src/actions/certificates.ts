@@ -48,11 +48,11 @@ export async function uploadCertificateMetadata({
     const { extractClaimsFromMultimodal } = await import("@/lib/extractor/document-extractor");
     
     // Default fallback text using metadata
-    let extractionText = `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`;
+    const extractionText = `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`;
     
     // [Elite Engineer Fix] Fetch the file and extract skills visually using Multimodal LLM
     const response = await fetch(fileUrl);
-    let extractionResult = { claims: [] as any[] };
+    let extractionResult: any = { claims: [] };
     
     if (response.ok) {
       const arrayBuffer = await response.arrayBuffer();
@@ -86,7 +86,7 @@ export async function uploadCertificateMetadata({
         .single();
 
       if (evidence) {
-        const claimRecords = extractionResult.claims.map((claim) => ({
+        const claimRecords = extractionResult.claims.map((claim: any) => ({
           evidence_id: evidence.id,
           extracted_text: claim.context_snippet,
           skill_id: claim.skill_id,

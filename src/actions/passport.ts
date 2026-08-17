@@ -88,7 +88,7 @@ export async function generatePassport() {
   const validCertUrls = new Set((certificates || []).map(c => c.file_url));
 
   if (evidenceData) {
-    evidenceData.forEach((ev: any) => {
+    evidenceData.forEach((ev: { id: string; source_type: string; raw_ref: string; evidence_claims?: { unmapped_label?: string; skill_id?: string; extracted_text?: string }[] }) => {
       if (ev.source_type === "certificate") {
         // [Elite Self-Healing] Auto-delete orphaned evidence from legacy data leaks
         if (!validCertUrls.has(ev.raw_ref)) {
@@ -99,7 +99,7 @@ export async function generatePassport() {
         }
 
         if (ev.evidence_claims) {
-          ev.evidence_claims.forEach((claim: any) => {
+          ev.evidence_claims.forEach((claim) => {
             // Use skill_id if mapped, else fallback
             const name = claim.unmapped_label || claim.skill_id;
             if (name) {

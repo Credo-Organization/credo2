@@ -77,7 +77,8 @@ Do not include markdown blocks or any other text. Output ONLY valid JSON.
 
       const responseText = response.text?.replace(/```json/g, "").replace(/```/g, "").trim() || "{}";
       parsedRoadmap = JSON.parse(responseText);
-    } catch (e: any) {
+    } catch (error) {
+      const e = error as Error;
       console.error("AI Generation Error:", e);
       throw new Error("Failed to generate AI roadmap. " + e.message);
     }

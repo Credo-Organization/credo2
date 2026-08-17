@@ -37,7 +37,7 @@ export async function getSkillGapAnalysis() {
   const acquiredSkills: string[] = [];
   const missingSkills: string[] = [];
 
-  const passportSkills = (passport.snapshot_data?.skills || []).map((s: any) => s.name.toLowerCase());
+  const passportSkills = (passport.snapshot_data?.skills || []).map((s: { name: string }) => s.name.toLowerCase());
 
   targetGoal.requiredSkills.forEach(reqSkill => {
     // Normalizing for matching (e.g. react-native vs react native, nodejs vs node)

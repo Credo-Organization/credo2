@@ -102,7 +102,7 @@ export async function syncGitHub(username: string) {
           // Delete existing languages for this repo before inserting new ones
           await supabase.from("repo_languages").delete().eq("repo_id", savedRepo.id);
 
-          const totalBytes = Object.values(languages).reduce((acc: number, bytes: any) => acc + bytes, 0);
+          const totalBytes = Object.values(languages).reduce((acc: number, bytes: unknown) => acc + (bytes as number), 0);
 
           const langInserts = Object.entries(languages).map(([lang, bytes]) => ({
             repo_id: savedRepo.id,
@@ -122,8 +122,9 @@ export async function syncGitHub(username: string) {
 
     revalidatePath("/github");
     return { success: true };
-  } catch (error: any) {
-    console.error("GitHub Sync Error:", error);
+  } catch (error) {
+    const err = error as Error;
+    console.error("GitHub Sync Error:", err);
     
     // Update sync status to failed
     await supabase
@@ -131,7 +132,7 @@ export async function syncGitHub(username: string) {
       .update({ sync_status: "failed" })
       .eq("profile_id", user.id);
 
-    throw new Error(error.message || "Failed to sync GitHub data.");
+    throw new Error(err.message || "Failed to sync GitHub data.");
   }
 }
 
