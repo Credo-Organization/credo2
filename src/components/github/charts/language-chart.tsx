@@ -52,10 +52,10 @@ export function LanguageChart({ languages }: LanguageChartProps) {
   }
 
   return (
-    <Card className="h-full bg-card/50 border-border/50">
+    <Card className="h-full bg-card border border-border hover:shadow-sm transition-all duration-300">
       <CardHeader>
-        <CardTitle className="text-sm font-semibold flex items-center gap-2">
-          <Code2 className="w-4 h-4 text-primary" />
+        <CardTitle className="text-sm font-bold flex items-center gap-2 text-zinc-900 uppercase tracking-wider">
+          <Code2 className="w-4 h-4 text-zinc-400" />
           Top Languages
         </CardTitle>
       </CardHeader>
@@ -76,7 +76,7 @@ export function LanguageChart({ languages }: LanguageChartProps) {
                 {aggregatedData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={LANG_COLORS[entry.name] || `hsl(var(--primary) / ${1 - index * 0.15})`}
+                    fill={LANG_COLORS[entry.name] || `hsl(var(--foreground) / ${1 - index * 0.15})`}
                   />
                 ))}
               </Pie>

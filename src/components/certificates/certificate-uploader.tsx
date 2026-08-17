@@ -105,10 +105,10 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
           </Button>
         )
       } />
-      <DialogContent className="sm:max-w-[425px] bg-card border-border/50">
+      <DialogContent className="dashboard-theme sm:max-w-[425px] bg-card border border-border shadow-lg">
         <DialogHeader>
-          <DialogTitle>Upload Certificate</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-zinc-900">Upload Certificate</DialogTitle>
+          <DialogDescription className="text-zinc-500">
             Upload a PDF or Image of your certification. Maximum file size is 5MB.
           </DialogDescription>
         </DialogHeader>
@@ -119,13 +119,13 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             <div className="flex items-center gap-4">
               <Label 
                 htmlFor="file"
-                className="flex-1 cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-border/60 rounded-xl hover:border-primary/50 hover:bg-accent/50 transition-colors"
+                className="flex-1 cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-zinc-300 rounded-xl hover:border-zinc-500 hover:bg-zinc-50 transition-colors group"
               >
-                <FileType2 className="w-8 h-8 text-muted-foreground mb-2" />
-                <span className="text-sm text-center font-medium">
+                <FileType2 className="w-8 h-8 text-zinc-400 group-hover:text-zinc-600 mb-2 transition-colors" />
+                <span className="text-sm text-center font-bold text-zinc-900">
                   {file ? file.name : "Click to select a file"}
                 </span>
-                <span className="text-xs text-muted-foreground mt-1">
+                <span className="text-xs text-zinc-500 font-medium mt-1 uppercase tracking-wider">
                   PDF, PNG, JPG (max. 5MB)
                 </span>
               </Label>
@@ -140,27 +140,29 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="title">Certificate Name *</Label>
+            <Label htmlFor="title" className="text-zinc-900 font-semibold text-xs uppercase tracking-wider">Certificate Name *</Label>
             <Input 
               id="title" 
               value={title} 
               onChange={(e) => setTitle(e.target.value)} 
               placeholder="e.g. AWS Solutions Architect"
               required
+              className="border-zinc-200 focus-visible:ring-zinc-900"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="issuer">Issuing Organization</Label>
+            <Label htmlFor="issuer" className="text-zinc-900 font-semibold text-xs uppercase tracking-wider">Issuing Organization</Label>
             <Input 
               id="issuer" 
               value={issuer} 
               onChange={(e) => setIssuer(e.target.value)} 
               placeholder="e.g. Amazon Web Services"
+              className="border-zinc-200 focus-visible:ring-zinc-900"
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={!file || !title || isUploading}>
+          <Button type="submit" className="w-full bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm" disabled={!file || !title || isUploading}>
             {isUploading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

@@ -21,38 +21,30 @@ export function Sidebar({ user }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col border-r border-white/5 bg-background/50 backdrop-blur-md transition-all duration-300 relative z-20",
+        "hidden lg:flex flex-col border-r border-border bg-card transition-all duration-300 relative z-20",
         collapsed ? "w-[68px]" : "w-[260px]"
       )}
     >
       {/* Logo */}
-      <div className="flex h-14 items-center gap-2 border-b border-white/5 px-4">
+      <div className={cn("flex h-14 items-center border-b border-border", collapsed ? "justify-center" : "px-4")}>
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Shield className="h-4 w-4 text-primary-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 shrink-0">
+            <Shield className="h-4 w-4 text-white" />
           </div>
           {!collapsed && (
-            <span className="text-lg font-semibold tracking-tight">
+            <span className="text-lg font-semibold tracking-tight truncate">
               Credify
             </span>
           )}
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={cn("ml-auto h-7 w-7", collapsed && "hidden")}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          <PanelLeftClose className="h-4 w-4 text-muted-foreground" />
-        </Button>
-        {collapsed && (
+        {!collapsed && (
           <Button
             variant="ghost"
             size="icon"
-            className="ml-auto h-7 w-7"
-            onClick={() => setCollapsed(false)}
+            className="ml-auto shrink-0 h-8 w-8 text-zinc-500 hover:text-zinc-900"
+            onClick={() => setCollapsed(true)}
           >
-            <PanelLeft className="h-4 w-4 text-muted-foreground" />
+            <PanelLeftClose className="h-4 w-4" />
           </Button>
         )}
       </div>
@@ -70,10 +62,10 @@ export function Sidebar({ user }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  ? "bg-zinc-100 text-zinc-900 shadow-sm border border-zinc-200/60"
+                  : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900",
                 collapsed && "justify-center px-2"
               )}
             >
@@ -85,7 +77,18 @@ export function Sidebar({ user }: SidebarProps) {
       </nav>
 
       {/* User section */}
-      <div className="border-t border-white/5 p-3">
+      <div className="border-t border-border p-3 flex flex-col gap-2">
+        {collapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-full h-10 flex items-center justify-center text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+            onClick={() => setCollapsed(false)}
+            title="Expand Sidebar"
+          >
+            <PanelLeft className="h-5 w-5" />
+          </Button>
+        )}
         <UserMenu user={user} collapsed={collapsed} />
       </div>
     </aside>

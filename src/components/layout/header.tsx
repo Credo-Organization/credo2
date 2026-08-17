@@ -25,11 +25,11 @@ export function Header({ user }: HeaderProps) {
   const title = getPageTitle(pathname);
 
   return (
-    <header className="flex h-14 items-center gap-4 border-b border-white/5 bg-background/40 backdrop-blur-md px-4 lg:px-8 shadow-sm">
+    <header className="flex h-14 items-center gap-4 border-b border-border bg-card px-4 lg:px-8">
       {/* Mobile menu trigger */}
       <Sheet>
         <SheetTrigger render={
-          <Button variant="ghost" size="icon" className="shrink-0 md:hidden">
+          <Button variant="ghost" size="icon" className="shrink-0 md:hidden text-zinc-900">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
@@ -41,13 +41,13 @@ export function Header({ user }: HeaderProps) {
       </Sheet>
 
       {/* Page title */}
-      <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+      <h1 className="text-lg font-semibold tracking-tight text-zinc-900">{title}</h1>
 
       {/* Right side actions */}
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
           <Bell className="h-4 w-4" />
-          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary" />
+          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500" />
         </Button>
       </div>
     </header>

@@ -67,19 +67,19 @@ export function GitHubInsights({ connection, repos, languages }: GitHubInsightsP
             />
           )}
           <div>
-            <h3 className="font-semibold text-lg">{connection.github_username}</h3>
-            <p className="text-xs text-muted-foreground flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <h3 className="font-semibold text-lg text-zinc-900">{connection.github_username}</h3>
+            <p className="text-xs text-muted-foreground flex items-center gap-2 font-medium">
+              <span className="w-2 h-2 rounded-full bg-zinc-900" />
               Connected
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={handleSync} disabled={isSyncing} className="gap-2">
+          <Button variant="outline" size="sm" onClick={handleSync} disabled={isSyncing} className="gap-2 text-zinc-900 border-zinc-200 hover:bg-zinc-100">
             <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
             Sync Now
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleDisconnect} disabled={isDisconnecting} className="text-destructive hover:text-destructive hover:bg-destructive/10 gap-2">
+          <Button variant="ghost" size="sm" onClick={handleDisconnect} disabled={isDisconnecting} className="text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 gap-2">
             <Trash2 className="w-4 h-4" />
             Disconnect
           </Button>
@@ -89,16 +89,16 @@ export function GitHubInsights({ connection, repos, languages }: GitHubInsightsP
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Repositories", value: repos.length, icon: BookOpen, color: "text-blue-500" },
-          { label: "Total Stars", value: totalStars, icon: Star, color: "text-amber-400" },
-          { label: "Top Language", value: topLanguage, icon: Code2, color: "text-emerald-500" },
-          { label: "Followers", value: connection.followers || 0, icon: Activity, color: "text-purple-500" },
+          { label: "Repositories", value: repos.length, icon: BookOpen },
+          { label: "Total Stars", value: totalStars, icon: Star },
+          { label: "Top Language", value: topLanguage, icon: Code2 },
+          { label: "Followers", value: connection.followers || 0, icon: Activity },
         ].map((stat, i) => (
-          <Card key={i} className="bg-card/50 border-border/50 hover:bg-card/80 transition-colors">
+          <Card key={i} className="bg-card border-border hover:shadow-md hover:border-zinc-300 transition-all duration-300 group">
             <CardContent className="p-5 flex flex-col items-center text-center">
-              <stat.icon className={`w-6 h-6 mb-3 ${stat.color}`} />
-              <p className="text-2xl font-bold">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+              <stat.icon className="w-6 h-6 mb-3 text-zinc-400 group-hover:text-zinc-900 transition-colors" />
+              <p className="text-3xl font-bold text-zinc-900 tracking-tight">{stat.value}</p>
+              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mt-1">{stat.label}</p>
             </CardContent>
           </Card>
         ))}

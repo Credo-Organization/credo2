@@ -27,12 +27,12 @@ export function GitHubConnectForm() {
 
   return (
     <div className="max-w-md mx-auto mt-12 animate-fade-in-up">
-      <div className="glass p-8 rounded-2xl shadow-xl border border-border/50 text-center">
-        <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <GitBranch className="w-8 h-8 text-primary" />
+      <div className="bg-card p-8 rounded-2xl shadow-sm border border-border text-center">
+        <div className="w-16 h-16 bg-zinc-100 border border-zinc-200 rounded-full flex items-center justify-center mx-auto mb-6">
+          <GitBranch className="w-8 h-8 text-zinc-900" />
         </div>
         
-        <h2 className="text-2xl font-bold mb-2">Connect GitHub</h2>
+        <h2 className="text-2xl font-bold mb-2 text-zinc-900">Connect GitHub</h2>
         <p className="text-muted-foreground text-sm mb-8">
           Enter your GitHub username to sync your repositories, languages, and contribution statistics.
         </p>
@@ -49,13 +49,13 @@ export function GitHubConnectForm() {
               onChange={(e) => setUsername(e.target.value)}
               disabled={isSyncing}
               required
-              className="h-11"
+              className="h-11 bg-white border-zinc-300 text-zinc-900 placeholder:text-muted-foreground focus-visible:ring-zinc-900"
             />
           </div>
           
           <Button 
             type="submit" 
-            className="w-full h-11 gap-2" 
+            className="w-full h-12 gap-2 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all duration-300 rounded-lg text-base font-medium" 
             disabled={!username.trim() || isSyncing}
           >
             {isSyncing ? (

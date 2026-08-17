@@ -16,8 +16,8 @@ export function RepoList({ repos }: RepoListProps) {
 
   if (topRepos.length === 0) {
     return (
-      <div className="text-center p-8 border border-dashed rounded-xl border-border/50">
-        <p className="text-sm text-muted-foreground">No public repositories found.</p>
+      <div className="text-center p-8 border border-dashed rounded-xl border-zinc-200 bg-zinc-50/50">
+        <p className="text-sm font-medium text-zinc-500">No public repositories found.</p>
       </div>
     );
   }
@@ -25,10 +25,10 @@ export function RepoList({ repos }: RepoListProps) {
   return (
     <div className="grid md:grid-cols-2 gap-4">
       {topRepos.map((repo) => (
-        <Card key={repo.id} className="p-5 bg-card/50 border-border/50 hover:border-border/80 transition-colors flex flex-col h-full">
+        <Card key={repo.id} className="p-5 bg-card border border-border hover:shadow-md hover:border-zinc-300 transition-all duration-300 flex flex-col h-full group">
           <div className="flex items-start justify-between mb-2">
-            <h4 className="font-semibold text-primary/90 flex items-center gap-2 truncate">
-              <BookOpen className="w-4 h-4 shrink-0" />
+            <h4 className="font-semibold text-zinc-900 flex items-center gap-2 truncate">
+              <BookOpen className="w-4 h-4 shrink-0 text-zinc-400 group-hover:text-zinc-900 transition-colors" />
               <a 
                 href={`https://github.com/${repo.full_name}`} 
                 target="_blank" 
@@ -39,7 +39,7 @@ export function RepoList({ repos }: RepoListProps) {
               </a>
             </h4>
             {repo.primary_language && (
-              <Badge variant="outline" className="text-xs shrink-0 font-normal">
+              <Badge variant="outline" className="text-xs shrink-0 font-medium border-zinc-200 text-zinc-600 bg-zinc-50">
                 {repo.primary_language}
               </Badge>
             )}

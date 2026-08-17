@@ -18,40 +18,40 @@ export default async function DashboardPage() {
       description: "Analyze your repos and commits",
       icon: GitBranch,
       href: "/github",
-      color: "text-blue-400",
-      bg: "bg-blue-400/10",
-      border: "group-hover:border-blue-400/50",
-      glow: "group-hover:shadow-[0_0_30px_-5px_rgba(96,165,250,0.3)]"
+      color: "text-zinc-900",
+      bg: "bg-zinc-100",
+      border: "group-hover:border-zinc-300",
+      glow: "group-hover:shadow-md"
     },
     {
       title: "Upload Certificates",
       description: "Add your certifications",
       icon: Award,
       href: "/certificates",
-      color: "text-amber-400",
-      bg: "bg-amber-400/10",
-      border: "group-hover:border-amber-400/50",
-      glow: "group-hover:shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)]"
+      color: "text-zinc-900",
+      bg: "bg-zinc-100",
+      border: "group-hover:border-zinc-300",
+      glow: "group-hover:shadow-md"
     },
     {
       title: "View Passport",
       description: "See your skill passport",
       icon: Shield,
       href: "/passport",
-      color: "text-primary",
-      bg: "bg-primary/10",
-      border: "group-hover:border-primary/50",
-      glow: "group-hover:shadow-[0_0_30px_-5px_rgba(255,152,0,0.3)]"
+      color: "text-zinc-900",
+      bg: "bg-zinc-100",
+      border: "group-hover:border-zinc-300",
+      glow: "group-hover:shadow-md"
     },
     {
       title: "Find Opportunities",
       description: "Match with jobs & internships",
       icon: Briefcase,
       href: "/opportunities",
-      color: "text-emerald-400",
-      bg: "bg-emerald-400/10",
-      border: "group-hover:border-emerald-400/50",
-      glow: "group-hover:shadow-[0_0_30px_-5px_rgba(52,211,153,0.3)]"
+      color: "text-zinc-900",
+      bg: "bg-zinc-100",
+      border: "group-hover:border-zinc-300",
+      glow: "group-hover:shadow-md"
     },
   ];
 
@@ -59,30 +59,26 @@ export default async function DashboardPage() {
     <div className="space-y-10 max-w-6xl mx-auto pb-10">
       
       {/* Header Section */}
-      <div className="flex flex-col gap-2 animate-fade-in-up">
-        <div className="flex items-center gap-3 text-muted-foreground mb-2">
-          <div className="p-2 rounded-lg bg-white/5 border border-white/10 shadow-inner">
-            <LayoutDashboard className="h-5 w-5 text-zinc-300" />
-          </div>
-          <span className="text-sm font-medium tracking-wider uppercase">Dashboard Overview</span>
+      <div className="flex flex-col gap-2 animate-fade-in-up mt-4">
+        <div className="flex items-center gap-2 text-muted-foreground mb-2">
+          <span className="text-sm font-semibold tracking-wider text-zinc-500 uppercase">Dashboard Overview</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-          Welcome back, <ShimmerText text={firstName} className="inline-block" />
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-900 mb-1">
+          Welcome back, {firstName}
         </h1>
-        <p className="text-muted-foreground text-lg max-w-2xl">
+        <p className="text-muted-foreground text-base max-w-2xl font-normal">
           Track your skill progress, manage your evidence, and find roles that match your true capabilities.
         </p>
       </div>
 
       {/* Profile Completeness */}
       <div className="animate-fade-in-up [animation-delay:150ms]">
-        <Card className="p-6 relative overflow-hidden bg-card/40 backdrop-blur-md border-white/10 shadow-2xl group transition-all duration-500 hover:border-white/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <Card className="p-6 bg-card border-border shadow-sm relative overflow-hidden transition-all hover:shadow-md">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                <h3 className="text-lg font-semibold flex items-center gap-2 text-zinc-900">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                   Profile Completeness
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
@@ -90,18 +86,16 @@ export default async function DashboardPage() {
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-3xl font-bold text-foreground">25%</span>
+                <span className="text-2xl font-bold text-zinc-900">25%</span>
               </div>
             </div>
             
-            {/* Custom glowing progress bar */}
-            <div className="h-3 w-full bg-zinc-900/50 rounded-full overflow-hidden border border-white/5 shadow-inner relative">
+            {/* Minimalist stark progress bar */}
+            <div className="h-2 w-full bg-zinc-100 rounded-full overflow-hidden border border-zinc-200">
               <div 
-                className="h-full bg-gradient-to-r from-primary to-orange-400 rounded-full shadow-[0_0_15px_rgba(255,152,0,0.5)] transition-all duration-1000 ease-out relative"
+                className="h-full bg-zinc-900 transition-all duration-1000 ease-out"
                 style={{ width: "25%" }}
-              >
-                <div className="absolute inset-0 bg-white/20 animate-pulse rounded-full" />
-              </div>
+              />
             </div>
           </div>
         </Card>
@@ -109,26 +103,23 @@ export default async function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="animate-fade-in-up [animation-delay:300ms]">
-        <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-          <Highlighter action="highlight" color="#FF9800">Quick Actions</Highlighter>
+        <h3 className="text-sm font-semibold tracking-wider text-zinc-500 uppercase mb-4">
+          Quick Actions
         </h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, i) => (
             <Link key={action.href} href={action.href} className="block outline-none">
-              <Card className={`group relative p-6 bg-card/40 backdrop-blur-md border-white/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer h-full overflow-hidden ${action.border} ${action.glow}`}>
-                {/* Subtle radial gradient on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
+              <Card className={`group relative p-5 bg-card border-border shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer h-full ${action.border} ${action.glow}`}>
                 <div className="relative z-10 flex flex-col h-full">
-                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-inner border border-white/5 ${action.bg}`}>
-                    <action.icon className={`h-6 w-6 ${action.color}`} />
+                  <div className={`h-10 w-10 rounded-lg flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-105 border border-zinc-200/60 ${action.bg}`}>
+                    <action.icon className={`h-5 w-5 ${action.color}`} />
                   </div>
-                  <h4 className="text-base font-semibold mb-2 group-hover:text-white transition-colors">{action.title}</h4>
-                  <p className="text-sm text-muted-foreground mb-4 flex-grow line-clamp-2">{action.description}</p>
+                  <h4 className="text-sm font-semibold text-zinc-900 mb-1">{action.title}</h4>
+                  <p className="text-xs text-muted-foreground mb-4 flex-grow line-clamp-2">{action.description}</p>
                   
-                  <div className="mt-auto flex items-center text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                  <div className="mt-auto flex items-center text-xs font-semibold text-indigo-600">
                     Get started
-                    <ArrowRight className="h-4 w-4 ml-1 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                    <ArrowRight className="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
               </Card>
@@ -140,21 +131,20 @@ export default async function DashboardPage() {
       {/* Stats Row */}
       <div className="grid sm:grid-cols-3 gap-4 animate-fade-in-up [animation-delay:450ms]">
         {[
-          { label: "Skills Discovered", value: "—", sub: "Connect sources", icon: Sparkles, color: "text-violet-400" },
-          { label: "Evidence Items", value: "—", sub: "No data yet", icon: FileCheck, color: "text-blue-400" },
-          { label: "Passport Status", value: "Draft", sub: "Not generated", icon: Shield, color: "text-zinc-400" },
+          { label: "Skills Discovered", value: "0", sub: "Connect sources", icon: Sparkles },
+          { label: "Evidence Items", value: "0", sub: "No data yet", icon: FileCheck },
+          { label: "Passport Status", value: "Draft", sub: "Not generated", icon: Shield },
         ].map((stat, i) => (
-          <Card key={stat.label} className="relative p-6 bg-card/40 backdrop-blur-md border-white/10 overflow-hidden group hover:border-white/20 transition-all duration-300">
-            <div className="absolute -right-6 -top-6 opacity-5 group-hover:opacity-10 transition-opacity duration-500 group-hover:scale-110">
-              <stat.icon className="w-32 h-32" />
-            </div>
+          <Card key={stat.label} className="relative p-5 bg-card border-border shadow-sm overflow-hidden group hover:shadow-md transition-all">
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-2">
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{stat.label}</p>
               </div>
-              <p className="text-4xl font-bold tracking-tight text-white">{stat.value}</p>
-              <p className="text-sm text-muted-foreground mt-2">{stat.sub}</p>
+              <p className="text-3xl font-bold tracking-tight text-zinc-900">{stat.value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{stat.sub}</p>
+            </div>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-5">
+              <stat.icon className="w-16 h-16 text-zinc-900" />
             </div>
           </Card>
         ))}

@@ -41,12 +41,12 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
   };
 
   return (
-    <Card className="flex flex-col bg-card/50 border-border/50 hover:border-border/80 transition-colors overflow-hidden group">
+    <Card className="flex flex-col bg-card border border-border hover:border-zinc-300 hover:shadow-md transition-all duration-300 overflow-hidden group">
       {/* Top Banner indicating file type or generic graphic */}
-      <div className="h-24 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center relative">
-        <Award className="w-10 h-10 text-primary/40" />
+      <div className="h-24 bg-zinc-900 flex items-center justify-center relative transition-colors group-hover:bg-zinc-800">
+        <Award className="w-8 h-8 text-white/30 group-hover:text-white/50 transition-colors" />
         {certificate.file_type?.includes("pdf") && (
-          <span className="absolute bottom-2 right-2 text-[10px] uppercase font-bold bg-background/50 px-2 py-0.5 rounded backdrop-blur-md">
+          <span className="absolute bottom-2 right-2 text-[10px] uppercase tracking-wider font-bold bg-white/10 text-white/80 px-2 py-0.5 rounded">
             PDF
           </span>
         )}
@@ -74,33 +74,33 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
       </div>
 
       {/* Actions */}
-      <div className="grid grid-cols-3 border-t border-border/50 divide-x divide-border/50 bg-accent/20">
+      <div className="grid grid-cols-3 border-t border-zinc-200 divide-x divide-zinc-200 bg-zinc-50">
         <a 
           href={certificate.file_url} 
           target="_blank" 
           rel="noreferrer"
-          className="flex items-center justify-center py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+          className="flex items-center justify-center py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
         >
-          <Eye className="w-4 h-4 mr-1.5" />
+          <Eye className="w-3.5 h-3.5 mr-1.5" />
           View
         </a>
         <button 
           onClick={handleDownload}
-          className="flex items-center justify-center py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+          className="flex items-center justify-center py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
         >
-          <Download className="w-4 h-4 mr-1.5" />
+          <Download className="w-3.5 h-3.5 mr-1.5" />
           Get
         </button>
         <button 
           onClick={handleDelete}
           disabled={isDeleting}
-          className="flex items-center justify-center py-2.5 text-xs font-medium text-destructive/80 hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+          className="flex items-center justify-center py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
         >
           {isDeleting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : (
             <>
-              <Trash2 className="w-4 h-4 mr-1.5" />
+              <Trash2 className="w-3.5 h-3.5 mr-1.5" />
               Drop
             </>
           )}

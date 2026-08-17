@@ -12,10 +12,10 @@ export function OpportunityCard({ result, passportSnapshot }: { result: MatchRes
   const isMatch = matchScore >= 75;
 
   return (
-    <Card className={`relative overflow-hidden transition-all hover:shadow-md ${isMatch ? 'border-primary/50' : 'border-border/50'}`}>
-      {/* Decorative gradient for high matches */}
+    <Card className={`relative overflow-hidden transition-all duration-300 hover:shadow-md border border-border group ${isMatch ? 'hover:border-zinc-400' : ''}`}>
+      {/* Black top border indicator for high matches instead of colored gradient */}
       {isMatch && (
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-emerald-400" />
+        <div className="absolute top-0 left-0 w-full h-1 bg-zinc-900" />
       )}
       
       <CardHeader>
@@ -30,13 +30,13 @@ export function OpportunityCard({ result, passportSnapshot }: { result: MatchRes
           </div>
           
           <div className="flex flex-col items-start md:items-end md:text-right shrink-0">
-            <span className={`text-3xl font-bold ${matchScore >= 80 ? 'text-emerald-500' : matchScore >= 50 ? 'text-amber-500' : 'text-muted-foreground'}`}>
+            <span className="text-4xl font-extrabold tracking-tight text-zinc-900">
               {matchScore}%
             </span>
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Match Score</span>
+            <span className="text-xs text-zinc-500 uppercase tracking-widest font-bold mt-1">Match Score</span>
           </div>
         </div>
-        <Progress value={matchScore} className={`h-2 mt-4 ${matchScore >= 80 ? '[&>div]:bg-emerald-500' : matchScore >= 50 ? '[&>div]:bg-amber-500' : ''}`} />
+        <Progress value={matchScore} className="h-2 mt-5 bg-zinc-100 border border-zinc-200 [&>div]:bg-zinc-900 [&>div]:transition-all [&>div]:duration-1000" />
       </CardHeader>
       
       <CardContent className="space-y-6">
@@ -48,13 +48,13 @@ export function OpportunityCard({ result, passportSnapshot }: { result: MatchRes
           {/* Matched Skills */}
           {matchedSkills.length > 0 && (
             <div>
-              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <h4 className="text-sm font-bold mb-3 flex items-center gap-2 text-zinc-900 uppercase tracking-wider">
+                <CheckCircle2 className="w-4 h-4 text-zinc-900" />
                 Verified Skills ({matchedSkills.length})
               </h4>
               <div className="flex flex-wrap gap-2">
                 {matchedSkills.map(skill => (
-                  <Badge key={skill.skill_id} variant="secondary" className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/20">
+                  <Badge key={skill.skill_id} variant="secondary" className="bg-zinc-100 text-zinc-900 hover:bg-zinc-200 border-zinc-200 font-medium">
                     {skill.skill_name}
                   </Badge>
                 ))}
@@ -65,15 +65,15 @@ export function OpportunityCard({ result, passportSnapshot }: { result: MatchRes
           {/* Missing Skills (Gap Analysis) */}
           {missingSkills.length > 0 && (
             <div>
-              <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Lock className="w-4 h-4 text-muted-foreground" />
+              <h4 className="text-sm font-bold mb-3 flex items-center gap-2 text-zinc-500 uppercase tracking-wider">
+                <Lock className="w-4 h-4 text-zinc-500" />
                 Missing Requirements ({missingSkills.length})
               </h4>
               <div className="flex flex-wrap gap-2">
                 {missingSkills.map(skill => (
-                  <Badge key={skill.skill_id} variant="outline" className="border-dashed text-muted-foreground">
+                  <Badge key={skill.skill_id} variant="outline" className="border-dashed border-zinc-300 text-zinc-500 font-normal">
                     {skill.skill_name}
-                    {skill.is_critical && <span className="ml-1 text-destructive">*</span>}
+                    {skill.is_critical && <span className="ml-1 font-bold text-zinc-900">*</span>}
                   </Badge>
                 ))}
               </div>
@@ -85,8 +85,11 @@ export function OpportunityCard({ result, passportSnapshot }: { result: MatchRes
         <AiCoachInsight result={result} passportSnapshot={passportSnapshot} />
       </CardContent>
       
-      <CardFooter className="bg-muted/30 border-t pt-4">
-        <Button className="w-full" variant={isMatch ? "default" : "secondary"}>
+      <CardFooter className="bg-zinc-50 border-t border-border pt-4">
+        <Button 
+          className={isMatch ? "w-full bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm" : "w-full bg-white border-zinc-200 text-zinc-500 hover:text-zinc-900"} 
+          variant={isMatch ? "default" : "outline"}
+        >
           {isMatch ? "Apply with Passport" : "Unlock by learning missing skills"}
         </Button>
       </CardFooter>
