@@ -60,7 +60,30 @@ export async function syncGitHub(username: string) {
     // Filter out forks and empty repos to save DB space
     const relevantRepos = repos.filter((r) => !r.fork && (r.size || 0) > 0);
 
+    // Import Anti-Cheat Agent once outside the loop
+    const { evaluateEvidenceIntegrity } = await import("@/lib/agents/anti-cheat");
+
     for (const repo of relevantRepos) {
+      // 4a. Run Anti-Cheat Agent on repo metadata
+      let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified" };
+      try {
+        integrityData = await evaluateEvidenceIntegrity("github", {
+          githubData: {
+            name: repo.name,
+            description: repo.description,
+            size: repo.size,
+            stargazers_count: repo.stargazers_count,
+            forks_count: repo.forks_count,
+            open_issues_count: repo.open_issues_count,
+            pushed_at: repo.pushed_at,
+            created_at: repo.created_at,
+            updated_at: repo.updated_at
+          }
+        });
+      } catch (e) {
+        console.error(`[AntiCheat] Failed to verify GitHub repo ${repo.name}`, e);
+      }
+
       // 4. Upsert Repo
       const { data: savedRepo, error: repoError } = await supabase
         .from("github_repos")
@@ -79,6 +102,9 @@ export async function syncGitHub(username: string) {
             open_issues: repo.open_issues_count,
             last_commit_at: repo.pushed_at,
             topics: repo.topics || [],
+            integrity_score: integrityData.integrity_score,
+            integrity_flags: integrityData.integrity_flags,
+            integrity_status: integrityData.integrity_status,
             synced_at: new Date().toISOString(),
           },
           { onConflict: "github_repo_id" }

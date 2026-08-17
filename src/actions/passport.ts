@@ -30,11 +30,13 @@ export async function generatePassport() {
   let languages = [];
 
   if (connection) {
-    const { data: repoData } = await supabase
+    const { data: repoDataRaw } = await supabase
       .from("github_repos")
       .select("*")
       .eq("connection_id", connection.id);
-    repos = repoData || [];
+      
+    // Filter out flagged repos
+    repos = (repoDataRaw || []).filter(r => r.integrity_status !== "flagged");
 
     if (repos.length > 0) {
       const repoIds = repos.map(r => r.id);
@@ -54,12 +56,13 @@ export async function generatePassport() {
 
   // --- EVIDENCE GRADING ENGINE (Module 3) ---
   
-  const { data: evidenceData } = await supabase
+  const { data: evidenceData, error: evidenceError } = await supabase
     .from("evidence")
     .select(`
       id,
       source_type,
       raw_ref,
+      integrity_status,
       evidence_claims (
         extracted_text,
         unmapped_label,
@@ -68,6 +71,10 @@ export async function generatePassport() {
       )
     `)
     .eq("user_id", user.id);
+
+  if (evidenceError) {
+    console.error("[Passport] Failed to fetch evidence data:", evidenceError);
+  }
 
   const skillMap = new Map<string, { repoCount: number, certCitations: string[], skill_id?: string }>();
   
@@ -88,7 +95,10 @@ export async function generatePassport() {
   const validCertUrls = new Set((certificates || []).map(c => c.file_url));
 
   if (evidenceData) {
-    evidenceData.forEach((ev: { id: string; source_type: string; raw_ref: string; evidence_claims?: { unmapped_label?: string; skill_id?: string; extracted_text?: string }[] }) => {
+    evidenceData.forEach((ev: { id: string; source_type: string; raw_ref: string; integrity_status?: string; evidence_claims?: { unmapped_label?: string; skill_id?: string; extracted_text?: string }[] }) => {
+      // Ignore evidence flagged by Anti-Cheat
+      if (ev.integrity_status === "flagged") return;
+
       if (ev.source_type === "certificate") {
         // [Elite Self-Healing] Auto-delete orphaned evidence from legacy data leaks
         if (!validCertUrls.has(ev.raw_ref)) {

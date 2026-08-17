@@ -90,6 +90,9 @@ CREATE TABLE IF NOT EXISTS public.github_repos (
   primary_language TEXT,
   html_url TEXT,
   is_fork BOOLEAN DEFAULT FALSE,
+  integrity_score INTEGER,
+  integrity_flags JSONB,
+  integrity_status TEXT DEFAULT 'pending',
   synced_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -160,6 +163,9 @@ CREATE TABLE IF NOT EXISTS public.evidence (
   storage_path TEXT,
   issuer_id TEXT,
   status TEXT DEFAULT 'pending',
+  integrity_score INTEGER,
+  integrity_flags JSONB,
+  integrity_status TEXT DEFAULT 'pending',
   ingested_at TIMESTAMPTZ DEFAULT NOW()
 );
 

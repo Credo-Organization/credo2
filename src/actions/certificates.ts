@@ -61,17 +61,19 @@ export async function uploadCertificateMetadata({
     const response = await fetch(fileUrl);
     let extractionResult: any = { claims: [] };
     
+    let fileBuffer: Buffer | null = null;
+    let fileMimeType = "application/pdf";
+    
     if (response.ok) {
       const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
+      fileBuffer = Buffer.from(arrayBuffer);
       
-      let mimeType = "application/pdf";
-      if (fileUrl.toLowerCase().endsWith(".png")) mimeType = "image/png";
-      else if (fileUrl.toLowerCase().endsWith(".jpg") || fileUrl.toLowerCase().endsWith(".jpeg")) mimeType = "image/jpeg";
+      if (fileUrl.toLowerCase().endsWith(".png")) fileMimeType = "image/png";
+      else if (fileUrl.toLowerCase().endsWith(".jpg") || fileUrl.toLowerCase().endsWith(".jpeg")) fileMimeType = "image/jpeg";
 
       extractionResult = await extractClaimsFromMultimodal(
-        buffer,
-        mimeType,
+        fileBuffer,
+        fileMimeType,
         extractionText,
         "certificate"
       );
@@ -80,6 +82,22 @@ export async function uploadCertificateMetadata({
     }
 
     if (extractionResult.claims.length > 0) {
+      // Run Anti-Cheat Agent
+      const { evaluateEvidenceIntegrity } = await import("@/lib/agents/anti-cheat");
+      let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified" };
+      
+      try {
+        if (fileBuffer) {
+          integrityData = await evaluateEvidenceIntegrity("certificate", {
+            fileBuffer: fileBuffer,
+            mimeType: fileMimeType,
+            metadata: extractionText
+          });
+        }
+      } catch (e) {
+        console.error("[uploadCertificateMetadata] Anti-cheat check failed:", e);
+      }
+
       const { data: evidence } = await supabase
         .from("evidence")
         .insert({
@@ -87,6 +105,9 @@ export async function uploadCertificateMetadata({
           source_type: "certificate",
           raw_ref: fileUrl,
           status: "processed",
+          integrity_score: integrityData.integrity_score,
+          integrity_flags: integrityData.integrity_flags,
+          integrity_status: integrityData.integrity_status,
           ingested_at: new Date().toISOString(),
         })
         .select("id")
