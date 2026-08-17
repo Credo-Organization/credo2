@@ -124,10 +124,10 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
           Share & Export
         </Button>
       } />
-      <DialogContent className="sm:max-w-md bg-card border-border/50">
+      <DialogContent className="dashboard-theme sm:max-w-md bg-card border border-border shadow-lg">
         <DialogHeader>
-          <DialogTitle>Share Your Skill Passport</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-zinc-900">Share Your Skill Passport</DialogTitle>
+          <DialogDescription className="text-zinc-500">
             Make your passport public to share it, or download it as a PDF.
           </DialogDescription>
         </DialogHeader>
@@ -136,29 +136,29 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
         <div className="grid grid-cols-2 gap-3 mt-2">
           <Button 
             variant="outline" 
-            className="h-16 flex flex-col gap-1 items-center justify-center bg-card/50 border-primary/20 hover:border-primary hover:bg-primary/5 transition-colors"
+            className="h-16 flex flex-col gap-1 items-center justify-center bg-card border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 transition-colors"
             onClick={downloadPDF}
             disabled={isDownloading}
           >
-            {isDownloading ? <Loader2 className="w-5 h-5 animate-spin" /> : <FileText className="w-5 h-5 text-primary" />}
-            <span className="text-xs font-semibold">Download PDF</span>
+            {isDownloading ? <Loader2 className="w-5 h-5 animate-spin text-zinc-900" /> : <FileText className="w-5 h-5 text-zinc-900" />}
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-900 mt-1">Download PDF</span>
           </Button>
           
           <Button 
             variant="outline" 
-            className="h-16 flex flex-col gap-1 items-center justify-center bg-card/50 border-emerald-500/20 hover:border-emerald-500 hover:bg-emerald-500/5 transition-colors"
+            className="h-16 flex flex-col gap-1 items-center justify-center bg-card border-zinc-200 hover:border-zinc-900 hover:bg-zinc-50 transition-colors"
             onClick={downloadQR}
             disabled={!isPublic}
           >
-            <QrCode className="w-5 h-5 text-emerald-500" />
-            <span className="text-xs font-semibold">Download QR</span>
+            <QrCode className="w-5 h-5 text-zinc-900" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-900 mt-1">Download QR</span>
           </Button>
         </div>
 
-        <div className="flex items-center justify-between p-4 border border-border/50 rounded-lg bg-accent/20 mt-2">
+        <div className="flex items-center justify-between p-4 border border-zinc-200 rounded-lg bg-zinc-50 mt-2">
           <div className="space-y-0.5">
-            <Label className="text-base font-semibold">Public Access</Label>
-            <p className="text-xs text-muted-foreground">
+            <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-900">Public Access</Label>
+            <p className="text-xs text-zinc-500">
               Anyone with the link can view your passport.
             </p>
           </div>
@@ -183,17 +183,17 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
             </div>
 
             <div className="space-y-2">
-              <Label>Public Link</Label>
+              <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-900">Public Link</Label>
               <div className="flex items-center gap-2">
                 <Input 
                   readOnly 
                   value={shareUrl} 
-                  className="bg-accent/50 text-muted-foreground"
+                  className="bg-white text-zinc-900 border-zinc-200 focus-visible:ring-zinc-900"
                 />
-                <Button size="icon" variant="outline" onClick={copyToClipboard} className="shrink-0">
-                  {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                <Button size="icon" variant="outline" onClick={copyToClipboard} className="shrink-0 border-zinc-200 hover:bg-zinc-100 text-zinc-900">
+                  {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                 </Button>
-                <Button size="icon" variant="outline" onClick={() => window.open(shareUrl, '_blank')} className="shrink-0">
+                <Button size="icon" variant="outline" onClick={() => window.open(shareUrl, '_blank')} className="shrink-0 border-zinc-200 hover:bg-zinc-100 text-zinc-900">
                   <ExternalLink className="w-4 h-4" />
                 </Button>
               </div>

@@ -51,6 +51,13 @@ export async function uploadCertificateMetadata({
     const extractionText = `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`;
     
     // [Elite Engineer Fix] Fetch the file and extract skills visually using Multimodal LLM
+    
+    // SSRF Protection: Ensure fileUrl is explicitly from our Supabase Storage bucket
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || !fileUrl.startsWith(`${supabaseUrl}/storage/v1/object/public/certificates/`)) {
+      throw new Error("Invalid file URL: Security exception");
+    }
+
     const response = await fetch(fileUrl);
     let extractionResult: any = { claims: [] };
     
