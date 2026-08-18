@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 
 import { StarButton } from "@/components/ui/star-button"
-import Link from "next/link"
+import { LoginModal } from "@/components/ui/login-modal"
 
 export function StarButtonDemo() {
   const { theme } = useTheme()
@@ -15,10 +15,10 @@ export function StarButtonDemo() {
   }, [theme])
 
   return (
-    <Link href="/dashboard">
-      <StarButton lightColor={lightColor} className="rounded-3xl">
+    <LoginModal>
+      <StarButton lightColor={lightColor} className="rounded-3xl cursor-pointer">
         Get my skill passport
       </StarButton>
-    </Link>
+    </LoginModal>
   )
 }

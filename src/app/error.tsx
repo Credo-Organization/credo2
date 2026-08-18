@@ -27,10 +27,9 @@ export default function ErrorPage({
           <AlertCircle className="w-8 h-8 text-red-500" />
         </div>
         
-        <h2 className="text-2xl font-bold mb-3 tracking-tight">AI Engine Timeout</h2>
+        <h2 className="text-2xl font-bold mb-3 tracking-tight">Application Error</h2>
         <p className="text-muted-foreground mb-8 text-sm leading-relaxed">
-          The operation took too long or encountered an unexpected payload. 
-          This usually happens when the generative AI takes too long to respond.
+          {error.message || "An unexpected error occurred."}
         </p>
         
         <div className="flex flex-col gap-3">
