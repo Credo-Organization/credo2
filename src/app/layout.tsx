@@ -50,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark`}
+      className={`${geistSans.variable} ${geistMono.variable} dark scroll-smooth`}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased">

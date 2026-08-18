@@ -77,7 +77,7 @@ const DUMMY_DATA: SkillPassportData = {
     description: "You have strong frontend skills, but lack backend frameworks and database experience for Full Stack Development.",
     recommendedTechStack: ["PostgreSQL", "Go", "Docker", "GraphQL"]
   },
-  githubHeatmap: Array(7).fill(0).map(() => Array(52).fill(0).map(() => Math.floor(Math.random() * 5))),
+  githubHeatmap: Array(7).fill(0).map((_, r) => Array(52).fill(0).map((_, c) => (r * 7 + c * 13) % 5)),
   evidence: {
     githubRepos: [
       { name: "nextjs-ecommerce", url: "#", language: "TypeScript", commits: 142 },
