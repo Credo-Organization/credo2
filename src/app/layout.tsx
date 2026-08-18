@@ -58,9 +58,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </TooltipProvider>
         <Toaster richColors position="bottom-right" />
-
-        {/* Subtle bottom fade blur overlay */}
-        <div className="pointer-events-none fixed bottom-0 left-0 right-0 h-[148.5px] bg-background/20 backdrop-blur-2xl [mask-image:linear-gradient(to_top,black_0%,transparent_100%)] z-50" />
       </body>
     </html>
   );

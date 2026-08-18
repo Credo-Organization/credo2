@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FileUpload } from "@/components/ui/file-upload";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,7 +49,7 @@ export function UnifiedOnboardingForm() {
     },
   });
 
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(1);
 
   const handleNextStep = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -65,7 +66,21 @@ export function UnifiedOnboardingForm() {
     }
   };
 
+  const handleGitHubVerify = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Dummy bypass: skip verification and proceed to document upload
+    setStep(3);
+  };
+
+  const handleDocumentUpload = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Dummy bypass: skip actual upload and finish onboarding
+    router.push("/dashboard");
+    router.refresh();
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // This is preserved but we're bypassing it with the dummy functions for now
     setLoading(true);
     try {
       const supabase = createClient();
@@ -92,7 +107,7 @@ export function UnifiedOnboardingForm() {
       }
 
       // Sync GitHub profile
-      await syncGitHub(values.github_username);
+      // await syncGitHub(values.github_username);
 
       router.push("/dashboard");
       router.refresh();
@@ -107,17 +122,19 @@ export function UnifiedOnboardingForm() {
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black mt-12 animate-fade-in-up">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold tracking-tight text-white">
-          {step === 1 ? "Tell us about yourself" : "Connect your GitHub"}
+          {step === 1 && "Tell us about yourself"}
+          {step === 2 && "Connect your GitHub"}
+          {step === 3 && "Upload Documents"}
         </h2>
         <p className="text-zinc-400 mt-3 text-sm">
-          {step === 1
-            ? "This helps us personalize your skill passport and roadmap."
-            : "We'll analyze your public repositories to instantly build your skill passport."}
+          {step === 1 && "This helps us personalize your skill passport and roadmap."}
+          {step === 2 && "We'll analyze your public repositories to instantly build your skill passport."}
+          {step === 3 && "Upload your certificates or resume to complete your profile."}
         </p>
       </div>
 
       <Form {...form}>
-        <form className="my-8" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="my-8" onSubmit={(e) => e.preventDefault()}>
 
           {step === 1 && (
             <>
@@ -195,7 +212,7 @@ export function UnifiedOnboardingForm() {
                     <FormItem className="w-full">
                       <LabelInputContainer>
                         <FormLabel>Gender</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-full h-10 border-input bg-transparent dark:bg-transparent">
                               <SelectValue placeholder="Select" />
@@ -263,11 +280,11 @@ export function UnifiedOnboardingForm() {
               <div className="flex flex-col space-y-4">
                 <button
                   className="group/btn relative flex justify-center items-center h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
-                  type="submit"
+                  type="button"
+                  onClick={handleGitHubVerify}
                   disabled={loading}
                 >
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Connect & Finish
+                  Verify and Continue
                   <BottomGradient />
                 </button>
 
@@ -275,6 +292,34 @@ export function UnifiedOnboardingForm() {
                   className="group/btn relative flex justify-center items-center h-10 w-full rounded-md bg-transparent font-medium text-zinc-400 border border-zinc-800 hover:text-white transition-colors"
                   type="button"
                   onClick={() => setStep(1)}
+                  disabled={loading}
+                >
+                  &larr; Back
+                  <BottomGradient />
+                </button>
+              </div>
+            </>
+          )}
+
+          {step === 3 && (
+            <>
+              <FileUpload onChange={(files) => console.log(files)} />
+
+              <div className="flex flex-col space-y-4">
+                <button
+                  className="group/btn relative flex justify-center items-center h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
+                  type="button"
+                  onClick={handleDocumentUpload}
+                  disabled={loading}
+                >
+                  Finish Onboarding
+                  <BottomGradient />
+                </button>
+
+                <button
+                  className="group/btn relative flex justify-center items-center h-10 w-full rounded-md bg-transparent font-medium text-zinc-400 border border-zinc-800 hover:text-white transition-colors"
+                  type="button"
+                  onClick={() => setStep(2)}
                   disabled={loading}
                 >
                   &larr; Back
