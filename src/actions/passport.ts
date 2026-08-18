@@ -26,8 +26,9 @@ export async function generatePassport() {
     .eq("profile_id", user.id)
     .single();
 
-  let repos = [];
+  let repos: any[] = [];
   let languages = [];
+  let flaggedReposCount = 0;
 
   if (connection) {
     const { data: repoDataRaw } = await supabase
@@ -37,6 +38,7 @@ export async function generatePassport() {
       
     // Filter out flagged repos
     repos = (repoDataRaw || []).filter(r => r.integrity_status !== "flagged");
+    flaggedReposCount = (repoDataRaw || []).filter(r => r.integrity_status === "flagged").length;
 
     if (repos.length > 0) {
       const repoIds = repos.map(r => r.id);
@@ -129,7 +131,6 @@ export async function generatePassport() {
   }
 
   // 3. Compute Grading Levels (Level 1 - 3)
-  const flaggedReposCount = (repoDataRaw || []).filter((r: any) => r.integrity_status === "flagged").length;
   let flaggedEvidenceCount = 0;
   if (evidenceData) {
     flaggedEvidenceCount = evidenceData.filter((ev: any) => ev.integrity_status === "flagged").length;

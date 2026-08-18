@@ -52,11 +52,11 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
           {certificate.integrity_status === "verified" && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger render={
                   <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-bold border-emerald-500/50 text-emerald-400 bg-emerald-500/10 cursor-help px-2 py-0.5">
                     <ShieldCheck className="w-3 h-3 mr-1 inline" /> Verified
                   </Badge>
-                </TooltipTrigger>
+                } />
                 <TooltipContent>
                   <p>Integrity Score: {certificate.integrity_score}%</p>
                 </TooltipContent>
@@ -66,11 +66,11 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
           {certificate.integrity_status === "flagged" && (
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger render={
                   <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-bold border-rose-500/50 text-rose-400 bg-rose-500/10 cursor-help px-2 py-0.5">
                     <ShieldAlert className="w-3 h-3 mr-1 inline" /> Flagged
                   </Badge>
-                </TooltipTrigger>
+                } />
                 <TooltipContent className="max-w-xs">
                   <p className="font-medium mb-1">Integrity Score: {certificate.integrity_score}%</p>
                   <ul className="list-disc pl-4 text-xs space-y-1">

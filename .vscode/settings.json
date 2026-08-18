@@ -1,0 +1,4 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "python.defaultInterpreterPath": "d:\\SIH\\backend\\venv\\Scripts\\python.exe"
+}

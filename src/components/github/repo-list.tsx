@@ -43,11 +43,11 @@ export function RepoList({ repos }: RepoListProps) {
               {repo.integrity_status === "verified" && (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger render={
                       <Badge variant="outline" className="text-xs shrink-0 font-medium border-emerald-200 text-emerald-700 bg-emerald-50 cursor-help">
                         <ShieldCheck className="w-3 h-3 mr-1" /> Verified
                       </Badge>
-                    </TooltipTrigger>
+                    } />
                     <TooltipContent>
                       <p>Integrity Score: {repo.integrity_score}%</p>
                     </TooltipContent>
@@ -57,11 +57,11 @@ export function RepoList({ repos }: RepoListProps) {
               {repo.integrity_status === "flagged" && (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger render={
                       <Badge variant="outline" className="text-xs shrink-0 font-medium border-rose-200 text-rose-700 bg-rose-50 cursor-help">
                         <ShieldAlert className="w-3 h-3 mr-1" /> Flagged ({repo.integrity_score}%)
                       </Badge>
-                    </TooltipTrigger>
+                    } />
                     <TooltipContent className="max-w-xs">
                       <p className="font-medium mb-1">Flags detected:</p>
                       <ul className="list-disc pl-4 text-xs space-y-1">
