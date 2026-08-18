@@ -3,14 +3,14 @@ from typing import Annotated, Dict, Any, List
 from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_xai import ChatXAI
+from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
 # Ensure API keys are available
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = "mock_key_for_now"
-if "XAI_API_KEY" not in os.environ:
-    os.environ["XAI_API_KEY"] = "mock_key_for_now"
+if "OPENROUTER_API_KEY" not in os.environ:
+    os.environ["OPENROUTER_API_KEY"] = "mock_key_for_now"
 
 # Define the State schema
 class GraphState(TypedDict):
@@ -86,9 +86,6 @@ def compute_match(state: GraphState):
     if not sanitized or not job_desc:
         return {"error": "Missing inputs for match computation"}
         
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-    structured_llm = llm.with_structured_output(MatchResultSchema)
-    
     try:
         prompt = f"""
         Evaluate this candidate against the job description.
@@ -97,7 +94,18 @@ def compute_match(state: GraphState):
         
         Provide a match score, gap analysis, and explainable text.
         """
-        res = structured_llm.invoke(prompt)
+        
+        try:
+            print("--- Attempting Grok via OpenRouter ---")
+            llm = ChatOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ.get("OPENROUTER_API_KEY"), model="x-ai/grok-2")
+            structured_llm = llm.with_structured_output(MatchResultSchema)
+            res = structured_llm.invoke(prompt)
+        except Exception as e:
+            print(f"--- Grok Failed, Falling back to Gemini: {e} ---")
+            llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+            structured_llm = llm.with_structured_output(MatchResultSchema)
+            res = structured_llm.invoke(prompt)
+            
         return {"match_result": res.model_dump()}
     except Exception as e:
         return {"error": f"Match computation failed: {str(e)}"}
