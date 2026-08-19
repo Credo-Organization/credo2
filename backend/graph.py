@@ -6,17 +6,28 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
+# GitProof Agent imports
+from gitproof.agents.orchestrator import OrchestratorAgent
+from gitproof.memory.memory_manager import MemoryManager
+from gitproof.llm.llm_client import LLMClient
+
+# Initialize singletons for the verifier
+_memory = MemoryManager()
+_llm = LLMClient()
+
 # Ensure API keys are available
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = "mock_key_for_now"
 if "OPENROUTER_API_KEY" not in os.environ:
     os.environ["OPENROUTER_API_KEY"] = "mock_key_for_now"
+if "AICREDIT_API_KEY" not in os.environ:
+    os.environ["AICREDIT_API_KEY"] = "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068"
 
 # Define the State schema
 class GraphState(TypedDict):
-    raw_document: str  # Input: the raw text or base64 PDF
+    passport_data: Dict[str, Any] # Input: The structured passport from the frontend
     job_description: str # Input: the internship description
-    extracted_passport: Dict[str, Any] # Output of Extract_Passport
+    github_token: str | None # Input: GitHub OAuth token for Git-Proof-Agent
     sanitized_passport: Dict[str, Any] # Output of Sanitize_Data
     match_result: Dict[str, Any] # Output of Compute_Match
     error: str
@@ -41,28 +52,12 @@ class MatchResultSchema(BaseModel):
 
 # --- Nodes ---
 
-def extract_passport(state: GraphState):
-    print("--- EXTRACT PASSPORT (Gemini 2.5) ---")
-    raw_doc = state.get("raw_document", "")
-    
-    # Initialize Gemini (using gemini-2.5-flash as requested previously, or gemini-2.5-pro)
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
-    structured_llm = llm.with_structured_output(PassportSchema)
-    
-    try:
-        # We mock this slightly for the hackathon setup, assuming raw_doc is text
-        res = structured_llm.invoke(f"Extract the student profile and skills from this document:\n{raw_doc}")
-        return {"extracted_passport": res.model_dump()}
-    except Exception as e:
-        print(f"Extraction Error: {e}")
-        return {"error": f"Extraction failed: {str(e)}"}
-
 def sanitize_data(state: GraphState):
     print("--- SANITIZE DATA (Blind Matching) ---")
     if state.get("error"):
         return {}
 
-    passport = state.get("extracted_passport", {})
+    passport = state.get("passport_data", {})
     
     if not passport:
         return {"error": "No passport to sanitize"}
@@ -96,13 +91,13 @@ def compute_match(state: GraphState):
         """
         
         try:
-            print("--- Attempting Grok via OpenRouter ---")
-            llm = ChatOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ.get("OPENROUTER_API_KEY"), model="x-ai/grok-2")
+            print("--- Attempting Match Evaluator via AICredits ---")
+            llm = ChatOpenAI(base_url="https://aicredits.in/api/v1", api_key=os.environ.get("AICREDIT_API_KEY"), model="allenai/olmo-3-32b-think")
             structured_llm = llm.with_structured_output(MatchResultSchema)
             res = structured_llm.invoke(prompt)
         except Exception as e:
-            print(f"--- Grok Failed, Falling back to Gemini: {e} ---")
-            llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+            print(f"--- Evaluator Failed, Falling back to aion-1.0-mini: {e} ---")
+            llm = ChatOpenAI(base_url="https://aicredits.in/api/v1", api_key=os.environ.get("AICREDIT_API_KEY"), model="aionlabs/aion-1.0-mini")
             structured_llm = llm.with_structured_output(MatchResultSchema)
             res = structured_llm.invoke(prompt)
             
@@ -115,13 +110,11 @@ def compute_match(state: GraphState):
 workflow = StateGraph(GraphState)
 
 # Add Nodes
-workflow.add_node("Extract_Passport", extract_passport)
 workflow.add_node("Sanitize_Data", sanitize_data)
 workflow.add_node("Compute_Match", compute_match)
 
 # Define Edges
-workflow.add_edge(START, "Extract_Passport")
-workflow.add_edge("Extract_Passport", "Sanitize_Data")
+workflow.add_edge(START, "Sanitize_Data")
 workflow.add_edge("Sanitize_Data", "Compute_Match")
 workflow.add_edge("Compute_Match", END)
 
