@@ -1,45 +1,46 @@
-# Credify: AI-Driven Verifiable Skill Passport 🚀
+# Credify: AI-Driven Verifiable Skill Passport
 
-Credify is a next-generation career identity platform built for the **Smart India Hackathon (SIH)**. It bridges the gap between academic credentials and industry requirements by generating cryptographically secure, AI-verified "Skill Passports." 
+Credify is a next-generation career identity platform designed to bridge the gap between academic credentials and industry requirements. By seamlessly generating cryptographically secure, AI-verified "Skill Passports," Credify empowers students and professionals to showcase their authentic capabilities. 
 
-By connecting their GitHub and uploading certificates, students receive a verifiable portfolio. Our **Multi-Agent Python Engine** then automatically matches them to live job opportunities and generates real-time AI roadmaps to close their skill gaps.
+By connecting GitHub profiles and uploading certificates, users receive a verifiable portfolio. Our **Dual-Layer AI Orchestration Engine** then automatically evaluates evidence integrity, matches candidates to live job opportunities, and generates real-time AI roadmaps to close their skill gaps.
 
 ---
 
-## 🧠 Enterprise AI Architecture (LangGraph & Gemini)
+## 🏗️ Enterprise Architecture 
 
-Credify operates on a decoupled architecture, separating the high-performance Next.js UI from a heavyweight Python orchestration backend.
+Credify operates on a robust, decoupled architecture separating a high-performance Next.js Edge UI from a heavyweight Python AI backend, connected via asynchronous background workers.
 
 ```mermaid
 graph TD
-    A[Next.js Client UI] -->|Server Actions| B[Next.js API Layer]
-    B -->|REST| C[FastAPI Backend]
+    A[Next.js Client UI] -->|OAuth & Server Actions| B[Next.js API Layer]
+    B -->|Async Job Polling| C[(Supabase PostgreSQL)]
     
-    subgraph Multi-Agent AI Orchestration
-        C --> D[LangGraph Orchestrator]
-        D --> E((Extractor Agent))
-        E --> F((Sanitizer Agent))
-        F --> G((AI Coach/Matcher Agent))
+    subgraph Background Processing
+        C -->|Queue| D[Passport Worker API]
+        C -->|Queue| E[Matcher Worker API]
     end
     
-    E -.->|Parse Resumes/Certs| H[Google Gemini 2.5 Flash]
-    G -.->|Semantic Scoring| H
-    G -->|JSON Response| C
+    subgraph AI Orchestration Layer
+        D -.-> F[Anti-Cheat Agent]
+        E -.-> G[FastAPI AI Microservice]
+        G --> H[LangGraph AI Coach]
+    end
 ```
 
-### 1. Multi-Agent Orchestration (Python + LangGraph)
-Instead of fragile, single-shot API calls, Credify uses a deterministic state graph:
-* **The Extractor Node**: Ingests unstructured data (GitHub repos, PDF certificates, LinkedIn profiles) and uses **Gemini 2.5 Flash** to extract deterministic JSON arrays of verifiable skills.
-* **The Matcher Node (AI Coach)**: Cross-references the extracted canonical skills against live industry job requirements to compute semantic compatibility scores and identify missing critical skills.
+### 1. Asynchronous Background Workers
+To handle long-running AI tasks and prevent serverless function timeouts (like Vercel's 10-second limit), Credify utilizes a robust state-machine queue system:
+* **`passport_jobs` and `match_jobs`**: Supabase tables that track the lifecycle (`pending`, `processing`, `completed`, `failed`) of heavy AI extractions.
+* **Non-Blocking UI**: The frontend polls these job tables in real-time, displaying beautiful progress indicators to the user while the heavy lifting happens invisibly in the background.
 
-### 2. Glassmorphic Frontend Engineering
-* **Premium Aesthetics**: Built with Next.js 14 App Router, utilizing Framer Motion for micro-interactions, staggered entrance animations, and a cohesive glassmorphic design system.
-* **Bulletproof Demo State**: Implements robust Next.js Error Boundaries (`error.tsx`, `global-error.tsx`) to gracefully catch API timeouts during live pitches, rendering a beautiful "System Glitch" UI rather than crashing.
-* **Streaming AI UI**: Uses the `@ai-sdk/react` to stream personalized career timelines directly to the UI, bypassing serverless timeout limitations.
+### 2. Live Anti-Cheat & Evidence Verification
+Instead of blindly trusting resumes, Credify acts as a strict technical recruiter:
+* **Next.js Native OAuth**: Securely connects directly to GitHub to fetch raw repository metadata, languages, and README snippets.
+* **Anti-Cheat Agent**: Uses `@vercel/ai` and structured `zod` schemas to evaluate repositories in real-time. It flags low-effort clones or boilerplate code, ensuring only authentic, hard-earned skills make it to the Skill Passport.
 
-### 3. Database Security & Scalability
-* **Supabase PostgreSQL**: Fully integrated with custom tables for `passports`, `skills`, and `user_skills`.
-* **Row Level Security (RLS)**: Strictly enforced backend policies guarantee that users can only insert or modify evidence claims that belong to their cryptographically signed profile.
+### 3. Pure Stateless AI Microservice (Python + LangGraph)
+The Python backend (`backend/main.py`) has been stripped of complex auth middleware, acting purely as an orchestration engine:
+* **The Extractor Node**: Ingests unstructured data (PDF certificates, GitHub repos) and uses **Gemini 2.5 Flash** (or xAI models) to extract deterministic JSON arrays of verifiable skills.
+* **The Matcher Node (AI Coach)**: Employs a custom, ultra-fast `vector-store.ts` for in-memory cosine similarity, cross-referencing extracted skills against live industry job requirements without relying on heavy external vector databases.
 
 ---
 
@@ -47,36 +48,41 @@ Instead of fragile, single-shot API calls, Credify uses a deterministic state gr
 
 * **Frontend**: [Next.js 14](https://nextjs.org/) (App Router), TypeScript, Tailwind CSS, shadcn/ui, Framer Motion
 * **AI Orchestration Backend**: Python 3.11, [FastAPI](https://fastapi.tiangolo.com/), [LangGraph](https://langchain-ai.github.io/langgraph/)
-* **AI Models**: Google Gemini 2.5 Flash (via `@google/genai`)
-* **Database & Auth**: [Supabase](https://supabase.com/)
-
----
-
-## 🏆 Hackathon Demo Survival Guide
-
-For the live SIH pitch, we have included a flawless demo environment seeder to prevent manual data entry.
-
-1. Open your **Supabase Dashboard** -> **SQL Editor**.
-2. Open `scripts/seed-demo-data.sql` from this repository.
-3. Paste the contents into the SQL Editor and click **Run**.
-4. The database is now populated with a perfect "Aman Kumar" student profile, 5 verified skills, a published Passport, and 2 mock jobs—ready for an instant demo.
+* **AI SDKs**: Vercel AI SDK (`@vercel/ai`)
+* **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL + RLS)
 
 ---
 
 ## 🚀 Getting Started (Local Development)
 
-### 1. Start the Frontend
+### 1. Start the Next.js Frontend
 ```bash
 git clone https://github.com/Credo-Organization/credo2.git
 cd credo2
 npm install
 ```
-Populate your `.env` file (see `.env.example`).
+
+Configure your `.env.local` file:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# GitHub OAuth Integration
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# AI Configuration
+XAI_API_KEY=your_xai_api_key
+```
+
+Run the database migrations to set up the background queues:
 ```bash
+node scripts/migrate.js
 npm run dev
 ```
 
-### 2. Start the AI Backend
+### 2. Start the FastAPI Backend
 ```bash
 # In a new terminal tab
 cd backend
@@ -84,10 +90,8 @@ python -m venv venv
 source venv/Scripts/activate  # On Windows
 pip install -r requirements.txt
 ```
+
 Ensure your `backend/.env` has `GEMINI_API_KEY` set.
 ```bash
-python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
-
----
-*Designed & Engineered by top elite frontend and AI engineers for SIH.*
