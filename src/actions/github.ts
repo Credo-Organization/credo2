@@ -4,70 +4,84 @@ import { createClient } from "@/lib/supabase/server";
 import { Octokit } from "octokit";
 import { revalidatePath } from "next/cache";
 
-export async function syncGitHub(username: string) {
+export async function syncGitHub(username: string, token: string) {
   const supabase = await createClient();
   const octokit = new Octokit({
-    auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN, // Optional, but increases rate limits
+    auth: token,
   });
 
-  // Verify user is authenticated
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized" };
   }
 
   try {
-    // 1. Fetch GitHub User Profile
-    const { data: ghUser } = await octokit.rest.users.getByUsername({
-      username,
-    });
+    const { data: ghUser } = await octokit.rest.users.getByUsername({ username });
 
-    // 2. Upsert GitHub Connection in Supabase
     const { data: connection, error: connectionError } = await supabase
       .from("github_connections")
       .upsert(
         {
           profile_id: user.id,
-          github_user_id: ghUser.id,
           github_username: ghUser.login,
-          access_token: "public_only", // Since we only ask for username, we don't have OAuth token yet
+          access_token: token,
           avatar_url: ghUser.avatar_url,
-          profile_url: ghUser.html_url,
-          public_repos: ghUser.public_repos,
-          followers: ghUser.followers,
-          following: ghUser.following,
-          last_synced_at: new Date().toISOString(),
-          sync_status: "completed",
+          synced_at: new Date().toISOString(),
         },
-        { onConflict: "profile_id,github_user_id" }
+        { onConflict: "profile_id" }
       )
       .select("id")
       .single();
 
     if (connectionError || !connection) {
       console.error("Connection Error:", connectionError);
-      throw new Error("Failed to save GitHub connection.");
+      return { success: false, error: "Failed to save GitHub connection." };
     }
 
-    // 3. Fetch Repositories
     const { data: repos } = await octokit.rest.repos.listForUser({
       username,
       type: "owner",
       sort: "pushed",
-      per_page: 30, // Fetch up to 30 active repos
+      per_page: 30,
     });
 
-    // Filter out forks and empty repos to save DB space
-    const relevantRepos = repos.filter((r) => !r.fork && (r.size || 0) > 0);
-
-    // Import Anti-Cheat Agent once outside the loop
+    const relevantRepos = repos.filter((r) => !r.fork && (r.size || 0) > 0).slice(0, 5);
     const { evaluateEvidenceIntegrity } = await import("@/lib/agents/anti-cheat");
 
-    for (const repo of relevantRepos) {
-      // 4a. Run Anti-Cheat Agent on repo metadata
-      let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified" };
+    // Clear old repos for this connection to avoid duplicates
+    await supabase.from("github_repos").delete().eq("connection_id", connection.id);
+
+    await Promise.all(relevantRepos.map(async (repo) => {
+      let languages: Record<string, number> = {};
+      if (repo.stargazers_count! > 0 || repo.language) {
+        try {
+          const { data: langData } = await octokit.rest.repos.listLanguages({
+            owner: username,
+            repo: repo.name,
+          });
+          languages = langData as Record<string, number>;
+        } catch (langError) {
+          console.error(`Failed to fetch languages for ${repo.name}`, langError);
+        }
+      }
+
+      let readmeSnippet = "None";
       try {
-        integrityData = await evaluateEvidenceIntegrity("github", {
+        const { data: readmeData } = await octokit.rest.repos.getReadme({
+          owner: username,
+          repo: repo.name,
+        });
+        if (readmeData && !Array.isArray(readmeData) && readmeData.content) {
+          const decoded = Buffer.from(readmeData.content, 'base64').toString('utf-8');
+          readmeSnippet = decoded.substring(0, 1500);
+        }
+      } catch (readmeError) {
+        // Ignore 404s
+      }
+
+      let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified", verified_skills: [] as string[] };
+      try {
+        const aiResult = await evaluateEvidenceIntegrity("github", {
           githubData: {
             name: repo.name,
             description: repo.description,
@@ -77,88 +91,83 @@ export async function syncGitHub(username: string) {
             open_issues_count: repo.open_issues_count,
             pushed_at: repo.pushed_at,
             created_at: repo.created_at,
-            updated_at: repo.updated_at
+            updated_at: repo.updated_at,
+            languages: languages,
+            readme_snippet: readmeSnippet
           }
         });
+        integrityData = { ...integrityData, ...aiResult } as any;
       } catch (e) {
         console.error(`[AntiCheat] Failed to verify GitHub repo ${repo.name}`, e);
       }
 
-      // 4. Upsert Repo
       const { data: savedRepo, error: repoError } = await supabase
         .from("github_repos")
-        .upsert(
-          {
-            connection_id: connection.id,
-            github_repo_id: repo.id,
-            name: repo.name,
-            full_name: repo.full_name,
-            description: repo.description,
-            is_fork: repo.fork,
-            is_private: repo.private,
-            primary_language: repo.language,
-            stars_count: repo.stargazers_count,
-            forks_count: repo.forks_count,
-            open_issues: repo.open_issues_count,
-            last_commit_at: repo.pushed_at,
-            topics: repo.topics || [],
-            integrity_score: integrityData.integrity_score,
-            integrity_flags: integrityData.integrity_flags,
-            integrity_status: integrityData.integrity_status,
-            synced_at: new Date().toISOString(),
-          },
-          { onConflict: "github_repo_id" }
-        )
+        .insert({
+          connection_id: connection.id,
+          name: repo.name,
+          description: repo.description,
+          is_fork: repo.fork,
+          primary_language: repo.language,
+          stars_count: repo.stargazers_count,
+          forks_count: repo.forks_count,
+          html_url: repo.html_url,
+          integrity_score: integrityData.integrity_score,
+          integrity_flags: integrityData.integrity_flags,
+          integrity_status: integrityData.integrity_status,
+          synced_at: new Date().toISOString(),
+        })
         .select("id")
         .single();
 
       if (repoError || !savedRepo) {
         console.error("Repo save error:", repoError);
-        continue;
+        return;
       }
 
-      // 5. Fetch Languages for top/active repos (limit API calls)
-      if (repo.stargazers_count! > 0 || repo.language) {
-        try {
-          const { data: languages } = await octokit.rest.repos.listLanguages({
-            owner: username,
-            repo: repo.name,
-          });
+      const langInserts = Object.entries(languages).map(([lang, bytes]) => ({
+        repo_id: savedRepo.id,
+        language: lang,
+        bytes: bytes as number,
+      }));
 
-          // Delete existing languages for this repo before inserting new ones
-          await supabase.from("repo_languages").delete().eq("repo_id", savedRepo.id);
+      if (langInserts.length > 0) {
+        await supabase.from("repo_languages").insert(langInserts);
+      }
 
-          const totalBytes = Object.values(languages).reduce((acc: number, bytes: unknown) => acc + (bytes as number), 0);
+      // Save extracted skills to evidence table if verified
+      if (integrityData.integrity_status === "verified" && integrityData.verified_skills && integrityData.verified_skills.length > 0) {
+        const { data: evidenceRecord, error: evError } = await supabase.from("evidence").insert({
+          user_id: user.id,
+          source_type: "github",
+          raw_ref: repo.html_url,
+          status: "verified",
+          integrity_score: integrityData.integrity_score,
+          integrity_status: integrityData.integrity_status,
+          integrity_flags: integrityData.integrity_flags
+        }).select("id").single();
 
-          const langInserts = Object.entries(languages).map(([lang, bytes]) => ({
-            repo_id: savedRepo.id,
-            language: lang,
-            bytes: bytes as number,
-            percentage: totalBytes > 0 ? ((bytes as number) / totalBytes) * 100 : 0,
+        if (evidenceRecord && !evError) {
+          const claims = integrityData.verified_skills.map((skill: string) => ({
+            evidence_id: evidenceRecord.id,
+            extracted_text: `Used ${skill} in repository ${repo.name}`,
+            unmapped_label: skill,
+            match_confidence: 1.0,
+            llm_model: "amazon/nova-micro-v1:0"
           }));
-
-          if (langInserts.length > 0) {
-            await supabase.from("repo_languages").insert(langInserts);
+          if (claims.length > 0) {
+            await supabase.from("evidence_claims").insert(claims);
           }
-        } catch (langError) {
-          console.error(`Failed to fetch languages for ${repo.name}`, langError);
         }
       }
-    }
+    }));
 
     revalidatePath("/github");
     return { success: true };
   } catch (error) {
     const err = error as Error;
     console.error("GitHub Sync Error:", err);
-    
-    // Update sync status to failed
-    await supabase
-      .from("github_connections")
-      .update({ sync_status: "failed" })
-      .eq("profile_id", user.id);
-
-    throw new Error(err.message || "Failed to sync GitHub data.");
+    return { success: false, error: err.message || "Failed to sync GitHub data." };
   }
 }
 
@@ -166,18 +175,17 @@ export async function disconnectGitHub() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
-  if (!user) throw new Error("Unauthorized");
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
 
-  // RLS will ensure we only delete this user's connection. 
-  // Cascading deletes on the database side should handle repos and languages, 
-  // but let's explicitly delete the connection to be safe.
   const { error } = await supabase
     .from("github_connections")
     .delete()
     .eq("profile_id", user.id);
 
   if (error) {
-    throw new Error("Failed to disconnect GitHub");
+    return { success: false, error: "Failed to disconnect GitHub" };
   }
 
   revalidatePath("/github");
