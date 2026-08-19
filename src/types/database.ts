@@ -61,6 +61,7 @@ export interface GitHubRepo {
   github_repo_id: number;
   name: string;
   full_name: string;
+  html_url: string;
   description: string | null;
   is_fork: boolean;
   is_private: boolean;

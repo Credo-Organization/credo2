@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS public.certificates (
   file_url TEXT NOT NULL,
   file_type TEXT,
   parsed BOOLEAN DEFAULT FALSE,
+  status TEXT DEFAULT 'pending',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -238,3 +239,98 @@ ALTER TABLE public.extraction_cache ENABLE ROW LEVEL SECURITY;
 -- Internal table used by Server Actions, no public access required
 DROP POLICY IF EXISTS "Deny public access to extraction_cache" ON public.extraction_cache;
 CREATE POLICY "Deny public access to extraction_cache" ON public.extraction_cache FOR ALL USING (false);
+
+-- ════════════════════════════════════════════════════════════════
+-- ASYNC JOBS (For Passport Generation)
+-- ════════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.passport_jobs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  status TEXT DEFAULT 'pending', -- 'pending', 'processing', 'completed', 'failed'
+  result_data JSONB,
+  error_message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+
+ALTER TABLE public.passport_jobs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view own jobs" ON public.passport_jobs;
+CREATE POLICY "Users can view own jobs" ON public.passport_jobs FOR SELECT USING (auth.uid() = profile_id);
+DROP POLICY IF EXISTS "Users can insert own jobs" ON public.passport_jobs;
+CREATE POLICY "Users can insert own jobs" ON public.passport_jobs FOR INSERT WITH CHECK (auth.uid() = profile_id);
+
+-- ════════════════════════════════════════════════════════════════
+-- RAG / PGVECTOR (For AI Skill Gap Analysis)
+-- ════════════════════════════════════════════════════════════════
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
+
+CREATE TABLE IF NOT EXISTS public.job_requirements (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  role_title TEXT NOT NULL,
+  industry TEXT,
+  required_skills JSONB,
+  description TEXT,
+  embedding vector(1536),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.job_requirements ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Job requirements viewable by everyone" ON public.job_requirements;
+CREATE POLICY "Job requirements viewable by everyone" ON public.job_requirements FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Only authenticated admins can modify jobs" ON public.job_requirements;
+-- Note: Replace true with appropriate admin check if needed. Keeping it open for authenticated users for now.
+CREATE POLICY "Only authenticated admins can modify jobs" ON public.job_requirements FOR ALL USING (auth.role() = 'authenticated');
+
+-- Match function for RAG
+CREATE OR REPLACE FUNCTION match_job_requirements (
+  query_embedding vector(1536),
+  match_threshold float,
+  match_count int
+)
+RETURNS TABLE (
+  id UUID,
+  role_title TEXT,
+  industry TEXT,
+  required_skills JSONB,
+  description TEXT,
+  similarity float
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    job_requirements.id,
+    job_requirements.role_title,
+    job_requirements.industry,
+    job_requirements.required_skills,
+    job_requirements.description,
+    1 - (job_requirements.embedding <=> query_embedding) AS similarity
+  FROM job_requirements
+  WHERE 1 - (job_requirements.embedding <=> query_embedding) > match_threshold
+  ORDER BY job_requirements.embedding <=> query_embedding
+  LIMIT match_count;
+END;
+$$;
+
+-- 8. MATCH JOBS QUEUE (For Async LangGraph Execution)
+CREATE TABLE IF NOT EXISTS public.match_jobs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  job_description TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending', -- pending, processing, completed, failed
+  match_score INTEGER,
+  gap_analysis TEXT,
+  explainable_text TEXT,
+  error_message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.match_jobs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own match jobs" ON public.match_jobs;
+CREATE POLICY "Users can view their own match jobs" ON public.match_jobs FOR SELECT TO authenticated USING (profile_id = auth.uid());
+DROP POLICY IF EXISTS "Users can insert their own match jobs" ON public.match_jobs;
+CREATE POLICY "Users can insert their own match jobs" ON public.match_jobs FOR INSERT TO authenticated WITH CHECK (profile_id = auth.uid());
+DROP POLICY IF EXISTS "Service role can update match jobs" ON public.match_jobs;
+CREATE POLICY "Service role can update match jobs" ON public.match_jobs FOR UPDATE TO service_role USING (true);
