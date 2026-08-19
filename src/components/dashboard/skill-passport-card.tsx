@@ -13,9 +13,14 @@ import {
   Database,
   Terminal,
   Server,
-  Code
+  Code,
+  Brain,
+  Cloud,
+  PenTool,
+  Boxes
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CertificateUploader } from "@/components/certificates/certificate-uploader";
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -49,10 +54,11 @@ export type SkillPassportData = {
   missingSkillsAnalysis: {
     description: string;
     recommendedTechStack: string[];
+    suggestedProjects?: { name: string, description: string }[];
   };
   githubHeatmap: number[][];
   evidence: {
-    githubRepos: { name: string; url: string; language: string; commits: number }[];
+    githubRepos: { name: string; url: string; language: string; stars: number }[];
     certificates: { name: string; issuer: string; url: string }[];
   };
 };
@@ -80,8 +86,8 @@ const DUMMY_DATA: SkillPassportData = {
   githubHeatmap: Array(7).fill(0).map((_, r) => Array(52).fill(0).map((_, c) => (r * 7 + c * 13) % 5)),
   evidence: {
     githubRepos: [
-      { name: "nextjs-ecommerce", url: "#", language: "TypeScript", commits: 142 },
-      { name: "go-microservices", url: "#", language: "Go", commits: 84 },
+      { name: "nextjs-ecommerce", url: "#", language: "TypeScript", stars: 142 },
+      { name: "go-microservices", url: "#", language: "Go", stars: 84 },
     ],
     certificates: [
       { name: "AWS Certified Developer", issuer: "Amazon", url: "#" },
@@ -94,10 +100,14 @@ const DUMMY_DATA: SkillPassportData = {
 // Simple mapping from name to a Lucide icon just for the visual layout
 const getIconForSkill = (name: string) => {
   const n = name.toLowerCase();
-  if (n.includes("react")) return <Code2 className="w-5 h-5 text-white" />;
-  if (n.includes("type") || n.includes("script")) return <Code className="w-5 h-5 text-white" />;
-  if (n.includes("node")) return <Server className="w-5 h-5 text-white" />;
-  if (n.includes("sql") || n.includes("data")) return <Database className="w-5 h-5 text-white" />;
+  if (n.includes("react") || n.includes("vue") || n.includes("angular")) return <Code2 className="w-5 h-5 text-white" />;
+  if (n.includes("type") || n.includes("script") || n.includes("html") || n.includes("css")) return <Code className="w-5 h-5 text-white" />;
+  if (n.includes("node") || n.includes("backend") || n.includes("api")) return <Server className="w-5 h-5 text-white" />;
+  if (n.includes("sql") || n.includes("data") || n.includes("mongo") || n.includes("postgres")) return <Database className="w-5 h-5 text-white" />;
+  if (n.includes("ai") || n.includes("machine learning") || n.includes("python")) return <Brain className="w-5 h-5 text-white" />;
+  if (n.includes("cloud") || n.includes("aws") || n.includes("azure") || n.includes("gcp") || n.includes("docker")) return <Cloud className="w-5 h-5 text-white" />;
+  if (n.includes("design") || n.includes("figma") || n.includes("ui") || n.includes("ux")) return <PenTool className="w-5 h-5 text-white" />;
+  if (n.includes("git") || n.includes("version")) return <Boxes className="w-5 h-5 text-white" />;
   return <Terminal className="w-5 h-5 text-white" />;
 };
 
@@ -224,15 +234,17 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                 </div>
               </motion.div>
 
-              <motion.div whileHover={{ y: -4 }} className="bg-[#111] rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-                  <FileBadge className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-white leading-tight">{data.certificates}</div>
-                  <div className="text-[10px] text-white/50">Certificates</div>
-                </div>
-              </motion.div>
+              <CertificateUploader>
+                <motion.button whileHover={{ y: -4 }} className="w-full text-left bg-[#111] cursor-pointer rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
+                    <FileBadge className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-lg font-bold text-white leading-tight">{data.certificates}</div>
+                    <div className="text-[10px] text-white/50">Certificates (Click to Upload)</div>
+                  </div>
+                </motion.button>
+              </CertificateUploader>
 
               <motion.div whileHover={{ y: -4 }} className="bg-[#111] rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
@@ -265,27 +277,27 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
               <span className="mb-2">Fri</span>
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-[3px]">
               {/* Months Row */}
-              <div className="flex text-[9px] text-white/40 mb-1">
+              <div className="flex text-[9px] text-white/40 mb-1 pl-1">
                 {["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"].map((month, i) => (
-                  <div key={i} className="flex-1 min-w-[26px]">{month}</div>
+                  <div key={i} className="flex-1 min-w-[21px]">{month}</div>
                 ))}
               </div>
 
               {/* Grid */}
               {data.githubHeatmap.map((row, rowIndex) => (
-                <div key={`row-${rowIndex}`} className="flex gap-1">
+                <div key={`row-${rowIndex}`} className="flex gap-[3px]">
                   {row.map((intensity, colIndex) => (
                     <div 
                       key={`cell-${rowIndex}-${colIndex}`} 
                       className={cn(
-                        "w-2.5 h-2.5 rounded-[2px] flex-shrink-0",
-                        intensity === 0 ? "bg-[#1a1a1a]" :
-                        intensity === 1 ? "bg-[#3a3a3a]" :
-                        intensity === 2 ? "bg-[#5a5a5a]" :
-                        intensity === 3 ? "bg-[#8a8a8a]" :
-                        "bg-[#ffffff]"
+                        "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:border hover:border-white/50",
+                        intensity === 0 ? "bg-white/[0.04]" :
+                        intensity === 1 ? "bg-white/[0.25]" :
+                        intensity === 2 ? "bg-white/[0.50]" :
+                        intensity === 3 ? "bg-white/[0.75]" :
+                        "bg-white"
                       )}
                     />
                   ))}
@@ -296,16 +308,16 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
 
           <div className="flex items-center justify-between text-[11px] text-white/40 mt-3 min-w-max pl-8 pr-2">
             <span>Learned consistency. Built momentum.</span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 text-[10px] text-white/40">
               <span>Less</span>
-              <div className="flex gap-1">
-                {[0,1,2,3,4].map((i) => (
+              <div className="flex gap-[3px]">
+                {[0, 1, 2, 3, 4].map(i => (
                   <div key={i} className={cn(
-                    "w-2.5 h-2.5 rounded-[2px]",
-                    i === 0 ? "bg-[#1a1a1a]" :
-                    i === 1 ? "bg-[#3a3a3a]" :
-                    i === 2 ? "bg-[#5a5a5a]" :
-                    i === 3 ? "bg-[#8a8a8a]" : "bg-[#ffffff]"
+                    "w-2.5 h-2.5 rounded-[3px]",
+                    i === 0 ? "bg-white/[0.04]" :
+                    i === 1 ? "bg-white/[0.25]" :
+                    i === 2 ? "bg-white/[0.50]" :
+                    i === 3 ? "bg-white/[0.75]" : "bg-white"
                   )} />
                 ))}
               </div>
@@ -344,18 +356,24 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                     <GithubIcon className="w-3.5 h-3.5" /> GitHub Evidence
                   </h4>
                   <div className="space-y-2">
-                    {data.evidence.githubRepos.map((repo, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-[#111]">
-                        <div className="flex flex-col">
-                          <span className="text-white text-[13px] font-medium">{repo.name}</span>
-                          <span className="text-[11px] text-white/40">{repo.language}</span>
+                    {data.evidence.githubRepos.length > 0 ? (
+                      data.evidence.githubRepos.map((repo, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+                          <div className="flex flex-col">
+                            <span className="text-white text-[13px] font-medium">{repo.name}</span>
+                            <span className="text-[11px] text-white/40">{repo.language}</span>
+                          </div>
+                          <div className="text-right flex flex-col items-end">
+                            <span className="text-white text-[12px]">{repo.stars} stars</span>
+                            <a href={repo.url} target="_blank" rel="noreferrer" className="block text-[11px] text-white/50 hover:text-white transition-colors hover:underline">View Repository</a>
+                          </div>
                         </div>
-                        <div className="text-right flex flex-col items-end">
-                          <span className="text-white text-[12px]">{repo.commits} commits</span>
-                          <a href={repo.url} className="block text-[11px] text-white/50 hover:text-white transition-colors hover:underline">View Repository</a>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] text-white/40 text-[12px] text-center">
+                        No GitHub evidence available.
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
 
@@ -365,15 +383,21 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                     <FileBadge className="w-3.5 h-3.5" /> Certificate Evidence
                   </h4>
                   <div className="space-y-2">
-                    {data.evidence.certificates.map((cert, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-[#111]">
-                        <div className="flex flex-col">
-                          <span className="text-white text-[13px] font-medium">{cert.name}</span>
-                          <span className="text-[11px] text-white/40">Issued by {cert.issuer}</span>
+                    {data.evidence.certificates.length > 0 ? (
+                      data.evidence.certificates.map((cert, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+                          <div className="flex flex-col">
+                            <span className="text-white text-[13px] font-medium">{cert.name}</span>
+                            <span className="text-[11px] text-white/40">Issued by {cert.issuer}</span>
+                          </div>
+                          <a href={cert.url} target="_blank" rel="noreferrer" className="text-[11px] text-white/50 hover:text-white transition-colors hover:underline">Verify Credential</a>
                         </div>
-                        <a href={cert.url} className="text-[11px] text-white/50 hover:text-white transition-colors hover:underline">Verify Credential</a>
+                      ))
+                    ) : (
+                      <div className="p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] text-white/40 text-[12px] text-center">
+                        No certificates uploaded.
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
 
