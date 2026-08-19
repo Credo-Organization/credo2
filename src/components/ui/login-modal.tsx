@@ -76,7 +76,7 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
 
   return (
     <Dialog>
-      {/* @ts-ignore Base UI nativeButton prop is needed to suppress warnings when rendering as a non-button */}
+      {/* @ts-expect-error Base UI nativeButton prop is needed to suppress warnings when rendering as a non-button */}
       <DialogTrigger render={<div className="inline-block" />} nativeButton={false}>
         {children}
       </DialogTrigger>

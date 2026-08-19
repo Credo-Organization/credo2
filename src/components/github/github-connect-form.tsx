@@ -9,6 +9,7 @@ export function GitHubConnectForm() {
 
   const handleConnect = () => {
     setIsRedirecting(true);
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = "/api/auth/github";
   };
 

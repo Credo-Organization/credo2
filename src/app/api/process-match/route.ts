@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
+  let jobId: string | null = null;
   try {
-    const { jobId } = await request.json();
+    const body = await request.json();
+    jobId = body.jobId;
 
     if (!jobId) {
-      return NextResponse.json({ error: "Missing jobId" }, { status: 400 });
+      return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: "Missing jobId" } }, { status: 400 });
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // 1. Fetch the match job
     const { data: job, error: jobError } = await supabase
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
       .single();
 
     if (jobError || !job) {
-      return NextResponse.json({ error: "Job not found" }, { status: 404 });
+      return NextResponse.json({ error: { code: 'NOT_FOUND', message: "Job not found" } }, { status: 404 });
     }
 
     // 2. Mark as processing
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
         .from("match_jobs")
         .update({ status: "failed", error_message: "Passport not found. Generate a passport first." })
         .eq("id", jobId);
-      return NextResponse.json({ error: "Passport not found" }, { status: 400 });
+      return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: "Passport not found" } }, { status: 400 });
     }
 
     // 4. Call Python Backend Microservice
@@ -53,7 +55,8 @@ export async function POST(request: Request) {
       github_token: profile.github_token || null,
     };
 
-    const pythonResponse = await fetch("http://localhost:8000/api/match/evaluate", {
+    const backendUrl = process.env.PYTHON_BACKEND_URL || "http://localhost:8000";
+    const pythonResponse = await fetch(`${backendUrl}/api/match/evaluate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(evaluatePayload),
@@ -87,19 +90,18 @@ export async function POST(request: Request) {
   } catch (err: any) {
     console.error("[ProcessMatch] Error:", err);
     // Attempt to mark as failed
-    try {
-      const { jobId } = await request.clone().json();
-      if (jobId) {
-        const supabase = await createClient();
+    if (jobId) {
+      try {
+        const supabase = createAdminClient();
         await supabase
           .from("match_jobs")
           .update({ status: "failed", error_message: err.message || "Internal server error" })
           .eq("id", jobId);
+      } catch (e) {
+        console.error("[ProcessMatch] Failed to update error status:", e);
       }
-    } catch (e) {
-      // Ignore
     }
 
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: "Internal server error" } }, { status: 500 });
   }
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { aiModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -8,15 +8,17 @@ import { normalizeSkill } from "@/lib/extractor/taxonomy-normalizer";
 export const maxDuration = 60; 
 
 export async function POST(request: Request) {
+  let job_id: string | null = null;
   try {
     const body = await request.json();
-    const { job_id, user_id } = body;
+    job_id = body.job_id;
+    const user_id = body.user_id;
 
     if (!job_id || !user_id) {
-      return NextResponse.json({ error: "Missing job_id or user_id" }, { status: 400 });
+      return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: "Missing job_id or user_id" } }, { status: 400 });
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // 1. Update status to processing
     await supabase
@@ -101,7 +103,7 @@ export async function POST(request: Request) {
     }
 
     // 6. Compute Grading
-    let flaggedEvidenceCount = evidenceData ? evidenceData.filter((ev: any) => ev.integrity_status === "flagged").length : 0;
+    const flaggedEvidenceCount = evidenceData ? evidenceData.filter((ev: any) => ev.integrity_status === "flagged").length : 0;
     const has_flagged_items = (flaggedReposCount + flaggedEvidenceCount) > 0;
 
     const topSkills = Array.from(skillMap.entries())
@@ -212,6 +214,20 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error("[ProcessPassport] Fatal error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    
+    // Attempt to mark as failed
+    if (job_id) {
+      try {
+        const supabase = createAdminClient();
+        await supabase
+          .from("passport_jobs")
+          .update({ status: "failed", error_message: error.message || "Internal server error" })
+          .eq("id", job_id);
+      } catch (e) {
+        console.error("[ProcessPassport] Failed to update error status:", e);
+      }
+    }
+
+    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: error.message || "Internal server error" } }, { status: 500 });
   }
 }

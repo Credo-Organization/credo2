@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 require('dotenv').config({ path: '.env' });
@@ -21,6 +22,8 @@ async function applySchema() {
   // or just run a specific SQL query block using fetch.
   
   // Actually, we can just use node-postgres (pg).
+  /* eslint-disable @typescript-eslint/no-require-imports */
+const { execSync } = require('child_process');
   const { Client } = require('pg');
   const client = new Client({
     connectionString: "postgresql://postgres.wizuwacevushwlegfgyu:subham1234@aws-0-ap-south-1.pooler.supabase.com:6543/postgres"

@@ -1,5 +1,5 @@
 import { streamObject } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+import { aiModel } from '@/lib/ai-client';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 
@@ -39,13 +39,8 @@ Generate a learning roadmap matching the JSON schema.
 For 'learningOrder', provide chronologically ordered steps to learn each skill with a 1-sentence description.
 For 'suggestedProject', design a capstone project utilizing the missing skills.`;
 
-  const aicredit = createOpenAI({
-    baseURL: "https://aicredits.in/api/v1",
-    apiKey: process.env.AICREDIT_API_KEY || "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068",
-  });
-
   const result = streamObject({
-    model: aicredit('allenai/olmo-3-32b-think'),
+    model: aiModel,
     schema: roadmapSchema,
     prompt: prompt,
     onFinish: async ({ object }) => {

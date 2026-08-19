@@ -8,11 +8,7 @@ import { LoginModal } from "@/components/ui/login-modal"
 
 export function StarButtonDemo() {
   const { theme } = useTheme()
-  const [lightColor, setLightColor] = useState("#FAFAFA")
-
-  useEffect(() => {
-    setLightColor(theme === "dark" ? "#FAFAFA" : "#FF2056")
-  }, [theme])
+  const lightColor = theme === "dark" ? "#FAFAFA" : "#FF2056"
 
   return (
     <LoginModal>

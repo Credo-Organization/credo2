@@ -20,7 +20,7 @@ export async function evaluateEvidenceIntegrity(
     githubData?: any;
   }
 ): Promise<IntegrityResult> {
-  let model = aiModel;
+  const model = aiModel;
 
   let systemInstruction = "";
   let messages: any[] = [];

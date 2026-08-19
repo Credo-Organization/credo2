@@ -94,7 +94,7 @@ export async function extractClaimsFromText(
     return cached.extracted_data as ExtractionResult;
   }
 
-  let model = aiModel;
+  const model = aiModel;
 
   // 3. Chunking & Concurrency
   const chunks = chunkText(sourceText, 3000);
@@ -180,7 +180,7 @@ export async function extractClaimsFromMultimodal(
   fallbackText: string,
   documentType: "resume" | "certificate" | "project_description" = "certificate"
 ): Promise<ExtractionResult> {
-  let model = multimodalModel;
+  const model = multimodalModel;
 
   const systemInstruction = `You are an elite evidence extraction engine for technical skill validation.
 Analyze the attached ${documentType} (which could be a scanned image or PDF).
