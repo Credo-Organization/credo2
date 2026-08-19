@@ -1,5 +1,5 @@
 import { streamObject } from 'ai';
-import { google } from '@ai-sdk/google';
+import { createOpenAI } from '@ai-sdk/openai';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 
@@ -22,14 +22,14 @@ export async function POST(req: Request) {
   const { goalTitle, missingSkills, passportId } = await req.json();
 
   if (!goalTitle || !missingSkills || !passportId) {
-    return new Response('Missing required fields', { status: 400 });
+    return new Response(JSON.stringify({ error: { code: 'VALIDATION_ERROR', message: 'Missing required fields' } }), { status: 422, headers: { 'Content-Type': 'application/json' } });
   }
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response(JSON.stringify({ error: { code: 'UNAUTHORIZED', message: 'Unauthorized' } }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
   const prompt = `You are an expert technical career coach. The user wants to become a ${goalTitle}.
@@ -39,8 +39,13 @@ Generate a learning roadmap matching the JSON schema.
 For 'learningOrder', provide chronologically ordered steps to learn each skill with a 1-sentence description.
 For 'suggestedProject', design a capstone project utilizing the missing skills.`;
 
+  const aicredit = createOpenAI({
+    baseURL: "https://aicredits.in/api/v1",
+    apiKey: process.env.AICREDIT_API_KEY || "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068",
+  });
+
   const result = streamObject({
-    model: google('gemini-2.5-pro'),
+    model: aicredit('allenai/olmo-3-32b-think'),
     schema: roadmapSchema,
     prompt: prompt,
     onFinish: async ({ object }) => {

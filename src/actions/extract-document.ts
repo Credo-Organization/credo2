@@ -43,7 +43,7 @@ export async function parseDocumentAction(text: string, documentType: "resume" |
       skill_id: claim.skill_id,
       unmapped_label: claim.unmapped_label,
       match_confidence: claim.skill_id ? 1.0 : 0.5,
-      llm_model: process.env.AI_MODEL || "gemini-2.5-flash",
+      llm_model: process.env.AI_MODEL || "amazon/nova-micro-v1:0",
     }));
 
     const { error: claimsError } = await supabase

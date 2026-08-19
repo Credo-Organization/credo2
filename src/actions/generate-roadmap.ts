@@ -1,7 +1,9 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { GoogleGenAI } from "@google/genai";
+import { generateObject } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
 export async function generateAiRoadmap(goalTitle: string, missingSkills: string[]) {
@@ -25,12 +27,12 @@ export async function generateAiRoadmap(goalTitle: string, missingSkills: string
     throw new Error("No passport found. Generate one first.");
   }
 
-  const apiKey = process.env.AI_API_KEY;
+  const apiKey = process.env.AICREDIT_API_KEY || "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068";
   let parsedRoadmap;
 
-  if (!apiKey || apiKey === "your-ai-api-key") {
+  if (apiKey === "your-ai-api-key") {
     // Fallback Mock for testing if no API key is provided
-    console.warn("No valid AI_API_KEY provided. Using mocked roadmap.");
+    console.warn("No valid API_KEY provided. Using mocked roadmap.");
     parsedRoadmap = {
       learningOrder: missingSkills.map((skill, index) => ({
         step: index + 1,
@@ -45,38 +47,37 @@ export async function generateAiRoadmap(goalTitle: string, missingSkills: string
     };
   } else {
     try {
-      const ai = new GoogleGenAI({ apiKey });
+      const aicredit = createOpenAI({
+        baseURL: "https://aicredits.in/api/v1",
+        apiKey: apiKey,
+      });
       
       const prompt = `
 You are an expert technical career coach. The user wants to become a ${goalTitle}.
 They already have some skills, but they are missing the following critical skills: ${missingSkills.join(", ")}.
 
-Generate a learning roadmap in strictly valid JSON format matching this schema:
-{
-  "learningOrder": [
-    {
-      "step": number, // chronological order
-      "skill": "string",
-      "description": "string" // brief 1-sentence description of what to focus on
-    }
-  ],
-  "suggestedProject": {
-    "title": "string",
-    "description": "string",
-    "features": ["string"] // 3-4 key features they must build to practice the missing skills
-  }
-}
+Generate a learning roadmap matching the JSON schema.
+For 'learningOrder', provide chronologically ordered steps to learn each skill with a 1-sentence description.
+For 'suggestedProject', design a capstone project utilizing the missing skills.`;
 
-Do not include markdown blocks or any other text. Output ONLY valid JSON.
-      `;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-pro',
-        contents: prompt,
+      const { object } = await generateObject({
+        model: aicredit('allenai/olmo-3-32b-think'),
+        schema: z.object({
+          learningOrder: z.array(z.object({
+            step: z.number(),
+            skill: z.string(),
+            description: z.string()
+          })),
+          suggestedProject: z.object({
+            title: z.string(),
+            description: z.string(),
+            features: z.array(z.string())
+          })
+        }),
+        prompt,
       });
 
-      const responseText = response.text?.replace(/```json/g, "").replace(/```/g, "").trim() || "{}";
-      parsedRoadmap = JSON.parse(responseText);
+      parsedRoadmap = object;
     } catch (error) {
       const e = error as Error;
       console.error("AI Generation Error:", e);

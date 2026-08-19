@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -119,10 +119,10 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger render={
-        <Button className="gap-2 bg-foreground text-background hover:bg-foreground/90">
+        <button className={buttonVariants({ variant: "default", className: "gap-2 bg-foreground text-background hover:bg-foreground/90" })}>
           <Share2 className="w-4 h-4" />
           Share & Export
-        </Button>
+        </button>
       } />
       <DialogContent className="dashboard-theme sm:max-w-md bg-card border border-border shadow-lg">
         <DialogHeader>

@@ -1,6 +1,5 @@
 import { generateObject } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createOpenAI } from "@ai-sdk/openai";
+import { aiModel, multimodalModel } from "@/lib/ai-client";
 import { z } from "zod";
 import { normalizeSkill } from "./taxonomy-normalizer";
 import { cookies } from "next/headers";
@@ -95,20 +94,7 @@ export async function extractClaimsFromText(
     return cached.extracted_data as ExtractionResult;
   }
 
-  // 2. Setup AI Model
-  let model;
-  if (provider === "xai") {
-    const xai = createOpenAI({
-      baseURL: "https://api.x.ai/v1",
-      apiKey: process.env.XAI_API_KEY || "",
-    });
-    model = xai("grok-2");
-  } else {
-    const googleAuth = createGoogleGenerativeAI({
-      apiKey: process.env.AI_API_KEY || "",
-    });
-    model = googleAuth(process.env.AI_MODEL || "gemini-2.5-flash");
-  }
+  let model = aiModel;
 
   // 3. Chunking & Concurrency
   const chunks = chunkText(sourceText, 3000);
@@ -194,20 +180,7 @@ export async function extractClaimsFromMultimodal(
   fallbackText: string,
   documentType: "resume" | "certificate" | "project_description" = "certificate"
 ): Promise<ExtractionResult> {
-  const cookieStore = await cookies();
-  const provider = cookieStore.get("ai_provider")?.value || "gemini";
-  
-  let model;
-  if (provider === "xai") {
-    // xAI does not support multimodal file uploads via the standard Vercel AI SDK structure yet,
-    // so we fallback to the text extraction pipeline if the user forced xAI.
-    return extractClaimsFromText(fallbackText, documentType);
-  } else {
-    const googleAuth = createGoogleGenerativeAI({
-      apiKey: process.env.AI_API_KEY || "",
-    });
-    model = googleAuth(process.env.AI_MODEL || "gemini-2.5-flash");
-  }
+  let model = multimodalModel;
 
   const systemInstruction = `You are an elite evidence extraction engine for technical skill validation.
 Analyze the attached ${documentType} (which could be a scanned image or PDF).

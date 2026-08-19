@@ -91,13 +91,13 @@ def compute_match(state: GraphState):
         """
         
         try:
-            print("--- Attempting Match Evaluator via AICredits ---")
-            llm = ChatOpenAI(base_url="https://aicredits.in/api/v1", api_key=os.environ.get("AICREDIT_API_KEY"), model="allenai/olmo-3-32b-think")
+            print("--- Attempting Match Evaluator via OpenRouter (Grok 2) ---")
+            llm = ChatOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ.get("OPENROUTER_API_KEY"), model="x-ai/grok-2")
             structured_llm = llm.with_structured_output(MatchResultSchema)
             res = structured_llm.invoke(prompt)
         except Exception as e:
-            print(f"--- Evaluator Failed, Falling back to aion-1.0-mini: {e} ---")
-            llm = ChatOpenAI(base_url="https://aicredits.in/api/v1", api_key=os.environ.get("AICREDIT_API_KEY"), model="aionlabs/aion-1.0-mini")
+            print(f"--- Evaluator Failed, Falling back to Llama 3 via OpenRouter: {e} ---")
+            llm = ChatOpenAI(base_url="https://openrouter.ai/api/v1", api_key=os.environ.get("OPENROUTER_API_KEY"), model="meta-llama/llama-3-8b-instruct:free")
             structured_llm = llm.with_structured_output(MatchResultSchema)
             res = structured_llm.invoke(prompt)
             

@@ -31,7 +31,7 @@ export function RepoList({ repos }: RepoListProps) {
             <h4 className="font-semibold text-zinc-900 flex items-center gap-2 truncate">
               <BookOpen className="w-4 h-4 shrink-0 text-zinc-400 group-hover:text-zinc-900 transition-colors" />
               <a 
-                href={`https://github.com/${repo.full_name}`} 
+                href={repo.html_url} 
                 target="_blank" 
                 rel="noreferrer"
                 className="hover:underline truncate"

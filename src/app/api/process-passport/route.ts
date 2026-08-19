@@ -64,8 +64,9 @@ export async function POST(request: Request) {
       const lang = r.primary_language;
       if (lang) {
         const normalized = normalizeSkill(lang);
-        const current = skillMap.get(normalized) || { repoCount: 0, certCitations: [] };
-        skillMap.set(normalized, { ...current, repoCount: current.repoCount + 1, skill_id: normalized });
+        const skillKey = normalized.canonical_name;
+        const current = skillMap.get(skillKey) || { repoCount: 0, certCitations: [] };
+        skillMap.set(skillKey, { ...current, repoCount: current.repoCount + 1, skill_id: normalized.skill_id || undefined });
       }
     });
 

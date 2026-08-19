@@ -20,11 +20,11 @@ export async function uploadCertificateMetadata({
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized" };
   }
 
   // 1. Insert into Database
-  const { error: dbError } = await supabase
+  const { data: certRecord, error: dbError } = await supabase
     .from("certificates")
     .insert({
       profile_id: user.id,
@@ -34,13 +34,16 @@ export async function uploadCertificateMetadata({
       file_url: fileUrl,
       file_type: fileType,
       parsed: false,
-    });
+      status: "pending",
+    })
+    .select("id")
+    .single();
 
   if (dbError) {
     console.error("Database insert error:", dbError);
     // Cleanup storage if DB insert fails
     await supabase.storage.from("certificates").remove([fileName]);
-    throw new Error("Failed to save certificate record.");
+    return { success: false, error: "Failed to save certificate record." };
   }
 
   // 4. Trigger Automatic Skill Claim Extraction
@@ -120,17 +123,37 @@ export async function uploadCertificateMetadata({
           skill_id: claim.skill_id,
           unmapped_label: claim.unmapped_label || claim.claimed_skill,
           match_confidence: claim.skill_id ? 1.0 : 0.5,
-          llm_model: process.env.AI_MODEL || "gemini-2.5-flash",
+          llm_model: process.env.AI_MODEL || "amazon/nova-micro-v1:0",
         }));
 
         const { error: claimsError } = await supabase.from("evidence_claims").insert(claimRecords);
         if (claimsError) {
           console.error("[uploadCertificateMetadata] Failed to insert evidence claims:", claimsError);
         }
+
+        // Update Certificate Status
+        const finalStatus = integrityData.integrity_status === "verified" ? "verified" : "flagged";
+        await supabase
+          .from("certificates")
+          .update({ parsed: true, status: finalStatus })
+          .eq("id", certRecord.id);
+
+        // Regenerate Passport to include new skills
+        try {
+          const { generatePassport } = await import("@/actions/passport");
+          await generatePassport();
+        } catch (err) {
+          console.error("[uploadCertificateMetadata] Failed to regenerate passport:", err);
+        }
+      } else {
+        return { success: false, error: "No skills could be extracted from this document." };
       }
+    } else {
+      return { success: false, error: "Failed to read file for extraction." };
     }
-  } catch (extErr) {
-    console.error("Non-blocking claim extraction error:", extErr);
+  } catch (extErr: any) {
+    console.error("Claim extraction error:", extErr);
+    return { success: false, error: extErr.message || "Failed to process certificate with AI." };
   }
 
   revalidatePath("/certificates");

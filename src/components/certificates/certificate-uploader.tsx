@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadCertificateMetadata } from "@/actions/certificates";
@@ -71,13 +71,17 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
         .getPublicUrl(fileName);
 
       // Now call server action just for the DB inserts & AI extraction
-      await uploadCertificateMetadata({
+      const result = await uploadCertificateMetadata({
         title,
         issuer,
         fileUrl: publicUrlData.publicUrl,
         fileType: file.type,
         fileName
       });
+
+      if (!result.success) {
+        throw new Error(result.error || "Server processing failed.");
+      }
 
       toast.success("Certificate uploaded successfully!");
       setIsOpen(false);
@@ -99,10 +103,10 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
         children ? (
           children as React.ReactElement
         ) : (
-          <Button className="gap-2">
+          <button className={buttonVariants({ variant: "default", className: "gap-2" })}>
             <UploadCloud className="w-4 h-4" />
             Upload Certificate
-          </Button>
+          </button>
         )
       } />
       <DialogContent className="dashboard-theme sm:max-w-[425px] bg-card border border-border shadow-lg">

@@ -31,23 +31,21 @@ export function GitHubInsights({ connection, repos, languages }: GitHubInsightsP
   const topLanguage = Array.from(langMap.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] || "None";
 
   const handleSync = async () => {
-    try {
-      setIsSyncing(true);
-      await syncGitHub(connection.github_username);
-      toast.success("GitHub data synced successfully!");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sync GitHub data.");
-    } finally {
-      setIsSyncing(false);
-    }
+    setIsSyncing(true);
+    window.location.href = "http://localhost:8000/auth/login";
   };
 
   const handleDisconnect = async () => {
     if (!confirm("Are you sure you want to disconnect GitHub? This will remove synced data.")) return;
     try {
       setIsDisconnecting(true);
-      await disconnectGitHub();
-      toast.success("GitHub account disconnected.");
+      const result = await disconnectGitHub();
+      if (result.success) {
+        toast.success("GitHub account disconnected.");
+      } else {
+        toast.error(result.error || "Failed to disconnect.");
+        setIsDisconnecting(false);
+      }
     } catch (error: any) {
       toast.error(error.message || "Failed to disconnect.");
       setIsDisconnecting(false);
@@ -92,7 +90,7 @@ export function GitHubInsights({ connection, repos, languages }: GitHubInsightsP
           { label: "Repositories", value: repos.length, icon: BookOpen },
           { label: "Total Stars", value: totalStars, icon: Star },
           { label: "Top Language", value: topLanguage, icon: Code2 },
-          { label: "Followers", value: connection.followers || 0, icon: Activity },
+          { label: "Sync Status", value: connection.sync_status || "N/A", icon: Activity },
         ].map((stat, i) => (
           <Card key={i} className="bg-card border-border hover:shadow-md hover:border-zinc-300 transition-all duration-300 group">
             <CardContent className="p-5 flex flex-col items-center text-center">

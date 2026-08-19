@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +13,7 @@ import {
   Users,
   UserPlus,
   Briefcase,
+  FileBadge,
   LogOut,
   ChevronLeft,
   ChevronRight
@@ -24,6 +25,7 @@ const SIDEBAR_ITEMS = [
   { name: "Find Team", href: "/dashboard/find-team", icon: Users },
   { name: "Create Teammates", href: "/dashboard/create-teammates", icon: UserPlus },
   { name: "Internships", href: "/dashboard/internships", icon: Briefcase },
+  { name: "Certificates", href: "/dashboard/certificates", icon: FileBadge },
 ];
 
 export function Sidebar() {
@@ -32,6 +34,22 @@ export function Sidebar() {
   // We can toggle this via a button if needed, but the prompt says 
   // "collapsed state / expanded state". I'll use a hover or a toggle.
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [userProfile, setUserProfile] = useState<{name: string, avatar: string} | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single();
+        setUserProfile({
+          name: profile?.full_name || user.email?.split('@')[0] || "User",
+          avatar: profile?.avatar_url || "https://github.com/shadcn.png"
+        });
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -152,7 +170,7 @@ export function Sidebar() {
           isCollapsed ? "justify-center" : "px-2 py-2 space-x-3"
         )}>
           <div className="w-8 h-8 rounded-full bg-cyan-500 overflow-hidden flex-shrink-0">
-            <img src="https://github.com/shadcn.png" alt="Avatar" className="w-full h-full object-cover" />
+            <img src={userProfile?.avatar || "https://github.com/shadcn.png"} alt="Avatar" className="w-full h-full object-cover" />
           </div>
           <AnimatePresence initial={false}>
             {!isCollapsed && (
@@ -162,7 +180,7 @@ export function Sidebar() {
                 exit={{ opacity: 0, width: 0 }}
                 className="flex flex-col overflow-hidden whitespace-nowrap"
               >
-                <span className="text-[13px] font-medium text-white">Guest User</span>
+                <span className="text-[13px] font-medium text-white">{userProfile?.name || "Guest User"}</span>
               </motion.div>
             )}
           </AnimatePresence>

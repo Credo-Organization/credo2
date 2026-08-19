@@ -1,10 +1,9 @@
 import {
   LayoutDashboard,
-  GitBranch,
-  Award,
-  Shield,
+  UserCircle,
+  Users,
+  UserPlus,
   Briefcase,
-  Map,
   Settings,
   type LucideIcon,
 } from "lucide-react";
@@ -24,29 +23,19 @@ export const dashboardNav: NavItem[] = [
     icon: LayoutDashboard,
   },
   {
-    title: "GitHub",
-    href: "/github",
-    icon: GitBranch,
+    title: "Find Team",
+    href: "/dashboard/find-team",
+    icon: Users,
   },
   {
-    title: "Certificates",
-    href: "/certificates",
-    icon: Award,
+    title: "Create Teammates",
+    href: "/dashboard/create-teammates",
+    icon: UserPlus,
   },
   {
-    title: "Passport",
-    href: "/passport",
-    icon: Shield,
-  },
-  {
-    title: "Opportunities",
-    href: "/opportunities",
+    title: "Internships",
+    href: "/dashboard/internships",
     icon: Briefcase,
-  },
-  {
-    title: "Roadmap",
-    href: "/roadmap",
-    icon: Map,
   },
   {
     title: "Settings",

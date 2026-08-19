@@ -2,37 +2,36 @@
 
 
 
+import { aiModel } from "@/lib/ai-client";
+import { generateText } from "ai";
+
 export async function generateCoachingInsight(passport: any, job: any) {
   try {
-    // Proxy the request to our local FastAPI backend running on port 8000
-    const response = await fetch("http://127.0.0.1:8000/api/match/evaluate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        raw_document: JSON.stringify(passport.skills || []),
-        job_description: `${job.title} at ${job.org_name}: ${job.description}`,
-      }),
+    const userSkills = passport?.skills || [];
+    const skillNames = userSkills.map((s: any) => s.name).join(", ");
+    
+    const { text } = await generateText({
+      model: aiModel,
+      system: "You are an expert career coach helping a junior developer land a job.",
+      prompt: `Analyze this candidate's fit for this specific role.
+      
+      Role: ${job.title} at ${job.org_name}
+      Job Description: ${job.description}
+      
+      Candidate's Current Verified Skills: ${skillNames || "None"}
+      
+      Write a highly encouraging, 3-paragraph semantic gap analysis explaining:
+      1. Why they are a good fit for this role based on their current skills.
+      2. Exactly what they need to learn to be a PERFECT match (the gap).
+      3. A specific, actionable next step.
+      
+      Format with markdown headings and bold text.`
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("FastAPI Backend Error:", errorText);
-      throw new Error(`FastAPI Backend Error: ${response.status}`);
-    }
+    return text;
 
-    const data = await response.json();
-    
-    if (data.success && data.match_result) {
-      const result = data.match_result;
-      return `**Match Score: ${result.match_score}%**\n\n### Semantic Gap Analysis\n${result.gap_analysis}\n\n### Explainable Text\n${result.explainable_text}`;
-    } else {
-      throw new Error("Invalid response format from FastAPI backend.");
-    }
-
-  } catch (error) {
-    console.error("AI Coach generation failed via FastAPI:", error);
-    throw new Error("Failed to generate coaching insight.");
+  } catch (error: any) {
+    console.error("AI Coach generation failed:", error);
+    throw new Error(error.message || "Failed to generate coaching insight.");
   }
 }
