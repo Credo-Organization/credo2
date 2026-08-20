@@ -8,9 +8,9 @@ By connecting their GitHub profiles and uploading PDF certificates, users receiv
 
 ## 🌟 Key Features
 
-* **🛡️ AI Anti-Cheat Verification**: Evaluates GitHub repositories to detect cloned projects, low-effort forks, or boilerplate code using structured LLM evaluations, ensuring high integrity of all verified skills.
+* **🛡️ AI Anti-Cheat Verification (GitProof)**: Evaluates GitHub repositories to detect cloned projects, low-effort forks, or boilerplate code using structured LLM evaluations, ensuring high integrity of all verified skills.
 * **⚡ Background AI Queuing**: Employs an asynchronous state-machine architecture to process heavy AI tasks without hitting serverless (Vercel) timeouts.
-* **🧠 Multi-Agent Orchestration**: Uses a deterministic LangGraph state machine to extract skills and match them semantically to industry requirements.
+* **🧠 Multi-Agent Orchestration**: Uses a deterministic LangGraph state machine and AICredits' high-performance OpenAI-compatible proxy to extract skills and match them semantically to industry requirements.
 * **💼 Real-Time Opportunity Matching**: Uses custom in-memory vector embeddings (cosine similarity) to match a candidate's verified skill passport against real-world job taxonomy.
 * **🎨 Premium Glassmorphic UI**: Built with Next.js 14 and Framer Motion for a stunning, responsive, and deeply interactive user experience.
 
@@ -47,9 +47,9 @@ Instead of blindly trusting resumes, Credify acts as a strict technical recruite
 * **Next.js Native OAuth**: Securely connects directly to GitHub to fetch raw repository metadata, languages, and README snippets.
 * **Anti-Cheat Agent**: Uses `@vercel/ai` and structured `zod` schemas to evaluate repositories in real-time. It flags low-effort clones or boilerplate code, ensuring only authentic, hard-earned skills make it to the Skill Passport.
 
-### 3. Pure Stateless AI Microservice (Python + LangGraph)
-The Python backend (`backend/main.py`) acts purely as a stateless orchestration engine:
-* **The Extractor Node**: Ingests unstructured data (PDF certificates) and uses **Gemini 2.5 Flash** to extract deterministic JSON arrays of verifiable skills.
+### 3. Pure Stateless AI Microservice (Python + Node AI Core)
+The backend acts purely as a stateless orchestration engine:
+* **The Extractor Node**: Ingests unstructured data (PDF certificates) and uses **AICredits (gpt-4o)** to extract deterministic JSON arrays of verifiable skills.
 * **The Matcher Node (AI Coach)**: Employs a custom, ultra-fast `vector-store.ts` for in-memory cosine similarity, cross-referencing extracted skills against live industry job requirements without relying on heavy external vector databases.
 
 ---
@@ -58,18 +58,18 @@ The Python backend (`backend/main.py`) acts purely as a stateless orchestration 
 
 Credify relies on a strictly relational schema secured by Row Level Security (RLS):
 
+* **`profiles`**: Stores core user data including gender, degree, and career goals.
 * **`passports` & `skills`**: Stores the user's generated passport snapshots and canonical skill mapping.
 * **`github_connections` & `github_repos`**: Stores OAuth metadata and repository stats (stars, size, language).
 * **`evidence` & `evidence_claims`**: Ties every verified skill back to an immutable source (a specific GitHub repo or uploaded certificate).
-* **`passport_jobs` & `match_jobs`**: The async task queues that the Next.js API polling workers rely upon.
 
 ---
 
 ## 💻 Tech Stack
 
 * **Frontend**: [Next.js 14](https://nextjs.org/) (App Router), TypeScript, Tailwind CSS, shadcn/ui, Framer Motion
-* **AI Orchestration Backend**: Python 3.11, [FastAPI](https://fastapi.tiangolo.com/), [LangGraph](https://langchain-ai.github.io/langgraph/)
-* **AI SDKs**: Vercel AI SDK (`@vercel/ai`) for Anti-Cheat, Google GenAI SDK for Extractor
+* **AI Orchestration Backend**: Python 3.11, [FastAPI](https://fastapi.tiangolo.com/), Node AI Core (`@ai-sdk/openai`)
+* **AI Providers**: AICredits (gpt-4o) for rapid Extraction & Matching, Google GenAI fallback.
 * **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL + RLS)
 
 ---
@@ -94,20 +94,15 @@ Create a `.env.local` file in the root directory and add the following keys:
 # Database Config
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key # Used for backend administrative tasks
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 # GitHub OAuth Integration
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 
-# AI Configuration (Anti-Cheat / Fast Embeddings)
-XAI_API_KEY=your_xai_api_key
-```
-
-Run the database migrations to set up the background queues and tables:
-```bash
-node scripts/migrate.js
+# AI Configuration (AICredits Integration)
+OPENAI_API_KEY=your_aicredits_key_here
 ```
 
 Start the frontend development server:
@@ -128,7 +123,7 @@ pip install -r requirements.txt
 
 Create a `.env` file inside the `/backend` directory:
 ```env
-GEMINI_API_KEY=your_gemini_api_key
+OPENAI_API_KEY=your_aicredits_key_here
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_service_role_key
 ```
