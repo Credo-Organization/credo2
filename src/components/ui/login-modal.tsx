@@ -20,24 +20,45 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const handleGoogleLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    setError(null);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("your-project-ref") || supabaseUrl.includes("mock-project")) {
+      setError("Please set your real NEXT_PUBLIC_SUPABASE_URL and ANON_KEY in the .env file to enable Google Login.");
+      return;
+    }
+    try {
+      const supabase = createClient();
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+    } catch (err: any) {
+      setError(err?.message || "Failed to initiate Google login");
+    }
   };
 
   const handleGithubLogin = async () => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+    setError(null);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (!supabaseUrl || supabaseUrl.includes("your-project-ref") || supabaseUrl.includes("mock-project")) {
+      setError("Please set your real NEXT_PUBLIC_SUPABASE_URL and ANON_KEY in the .env file to enable GitHub Login.");
+      return;
+    }
+    try {
+      const supabase = createClient();
+      await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+    } catch (err: any) {
+      setError(err?.message || "Failed to initiate GitHub login");
+    }
   };
+
 
   const handleEmailLogin = async () => {
     setError(null);
