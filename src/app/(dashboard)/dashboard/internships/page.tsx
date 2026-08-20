@@ -55,7 +55,7 @@ export default async function InternshipsPage() {
             {hasGithubConnection ? (
               <GeneratePassportButton />
             ) : (
-              <Link href="/settings">
+              <Link href="/dashboard/settings">
                 <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 rounded-full px-6 bg-transparent">
                   Connect GitHub
                 </Button>

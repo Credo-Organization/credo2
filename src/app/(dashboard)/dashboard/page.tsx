@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   let certificateItems: CertificateItem[] = [];
 
   if (user) {
-    let [{ data: passport }, { data: certs }, { data: profile }, { data: connection }] = await Promise.all([
+    const [passportRes, certsRes, profileRes, connectionRes] = await Promise.all([
       supabase
         .from("passports")
         .select("snapshot_data")
@@ -42,10 +42,15 @@ export default async function DashboardPage() {
         .single()
     ]);
 
+    let passport = passportRes.data;
+    const certs = certsRes.data;
+    const profile = profileRes.data;
+    const connection = connectionRes.data;
+
     // If no passport exists yet, automatically generate it on the fly!
     if (!passport || passport.length === 0 || !passport[0]?.snapshot_data) {
       try {
-        const autoRes = await generatePassport();
+        const autoRes = await generatePassport(true);
         if (autoRes?.snapshotData) {
           passport = [{ snapshot_data: autoRes.snapshotData } as any];
         }

@@ -20,6 +20,10 @@ export default async function GitHubDashboardPage({
   }
 
   // 2. Fetch existing connection from Supabase for current user
+  let connectionData = null;
+  let reposData = [];
+  let languagesData = [];
+
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -32,24 +36,29 @@ export default async function GitHubDashboardPage({
         .maybeSingle();
 
       if (connection) {
+        connectionData = connection;
         const [{ data: repos }, { data: languages }] = await Promise.all([
           supabase.from("github_repos").select("*").or(`profile_id.eq.${user.id},user_id.eq.${user.id},connection_id.eq.${connection.id}`),
           supabase.from("repo_languages").select("*").or(`profile_id.eq.${user.id},user_id.eq.${user.id}`),
         ]);
-
-        return (
-          <div className="max-w-6xl mx-auto py-8 px-4">
-            <GitHubInsights
-              connection={connection}
-              repos={repos || []}
-              languages={languages || []}
-            />
-          </div>
-        );
+        reposData = repos || [];
+        languagesData = languages || [];
       }
     }
   } catch (e) {
     console.error("Error loading GitHub connection:", e);
+  }
+
+  if (connectionData) {
+    return (
+      <div className="max-w-6xl mx-auto py-8 px-4">
+        <GitHubInsights
+          connection={connectionData}
+          repos={reposData}
+          languages={languagesData}
+        />
+      </div>
+    );
   }
 
   // 3. Fallback: Show connect form + Role Competency Requirements Preview

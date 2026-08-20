@@ -164,35 +164,35 @@ export function AuditBreakdownPanel({
   return (
     <div
       className={cn(
-        "w-full bg-[#0d1322]/90 backdrop-blur-xl border border-[#1e2c4f] rounded-3xl p-6 shadow-2xl text-white font-sans",
+        "w-full glass rounded-3xl p-6 shadow-2xl font-sans relative overflow-hidden",
         className
       )}
     >
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border/40 relative z-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-1.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
             GitProof™ Deep Audit Engine
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
             Verification & Evidence Breakdown
           </h2>
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-muted-foreground mt-1">
             Real-time multi-extension repository inspection, language scores, and cryptographic certificate verification.
           </p>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 bg-[#080d19] p-1 rounded-2xl border border-white/[0.06] self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 bg-accent/30 p-1 rounded-2xl border border-border/40 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveTab("repos")}
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all",
               activeTab === "repos"
-                ? "bg-white text-zinc-950 shadow-md"
-                : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                ? "bg-background border border-border/50 text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
             )}
           >
             <FolderGit2 className="w-3.5 h-3.5" />
@@ -205,8 +205,8 @@ export function AuditBreakdownPanel({
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all",
               activeTab === "languages"
-                ? "bg-white text-zinc-950 shadow-md"
-                : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                ? "bg-background border border-border/50 text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
             )}
           >
             <Code2 className="w-3.5 h-3.5" />
@@ -219,8 +219,8 @@ export function AuditBreakdownPanel({
             className={cn(
               "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all",
               activeTab === "certificates"
-                ? "bg-white text-zinc-950 shadow-md"
-                : "text-white/60 hover:text-white hover:bg-white/[0.04]"
+                ? "bg-background border border-border/50 text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
             )}
           >
             <FileCheck className="w-3.5 h-3.5" />
@@ -231,43 +231,43 @@ export function AuditBreakdownPanel({
 
       {/* TAB CONTENT 1: REPOSITORIES */}
       {activeTab === "repos" && (
-        <div className="pt-6 space-y-4">
+        <div className="pt-6 space-y-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
-            <div className="bg-[#121a2e] border border-[#213054] rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <div className="bg-card/40 border border-border/60 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                 <FolderGit2 className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[11px] text-white/50 uppercase font-bold tracking-wider block">
+                <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Scanned Repos
                 </span>
-                <span className="text-lg font-extrabold text-white">{displayRepos.length} Repositories</span>
+                <span className="text-lg font-extrabold text-foreground">{displayRepos.length} Repositories</span>
               </div>
             </div>
 
-            <div className="bg-[#121a2e] border border-[#213054] rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="bg-card/40 border border-border/60 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[11px] text-white/50 uppercase font-bold tracking-wider block">
+                <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Integrity Verified
                 </span>
-                <span className="text-lg font-extrabold text-emerald-400">
+                <span className="text-lg font-extrabold text-emerald-500">
                   {displayRepos.filter((r) => r.integrity_status !== "flagged").length} Clean
                 </span>
               </div>
             </div>
 
-            <div className="bg-[#121a2e] border border-[#213054] rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+            <div className="bg-card/40 border border-border/60 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[11px] text-white/50 uppercase font-bold tracking-wider block">
+                <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Anti-Cheat Score
                 </span>
-                <span className="text-lg font-extrabold text-white">98% Avg Confidence</span>
+                <span className="text-lg font-extrabold text-foreground">98% Avg Confidence</span>
               </div>
             </div>
           </div>
@@ -281,11 +281,11 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-[#121a2e]/70 hover:bg-[#121a2e] border border-[#202e52] rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group"
+                  className="bg-card/40 hover:bg-card border border-border/50 rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                      <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
                         {repo.name}
                       </span>
                       {repo.url && (
@@ -293,7 +293,7 @@ export function AuditBreakdownPanel({
                           href={repo.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-white/40 hover:text-white"
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           <ExternalLink className="w-3 h-3" />
                         </a>
@@ -317,14 +317,14 @@ export function AuditBreakdownPanel({
                   </div>
 
                   {repo.description && (
-                    <p className="text-xs text-white/60 line-clamp-1">{repo.description}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{repo.description}</p>
                   )}
 
                   {/* Metadata Footer */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-white/50">
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-muted-foreground">
                     <div className="flex items-center gap-3">
                       {repo.language && (
-                        <span className="flex items-center gap-1.5 font-medium text-white/80">
+                        <span className="flex items-center gap-1.5 font-medium text-foreground/80">
                           <span
                             className="w-2.5 h-2.5 rounded-full"
                             style={{ backgroundColor: langColor }}
@@ -347,7 +347,7 @@ export function AuditBreakdownPanel({
                         {repo.skills.map((skill, sIdx) => (
                           <span
                             key={sIdx}
-                            className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-[10px] text-white/80 font-medium"
+                            className="px-2 py-0.5 rounded-md bg-accent border border-border/50 text-[10px] text-foreground/80 font-medium"
                           >
                             {skill}
                           </span>
@@ -372,7 +372,7 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-[#121a2e] border border-[#213054] rounded-2xl p-4 flex flex-col justify-between gap-3 relative overflow-hidden"
+                  className="bg-card/40 border border-border/50 rounded-2xl p-4 flex flex-col justify-between gap-3 relative overflow-hidden"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
@@ -380,16 +380,16 @@ export function AuditBreakdownPanel({
                         className="w-3.5 h-3.5 rounded-full shadow-md"
                         style={{ backgroundColor: langColor }}
                       />
-                      <span className="text-sm font-bold text-white">{lang.language}</span>
+                      <span className="text-sm font-bold text-foreground">{lang.language}</span>
                     </div>
 
-                    <span className="text-xs font-extrabold text-white px-2 py-0.5 rounded-md bg-white/10 font-mono">
+                    <span className="text-xs font-extrabold text-foreground px-2 py-0.5 rounded-md bg-accent font-mono border border-border/50">
                       {lang.percentage}%
                     </span>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="w-full h-2 bg-[#090e1a] rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-accent rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{
@@ -399,9 +399,9 @@ export function AuditBreakdownPanel({
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-xs text-white/50 pt-1 border-t border-white/[0.05]">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/40">
                     <span>{lang.repoCount} active repos</span>
-                    <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" />
                       {lang.confidence} Mastery
                     </span>
@@ -418,29 +418,29 @@ export function AuditBreakdownPanel({
         <div className="pt-6 space-y-4">
           {/* Summary Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#121a2e] border border-emerald-500/20 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="bg-card/40 border border-border/60 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[11px] text-white/50 uppercase font-bold tracking-wider block">
+                <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Accepted & Verified
                 </span>
-                <span className="text-lg font-extrabold text-emerald-400">
+                <span className="text-lg font-extrabold text-emerald-500">
                   {verifiedCertsCount} Certificates
                 </span>
               </div>
             </div>
 
-            <div className="bg-[#121a2e] border border-rose-500/20 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+            <div className="bg-card/40 border border-border/60 rounded-2xl p-3.5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500">
                 <XCircle className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-[11px] text-white/50 uppercase font-bold tracking-wider block">
+                <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Rejected / Flagged
                 </span>
-                <span className="text-lg font-extrabold text-rose-400">
+                <span className="text-lg font-extrabold text-rose-500">
                   {flaggedCertsCount} Certificates
                 </span>
               </div>
@@ -456,10 +456,10 @@ export function AuditBreakdownPanel({
                 <div
                   key={idx}
                   className={cn(
-                    "bg-[#121a2e] border rounded-2xl p-4 flex flex-col gap-3 transition-all",
+                    "bg-card/40 border rounded-2xl p-4 flex flex-col gap-3 transition-all",
                     isAccepted
-                      ? "border-[#213054] hover:border-emerald-500/40"
-                      : "border-rose-500/30 bg-rose-950/10"
+                      ? "border-border/50 hover:border-emerald-500/40"
+                      : "border-rose-500/30 bg-rose-500/5"
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -468,17 +468,17 @@ export function AuditBreakdownPanel({
                         className={cn(
                           "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5",
                           isAccepted
-                            ? "bg-blue-500/10 border border-blue-500/20 text-blue-400"
-                            : "bg-rose-500/10 border border-rose-500/20 text-rose-400"
+                            ? "bg-primary/10 border border-primary/20 text-primary"
+                            : "bg-rose-500/10 border border-rose-500/20 text-rose-500"
                         )}
                       >
                         <Award className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-white leading-tight">
+                        <h4 className="text-sm font-bold text-foreground leading-tight">
                           {cert.title}
                         </h4>
-                        <span className="text-xs text-white/60 font-medium block mt-0.5">
+                        <span className="text-xs text-muted-foreground font-medium block mt-0.5">
                           Issued by {cert.issuer} {cert.issue_date && `• ${cert.issue_date}`}
                         </span>
                       </div>
@@ -486,12 +486,12 @@ export function AuditBreakdownPanel({
 
                     {/* Status badge */}
                     {isAccepted ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-sm flex-shrink-0">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 shadow-sm flex-shrink-0">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         ACCEPTED & VERIFIED
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/15 border border-rose-500/40 text-rose-400 shadow-sm flex-shrink-0">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-500/10 border border-rose-500/30 text-rose-500 shadow-sm flex-shrink-0">
                         <XCircle className="w-3.5 h-3.5" />
                         REJECTED / FLAGGED
                       </span>
@@ -500,22 +500,22 @@ export function AuditBreakdownPanel({
 
                   {/* If rejected, show reason */}
                   {!isAccepted && cert.rejection_reason && (
-                    <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                    <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-rose-500 flex-shrink-0" />
                       <span>Rejection reason: {cert.rejection_reason}</span>
                     </div>
                   )}
 
                   {/* Skills Extracted */}
                   {cert.skills && cert.skills.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-white/[0.05]">
-                      <span className="text-[11px] text-white/40 font-semibold mr-1">
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-border/40">
+                      <span className="text-[11px] text-muted-foreground font-semibold mr-1">
                         Verified Skills:
                       </span>
                       {cert.skills.map((skill, sIdx) => (
                         <span
                           key={sIdx}
-                          className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-[10px] text-white/80 font-medium"
+                          className="px-2 py-0.5 rounded-md bg-accent border border-border/50 text-[10px] text-foreground/80 font-medium"
                         >
                           {skill}
                         </span>

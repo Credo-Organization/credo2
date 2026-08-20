@@ -139,10 +139,14 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
       ? `${window.location.origin}/verify/passport/${studentId}`
       : `https://credify.dev/verify/passport/${studentId}`);
 
-  // Default Illustrated Female Avatar if none provided
+  // Default Illustrated Avatar if none provided
+  const fallbackFemale = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80";
+  const fallbackMale = "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80"; // A standard male portrait
+  
   const avatarUrl =
-    studentData?.avatarUrl ||
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80";
+    studentData?.avatarUrl && studentData.avatarUrl.trim() !== ""
+      ? studentData.avatarUrl
+      : (gender.toLowerCase() === "male" ? fallbackMale : fallbackFemale);
 
   return (
     <div

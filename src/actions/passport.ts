@@ -7,7 +7,7 @@ import { aiModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
 import { z } from "zod";
 
-export async function generatePassport() {
+export async function generatePassport(skipRevalidate: boolean = false) {
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -161,7 +161,7 @@ export async function generatePassport() {
         headline: profile?.headline || "Software Engineer",
         country: profile?.country || "India",
         college: profile?.college_name || "IIT Delhi",
-        avatar_url: profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+        avatar_url: profile?.avatar_url || "",
         gender: profile?.gender || "Female",
         degree: profile?.degree || "B.Tech – Computer Science Engineering",
       },
@@ -210,8 +210,10 @@ export async function generatePassport() {
         .eq("id", job.id);
     }
 
-    revalidatePath("/dashboard");
-    revalidatePath("/passport");
+    if (!skipRevalidate) {
+      revalidatePath("/dashboard");
+      revalidatePath("/passport");
+    }
 
     return { success: true, job_id: jobId, status: "completed", snapshotData };
   } catch (error: any) {

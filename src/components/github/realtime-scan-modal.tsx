@@ -56,12 +56,17 @@ export function RealtimeScanModal({
 
   useEffect(() => {
     if (!isOpen) {
-      setCurrentStepIndex(0);
-      setProgress(12);
-      setScannedRepos([]);
-      setIsFinished(false);
       return;
     }
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentStepIndex(0);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setProgress(12);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setScannedRepos([]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsFinished(false);
 
     let p = 15;
     const progressTimer = setInterval(() => {
