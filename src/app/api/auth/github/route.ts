@@ -10,16 +10,22 @@ export async function GET() {
   // Generate a random state for CSRF protection
   const state = randomBytes(16).toString("hex");
 
-  // Construct GitHub OAuth URL
-  const params = new URLSearchParams({
+  const params: Record<string, string> = {
     client_id: clientId,
-    redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/auth/github/callback`,
     scope: "repo read:user user:email",
     state: state,
-  });
+  };
 
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?${params.toString()}`;
+  // Only pass redirect_uri if explicitly configured, otherwise GitHub uses registered callback
+  if (process.env.GITHUB_REDIRECT_URI) {
+    params["redirect_uri"] = process.env.GITHUB_REDIRECT_URI;
+  }
+
+  const searchParams = new URLSearchParams(params);
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?${searchParams.toString()}`;
 
   // Redirect user to GitHub
   return NextResponse.redirect(githubAuthUrl);
 }
+
+
