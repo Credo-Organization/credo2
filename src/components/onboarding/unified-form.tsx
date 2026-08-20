@@ -21,6 +21,7 @@ import { useState } from "react";
 import { Loader2, GitBranch, CheckCircle2, ShieldCheck, Star, Code2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { syncGitHub, analyzeGitHubRealtime } from "@/actions/github";
+import { RealtimeScanModal } from "@/components/github/realtime-scan-modal";
 
 const formSchema = z.object({
   full_name: z.string().min(2, "Name must be at least 2 characters."),
@@ -73,6 +74,9 @@ export function UnifiedOnboardingForm() {
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
 
 
+  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
+  const [authLogin, setAuthLogin] = useState<string>("developer");
+
   const handleOAuthConnect = () => {
     setGithubError(null);
     setIsConnecting(true);
@@ -92,26 +96,21 @@ export function UnifiedOnboardingForm() {
     const messageHandler = async (event: MessageEvent) => {
       if (event.data?.type === "GITHUB_AUTH_SUCCESS") {
         window.removeEventListener("message", messageHandler);
+        setAuthLogin(event.data.login || "developer");
+        setIsScanModalOpen(true);
         setSyncStatus("Connected! Running GitProof deep scan across your account...");
 
         try {
           const syncRes = await syncGitHub(event.data.login, event.data.token);
           if (syncRes.success) {
             setSyncStatus("GitProof scan completed! Advancing...");
-            setTimeout(() => {
-              setStep(3);
-              setIsConnecting(false);
-              setSyncStatus(null);
-            }, 600);
           } else {
             setGithubError(syncRes.error || "Failed to scan GitHub repositories.");
-            setIsConnecting(false);
-            setSyncStatus(null);
           }
         } catch (err: any) {
           setGithubError(err?.message || "Sync failed.");
+        } finally {
           setIsConnecting(false);
-          setSyncStatus(null);
         }
       } else if (event.data?.type === "GITHUB_AUTH_ERROR") {
         window.removeEventListener("message", messageHandler);
@@ -128,6 +127,7 @@ export function UnifiedOnboardingForm() {
     window.addEventListener("message", messageHandler);
   };
 
+
   const handleDocumentUpload = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push("/dashboard");
@@ -137,7 +137,23 @@ export function UnifiedOnboardingForm() {
 
   return (
     <div className="shadow-input mx-auto w-full max-w-lg rounded-2xl bg-zinc-950/80 backdrop-blur-xl border border-zinc-800 p-6 md:p-8 dark:bg-black mt-8 animate-fade-in-up">
+      <RealtimeScanModal
+        isOpen={isScanModalOpen}
+        onClose={() => {
+          setIsScanModalOpen(false);
+          setStep(3);
+        }}
+        githubUsername={authLogin}
+        onComplete={() => {
+          setTimeout(() => {
+            setIsScanModalOpen(false);
+            setStep(3);
+          }, 800);
+        }}
+      />
+
       <div className="text-center mb-8">
+
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-zinc-800/80 text-zinc-300 border border-zinc-700/50 mb-3">
           <span>Step {step} of 3</span>
         </div>
