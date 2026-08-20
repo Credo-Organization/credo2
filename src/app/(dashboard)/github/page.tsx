@@ -1,6 +1,7 @@
 import { GitHubOAuthCallback } from "@/components/github/github-oauth-callback";
 import { GitHubConnectForm } from "@/components/github/github-connect-form";
 import { GitHubInsights } from "@/components/github/github-insights";
+import { RoleCompetencyAnalyzer } from "@/components/github/role-competency-analyzer";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function GitHubDashboardPage({
@@ -27,17 +28,17 @@ export default async function GitHubDashboardPage({
       const { data: connection } = await supabase
         .from("github_connections")
         .select("*")
-        .eq("user_id", user.id)
-        .single();
+        .or(`profile_id.eq.${user.id},user_id.eq.${user.id}`)
+        .maybeSingle();
 
       if (connection) {
         const [{ data: repos }, { data: languages }] = await Promise.all([
-          supabase.from("github_repos").select("*").eq("user_id", user.id),
-          supabase.from("repo_languages").select("*").eq("user_id", user.id),
+          supabase.from("github_repos").select("*").or(`profile_id.eq.${user.id},user_id.eq.${user.id},connection_id.eq.${connection.id}`),
+          supabase.from("repo_languages").select("*").or(`profile_id.eq.${user.id},user_id.eq.${user.id}`),
         ]);
 
         return (
-          <div className="max-w-6xl mx-auto py-8">
+          <div className="max-w-6xl mx-auto py-8 px-4">
             <GitHubInsights
               connection={connection}
               repos={repos || []}
@@ -51,11 +52,11 @@ export default async function GitHubDashboardPage({
     console.error("Error loading GitHub connection:", e);
   }
 
-  // 3. Fallback: Show connect form with error notification if any
+  // 3. Fallback: Show connect form + Role Competency Requirements Preview
   return (
-    <div className="py-8">
+    <div className="max-w-6xl mx-auto py-8 px-4 space-y-10">
       {error && (
-        <div className="max-w-md mx-auto mb-6 p-4 rounded-xl bg-red-950/40 border border-red-800/60 text-center">
+        <div className="max-w-md mx-auto p-4 rounded-2xl bg-red-950/40 border border-red-800/60 text-center">
           <h4 className="text-sm font-semibold text-red-400 mb-1">GitHub Authentication Notice</h4>
           <p className="text-xs text-zinc-400">
             {error === "missing_code"
@@ -64,8 +65,15 @@ export default async function GitHubDashboardPage({
           </p>
         </div>
       )}
+
       <GitHubConnectForm />
+
+      {/* Role Competency Preview */}
+      <div className="pt-4">
+        <RoleCompetencyAnalyzer />
+      </div>
     </div>
   );
 }
+
 
