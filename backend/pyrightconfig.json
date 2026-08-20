@@ -1,0 +1,6 @@
+{
+  "extraPaths": [
+    "./gitproof",
+    "./credential_verifier-main"
+  ]
+}

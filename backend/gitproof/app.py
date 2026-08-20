@@ -37,9 +37,9 @@ logger = get_logger(__name__)
 app = FastAPI(title="GitProof Agent", version="2.0.0")
 
 SESSION_SECRET = os.getenv("SESSION_SECRET", "dev-secret-change-me")
-app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET, same_site="lax")
+# app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET, same_site="lax") # Handled by main.py
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:8000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 _memory = MemoryManager(db_path=os.getenv("MEMORY_DB_PATH", os.path.join(_BASE_DIR, "gitproof_memory.db")))
@@ -93,8 +93,9 @@ def callback(
     request.session["github_name"] = github_user.get("name")
 
     logger.info("User %s authenticated via GitHub OAuth", github_user.get("login"))
-    return RedirectResponse(FRONTEND_URL)
-
+    # Pass the token and login to the frontend so it can save the connection in Supabase
+    redirect_url = f"{FRONTEND_URL}/github?github_token={token}&github_login={github_user.get('login')}"
+    return RedirectResponse(redirect_url)
 
 @app.post("/auth/logout")
 def logout(request: Request):

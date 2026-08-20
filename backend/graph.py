@@ -1,6 +1,5 @@
 import os
-from typing import Annotated, Dict, Any, List
-from typing_extensions import TypedDict
+from typing import Annotated, Dict, Any, List, TypedDict
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI

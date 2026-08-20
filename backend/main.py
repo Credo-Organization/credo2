@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import Optional
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -26,6 +27,8 @@ try:
 except ImportError:
     import importlib.util
     spec = importlib.util.spec_from_file_location("verifier", Path(verifier_dir) / "verifier.py")
+    if spec is None or spec.loader is None:
+        raise ImportError("Could not load verifier module spec")
     verifier_mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(verifier_mod)
     verify_credential = verifier_mod.verify_credential
@@ -162,6 +165,23 @@ def scan_user_gitproof(req: GitProofScanRequest):
         return {"success": True, "result": result}
     except Exception as e:
         return {"success": False, "error": str(e)}
+
+# --- GitHub OAuth Redirects for GitProof Subapp ---
+# Because GitProof is mounted at /gitproof, its auth routes are /gitproof/auth/...
+# However, the frontend and GitHub OAuth App expect /auth/login and /auth/callback.
+# We proxy these root routes into the GitProof subapp to preserve functionality.
+from fastapi.responses import RedirectResponse
+
+@app.get("/auth/login")
+def auth_login(request: Request):
+    return RedirectResponse(url="/gitproof/auth/login")
+
+@app.get("/auth/callback")
+def auth_callback(request: Request):
+    # Pass along any query params (like ?code=...&state=...) from GitHub
+    query = request.url.query
+    url = f"/gitproof/auth/callback?{query}" if query else "/gitproof/auth/callback"
+    return RedirectResponse(url=url)
 
 # Mount the full GitProof application at /gitproof
 app.mount("/gitproof", gitproof_app)

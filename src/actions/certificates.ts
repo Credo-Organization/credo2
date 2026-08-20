@@ -61,14 +61,14 @@ export async function uploadCertificateMetadata({
       throw new Error("Invalid file URL: Security exception");
     }
 
-    const response = await fetch(fileUrl);
+    const { data: fileData, error: downloadError } = await supabase.storage.from("certificates").download(fileName);
     let extractionResult: any = { claims: [] };
     
     let fileBuffer: Buffer | null = null;
     let fileMimeType = "application/pdf";
     
-    if (response.ok) {
-      const arrayBuffer = await response.arrayBuffer();
+    if (fileData && !downloadError) {
+      const arrayBuffer = await fileData.arrayBuffer();
       fileBuffer = Buffer.from(arrayBuffer);
       
       if (fileUrl.toLowerCase().endsWith(".png")) fileMimeType = "image/png";
@@ -81,75 +81,78 @@ export async function uploadCertificateMetadata({
         "certificate"
       );
     } else {
-      console.warn(`[Document Extractor] Failed to fetch file from storage. Status: ${response.status}`);
+      console.warn(`[Document Extractor] Failed to fetch file from storage. Error: ${downloadError?.message || "Unknown error"}`);
     }
 
-    if (extractionResult.claims.length > 0) {
-      // Run Anti-Cheat Agent
-      const { evaluateEvidenceIntegrity } = await import("@/lib/agents/anti-cheat");
-      let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified" };
-      
-      try {
-        if (fileBuffer) {
-          integrityData = await evaluateEvidenceIntegrity("certificate", {
-            fileBuffer: fileBuffer,
-            mimeType: fileMimeType,
-            metadata: extractionText
-          });
-        }
-      } catch (e) {
-        console.error("[uploadCertificateMetadata] Anti-cheat check failed:", e);
-      }
+    if (!fileBuffer) {
+      return { success: false, error: "Failed to read file from storage." };
+    }
 
-      const { data: evidence } = await supabase
-        .from("evidence")
-        .insert({
-          user_id: user.id,
-          source_type: "certificate",
-          raw_ref: fileUrl,
-          status: "processed",
-          integrity_score: integrityData.integrity_score,
-          integrity_flags: integrityData.integrity_flags,
-          integrity_status: integrityData.integrity_status,
-          ingested_at: new Date().toISOString(),
-        })
-        .select("id")
-        .single();
+    if (extractionResult.claims.length === 0) {
+      return { success: false, error: "No skills could be extracted from this document." };
+    }
 
-      if (evidence) {
-        const claimRecords = extractionResult.claims.map((claim: any) => ({
-          evidence_id: evidence.id,
-          extracted_text: claim.context_snippet,
-          skill_id: claim.skill_id,
-          unmapped_label: claim.unmapped_label || claim.claimed_skill,
-          match_confidence: claim.skill_id ? 1.0 : 0.5,
-          llm_model: process.env.AI_MODEL || "amazon/nova-micro-v1:0",
-        }));
+    // Run Anti-Cheat Agent
+    const { evaluateEvidenceIntegrity } = await import("@/lib/agents/anti-cheat");
+    let integrityData = { integrity_score: 100, integrity_flags: [] as string[], integrity_status: "verified" };
+    
+    try {
+      integrityData = await evaluateEvidenceIntegrity("certificate", {
+        fileBuffer: fileBuffer,
+        mimeType: fileMimeType,
+        metadata: extractionText
+      });
+    } catch (e) {
+      console.error("[uploadCertificateMetadata] Anti-cheat check failed:", e);
+    }
 
-        const { error: claimsError } = await supabase.from("evidence_claims").insert(claimRecords);
-        if (claimsError) {
-          console.error("[uploadCertificateMetadata] Failed to insert evidence claims:", claimsError);
-        }
+    const { data: evidence, error: evidenceError } = await supabase
+      .from("evidence")
+      .insert({
+        user_id: user.id,
+        source_type: "certificate",
+        raw_ref: fileUrl,
+        status: "processed",
+        integrity_score: integrityData.integrity_score,
+        integrity_flags: integrityData.integrity_flags,
+        integrity_status: integrityData.integrity_status,
+        ingested_at: new Date().toISOString(),
+      })
+      .select("id")
+      .single();
 
-        // Update Certificate Status
-        const finalStatus = integrityData.integrity_status === "verified" ? "verified" : "flagged";
-        await supabase
-          .from("certificates")
-          .update({ parsed: true, status: finalStatus })
-          .eq("id", certRecord.id);
+    if (evidenceError || !evidence) {
+      console.error("[uploadCertificateMetadata] Failed to insert evidence:", evidenceError);
+      return { success: false, error: "Failed to save evidence record." };
+    }
 
-        // Regenerate Passport to include new skills
-        try {
-          const { generatePassport } = await import("@/actions/passport");
-          await generatePassport();
-        } catch (err) {
-          console.error("[uploadCertificateMetadata] Failed to regenerate passport:", err);
-        }
-      } else {
-        return { success: false, error: "No skills could be extracted from this document." };
-      }
-    } else {
-      return { success: false, error: "Failed to read file for extraction." };
+    const claimRecords = extractionResult.claims.map((claim: any) => ({
+      evidence_id: evidence.id,
+      extracted_text: claim.context_snippet,
+      skill_id: claim.skill_id,
+      unmapped_label: claim.unmapped_label || claim.claimed_skill,
+      match_confidence: claim.skill_id ? 1.0 : 0.5,
+      llm_model: process.env.AI_MODEL || "amazon/nova-micro-v1:0",
+    }));
+
+    const { error: claimsError } = await supabase.from("evidence_claims").insert(claimRecords);
+    if (claimsError) {
+      console.error("[uploadCertificateMetadata] Failed to insert evidence claims:", claimsError);
+    }
+
+    // Update Certificate Status
+    const finalStatus = integrityData.integrity_status === "verified" ? "verified" : "flagged";
+    await supabase
+      .from("certificates")
+      .update({ parsed: true, status: finalStatus })
+      .eq("id", certRecord.id);
+
+    // Regenerate Passport to include new skills
+    try {
+      const { generatePassport } = await import("@/actions/passport");
+      await generatePassport();
+    } catch (err) {
+      console.error("[uploadCertificateMetadata] Failed to regenerate passport:", err);
     }
   } catch (extErr: any) {
     console.error("Claim extraction error:", extErr);
@@ -339,3 +342,34 @@ export async function verifyOpenBadge(badgeJsonUrl: string) {
   }
 }
 
+export async function deleteCertificate(certificateId: number | string, fileUrl?: string | null) {
+  const supabase = await createClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("Unauthorized");
+  }
+
+  const { error: dbError } = await supabase
+    .from("certificates")
+    .delete()
+    .eq("id", certificateId)
+    .eq("profile_id", user.id);
+
+  if (dbError) {
+    throw new Error("Failed to delete certificate record");
+  }
+
+  if (fileUrl) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (supabaseUrl && fileUrl.startsWith(`${supabaseUrl}/storage/v1/object/public/certificates/`)) {
+      const fileName = fileUrl.split("/").pop();
+      if (fileName) {
+        await supabase.storage.from("certificates").remove([fileName]);
+      }
+    }
+  }
+
+  revalidatePath("/certificates");
+  return { success: true };
+}

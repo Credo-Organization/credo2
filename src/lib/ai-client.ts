@@ -2,7 +2,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 
 // 1. Initialize the AI Provider globally using OpenRouter
 const openRouter = createOpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
+  baseURL: "https://aicredits.in/v1",
   apiKey: process.env.OPENROUTER_API_KEY || "",
 });
 
