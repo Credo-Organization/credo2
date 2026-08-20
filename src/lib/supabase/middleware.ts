@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/certificates") ||
     request.nextUrl.pathname.startsWith("/passport") ||
     request.nextUrl.pathname.startsWith("/roadmap") ||
-    request.nextUrl.pathname.startsWith("/settings");
+    request.nextUrl.pathname.startsWith("/dashboard/settings");
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
@@ -59,21 +59,21 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Handle Onboarding Flow (Temporarily disabled for UI testing)
+  // Handle Onboarding Flow
   if (user) {
-    // const onboardingCompleted = user.user_metadata?.onboarding_completed;
+    const onboardingCompleted = user.user_metadata?.onboarding_completed;
     
-    // if (!onboardingCompleted && request.nextUrl.pathname !== "/onboarding") {
-    //   // Force user to onboarding if not completed
-    //   const url = request.nextUrl.clone();
-    //   url.pathname = "/onboarding";
-    //   return NextResponse.redirect(url);
-    // } else if (onboardingCompleted && request.nextUrl.pathname === "/onboarding") {
-    //   // Prevent user from going back to onboarding if already done
-    //   const url = request.nextUrl.clone();
-    //   url.pathname = "/dashboard";
-    //   return NextResponse.redirect(url);
-    // }
+    if (!onboardingCompleted && request.nextUrl.pathname !== "/onboarding") {
+      // Force user to onboarding if not completed
+      const url = request.nextUrl.clone();
+      url.pathname = "/onboarding";
+      return NextResponse.redirect(url);
+    } else if (onboardingCompleted && request.nextUrl.pathname === "/onboarding") {
+      // Prevent user from going back to onboarding if already done
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   // Redirect authenticated users away from login

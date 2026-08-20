@@ -14,6 +14,7 @@ export interface Profile {
   college_name: string | null;
   degree: string | null;
   graduation_year: string | null;
+  gender?: string | null;
   experience_level: "beginner" | "intermediate" | "advanced" | null;
   onboarding_completed: boolean;
   github_connected: boolean;

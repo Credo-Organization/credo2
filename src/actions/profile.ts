@@ -8,6 +8,9 @@ export async function updateProfile(data: {
   bio?: string;
   college_name?: string;
   graduation_year?: string;
+  gender?: string;
+  career_goal?: string;
+  degree?: string;
 }) {
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -20,9 +23,12 @@ export async function updateProfile(data: {
     .from("profiles")
     .update({
       full_name: data.full_name,
-      bio: data.bio,
+      headline: data.career_goal || data.bio,
       college_name: data.college_name,
       graduation_year: data.graduation_year,
+      gender: data.gender,
+      degree: data.degree,
+      onboarding_completed: true,
     })
     .eq("id", user.id);
 
@@ -31,7 +37,7 @@ export async function updateProfile(data: {
     return { success: false, error: error.message || "Failed to update profile" };
   }
 
-  revalidatePath("/settings");
+  revalidatePath("/dashboard/settings");
   revalidatePath("/dashboard");
   return { success: true };
 }

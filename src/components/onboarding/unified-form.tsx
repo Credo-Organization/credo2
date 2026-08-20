@@ -21,6 +21,7 @@ import { useState } from "react";
 import { Loader2, GitBranch, CheckCircle2, ShieldCheck, Star, Code2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { syncGitHub, analyzeGitHubRealtime } from "@/actions/github";
+import { updateProfile } from "@/actions/profile";
 import { RealtimeScanModal } from "@/components/github/realtime-scan-modal";
 
 const formSchema = z.object({
@@ -128,10 +129,19 @@ export function UnifiedOnboardingForm() {
   };
 
 
-  const handleDocumentUpload = (e: React.MouseEvent) => {
+  const handleDocumentUpload = async (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push("/dashboard");
-    router.refresh();
+    setLoading(true);
+    try {
+      const values = form.getValues();
+      await updateProfile(values);
+    } catch (err) {
+      console.error("Failed to save profile", err);
+    } finally {
+      setLoading(false);
+      router.push("/dashboard");
+      router.refresh();
+    }
   };
 
 
@@ -373,8 +383,9 @@ export function UnifiedOnboardingForm() {
                   className="group/btn relative flex justify-center items-center h-11 w-full rounded-xl bg-white hover:bg-zinc-200 font-semibold text-black transition-colors"
                   type="button"
                   onClick={handleDocumentUpload}
+                  disabled={loading}
                 >
-                  Finish Onboarding & Go to Dashboard →
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Finish Onboarding & Go to Dashboard →"}
                 </button>
 
                 <button
