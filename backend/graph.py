@@ -6,14 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
-# GitProof Agent imports
-from gitproof.agents.orchestrator import OrchestratorAgent
-from gitproof.memory.memory_manager import MemoryManager
-from gitproof.llm.llm_client import LLMClient
-
-# Initialize singletons for the verifier
-_memory = MemoryManager()
-_llm = LLMClient()
+# Removed unused gitproof imports
 
 # Ensure API keys are available
 if "GOOGLE_API_KEY" not in os.environ:
