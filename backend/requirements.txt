@@ -1,13 +1,16 @@
 fastapi
-uvicorn
+uvicorn[standard]
 pydantic
 langgraph
 langchain
 langchain-core
 langchain-google-genai
+langchain-openai
 langchain-xai
 python-dotenv
 starlette
 httpx
 google-genai
 itsdangerous
+requests
+tenacity
