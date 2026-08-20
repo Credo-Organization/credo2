@@ -1,0 +1,6 @@
+{
+  "did:web:hackathon.university.edu#key-1": {
+    "publicKeyHex": "3dd8bb57de8dfcfb5ae0aa1f548e9ffe4c99838cdb117344fcce65550ba2cf66",
+    "type": "Ed25519VerificationKey2020"
+  }
+}
