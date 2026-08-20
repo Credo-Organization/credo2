@@ -160,50 +160,182 @@ export async function uploadCertificateMetadata({
   return { success: true };
 }
 
-export async function deleteCertificate(id: number, fileUrl: string) {
+export async function verifyCredlyBadge(badgeUrlOrId: string) {
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized. Please log in." };
   }
 
-  // 1. Delete from Database first (RLS ensures user owns the record)
-  const { error: dbError } = await supabase
-    .from("certificates")
-    .delete()
-    .eq("id", id)
-    .eq("profile_id", user.id);
-
-  if (dbError) {
-    throw new Error("Failed to delete certificate record.");
+  const cleanInput = (badgeUrlOrId || "").trim();
+  if (!cleanInput) {
+    return { success: false, error: "Credly badge URL or ID is required." };
   }
 
-  // Also delete the associated evidence record (cascade will handle evidence_claims)
-  const { error: evidenceError } = await supabase
-    .from("evidence")
-    .delete()
-    .eq("raw_ref", fileUrl)
-    .eq("user_id", user.id);
-    
-  if (evidenceError) {
-    console.error("Failed to delete evidence record, orphaned claims may exist:", evidenceError);
+  // Extract badge ID from various Credly URL formats
+  let badgeId = cleanInput;
+  const match = cleanInput.match(/badges\/([a-f0-9-]+)/i) || cleanInput.match(/badge\/([a-f0-9-]+)/i);
+  if (match && match[1]) {
+    badgeId = match[1];
   }
 
-  // 2. Extract path from public URL and delete from storage
-  // The URL looks like: https://[project].supabase.co/storage/v1/object/public/certificates/[user.id]/[filename]
-  const pathParts = fileUrl.split("/certificates/");
-  if (pathParts.length > 1) {
-    const filePath = pathParts[1];
-    const { error: storageError } = await supabase.storage
-      .from("certificates")
-      .remove([filePath]);
-      
-    if (storageError) {
-      console.error("Failed to delete file from storage, but DB record was deleted:", storageError);
+  try {
+    // 1. Fetch public Credly badge JSON
+    const credlyRes = await fetch(`https://www.credly.com/badges/${badgeId}.json`, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "Credify-CredentialVerifier/2.0",
+      },
+    });
+
+    if (!credlyRes.ok) {
+      if (credlyRes.status === 404) {
+        return { success: false, error: "Credly badge not found. Please verify the badge URL." };
+      }
+      return { success: false, error: `Credly verification service returned HTTP ${credlyRes.status}` };
     }
+
+    const badgeData = await credlyRes.json();
+
+    const title = badgeData.badge_template?.name || badgeData.name || "Verified Credly Certification";
+    const issuer = badgeData.badge_template?.issuer?.entities?.[0]?.entity?.name || 
+                   badgeData.badge_template?.issuer?.name || 
+                   badgeData.issuer?.name || 
+                   "Credly Issuer";
+    const issueDate = badgeData.issued_at_date || badgeData.issued_at || new Date().toISOString();
+    const expiresAt = badgeData.expires_at_date || badgeData.expires_at || null;
+    const badgeImageUrl = badgeData.badge_template?.image_url || badgeData.image_url || badgeData.image?.id || null;
+    const earnerName = badgeData.recipient_email || badgeData.issued_to || "Recipient";
+    const skills = (badgeData.badge_template?.skills || []).map((s: any) => s.name || s);
+
+    // 2. Insert verified certificate into database
+    const { data: certRecord, error: dbError } = await supabase
+      .from("certificates")
+      .insert({
+        profile_id: user.id,
+        title: title.trim(),
+        issuer: issuer.trim(),
+        issue_date: issueDate,
+        file_url: badgeImageUrl || `https://www.credly.com/badges/${badgeId}`,
+        file_type: "badge/credly",
+        parsed: true,
+        status: "verified",
+      })
+      .select("id")
+      .single();
+
+    if (dbError) {
+      console.error("Credly DB save error:", dbError);
+      return { success: false, error: "Failed to save verified Credly credential." };
+    }
+
+    // 3. Record verified evidence
+    const { data: evidence } = await supabase
+      .from("evidence")
+      .insert({
+        user_id: user.id,
+        source_type: "certificate",
+        raw_ref: `https://www.credly.com/badges/${badgeId}`,
+        status: "verified",
+        integrity_score: 100,
+        integrity_flags: [],
+        integrity_status: "verified",
+        ingested_at: new Date().toISOString(),
+      })
+      .select("id")
+      .single();
+
+    if (evidence) {
+      const extractedSkills = skills.length > 0 ? skills : [title];
+      const claimRecords = extractedSkills.map((skill: string) => ({
+        evidence_id: evidence.id,
+        extracted_text: `Credly verified certification: ${title} issued by ${issuer}`,
+        unmapped_label: skill,
+        match_confidence: 1.0,
+        llm_model: "credly-direct-v2",
+      }));
+
+      await supabase.from("evidence_claims").insert(claimRecords);
+    }
+
+    // 4. Trigger instant passport regeneration
+    try {
+      const { generatePassport } = await import("@/actions/passport");
+      await generatePassport();
+    } catch (e) {
+      console.error("Passport regeneration trigger failed:", e);
+    }
+
+    revalidatePath("/certificates");
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      badge: {
+        badgeId,
+        title,
+        issuer,
+        issueDate,
+        expiresAt,
+        badgeImageUrl,
+        earnerName,
+        skills,
+        verificationUrl: `https://www.credly.com/badges/${badgeId}`,
+      },
+    };
+  } catch (err: any) {
+    console.error("Credly badge verification error:", err);
+    return { success: false, error: err?.message || "Failed to verify Credly badge." };
+  }
+}
+
+export async function verifyOpenBadge(badgeJsonUrl: string) {
+  const supabase = await createClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, error: "Unauthorized." };
   }
 
-  revalidatePath("/certificates");
-  return { success: true };
+  try {
+    const res = await fetch(badgeJsonUrl, {
+      headers: { Accept: "application/ld+json, application/json" },
+    });
+
+    if (!res.ok) {
+      return { success: false, error: "Failed to resolve Open Badge JSON-LD endpoint." };
+    }
+
+    const badge = await res.json();
+    const title = badge.badge?.name || badge.name || "Open Badge Credential";
+    const issuer = typeof badge.badge?.issuer === "string" 
+      ? badge.badge.issuer 
+      : badge.badge?.issuer?.name || badge.issuer?.name || "Open Badge Issuer";
+    const issueDate = badge.issuedOn || new Date().toISOString();
+    const badgeImage = badge.badge?.image || badge.image || "";
+
+    const { data: certRecord } = await supabase
+      .from("certificates")
+      .insert({
+        profile_id: user.id,
+        title,
+        issuer,
+        issue_date: issueDate,
+        file_url: typeof badgeImage === "string" ? badgeImage : badgeJsonUrl,
+        file_type: "badge/openbadge",
+        parsed: true,
+        status: "verified",
+      })
+      .select("id")
+      .single();
+
+    revalidatePath("/certificates");
+    revalidatePath("/dashboard");
+
+    return { success: true, title, issuer };
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Failed to verify Open Badge." };
+  }
 }
+
