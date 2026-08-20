@@ -11,7 +11,23 @@ export async function GET(request: Request) {
 
   if (error || !code) {
     console.error("GitHub OAuth Error:", error, errorDescription);
-    return NextResponse.redirect(`${dashboardRedirect}?auth_error=${error || "missing_code"}`);
+    const errCode = error || "missing_code";
+    return new Response(
+      `<!DOCTYPE html>
+      <html>
+      <body>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: '${errCode}' }, '*');
+            window.close();
+          } else {
+            window.location.href = '${dashboardRedirect}?auth_error=${errCode}';
+          }
+        </script>
+      </body>
+      </html>`,
+      { headers: { "Content-Type": "text/html" } }
+    );
   }
 
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -19,7 +35,22 @@ export async function GET(request: Request) {
 
   if (!clientId || !clientSecret) {
     console.error("Missing GitHub OAuth credentials in environment");
-    return NextResponse.redirect(`${dashboardRedirect}?auth_error=server_configuration_error`);
+    return new Response(
+      `<!DOCTYPE html>
+      <html>
+      <body>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: 'server_configuration_error' }, '*');
+            window.close();
+          } else {
+            window.location.href = '${dashboardRedirect}?auth_error=server_configuration_error';
+          }
+        </script>
+      </body>
+      </html>`,
+      { headers: { "Content-Type": "text/html" } }
+    );
   }
 
   try {
@@ -41,7 +72,22 @@ export async function GET(request: Request) {
 
     if (tokenData.error) {
       console.error("GitHub token exchange error:", tokenData);
-      return NextResponse.redirect(`${dashboardRedirect}?auth_error=${tokenData.error}`);
+      return new Response(
+        `<!DOCTYPE html>
+        <html>
+        <body>
+          <script>
+            if (window.opener) {
+              window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: '${tokenData.error}' }, '*');
+              window.close();
+            } else {
+              window.location.href = '${dashboardRedirect}?auth_error=${tokenData.error}';
+            }
+          </script>
+        </body>
+        </html>`,
+        { headers: { "Content-Type": "text/html" } }
+      );
     }
 
     const accessToken = tokenData.access_token;
@@ -61,18 +107,51 @@ export async function GET(request: Request) {
     const userData = await userResponse.json();
     const login = userData.login;
 
-    // 3. Redirect back to the frontend with the token and login
-    // In a real production app, you would set a secure HTTP-only cookie here, 
-    // but we'll stick to the existing architecture of passing it in the URL 
-    // to let the frontend server action grab it and persist it in Supabase.
-    const redirectUrl = new URL(dashboardRedirect);
-    redirectUrl.searchParams.set("github_token", accessToken);
-    redirectUrl.searchParams.set("github_login", login);
+    // 3. Popup friendly response: notify opener window and close popup
+    return new Response(
+      `<!DOCTYPE html>
+      <html>
+      <head><title>GitHub Connected</title></head>
+      <body style="background:#09090b;color:#fafafa;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+        <div style="text-align:center;">
+          <h2 style="font-size:18px;margin-bottom:8px;">GitHub Connected Successfully</h2>
+          <p style="font-size:14px;color:#a1a1aa;">Importing your profile & closing window...</p>
+        </div>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage({ 
+              type: 'GITHUB_AUTH_SUCCESS', 
+              token: '${accessToken}', 
+              login: '${login}' 
+            }, '*');
+            setTimeout(() => window.close(), 300);
+          } else {
+            window.location.href = '${dashboardRedirect}?github_token=${accessToken}&github_login=${login}';
+          }
+        </script>
+      </body>
+      </html>`,
+      { headers: { "Content-Type": "text/html" } }
+    );
 
-    return NextResponse.redirect(redirectUrl.toString());
-
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error during GitHub OAuth callback:", err);
-    return NextResponse.redirect(`${dashboardRedirect}?auth_error=internal_server_error`);
+    return new Response(
+      `<!DOCTYPE html>
+      <html>
+      <body>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: 'internal_server_error' }, '*');
+            window.close();
+          } else {
+            window.location.href = '${dashboardRedirect}?auth_error=internal_server_error';
+          }
+        </script>
+      </body>
+      </html>`,
+      { headers: { "Content-Type": "text/html" } }
+    );
   }
 }
+
