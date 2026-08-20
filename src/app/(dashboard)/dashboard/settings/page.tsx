@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/shared/page-header";
 import { SettingsForm } from "@/components/settings/settings-form";
 import { GitHubSettings } from "@/components/settings/github-settings";
-import { ProviderToggle } from "@/components/settings/provider-toggle";
-import { getAiProvider } from "@/actions/settings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function SettingsPage() {
@@ -31,7 +29,7 @@ export default async function SettingsPage() {
     .eq("profile_id", user.id)
     .single();
 
-  const provider = await getAiProvider();
+
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-8 animate-fade-in">
@@ -58,16 +56,6 @@ export default async function SettingsPage() {
           </CardHeader>
           <CardContent>
             <GitHubSettings connection={connection} />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>AI Preferences</CardTitle>
-            <CardDescription>Choose the AI model that powers your skill extraction and insights.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ProviderToggle initialProvider={provider} />
           </CardContent>
         </Card>
       </div>

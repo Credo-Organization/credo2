@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -23,6 +24,9 @@ export function SettingsForm({ profile }: { profile: Profile }) {
       bio: formData.get("bio") as string,
       college_name: formData.get("college_name") as string,
       graduation_year: formData.get("graduation_year") as string,
+      degree: formData.get("degree") as string,
+      career_goal: formData.get("career_goal") as string,
+      gender: formData.get("gender") as string,
     };
 
     const result = await updateProfile(data);
@@ -79,6 +83,43 @@ export function SettingsForm({ profile }: { profile: Profile }) {
             placeholder="e.g. 2026"
           />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="degree">Degree</Label>
+          <Input 
+            id="degree" 
+            name="degree" 
+            defaultValue={profile.degree || ""} 
+            placeholder="e.g. B.Tech Computer Science"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="career_goal">Career Goal / Headline</Label>
+          <Input 
+            id="career_goal" 
+            name="career_goal" 
+            defaultValue={profile.headline || ""} 
+            placeholder="e.g. Frontend Engineer"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="gender">Gender</Label>
+        <Select name="gender" defaultValue={profile.gender || "male"}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Gender" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Male">Male</SelectItem>
+            <SelectItem value="Female">Female</SelectItem>
+            <SelectItem value="Non-binary">Non-binary</SelectItem>
+            <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex justify-end pt-4 border-t border-border">

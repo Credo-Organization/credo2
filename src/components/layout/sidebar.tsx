@@ -26,6 +26,7 @@ const SIDEBAR_ITEMS = [
   { name: "Create Teammates", href: "/dashboard/create-teammates", icon: UserPlus },
   { name: "Internships", href: "/dashboard/internships", icon: Briefcase },
   { name: "Certificates", href: "/dashboard/certificates", icon: FileBadge },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 export function Sidebar() {

@@ -11,7 +11,7 @@ export async function setAiProvider(provider: "gemini" | "xai") {
     path: "/",
   });
   
-  revalidatePath("/settings");
+  revalidatePath("/dashboard/settings");
   revalidatePath("/certificates"); // Where extraction happens
   
   return { success: true };
