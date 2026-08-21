@@ -269,14 +269,14 @@ def calculate_team_synergy(req: TeamSynergyRequest):
     scored_teams = []
 
     for team in sample_teams:
-        req_skills = [s.lower() for s in team["required_skills"]]
-        matched_skills = [s for s in team["required_skills"] if s.lower() in user_skills_lower]
+        team_required_skills: list[str] = [str(s) for s in team["required_skills"]]
+        matched_skills: list[str] = [s for s in team_required_skills if s.lower() in user_skills_lower]
         
         # Calculate synergy: base fit + complementary power
-        match_ratio = len(matched_skills) / max(len(req_skills), 1)
+        match_ratio = len(matched_skills) / max(len(team_required_skills), 1)
         synergy_score = int(min(98, max(58, match_ratio * 100 + 15)))
         
-        complementary_reasons = []
+        complementary_reasons: list[str] = []
         if matched_skills:
             complementary_reasons.append(f"You provide essential {', '.join(matched_skills[:2])} skills.")
         if req.career_goal and any(w in req.career_goal.lower() for w in ["ai", "full", "backend", "lead"]):
