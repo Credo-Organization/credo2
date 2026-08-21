@@ -6,7 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { GeneratePassportButton } from "@/components/passport/generate-button";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { OpportunityMatcher } from "@/components/dashboard/opportunity-matcher";
+import { DashboardInternshipPreviewCard } from "@/components/dashboard/internship-preview-card";
+import { DashboardProofHUD } from "@/components/dashboard/proof-hud";
 import { generatePassport } from "@/actions/passport";
 
 export default async function DashboardPage() {
@@ -223,7 +224,14 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="w-full min-h-full flex flex-col gap-10 px-4 sm:px-8 py-10 max-w-[1400px] mx-auto">
+    <div className="w-full min-h-full flex flex-col gap-8 px-4 sm:px-8 py-8 max-w-[1400px] mx-auto">
+      {/* TOP CRYPTOGRAPHIC PROOF HUD */}
+      <DashboardProofHUD
+        studentId={studentPassportData?.studentId}
+        repoCount={mappedData.githubRepos}
+        certCount={mappedData.certificates}
+      />
+
       {/* TOP ROW: Passport Card Switcher + Skill Gap Analysis */}
       <div className="w-full flex flex-col lg:flex-row items-start justify-start gap-8 lg:gap-12">
         {/* LEFT: Passport Card Switcher */}
@@ -232,61 +240,85 @@ export default async function DashboardPage() {
         </div>
 
         {/* RIGHT: Skill Gap Analysis & Career Recommendations */}
-        <div className="flex-1 w-full flex flex-col justify-start gap-8 pr-2 pb-6">
-          {/* Section 1: Gap Analysis */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <Brain className="w-4 h-4 text-blue-400" />
-              <h3 className="text-[12px] font-bold tracking-widest text-blue-400 uppercase">
-                AI Skill Gap Analysis
-              </h3>
-            </div>
-            <div>
-              <p className="text-[15px] text-white/80 leading-relaxed font-medium">
-                {mappedData?.missingSkillsAnalysis?.description || "Keep building to unlock gap analysis."}
-              </p>
-            </div>
+        <div className="flex-1 w-full flex flex-col justify-start gap-7 pr-1 pb-4">
+          {/* Section 1: Live Internship Match Engine Preview */}
+          <div>
+            <DashboardInternshipPreviewCard
+              careerGoal={mappedData.careerGoal}
+              verifiedSkillsCount={mappedData.verifiedSkillsCount}
+            />
           </div>
-          
-          {/* Section 2: Recommended Tech Stack */}
-          <div className="flex flex-col gap-4 pt-6 border-t border-white/[0.08]">
-            <div className="flex items-center gap-3">
-              <Target className="w-4 h-4 text-emerald-400" />
-              <h3 className="text-[12px] font-bold tracking-widest text-emerald-400 uppercase">
-                Recommended Tech Stack
-              </h3>
-            </div>
-            <div className="flex flex-wrap gap-2.5">
-              {(mappedData?.missingSkillsAnalysis?.recommendedTechStack || []).map((tech: string) => (
-                <span key={tech} className="px-4 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] shadow-sm text-[13px] text-white/95 font-medium tracking-wide">
-                  {tech}
+
+          {/* Section 2: AI Skill Gap Intelligence */}
+          <div className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                <Brain className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[11px] font-bold tracking-widest text-blue-400 uppercase">
+                  AI Skill Intelligence
                 </span>
-              ))}
+                <h4 className="text-sm font-bold text-white tracking-tight">
+                  Target Career Benchmark
+                </h4>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-white/75 leading-relaxed font-normal">
+              {mappedData?.missingSkillsAnalysis?.description || "Keep building to unlock gap analysis."}
+            </p>
+
+            {/* Recommended Tech Stack Pills */}
+            <div className="pt-3 border-t border-white/[0.06] space-y-2.5">
+              <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider block">
+                Recommended Growth Vectors
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {(mappedData?.missingSkillsAnalysis?.recommendedTechStack || []).map((tech: string) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs text-white/90 font-medium tracking-wide shadow-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Section 3: Suggested Projects */}
-          <div className="flex flex-col gap-4 pt-6 border-t border-white/[0.08]">
-            <div className="flex items-center gap-3">
-              <Briefcase className="w-4 h-4 text-purple-400" />
-              <h3 className="text-[12px] font-bold tracking-widest text-purple-400 uppercase">
-                Suggested Projects
-              </h3>
+          {/* Section 3: Suggested Proof-of-Work Projects */}
+          <div className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                <Briefcase className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[11px] font-bold tracking-widest text-purple-400 uppercase">
+                  Proof-of-Work Blueprints
+                </span>
+                <h4 className="text-sm font-bold text-white tracking-tight">
+                  High-Impact Suggested Projects
+                </h4>
+              </div>
             </div>
-            <div className="flex flex-col gap-3.5 mt-1">
+
+            <div className="flex flex-col gap-3">
               {(mappedData?.missingSkillsAnalysis as any)?.suggestedProjects?.map((proj: any, idx: number) => (
-                <div key={idx} className="flex flex-col gap-1.5 p-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] transition-colors relative overflow-hidden group">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500/40 group-hover:bg-purple-400 transition-colors" />
-                  <span className="text-[14px] text-white font-bold tracking-tight">{proj.name}</span>
-                  <span className="text-[13px] text-white/60 leading-relaxed">{proj.description}</span>
+                <div
+                  key={idx}
+                  className="p-4 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] transition-all relative overflow-hidden group"
+                >
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500/40 to-purple-500/40 group-hover:from-blue-400 group-hover:to-purple-400 transition-colors" />
+                  <span className="text-xs sm:text-sm text-white font-bold tracking-tight block">
+                    {proj.name}
+                  </span>
+                  <span className="text-xs text-white/60 leading-relaxed mt-1 block">
+                    {proj.description}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Section 4: Opportunity Matcher */}
-          <div className="pt-6 border-t border-white/[0.08]">
-            <OpportunityMatcher />
           </div>
         </div>
       </div>
