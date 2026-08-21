@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.pptx.pdf
 
 # debug
 npm-debug.log*
@@ -42,10 +43,14 @@ next-env.d.ts
 .gstack/
 
 # python & backend
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
 backend/.venv/
 backend/venv/
 backend/**/__pycache__/
-*.pyc
 *.db
 backend/gitproof_memory.db
 temp-agent/

@@ -1,5 +1,6 @@
 import os
-from typing import Annotated, Dict, Any, List, TypedDict
+from typing import Annotated, Dict, Any, List
+from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
@@ -119,28 +120,34 @@ def compute_match(state: GraphState):
         """
         
         res = None
-        # 1. Try OpenRouter Grok-2 if key is configured
-        openrouter_key = os.environ.get("OPENROUTER_API_KEY")
-        if openrouter_key and openrouter_key != "mock_key_for_now":
-            try:
-                print("--- Attempting Match Evaluator via OpenRouter (Grok 2) ---")
-                llm = ChatOpenAI(base_url="https://openrouter.ai/api/v1", api_key=openrouter_key, model="x-ai/grok-2")
-                structured_llm = llm.with_structured_output(MatchResultSchema)
-                res = structured_llm.invoke(prompt)
-            except Exception as e:
-                print(f"--- Grok 2 failed: {e} ---")
+        base_url = os.environ.get("AI_BASE_URL") or os.environ.get("OPENROUTER_BASE_URL") or "https://aicredits.in/v1"
+        api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("AICREDIT_API_KEY")
 
-        # 2. Try Gemini (Google Generative AI)
+        # 1. Try AICredits / OpenRouter Gateway with Grok-2 or Gemini 2.5 Flash
+        if api_key and api_key != "mock_key_for_now":
+            # Attempt 1a: Grok-2 / Gemini 2.5 Flash via Gateway
+            for model_candidate in ["x-ai/grok-2", "google/gemini-2.5-flash", "openai/gpt-4o-mini"]:
+                try:
+                    print(f"--- Attempting Match Evaluator via Gateway ({model_candidate}) ---")
+                    llm = ChatOpenAI(base_url=base_url, api_key=api_key, model=model_candidate, timeout=10)
+                    structured_llm = llm.with_structured_output(MatchResultSchema)
+                    res = structured_llm.invoke(prompt)
+                    if res:
+                        break
+                except Exception as e:
+                    print(f"--- Gateway model {model_candidate} failed: {e} ---")
+
+        # 2. Try Direct Gemini API (Google Generative AI)
         if res is None:
             google_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
             if google_key and google_key != "mock_key_for_now":
                 try:
-                    print("--- Attempting Match Evaluator via Gemini (gemini-2.5-flash) ---")
-                    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=google_key)
+                    print("--- Attempting Match Evaluator via Native Gemini (gemini-2.5-flash) ---")
+                    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=google_key, timeout=10)
                     structured_llm = llm.with_structured_output(MatchResultSchema)
                     res = structured_llm.invoke(prompt)
                 except Exception as e:
-                    print(f"--- Gemini failed: {e} ---")
+                    print(f"--- Native Gemini failed: {e} ---")
 
         # 3. Deterministic scoring fallback if all LLMs are unreachable
         if res is None:
@@ -163,7 +170,8 @@ def compute_match(state: GraphState):
 
 
 # --- Build Graph ---
-workflow = StateGraph(GraphState)
+# Note: cast or type ignore resolves Pyright's TypedDictLike protocol limitation with LangGraph's StateT
+workflow = StateGraph(GraphState)  # type: ignore[arg-type]
 
 # Add Nodes
 workflow.add_node("Verify_Git_Proof", verify_git_proof)
