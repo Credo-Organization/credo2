@@ -250,7 +250,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Section 2: AI Skill Gap Intelligence */}
-          <div className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4">
+          <div id="gap-analysis" className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4 scroll-mt-24">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <Brain className="w-4 h-4" />
@@ -324,7 +324,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* BOTTOM ROW: Comprehensive Repositories, Language Scores & Certificate Audit Breakdown */}
-      <div className="w-full pt-4">
+      <div id="audit-console" className="w-full pt-4 scroll-mt-24">
         <AuditBreakdownPanel
           repos={repoItems}
           languages={languageScores}
