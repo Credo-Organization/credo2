@@ -21,7 +21,8 @@ import {
   Calendar,
   Lock,
   Sparkles,
-  Cpu
+  Cpu,
+  Trash2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,11 +30,13 @@ interface CertificateDetailModalProps {
   cert: any;
   isOpen: boolean;
   onClose: () => void;
+  onDelete?: (certId: string, fileUrl?: string) => Promise<void>;
 }
 
-export function CertificateDetailModal({ cert, isOpen, onClose }: CertificateDetailModalProps) {
+export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: CertificateDetailModalProps) {
   const [copied, setCopied] = useState(false);
   const [showRawJson, setShowRawJson] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (!cert) return null;
 
@@ -204,29 +207,48 @@ export function CertificateDetailModal({ cert, isOpen, onClose }: CertificateDet
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between gap-3 pt-4 border-t border-white/[0.06]">
-            {cert.file_url ? (
-              <a
-                href={cert.file_url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-block"
-              >
-                <Button
-                  variant="outline"
-                  className="h-9 px-4 text-xs font-semibold text-white bg-white/[0.04] border-white/[0.1] hover:bg-white/[0.08] rounded-xl flex items-center gap-1.5"
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/[0.06]">
+            <div className="flex items-center gap-2">
+              {cert.file_url && (
+                <a
+                  href={cert.file_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-block"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  View Original Document
+                  <Button
+                    variant="outline"
+                    className="h-9 px-3.5 text-xs font-semibold text-white bg-white/[0.04] border-white/[0.1] hover:bg-white/[0.08] rounded-xl flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    View Original
+                  </Button>
+                </a>
+              )}
+
+              {onDelete && (
+                <Button
+                  onClick={async () => {
+                    if (confirm(`Are you sure you want to delete "${cert.title}"?`)) {
+                      setIsDeleting(true);
+                      await onDelete(cert.id, cert.file_url);
+                      setIsDeleting(false);
+                      onClose();
+                    }
+                  }}
+                  disabled={isDeleting}
+                  variant="ghost"
+                  className="h-9 px-3 text-xs font-semibold text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/10 rounded-xl flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </Button>
-              </a>
-            ) : (
-              <div />
-            )}
+              )}
+            </div>
 
             <Button
               onClick={onClose}
-              className="h-9 px-5 text-xs font-semibold bg-white text-black hover:bg-white/90 rounded-xl"
+              className="h-9 px-5 text-xs font-semibold bg-white text-black hover:bg-white/90 rounded-xl cursor-pointer ml-auto"
             >
               Close Inspector
             </Button>

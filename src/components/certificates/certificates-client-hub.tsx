@@ -13,11 +13,14 @@ import {
   Clock, 
   Key, 
   Eye,
-  Plus
+  Plus,
+  Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CertificateUploader } from "./certificate-uploader";
 import { CertificateDetailModal } from "./certificate-detail-modal";
+import { deleteCertificate } from "@/actions/certificates";
+import { toast } from "sonner";
 
 interface Certificate {
   id: string;
@@ -39,12 +42,28 @@ interface CertificatesClientHubProps {
 }
 
 export function CertificatesClientHub({ certificates, studentDid = "did:cdy:ed25519:7421student" }: CertificatesClientHubProps) {
+  const [certsList, setCertsList] = useState<Certificate[]>(certificates);
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "verified" | "pending">("all");
 
+  // Keep certsList in sync if parent prop changes
+  React.useEffect(() => {
+    setCertsList(certificates);
+  }, [certificates]);
+
+  const handleDeleteCertificate = async (certId: string, fileUrl?: string) => {
+    try {
+      setCertsList((prev) => prev.filter((c) => c.id !== certId));
+      toast.success("Certificate removed from your passport.");
+      await deleteCertificate(certId, fileUrl);
+    } catch (err: any) {
+      console.log("Delete error fallback", err);
+    }
+  };
+
   const filteredCerts = useMemo(() => {
-    return certificates.filter((cert) => {
+    return certsList.filter((cert) => {
       const matchesStatus = filterStatus === "all" || cert.status === filterStatus;
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
@@ -54,9 +73,9 @@ export function CertificatesClientHub({ certificates, studentDid = "did:cdy:ed25
 
       return matchesStatus && matchesSearch;
     });
-  }, [certificates, filterStatus, searchQuery]);
+  }, [certsList, filterStatus, searchQuery]);
 
-  const verifiedCount = certificates.filter((c) => c.status === "verified").length;
+  const verifiedCount = certsList.filter((c) => c.status === "verified").length;
 
   return (
     <div className="w-full space-y-8">
@@ -283,6 +302,19 @@ export function CertificatesClientHub({ certificates, studentDid = "did:cdy:ed25
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   )}
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm(`Are you sure you want to delete "${cert.title}"?`)) {
+                        handleDeleteCertificate(cert.id, cert.file_url);
+                      }
+                    }}
+                    className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white/40 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                    title="Delete Certificate"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             );
@@ -296,6 +328,7 @@ export function CertificatesClientHub({ certificates, studentDid = "did:cdy:ed25
           cert={selectedCert}
           isOpen={!!selectedCert}
           onClose={() => setSelectedCert(null)}
+          onDelete={handleDeleteCertificate}
         />
       )}
     </div>

@@ -370,6 +370,8 @@ export async function deleteCertificate(certificateId: number | string, fileUrl?
     }
   }
 
+  revalidatePath("/dashboard/certificates");
   revalidatePath("/certificates");
+  revalidatePath("/dashboard");
   return { success: true };
 }
