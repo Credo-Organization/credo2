@@ -183,6 +183,121 @@ def auth_callback(request: Request):
     url = f"/gitproof/auth/callback?{query}" if query else "/gitproof/auth/callback"
     return RedirectResponse(url=url)
 
+class TeamSynergyRequest(BaseModel):
+    user_skills: list[str] = Field(default_factory=list)
+    career_goal: Optional[str] = "Full Stack Engineer"
+    preferred_track: Optional[str] = None
+
+@app.post("/api/team/synergy-match")
+def calculate_team_synergy(req: TeamSynergyRequest):
+    """
+    Computes complementary team compatibility between student's verified skills 
+    and open hackathon squads.
+    """
+    sample_teams = [
+        {
+            "id": "squad-01",
+            "name": "NeuralForge AI",
+            "track": "Smart Automation & AI",
+            "problem": "Autonomous code synthesis & vulnerability repair pipeline",
+            "leader": "Arjun Mehta (IIT Bombay)",
+            "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80",
+            "current_members": [
+                {"name": "Arjun M.", "role": "ML Lead", "skills": ["PyTorch", "Python", "HuggingFace"]},
+                {"name": "Sneha P.", "role": "UI/UX", "skills": ["Figma", "React", "TailwindCSS"]}
+            ],
+            "open_roles": ["Backend & LangGraph Architect", "DevOps & Cloud Engineer"],
+            "required_skills": ["FastAPI", "Python", "Docker", "PostgreSQL", "LangGraph"],
+            "max_members": 4,
+            "discord": "discord.gg/neuralforge",
+            "github_repo": "NeuralForge-SIH/core-agent"
+        },
+        {
+            "id": "squad-02",
+            "name": "ZeroKnowledge Guild",
+            "track": "Blockchain & Cybersecurity",
+            "problem": "Decentralized verifiable identity & anti-sybil protocol",
+            "leader": "Priya Sharma (NIT Trichy)",
+            "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80",
+            "current_members": [
+                {"name": "Priya S.", "role": "ZK Cryptographer", "skills": ["Circom", "Rust", "Solidity"]},
+                {"name": "Dev K.", "role": "Smart Contracts", "skills": ["Solidity", "Hardhat", "Go"]}
+            ],
+            "open_roles": ["Frontend Web3 Integration", "Full-Stack Typescript Lead"],
+            "required_skills": ["TypeScript", "React", "Next.js", "Ethers.js", "TailwindCSS"],
+            "max_members": 4,
+            "discord": "discord.gg/zk-guild",
+            "github_repo": "zk-guild/identity-contracts"
+        },
+        {
+            "id": "squad-03",
+            "name": "AgriSense Drones",
+            "track": "AgriTech & IoT",
+            "problem": "Autonomous crop disease detection via multispectral satellite imagery",
+            "leader": "Rohan Verma (BITS Pilani)",
+            "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&auto=format&fit=crop&q=80",
+            "current_members": [
+                {"name": "Rohan V.", "role": "Embedded Systems", "skills": ["C++", "ROS", "Python"]},
+                {"name": "Ananya R.", "role": "Computer Vision", "skills": ["OpenCV", "TensorFlow", "YOLO"]}
+            ],
+            "open_roles": ["Distributed Backend & Cloud Pipeline", "Web GIS Dashboard Engineer"],
+            "required_skills": ["Python", "FastAPI", "React", "PostgreSQL", "Docker"],
+            "max_members": 4,
+            "discord": "discord.gg/agrisense",
+            "github_repo": "agrisense-sih/flight-telemetry"
+        },
+        {
+            "id": "squad-04",
+            "name": "MediTriage AI",
+            "track": "MedTech & Healthcare",
+            "problem": "Real-time emergency room triage and predictive vitals dashboard",
+            "leader": "Vikram Patel (IIIT Hyderabad)",
+            "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+            "current_members": [
+                {"name": "Vikram P.", "role": "Data Scientist", "skills": ["Python", "Scikit-Learn", "FastAPI"]},
+                {"name": "Meera J.", "role": "Mobile App Dev", "skills": ["Flutter", "Dart", "Firebase"]}
+            ],
+            "open_roles": ["Security & Cryptographic Audit Lead", "System Architect"],
+            "required_skills": ["Node.js", "TypeScript", "Docker", "Security", "GraphQL"],
+            "max_members": 4,
+            "discord": "discord.gg/meditriage",
+            "github_repo": "meditriage/vital-predict"
+        }
+    ]
+
+    user_skills_lower = [s.strip().lower() for s in req.user_skills]
+    scored_teams = []
+
+    for team in sample_teams:
+        req_skills = [s.lower() for s in team["required_skills"]]
+        matched_skills = [s for s in team["required_skills"] if s.lower() in user_skills_lower]
+        
+        # Calculate synergy: base fit + complementary power
+        match_ratio = len(matched_skills) / max(len(req_skills), 1)
+        synergy_score = int(min(98, max(58, match_ratio * 100 + 15)))
+        
+        complementary_reasons = []
+        if matched_skills:
+            complementary_reasons.append(f"You provide essential {', '.join(matched_skills[:2])} skills.")
+        if req.career_goal and any(w in req.career_goal.lower() for w in ["ai", "full", "backend", "lead"]):
+            complementary_reasons.append(f"Your goal as {req.career_goal} complements their roadmap.")
+            
+        scored_teams.append({
+            **team,
+            "synergy_score": synergy_score,
+            "matched_skills": matched_skills,
+            "complementary_note": " ".join(complementary_reasons) or "Great potential team addition for SIH 2026."
+        })
+
+    # Sort by highest synergy first
+    scored_teams.sort(key=lambda t: t["synergy_score"], reverse=True)
+
+    return {
+        "success": True,
+        "count": len(scored_teams),
+        "teams": scored_teams
+    }
+
 # Mount the full GitProof application at /gitproof
 app.mount("/gitproof", gitproof_app)
 
