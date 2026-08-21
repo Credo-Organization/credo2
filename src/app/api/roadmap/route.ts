@@ -1,5 +1,5 @@
 import { streamObject } from 'ai';
-import { aiModel } from '@/lib/ai-client';
+import { roadmapModel } from '@/lib/ai-client';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 
@@ -40,7 +40,7 @@ For 'learningOrder', provide chronologically ordered steps to learn each skill w
 For 'suggestedProject', design a capstone project utilizing the missing skills.`;
 
   const result = streamObject({
-    model: aiModel,
+    model: roadmapModel,
     schema: roadmapSchema,
     prompt: prompt,
     onFinish: async ({ object }) => {

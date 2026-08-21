@@ -2,7 +2,7 @@
 
 
 
-import { aiModel } from "@/lib/ai-client";
+import { coachModel } from "@/lib/ai-client";
 import { generateText } from "ai";
 
 export async function generateCoachingInsight(passport: any, job: any) {
@@ -11,7 +11,7 @@ export async function generateCoachingInsight(passport: any, job: any) {
     const skillNames = userSkills.map((s: any) => s.name).join(", ");
     
     const { text } = await generateText({
-      model: aiModel,
+      model: coachModel,
       system: "You are an expert career coach helping a junior developer land a job.",
       prompt: `Analyze this candidate's fit for this specific role.
       

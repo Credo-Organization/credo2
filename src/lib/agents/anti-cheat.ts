@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { aiModel } from "@/lib/ai-client";
+import { antiCheatModel, extractorModel, multimodalModel } from "@/lib/ai-client";
 import { z } from "zod";
 
 const integritySchema = z.object({
@@ -20,7 +20,7 @@ export async function evaluateEvidenceIntegrity(
     githubData?: any;
   }
 ): Promise<IntegrityResult> {
-  const model = aiModel;
+  const model = payload.fileBuffer ? multimodalModel : antiCheatModel;
 
   let systemInstruction = "";
   let messages: any[] = [];
@@ -82,7 +82,7 @@ Score: 95. Flags: []. Skills: ["TypeScript", "CSS", "Supabase", "PostgreSQL"]. S
     
     // For GitHub, we use a specialized fast/cheap model to extract stack first
     if (type === "github") {
-      const extractionModel = aiModel;
+      const extractionModel = extractorModel;
       const extractionSchema = z.object({
         skills: z.array(z.string()).describe("List of exact programming languages, frameworks, or tools used in the repo.")
       });

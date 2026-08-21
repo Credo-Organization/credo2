@@ -1,5 +1,5 @@
 import { generateObject } from "ai";
-import { aiModel, multimodalModel } from "@/lib/ai-client";
+import { extractorModel, multimodalModel, getModel } from "@/lib/ai-client";
 import { z } from "zod";
 import { normalizeSkill } from "./taxonomy-normalizer";
 import { cookies } from "next/headers";
@@ -94,7 +94,8 @@ export async function extractClaimsFromText(
     return cached.extracted_data as ExtractionResult;
   }
 
-  const model = aiModel;
+  // Use specialized extraction model (Gemini 2.5 Flash / Grok / custom provider)
+  const model = provider === "xai" ? getModel("x-ai/grok-2") : extractorModel;
 
   // 3. Chunking & Concurrency
   const chunks = chunkText(sourceText, 3000);

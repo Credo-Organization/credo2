@@ -3,9 +3,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { normalizeSkill } from "@/lib/extractor/taxonomy-normalizer";
 import { revalidatePath } from "next/cache";
-import { aiModel } from "@/lib/ai-client";
-import { generateObject } from "ai";
-import { z } from "zod";
 
 export async function generatePassport(skipRevalidate: boolean = false) {
   const supabase = await createClient();

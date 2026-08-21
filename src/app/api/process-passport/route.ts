@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { aiModel } from "@/lib/ai-client";
+import { coachModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
 import { z } from "zod";
 import { normalizeSkill } from "@/lib/extractor/taxonomy-normalizer";
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
         : "No specific real-world data available. Rely on general industry knowledge.";
 
       const { object } = await generateObject({
-        model: aiModel,
+        model: coachModel,
         schema: z.object({
           gap_analysis_text: z.string().describe("A 1-sentence supportive analysis of what skills the user lacks for their career goal based on their current skills."),
           recommended_tech_stack: z.array(z.string()).describe("List of 4 recommended technologies to learn next."),

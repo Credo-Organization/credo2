@@ -1,6 +1,6 @@
 import { Opportunity, OpportunityRequirement } from "./opportunity-matcher";
 import { extractSkillsFromTextFast } from "../extractor/taxonomy-normalizer";
-import { aiModel } from "@/lib/ai-client";
+import { matcherModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
 
   try {
     const { object } = await generateObject({
-      model: aiModel,
+      model: matcherModel,
       schema: z.object({
         jobs: z.array(z.object({
           job_title: z.string(),
