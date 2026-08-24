@@ -9,9 +9,10 @@ By connecting their GitHub profiles and uploading PDF certificates, users receiv
 ## 🌟 Key Features
 
 * **🛡️ AI Anti-Cheat Verification (GitProof)**: Evaluates GitHub repositories to detect cloned projects, low-effort forks, or boilerplate code using structured LLM evaluations, ensuring high integrity of all verified skills.
+* **🔐 Cryptographic Certificate Proof**: Every accepted certificate is fingerprinted server-side with a SHA-256 digest of the stored file bytes (`src/lib/crypto/certificate-proof.ts`), plus a deterministic issuer DID. Hosted badges (Credly / Open Badge) are committed to their canonical URL.
 * **⚡ Background AI Queuing**: Employs an asynchronous state-machine architecture to process heavy AI tasks without hitting serverless (Vercel) timeouts.
 * **🧠 Multi-Agent Orchestration**: Uses a deterministic LangGraph state machine and AICredits' high-performance OpenAI-compatible proxy to extract skills and match them semantically to industry requirements.
-* **💼 Real-Time Opportunity Matching**: Uses custom in-memory vector embeddings (cosine similarity) to match a candidate's verified skill passport against real-world job taxonomy.
+* **💼 Deterministic Opportunity Matching**: Scores a candidate's verified Skill Passport against role profiles built for the Indian market, comparing canonical skill IDs rather than keywords. Role profiles are AI-generated from the candidate's goal and verified skills; Credify does not currently ingest live job-board listings.
 * **🎨 Premium Glassmorphic UI**: Built with Next.js 14 and Framer Motion for a stunning, responsive, and deeply interactive user experience.
 
 ---
@@ -105,13 +106,24 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 OPENAI_API_KEY=your_aicredits_key_here
 ```
 
-Start the frontend development server:
+### 3. Apply the Database Schema
+
+Run `supabase-schema.sql` in the Supabase SQL editor to create the base tables, then apply the migration:
+
+```bash
+scripts/fix-profiles-schema.sql
+```
+
+This is **required**, not optional. It adds `gender`, `avatar_url` and `experience_level` to `profiles`, adds `sha256_hash` and `issuer_did` to `certificates`, and backfills `onboarding_completed` into Supabase Auth metadata. Without it, profile saves and certificate uploads are rejected by Postgres.
+
+### 4. Run the Frontend
+
 ```bash
 npm run dev
 ```
 The frontend will be available at `http://localhost:3000`.
 
-### 3. Configure the AI Microservice (FastAPI)
+### 5. Configure the AI Microservice (FastAPI)
 
 Open a **new terminal tab** and navigate to the backend directory:
 ```bash

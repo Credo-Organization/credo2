@@ -54,3 +54,6 @@ backend/**/__pycache__/
 *.db
 backend/gitproof_memory.db
 temp-agent/
+# local agent/session artifacts
+.claude/
+memory/

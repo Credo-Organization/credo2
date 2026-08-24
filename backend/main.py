@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Optional
+from typing import Optional, Any
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -194,7 +194,7 @@ def calculate_team_synergy(req: TeamSynergyRequest):
     Computes complementary team compatibility between student's verified skills 
     and open hackathon squads.
     """
-    sample_teams = [
+    sample_teams: list[dict[str, Any]] = [
         {
             "id": "squad-01",
             "name": "NeuralForge AI",
@@ -269,7 +269,8 @@ def calculate_team_synergy(req: TeamSynergyRequest):
     scored_teams = []
 
     for team in sample_teams:
-        team_required_skills: list[str] = [str(s) for s in team["required_skills"]]
+        raw_skills = team.get("required_skills", [])
+        team_required_skills: list[str] = [str(s) for s in raw_skills] if isinstance(raw_skills, list) else []
         matched_skills: list[str] = [s for s in team_required_skills if s.lower() in user_skills_lower]
         
         # Calculate synergy: base fit + complementary power

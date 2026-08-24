@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { syncGitHub, analyzeGitHubRealtime } from "@/actions/github";
 import { updateProfile } from "@/actions/profile";
 import { RealtimeScanModal } from "@/components/github/realtime-scan-modal";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   full_name: z.string().min(2, "Name must be at least 2 characters."),
@@ -134,13 +135,22 @@ export function UnifiedOnboardingForm() {
     setLoading(true);
     try {
       const values = form.getValues();
-      await updateProfile(values);
-    } catch (err) {
-      console.error("Failed to save profile", err);
-    } finally {
-      setLoading(false);
+      const res = await updateProfile(values);
+
+      // updateProfile RETURNS an error object, it does not throw. Without this
+      // check a failed save silently redirected as though it had worked.
+      if (!res?.success) {
+        toast.error(res?.error || "Could not save your profile. Please try again.");
+        return;
+      }
+
       router.push("/dashboard");
       router.refresh();
+    } catch (err: any) {
+      console.error("Failed to save profile", err);
+      toast.error(err?.message || "Something went wrong while saving your profile.");
+    } finally {
+      setLoading(false);
     }
   };
 

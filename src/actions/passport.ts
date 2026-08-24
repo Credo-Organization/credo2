@@ -150,30 +150,29 @@ export async function generatePassport(skipRevalidate: boolean = false) {
       verification_url: verificationUrl,
       degree: profile?.degree || "B.Tech – Computer Science Engineering",
       gender: profile?.gender || "Female",
-      courses_completed: repos.length > 0 ? repos.length : 14,
-      skills_verified: topSkills.length > 0 ? topSkills.length : 12,
-      certificates_earned: (certificates || []).length > 0 ? (certificates || []).length : 3,
+      courses_completed: repos.length,
+      skills_verified: topSkills.length,
+      certificates_earned: (certificates || []).length,
       profile: {
-        name: profile?.full_name || profile?.username || "Jane Doe",
+        name: profile?.full_name || profile?.username || "Unnamed Student",
         headline: profile?.headline || "Software Engineer",
         country: profile?.country || "India",
-        college: profile?.college_name || "IIT Delhi",
+        college: profile?.college_name || "",
         avatar_url: profile?.avatar_url || "",
         gender: profile?.gender || "Female",
         degree: profile?.degree || "B.Tech – Computer Science Engineering",
       },
       github: {
         username: connection?.github_username || "developer",
-        total_repos: repos.length > 0 ? repos.length : 14,
+        total_repos: repos.length,
         total_stars: repos.reduce((acc: number, r: any) => acc + (r.stars_count || 0), 0),
       },
       certificates: (certificates || []).length,
       skills: topSkills,
       has_flagged_items: false,
-      top_projects: (repos.length > 0 ? repos : [
-        { name: "credo-ai-passport", description: "Cryptographic skill passport verification engine", primary_language: "TypeScript", stars_count: 12 },
-        { name: "gitproof-analyzer", description: "Hamiltonian code graph parser and anti-cheat scanner", primary_language: "Python", stars_count: 8 }
-      ]).slice(0, 2).map((r: any) => ({
+      // No invented projects. A passport that lists repositories the student
+      // never wrote is the exact failure this product exists to prevent.
+      top_projects: repos.slice(0, 2).map((r: any) => ({
         name: r.name, description: r.description || "Portfolio project", language: r.primary_language || "TypeScript", stars: r.stars_count || 0
       })),
       insights

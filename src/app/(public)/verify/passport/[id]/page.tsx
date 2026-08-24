@@ -17,7 +17,9 @@ export default async function VerifyPassportPage({ params }: Props) {
     .select("*, profiles(*)")
     .order("generated_at", { ascending: false });
 
-  // Find passport matching student_id or card_id or fallback
+  // Find the passport matching this exact identifier. There is deliberately no
+  // fallback here: returning passports[0] on a miss meant an unknown or mistyped
+  // ID rendered an unrelated student's passport as "verified".
   const matched = passports?.find((p: any) => {
     const snap = p.snapshot_data;
     return (
@@ -25,7 +27,29 @@ export default async function VerifyPassportPage({ params }: Props) {
       snap?.card_id === id ||
       p.id === id
     );
-  }) || passports?.[0];
+  });
+
+  if (!matched) {
+    return (
+      <div className="min-h-screen bg-[#050811] text-white flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-5">
+          <ShieldCheck className="w-8 h-8 text-amber-400" />
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight mb-2">Passport Not Found</h1>
+        <p className="text-sm text-zinc-400 max-w-sm">
+          No Credify passport is registered under the identifier
+          <span className="font-mono text-zinc-300"> {id}</span>. Check the link or
+          rescan the QR code on the card.
+        </p>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors mt-6"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Credify Home
+        </Link>
+      </div>
+    );
+  }
 
   const snap = matched?.snapshot_data;
   const profile = matched?.profiles;
@@ -33,16 +57,16 @@ export default async function VerifyPassportPage({ params }: Props) {
   const studentData = {
     cardId: snap?.card_id || `CDY2025-${id.slice(-6)}`,
     studentId: snap?.student_id || id,
-    name: snap?.profile?.name || profile?.full_name || "Jane Doe",
+    name: snap?.profile?.name || profile?.full_name || "Unnamed Student",
     gender: snap?.gender || profile?.gender || "Female",
     degree: snap?.degree || profile?.degree || "B.Tech – Computer Science Engineering",
-    college: snap?.profile?.college || profile?.college_name || "IIT Delhi",
+    college: snap?.profile?.college || profile?.college_name || "",
     avatarUrl: snap?.profile?.avatar_url || profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
     issueDate: snap?.issue_date || "18 MAY 2025",
     expiryDate: snap?.expiry_date || "17 MAY 2027",
-    coursesCompleted: snap?.courses_completed || 14,
-    skillsVerified: snap?.skills_verified || 12,
-    certificatesEarned: snap?.certificates_earned || 3,
+    coursesCompleted: snap?.courses_completed ?? 0,
+    skillsVerified: snap?.skills_verified ?? 0,
+    certificatesEarned: snap?.certificates_earned ?? 0,
     verificationUrl: snap?.verification_url || `https://credify.dev/verify/passport/${id}`,
   };
 

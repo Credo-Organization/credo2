@@ -75,6 +75,16 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Solidity: "#AA6746",
 };
 
+function AuditEmptyState({ label, hint }: { label: string; hint: string }) {
+  return (
+    <div className="py-14 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-border/60 bg-card/20">
+      <ShieldCheck className="w-9 h-9 text-muted-foreground/30 mb-2.5" />
+      <h4 className="text-sm font-bold text-foreground">{label}</h4>
+      <p className="text-xs text-muted-foreground max-w-xs mt-1">{hint}</p>
+    </div>
+  );
+}
+
 export function AuditBreakdownPanel({
   repos = [],
   languages = [],
@@ -83,76 +93,13 @@ export function AuditBreakdownPanel({
 }: AuditBreakdownProps) {
   const [activeTab, setActiveTab] = useState<"repos" | "languages" | "certificates">("repos");
 
-  // Fallback demo data if no repos yet to ensure UI always looks rich
-  const displayRepos: RepoItem[] =
-    repos.length > 0
-      ? repos
-      : [
-          {
-            name: "credo-ai-passport",
-            description: "Cryptographic skill passport & Hamiltonian code graph engine",
-            language: "TypeScript",
-            stars: 18,
-            forks: 4,
-            integrity_status: "verified",
-            integrity_score: 99,
-            skills: ["TypeScript", "Next.js", "Supabase", "TailwindCSS"],
-          },
-          {
-            name: "gitproof-verifier",
-            description: "Anti-cheat source tree multi-extension AST analyzer",
-            language: "Python",
-            stars: 12,
-            forks: 2,
-            integrity_status: "verified",
-            integrity_score: 97,
-            skills: ["Python", "FastAPI", "Static Analysis", "Pydantic"],
-          },
-          {
-            name: "distributed-consensus-raft",
-            description: "Raft consensus implementation with RPC heartbeats",
-            language: "Go",
-            stars: 9,
-            forks: 1,
-            integrity_status: "verified",
-            integrity_score: 95,
-            skills: ["Go", "Distributed Systems", "gRPC", "Networking"],
-          },
-        ];
-
-  // Derive languages if empty
-  const displayLanguages: LanguageScore[] =
-    languages.length > 0
-      ? languages
-      : [
-          { language: "TypeScript", percentage: 48, repoCount: 6, confidence: "High" },
-          { language: "Python", percentage: 28, repoCount: 4, confidence: "High" },
-          { language: "Go", percentage: 14, repoCount: 2, confidence: "Medium" },
-          { language: "PostgreSQL / SQL", percentage: 10, repoCount: 2, confidence: "Medium" },
-        ];
-
-  // Fallback certificates if empty
-  const displayCerts: CertificateItem[] =
-    certificates.length > 0
-      ? certificates
-      : [
-          {
-            title: "AWS Certified Solutions Architect – Associate",
-            issuer: "Amazon Web Services (Credly)",
-            issue_date: "14 Feb 2025",
-            status: "verified",
-            file_type: "badge/credly",
-            skills: ["AWS", "Cloud Architecture", "S3", "Lambda", "IAM"],
-          },
-          {
-            title: "Meta Front-End Developer Professional Certificate",
-            issuer: "Meta (Coursera / Credly)",
-            issue_date: "10 Jan 2025",
-            status: "verified",
-            file_type: "badge/credly",
-            skills: ["React", "JavaScript", "HTML5", "CSS3", "UI Design"],
-          },
-        ];
+  // These arrays are rendered as audited evidence with integrity scores. Filling
+  // them with sample repositories when a user has none would put fabricated
+  // "99% verified" results in front of a recruiter, which is precisely what
+  // GitProof exists to detect. Empty stays empty.
+  const displayRepos: RepoItem[] = repos;
+  const displayLanguages: LanguageScore[] = languages;
+  const displayCerts: CertificateItem[] = certificates;
 
   const verifiedCertsCount = displayCerts.filter(
     (c) => c.status === "verified" || c.status === "accepted"
@@ -267,13 +214,23 @@ export function AuditBreakdownPanel({
                 <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">
                   Anti-Cheat Score
                 </span>
-                <span className="text-lg font-extrabold text-foreground">98% Avg Confidence</span>
+                <span className="text-lg font-extrabold text-foreground">
+                  {displayRepos.length === 0
+                    ? "No scan yet"
+                    : `${Math.round(
+                        displayRepos.reduce((sum, r) => sum + (r.integrity_score ?? 0), 0) /
+                          displayRepos.length
+                      )}% Avg Confidence`}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Repo List */}
           <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+            {displayRepos.length === 0 && (
+              <AuditEmptyState label="No repositories scanned yet" hint="Connect GitHub from Settings and GitProof will audit every repository on your account." />
+            )}
             {displayRepos.map((repo, idx) => {
               const isVerified = repo.integrity_status !== "flagged";
               const langColor = LANGUAGE_COLORS[repo.language || ""] || "#60a5fa";
@@ -366,6 +323,9 @@ export function AuditBreakdownPanel({
       {activeTab === "languages" && (
         <div className="pt-6 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {displayLanguages.length === 0 && (
+              <AuditEmptyState label="No language data yet" hint="Language confidence is derived from your scanned repositories." />
+            )}
             {displayLanguages.map((lang, idx) => {
               const langColor = LANGUAGE_COLORS[lang.language] || "#3b82f6";
 
@@ -449,6 +409,9 @@ export function AuditBreakdownPanel({
 
           {/* Certificate Cards */}
           <div className="space-y-3">
+            {displayCerts.length === 0 && (
+              <AuditEmptyState label="No certificates audited yet" hint="Upload a certificate or link a Credly badge to run an integrity check." />
+            )}
             {displayCerts.map((cert, idx) => {
               const isAccepted = cert.status === "verified" || cert.status === "accepted";
 

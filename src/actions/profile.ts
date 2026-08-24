@@ -19,6 +19,18 @@ export async function updateProfile(data: {
     return { success: false, error: "Unauthorized" };
   }
 
+  // The middleware gate reads `user_metadata.onboarding_completed` from Supabase
+  // Auth, NOT the profiles table. Write it here first so the dashboard unlocks
+  // even if the profiles update below fails on a schema mismatch.
+  const { error: metaError } = await supabase.auth.updateUser({
+    data: { onboarding_completed: true },
+  });
+
+  if (metaError) {
+    console.error("Auth metadata update error:", metaError);
+    return { success: false, error: metaError.message || "Failed to complete onboarding" };
+  }
+
   const { error } = await supabase
     .from("profiles")
     .update({

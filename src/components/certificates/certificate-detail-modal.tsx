@@ -40,8 +40,11 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
 
   if (!cert) return null;
 
-  // Generate deterministic cryptographic proof metadata
-  const sha256Digest = cert.sha256_hash || `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.slice(0, 32) + "...";
+  // Cryptographic proof metadata. These are read straight from the stored
+  // record — never synthesised. The previous placeholder was the SHA-256 of an
+  // empty string, which displayed a real-looking digest for a file that had
+  // never actually been hashed.
+  const sha256Digest = cert.sha256_hash ?? null;
   const issuerDid = cert.issuer_did || `did:cdy:issuer:${(cert.issuer || "accredited-org").toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
   const signatureAlgorithm = "Ed25519-2020 / SHA-256";
 
@@ -150,7 +153,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
                   SHA-256 Document Hash Digest
                 </span>
                 <span className="font-mono text-white/70 text-[11px] truncate block bg-white/[0.02] px-2.5 py-1.5 rounded-lg border border-white/[0.04]">
-                  {sha256Digest}
+                  {sha256Digest ?? "Not yet computed"}
                 </span>
               </div>
             </div>

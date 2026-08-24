@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { sha256Hex, sha256Text, issuerDid } from "@/lib/crypto/certificate-proof";
 
 export async function uploadCertificateMetadata({
   title,
@@ -23,7 +24,36 @@ export async function uploadCertificateMetadata({
     return { success: false, error: "Unauthorized" };
   }
 
-  // 1. Insert into Database
+  // 1. Fetch the stored bytes and fingerprint them BEFORE inserting, so the
+  // certificate row is never written without its cryptographic proof.
+  // SSRF protection: the URL must point at our own certificates bucket.
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl || !fileUrl.startsWith(`${supabaseUrl}/storage/v1/object/public/certificates/`)) {
+    return { success: false, error: "Invalid file URL: Security exception" };
+  }
+
+  let fileBuffer: Buffer | null = null;
+  let fileMimeType = "application/pdf";
+  let sha256Digest: string | null = null;
+
+  try {
+    const { data: fileData, error: downloadError } = await supabase.storage
+      .from("certificates")
+      .download(fileName);
+
+    if (fileData && !downloadError) {
+      fileBuffer = Buffer.from(await fileData.arrayBuffer());
+      sha256Digest = sha256Hex(fileBuffer);
+
+      const lower = fileUrl.toLowerCase();
+      if (lower.endsWith(".png")) fileMimeType = "image/png";
+      else if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) fileMimeType = "image/jpeg";
+    }
+  } catch (dlErr) {
+    console.warn("[Certificate Proof] Storage download failed:", dlErr);
+  }
+
+  // 2. Insert into Database
   const { data: certRecord, error: dbError } = await supabase
     .from("certificates")
     .insert({
@@ -35,6 +65,8 @@ export async function uploadCertificateMetadata({
       file_type: fileType,
       parsed: false,
       status: "pending",
+      sha256_hash: sha256Digest,
+      issuer_did: issuerDid(issuer),
     })
     .select("id")
     .single();
@@ -53,30 +85,8 @@ export async function uploadCertificateMetadata({
     // Default fallback text using metadata
     const extractionText = `Certificate Title: ${title}. Issuer: ${issuer || 'N/A'}. File: ${fileName}`;
     
-    // [Elite Engineer Fix] Fetch the file and extract skills visually using Multimodal LLM
-    
-    // SSRF Protection: Ensure fileUrl is explicitly from our Supabase Storage bucket
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    if (!supabaseUrl || !fileUrl.startsWith(`${supabaseUrl}/storage/v1/object/public/certificates/`)) {
-      throw new Error("Invalid file URL: Security exception");
-    }
-
-    let fileBuffer: Buffer | null = null;
-    let fileMimeType = "application/pdf";
-    
-    try {
-      const { data: fileData, error: downloadError } = await supabase.storage.from("certificates").download(fileName);
-      if (fileData && !downloadError) {
-        const arrayBuffer = await fileData.arrayBuffer();
-        fileBuffer = Buffer.from(arrayBuffer);
-        
-        if (fileUrl.toLowerCase().endsWith(".png")) fileMimeType = "image/png";
-        else if (fileUrl.toLowerCase().endsWith(".jpg") || fileUrl.toLowerCase().endsWith(".jpeg")) fileMimeType = "image/jpeg";
-      }
-    } catch (dlErr) {
-      console.warn(`[Document Extractor] Storage download failed, falling back to metadata:`, dlErr);
-    }
-
+    // The file was already downloaded and fingerprinted above; reuse that
+    // buffer rather than pulling the object from storage a second time.
     let extractionResult: any = { claims: [] };
 
     if (fileBuffer) {
@@ -177,6 +187,10 @@ export async function uploadCertificateMetadata({
     }
   }
 
+  // Same reasoning as disconnectGitHub: the passport is derived from this
+  // evidence, so removing a certificate has to invalidate the snapshot.
+  await supabase.from("passports").delete().eq("profile_id", user.id);
+
   revalidatePath("/dashboard/certificates");
   revalidatePath("/certificates");
   revalidatePath("/dashboard");
@@ -244,6 +258,8 @@ export async function verifyCredlyBadge(badgeUrlOrId: string) {
         file_type: "badge/credly",
         parsed: true,
         status: "verified",
+        sha256_hash: sha256Text(`https://www.credly.com/badges/${badgeId}`),
+        issuer_did: issuerDid(issuer),
       })
       .select("id")
       .single();
@@ -350,6 +366,8 @@ export async function verifyOpenBadge(badgeJsonUrl: string) {
         file_type: "badge/openbadge",
         parsed: true,
         status: "verified",
+        sha256_hash: sha256Text(badgeJsonUrl),
+        issuer_did: issuerDid(issuer),
       })
       .select("id")
       .single();

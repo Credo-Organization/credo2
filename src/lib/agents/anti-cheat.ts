@@ -6,7 +6,11 @@ const integritySchema = z.object({
   integrity_score: z.number().min(0).max(100).describe("0-100 score of how authentic this evidence appears"),
   integrity_flags: z.array(z.string()).describe("List of specific red flags found. Empty if verified."),
   integrity_status: z.enum(["verified", "flagged"]).describe("verified if score >= 70, else flagged"),
-  verified_skills: z.array(z.string()).optional().describe("List of programming languages, frameworks, or tools identified in the evidence. Empty if none."),
+  // NOT .optional(): OpenAI strict structured outputs require every key in
+  // `properties` to appear in `required`, and an optional field is omitted from
+  // it. That mismatch made the provider reject every single call with a 400,
+  // which meant the catch below silently marked all evidence authentic.
+  verified_skills: z.array(z.string()).describe("Programming languages, frameworks, or tools identified in the evidence. Empty array if none."),
 });
 
 export type IntegrityResult = z.infer<typeof integritySchema>;

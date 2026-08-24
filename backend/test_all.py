@@ -51,6 +51,20 @@ async def test_gitproof_status(client):
         print(f"GitProof Status test failed: {e}")
         return None
 
+async def test_team_synergy(client):
+    try:
+        print("Testing Team Synergy Match POST...")
+        payload = {
+            "user_skills": ["Python", "FastAPI", "Docker"],
+            "career_goal": "AI Architect"
+        }
+        res = await client.post(f"{BASE_URL}/api/team/synergy-match", json=payload)
+        print(f"Team Synergy Status: {res.status_code}")
+        return res.json()
+    except Exception as e:
+        print(f"Team Synergy test failed: {e}")
+        return None
+
 async def main():
     async with httpx.AsyncClient() as client:
         results = await asyncio.gather(
@@ -58,6 +72,7 @@ async def main():
             test_credential_verify(client),
             test_match_evaluate(client),
             test_gitproof_status(client),
+            test_team_synergy(client),
             return_exceptions=True
         )
         
@@ -66,6 +81,7 @@ async def main():
         print(f"2. Verify: {results[1]}")
         print(f"3. Match Evaluate: {results[2]}")
         print(f"4. GitProof Status: {results[3]}")
+        print(f"5. Team Synergy: {results[4]}")
 
 if __name__ == "__main__":
     asyncio.run(main())

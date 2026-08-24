@@ -204,7 +204,15 @@ export async function disconnectGitHub() {
     return { success: false, error: "Failed to disconnect GitHub" };
   }
 
+  // The passport snapshot is derived evidence. Leaving it in place after the
+  // source is removed meant the dashboard kept displaying repo and skill counts
+  // for an account that no longer had any. Dropping it makes the dashboard
+  // rebuild from whatever evidence actually remains on next load.
+  await supabase.from("passports").delete().eq("profile_id", user.id);
+
   revalidatePath("/github");
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/internships");
   return { success: true };
 }
 

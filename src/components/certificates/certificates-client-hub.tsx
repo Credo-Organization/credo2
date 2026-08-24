@@ -152,7 +152,9 @@ export function CertificatesClientHub({ certificates, studentDid = "did:cdy:ed25
               Anti-Cheat Authenticity
             </span>
             <span className="text-lg font-bold text-white">
-              100% Tamper-Proof
+              {certificates.length === 0
+                ? "No credentials yet"
+                : `${Math.round((verifiedCount / certificates.length) * 100)}% Tamper-Proof`}
             </span>
           </div>
         </div>

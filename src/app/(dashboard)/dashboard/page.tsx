@@ -25,6 +25,7 @@ export default async function DashboardPage() {
       supabase
         .from("passports")
         .select("snapshot_data")
+        .eq("profile_id", user.id)
         .order('generated_at', { ascending: false })
         .limit(1),
       supabase
@@ -131,7 +132,7 @@ export default async function DashboardPage() {
       }
 
       mappedData = {
-        name: snap.profile?.name || profile?.full_name || "Jane Doe",
+        name: snap.profile?.name || profile?.full_name || "Unnamed Student",
         gender: snap.gender || profile?.gender || "Female",
         careerGoal: snap.profile?.headline || profile?.headline || "Software Engineer",
         profileImage: snap.profile?.avatar_url || profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
@@ -191,13 +192,16 @@ export default async function DashboardPage() {
         name: mappedData.name,
         gender: mappedData.gender,
         degree: snap.degree || profile?.degree || "B.Tech – Computer Science Engineering",
-        college: snap.profile?.college || profile?.college_name || "IIT Delhi",
+        college: snap.profile?.college || profile?.college_name || "College not set",
         avatarUrl: mappedData.profileImage,
         issueDate: snap.issue_date || "18 MAY 2025",
         expiryDate: snap.expiry_date || "17 MAY 2027",
-        coursesCompleted: snap.courses_completed || totalRepos || 14,
-        skillsVerified: snap.skills_verified || (snap.skills || []).length || 12,
-        certificatesEarned: snap.certificates_earned || (certs || []).length || 3,
+        // `||` treated a real count of 0 as missing and substituted 14/12/3, so a
+        // brand-new account displayed a passport full of achievements it did not
+        // have. `??` keeps a genuine zero.
+        coursesCompleted: snap.courses_completed ?? totalRepos ?? 0,
+        skillsVerified: snap.skills_verified ?? (snap.skills || []).length ?? 0,
+        certificatesEarned: snap.certificates_earned ?? (certs || []).length ?? 0,
         verificationUrl: snap.verification_url || `https://credify.dev/verify/passport/${studentId}`
       };
     }
