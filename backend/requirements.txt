@@ -14,3 +14,4 @@ google-genai
 itsdangerous
 requests
 tenacity
+cryptography

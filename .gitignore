@@ -24,6 +24,8 @@
 .DS_Store
 *.pem
 *.pptx.pdf
+DEMO_SCRIPT_RAW.md
+DEMO_VIDEO_SCRIPT.md
 
 # debug
 npm-debug.log*
