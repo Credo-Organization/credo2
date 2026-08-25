@@ -128,7 +128,8 @@ export function TeamsClientHub({
   useEffect(() => {
     const fetchBackendSynergy = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/team/synergy-match", {
+        const backendUrl = process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL || "http://127.0.0.1:8000";
+        const res = await fetch(`${backendUrl}/api/team/synergy-match`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
