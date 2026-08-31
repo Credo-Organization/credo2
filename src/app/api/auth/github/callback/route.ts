@@ -1,157 +1,80 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import {
+  verifyOAuthState,
+  buildOAuthSuccessHtml,
+  buildOAuthErrorHtml,
+} from "@/lib/security/oauth-callback";
+import { OAUTH_STATE_COOKIE } from "../route";
+
+const HTML = { headers: { "Content-Type": "text/html" } };
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const error = searchParams.get("error");
-  const errorDescription = searchParams.get("error_description");
+  const returnedState = searchParams.get("state");
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const dashboardRedirect = `${appUrl}/github`;
+  const fail = (c: string) => new Response(buildOAuthErrorHtml({ code: c, appUrl }), HTML);
+
+  const jar = await cookies();
+  const issuedState = jar.get(OAUTH_STATE_COOKIE)?.value;
 
   if (error || !code) {
-    console.error("GitHub OAuth Error:", error, errorDescription);
-    const errCode = error || "missing_code";
-    return new Response(
-      `<!DOCTYPE html>
-      <html>
-      <body>
-        <script>
-          if (window.opener) {
-            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: '${errCode}' }, '*');
-            window.close();
-          } else {
-            window.location.href = '${dashboardRedirect}?auth_error=${errCode}';
-          }
-        </script>
-      </body>
-      </html>`,
-      { headers: { "Content-Type": "text/html" } }
-    );
+    return fail(error || "missing_code");
+  }
+
+  // CSRF: the callback must correspond to an authorize request this browser made.
+  if (!verifyOAuthState(issuedState, returnedState)) {
+    console.error("GitHub OAuth state mismatch");
+    return fail("state_mismatch");
   }
 
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-
   if (!clientId || !clientSecret) {
     console.error("Missing GitHub OAuth credentials in environment");
-    return new Response(
-      `<!DOCTYPE html>
-      <html>
-      <body>
-        <script>
-          if (window.opener) {
-            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: 'server_configuration_error' }, '*');
-            window.close();
-          } else {
-            window.location.href = '${dashboardRedirect}?auth_error=server_configuration_error';
-          }
-        </script>
-      </body>
-      </html>`,
-      { headers: { "Content-Type": "text/html" } }
-    );
+    return fail("server_configuration_error");
   }
 
   try {
-    // 1. Exchange the code for an access token
     const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-      }),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code }),
     });
 
     const tokenData = await tokenResponse.json();
-
     if (tokenData.error) {
       console.error("GitHub token exchange error:", tokenData);
-      return new Response(
-        `<!DOCTYPE html>
-        <html>
-        <body>
-          <script>
-            if (window.opener) {
-              window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: '${tokenData.error}' }, '*');
-              window.close();
-            } else {
-              window.location.href = '${dashboardRedirect}?auth_error=${tokenData.error}';
-            }
-          </script>
-        </body>
-        </html>`,
-        { headers: { "Content-Type": "text/html" } }
-      );
+      return fail(tokenData.error);
     }
 
     const accessToken = tokenData.access_token;
 
-    // 2. Fetch the user's GitHub profile to get their login
     const userResponse = await fetch("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Accept": "application/vnd.github.v3+json",
+        Accept: "application/vnd.github.v3+json",
       },
     });
-
     if (!userResponse.ok) {
       throw new Error(`Failed to fetch user profile: ${userResponse.statusText}`);
     }
 
-    const userData = await userResponse.json();
-    const login = userData.login;
+    const { login } = await userResponse.json();
 
-    // 3. Popup friendly response: notify opener window and close popup
-    return new Response(
-      `<!DOCTYPE html>
-      <html>
-      <head><title>GitHub Connected</title></head>
-      <body style="background:#09090b;color:#fafafa;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-        <div style="text-align:center;">
-          <h2 style="font-size:18px;margin-bottom:8px;">GitHub Connected Successfully</h2>
-          <p style="font-size:14px;color:#a1a1aa;">Importing your profile & closing window...</p>
-        </div>
-        <script>
-          if (window.opener) {
-            window.opener.postMessage({ 
-              type: 'GITHUB_AUTH_SUCCESS', 
-              token: '${accessToken}', 
-              login: '${login}' 
-            }, '*');
-            setTimeout(() => window.close(), 300);
-          } else {
-            window.location.href = '${dashboardRedirect}?github_token=${accessToken}&github_login=${login}';
-          }
-        </script>
-      </body>
-      </html>`,
-      { headers: { "Content-Type": "text/html" } }
+    const response = new Response(
+      buildOAuthSuccessHtml({ token: accessToken, login, appUrl }),
+      HTML
     );
-
-  } catch (err: any) {
+    // Single-use state.
+    const cleared = NextResponse.next();
+    cleared.cookies.delete(OAUTH_STATE_COOKIE);
+    return response;
+  } catch (err) {
     console.error("Error during GitHub OAuth callback:", err);
-    return new Response(
-      `<!DOCTYPE html>
-      <html>
-      <body>
-        <script>
-          if (window.opener) {
-            window.opener.postMessage({ type: 'GITHUB_AUTH_ERROR', error: 'internal_server_error' }, '*');
-            window.close();
-          } else {
-            window.location.href = '${dashboardRedirect}?auth_error=internal_server_error';
-          }
-        </script>
-      </body>
-      </html>`,
-      { headers: { "Content-Type": "text/html" } }
-    );
+    return fail("internal_server_error");
   }
 }
-

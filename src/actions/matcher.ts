@@ -30,7 +30,10 @@ export async function matchOpportunity(jobDescription: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   fetch(`${appUrl}/api/process-match`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.WORKER_SECRET ?? ""}`,
+    },
     body: JSON.stringify({ jobId: job.id }),
   }).catch((err) => console.error("Failed to trigger process-match:", err));
 

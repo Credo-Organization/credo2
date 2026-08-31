@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isAuthorizedWorkerRequest } from "@/lib/security/worker-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { coachModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
@@ -9,6 +10,15 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   let job_id: string | null = null;
+  // This route uses the service-role client, which bypasses RLS, and accepts an
+  // account identifier from the caller. It must never be reachable unauthenticated.
+  if (!isAuthorizedWorkerRequest(request)) {
+    return NextResponse.json(
+      { error: { code: "UNAUTHORIZED", message: "Missing or invalid worker credentials" } },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
     job_id = body.job_id;
