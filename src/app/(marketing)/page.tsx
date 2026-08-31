@@ -118,11 +118,11 @@ function HeroSection() {
         <div className="h-[100px] sm:h-[140px]" />
 
         {/* Headline */}
-        <h1 className="flex flex-col items-center justify-center font-bold tracking-tight leading-[1.1] animate-fade-in-up">
-          <span className="text-3xl sm:text-4xl md:text-5xl text-white mb-2 font-medium tracking-normal">
+        <h1 className="flex flex-col items-center justify-center font-bold tracking-tight leading-[1.1] animate-fade-in-up px-2">
+          <span className="text-3xl sm:text-4xl md:text-5xl text-white mb-2 font-medium tracking-normal text-center">
             The Future of
           </span>
-          <ShimmerText text="Skill Identity." className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl pb-2" />
+          <ShimmerText text="Skill Identity." className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl pb-2 text-center" />
         </h1>
 
         {/* Subheadline */}
@@ -389,7 +389,7 @@ function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="pt-24 sm:pt-32 pb-24 sm:pb-40 relative">
+    <section id="features" className="pt-24 sm:pt-32 pb-24 sm:pb-40 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -415,7 +415,7 @@ function FeaturesSection() {
               <div
                 key={feature.title}
                 className={cn(
-                  "group relative w-80 sm:w-96 shrink-0 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-border/80 transition-all duration-300 overflow-hidden"
+                  "group relative w-[280px] sm:w-96 shrink-0 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-border/80 transition-all duration-300 overflow-hidden"
                 )}
               >
                 <div className="relative">
@@ -494,7 +494,7 @@ function FullPassportPreview() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto mt-2 sm:mt-0">
           <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/15">
             <CheckCircle2 className="h-3 w-3 mr-1" />
             12 Verified Skills
@@ -508,11 +508,11 @@ function FullPassportPreview() {
 
       {/* Skills */}
       <div className="p-6 sm:p-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4 sm:gap-0">
           <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             Skill Assessment
           </h4>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <div className="h-2 w-2 rounded-full bg-emerald-400" /> Verified
             </span>

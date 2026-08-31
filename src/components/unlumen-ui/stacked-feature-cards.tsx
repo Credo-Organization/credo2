@@ -94,10 +94,11 @@ export function StackedFeatureCards({
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className={cn(
-                    "sticky transition-transform duration-500",
+                    "md:sticky transition-transform duration-500 mb-8 md:mb-0",
                     card.rotateClassName,
+                    "md:[top:var(--card-top)]"
                   )}
-                  style={{ top: `calc(8rem + ${index * 1.5}rem)` }}
+                  style={{ "--card-top": `calc(8rem + ${index * 1.5}rem)` } as React.CSSProperties}
                 >
                   <div className={cn("p-8 sm:p-10 rounded-xl shadow-xl border", card.cardClassName)}>
                     <div className="flex justify-between items-start mb-6 gap-4">
