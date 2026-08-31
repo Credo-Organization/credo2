@@ -13,7 +13,30 @@ const integritySchema = z.object({
   verified_skills: z.array(z.string()).describe("Programming languages, frameworks, or tools identified in the evidence. Empty array if none."),
 });
 
-export type IntegrityResult = z.infer<typeof integritySchema>;
+// The model may only answer verified/flagged. "pending" is ours: it marks
+// evidence whose audit could not be completed, which must never be presented as
+// a pass.
+export type IntegrityResult = Omit<z.infer<typeof integritySchema>, "integrity_status"> & {
+  integrity_status: "verified" | "flagged" | "pending";
+};
+
+/**
+ * Result used when the integrity check cannot run at all.
+ *
+ * This previously returned score 100 / "verified" so an outage would not block
+ * real users. The effect was that any provider failure silently certified every
+ * repository and certificate as authentic, which is indistinguishable from a
+ * genuine pass. Failing to "pending" keeps users unblocked while making it
+ * visible that nothing was actually checked.
+ */
+export function auditUnavailableResult(): Required<IntegrityResult> {
+  return {
+    integrity_score: 0,
+    integrity_flags: ["audit_unavailable: integrity check could not be completed"],
+    integrity_status: "pending",
+    verified_skills: [],
+  };
+}
 
 export async function evaluateEvidenceIntegrity(
   type: "certificate" | "github",
@@ -122,12 +145,6 @@ Score: 95. Flags: []. Skills: ["TypeScript", "CSS", "Supabase", "PostgreSQL"]. S
     return object;
   } catch (e) {
     console.error("[AntiCheatAgent] Evaluation failed:", e);
-    // Fail open - assume verified if the AI fails, so we don't block real users
-    return {
-      integrity_score: 100,
-      integrity_flags: [],
-      integrity_status: "verified",
-      verified_skills: []
-    };
+    return auditUnavailableResult();
   }
 }

@@ -201,7 +201,7 @@ export function AuditBreakdownPanel({
                   Integrity Verified
                 </span>
                 <span className="text-lg font-extrabold text-emerald-500">
-                  {displayRepos.filter((r) => r.integrity_status !== "flagged").length} Clean
+                  {displayRepos.filter((r) => r.integrity_status === "verified").length} Clean
                 </span>
               </div>
             </div>
@@ -232,7 +232,7 @@ export function AuditBreakdownPanel({
               <AuditEmptyState label="No repositories scanned yet" hint="Connect GitHub from Settings and GitProof will audit every repository on your account." />
             )}
             {displayRepos.map((repo, idx) => {
-              const isVerified = repo.integrity_status !== "flagged";
+              const isVerified = repo.integrity_status === "verified";
               const langColor = LANGUAGE_COLORS[repo.language || ""] || "#60a5fa";
 
               return (

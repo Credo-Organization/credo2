@@ -11,23 +11,28 @@ interface Props {
 export default async function VerifyPassportPage({ params }: Props) {
   const { id } = await params;
 
-  const supabase = createAdminClient();
-  const { data: passports } = await supabase
-    .from("passports")
-    .select("*, profiles(*)")
-    .order("generated_at", { ascending: false });
+  // Only an identifier the owner published can be resolved here. The previous
+  // version pulled every passport in the table with the service-role client and
+  // filtered in JS, which both ignored is_public and scaled with the whole table.
+  const safeId = id.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64);
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(safeId);
 
-  // Find the passport matching this exact identifier. There is deliberately no
-  // fallback here: returning passports[0] on a miss meant an unknown or mistyped
-  // ID rendered an unrelated student's passport as "verified".
-  const matched = passports?.find((p: any) => {
-    const snap = p.snapshot_data;
-    return (
-      snap?.student_id === id ||
-      snap?.card_id === id ||
-      p.id === id
-    );
-  });
+  const filters = [
+    `snapshot_data->>student_id.eq.${safeId}`,
+    `snapshot_data->>card_id.eq.${safeId}`,
+    ...(isUuid ? [`id.eq.${safeId}`] : []),
+  ];
+
+  const supabase = createAdminClient();
+  const { data: matched } = safeId
+    ? await supabase
+        .from("passports")
+        .select("*, profiles(*)")
+        .eq("is_public", true)
+        .or(filters.join(","))
+        .limit(1)
+        .maybeSingle()
+    : { data: null };
 
   if (!matched) {
     return (
@@ -37,9 +42,10 @@ export default async function VerifyPassportPage({ params }: Props) {
         </div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Passport Not Found</h1>
         <p className="text-sm text-zinc-400 max-w-sm">
-          No Credify passport is registered under the identifier
-          <span className="font-mono text-zinc-300"> {id}</span>. Check the link or
-          rescan the QR code on the card.
+          No published Credify passport matches
+          <span className="font-mono text-zinc-300"> {id}</span>. Either the
+          identifier is wrong, or the student has not shared this passport
+          publicly.
         </p>
         <Link
           href="/"

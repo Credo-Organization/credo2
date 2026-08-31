@@ -43,17 +43,20 @@ export interface ProfileCareerGoal {
 export interface GitHubConnection {
   id: number;
   profile_id: string;
-  github_user_id: number;
   github_username: string;
-  access_token: string;
-  avatar_url: string | null;
-  profile_url: string | null;
-  public_repos: number | null;
-  followers: number | null;
-  following: number | null;
-  connected_at: string;
-  last_synced_at: string | null;
-  sync_status: "pending" | "syncing" | "completed" | "failed";
+  // Everything below is optional because pages that render in the browser must
+  // select a narrowed column set. access_token in particular is stored
+  // encrypted and must never be sent to the client.
+  github_user_id?: number;
+  access_token?: string;
+  avatar_url?: string | null;
+  profile_url?: string | null;
+  public_repos?: number | null;
+  followers?: number | null;
+  following?: number | null;
+  connected_at?: string;
+  last_synced_at?: string | null;
+  sync_status?: "pending" | "syncing" | "completed" | "failed";
 }
 
 export interface GitHubRepo {

@@ -1,13 +1,34 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { encryptToken, decryptToken } from "@/lib/security/token-crypto";
 import { Octokit } from "octokit";
 import { revalidatePath } from "next/cache";
 
-export async function syncGitHub(username: string, token: string) {
+/**
+ * `token` is optional on purpose. It is supplied only immediately after the
+ * OAuth popup, where the browser legitimately already has it. Every other
+ * caller omits it and the stored (encrypted) token is resolved here, so the
+ * credential never has to be sent to the client to trigger a resync.
+ */
+export async function syncGitHub(username: string, token?: string) {
   const supabase = await createClient();
+
+  let accessToken = token;
+  if (!accessToken) {
+    const { data: authUser } = await supabase.auth.getUser();
+    if (!authUser?.user) throw new Error("Unauthorized");
+    const { data: existing } = await supabase
+      .from("github_connections")
+      .select("access_token")
+      .eq("profile_id", authUser.user.id)
+      .single();
+    if (!existing?.access_token) throw new Error("No GitHub connection on file");
+    accessToken = decryptToken(existing.access_token);
+  }
+
   const octokit = new Octokit({
-    auth: token,
+    auth: accessToken,
   });
 
   const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -24,7 +45,7 @@ export async function syncGitHub(username: string, token: string) {
         {
           profile_id: user.id,
           github_username: ghUser.login,
-          access_token: token,
+          access_token: encryptToken(accessToken),
           avatar_url: ghUser.avatar_url,
           synced_at: new Date().toISOString(),
         },
@@ -299,7 +320,7 @@ export async function analyzeGitHubRealtime(username: string, token?: string) {
         let integrityData = {
           integrity_score: 95,
           integrity_flags: [] as string[],
-          integrity_status: "verified" as "verified" | "flagged",
+          integrity_status: "verified" as "verified" | "flagged" | "pending",
           verified_skills: [] as string[],
         };
 

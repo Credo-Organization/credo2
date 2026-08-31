@@ -78,8 +78,11 @@ export default async function DashboardPage() {
           language: r.primary_language || "TypeScript",
           stars: r.stars_count || 0,
           forks: r.forks_count || 0,
-          integrity_status: (r.integrity_status === "flagged" ? "flagged" : "verified") as any,
-          integrity_score: r.integrity_score || (r.integrity_status === "flagged" ? 45 : 99),
+          // Pass the stored status through. Collapsing anything non-flagged into
+          // "verified" would render an unaudited repo (integrity_status
+          // "pending") as though it had passed.
+          integrity_status: (r.integrity_status ?? "pending") as any,
+          integrity_score: r.integrity_score ?? 0,
           skills: r.languages ? Object.keys(r.languages) : [r.primary_language].filter(Boolean)
         }));
 

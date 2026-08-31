@@ -25,7 +25,7 @@ export default async function SettingsPage() {
 
   const { data: connection } = await supabase
     .from("github_connections")
-    .select("*")
+    .select("id, github_username, avatar_url, synced_at, profile_id")
     .eq("profile_id", user.id)
     .single();
 

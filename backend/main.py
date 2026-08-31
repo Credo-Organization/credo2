@@ -40,12 +40,23 @@ SESSION_SECRET = os.getenv("SESSION_SECRET", "dev-secret-change-me")
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET, same_site="lax")
 
 # Allow requests from the Next.js frontend
+# "*" combined with allow_credentials=True is both unsafe and self-defeating:
+# browsers reject a wildcard origin on credentialed requests, so the wildcard
+# bought nothing while advertising the API to every site. Origins now come from
+# ALLOWED_ORIGINS (comma separated) and fall back to local development only.
+_default_origins = "http://localhost:3000,http://127.0.0.1:3000"
+ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("ALLOWED_ORIGINS", _default_origins).split(",")
+    if o.strip() and o.strip() != "*"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 class PassportInput(BaseModel):

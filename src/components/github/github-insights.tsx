@@ -37,8 +37,11 @@ export function GitHubInsights({ connection, repos, languages }: GitHubInsightsP
   const handleSync = async () => {
     setIsScanModalOpen(true);
     try {
-      if (connection.github_username && connection.access_token) {
-        await syncGitHub(connection.github_username, connection.access_token);
+      // Deliberately no token argument: the server action resolves the stored
+      // credential itself. Passing connection.access_token here shipped the
+      // GitHub token into the browser with the rendered page.
+      if (connection.github_username) {
+        await syncGitHub(connection.github_username);
       }
     } catch (e) {
       console.warn("Resync notice:", e);

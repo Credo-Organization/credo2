@@ -31,7 +31,7 @@ export default async function GitHubDashboardPage({
     if (user) {
       const { data: connection } = await supabase
         .from("github_connections")
-        .select("*")
+        .select("id, github_username, avatar_url, synced_at, profile_id")
         .or(`profile_id.eq.${user.id},user_id.eq.${user.id}`)
         .maybeSingle();
 
