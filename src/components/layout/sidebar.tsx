@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-export function Sidebar() {
+export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -58,18 +58,23 @@ export function Sidebar() {
   return (
     <motion.aside
       initial={false}
-      animate={{ width: isCollapsed ? 76 : 260 }}
+      animate={{ width: isMobile ? "100%" : (isCollapsed ? 76 : 260) }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="group relative flex flex-col h-full bg-[#090b10] border border-white/[0.08] shadow-[0_10px_35px_rgba(0,0,0,0.6)] flex-shrink-0 rounded-[28px] backdrop-blur-2xl select-none"
+      className={cn(
+        "group relative flex flex-col h-full bg-[#090b10] border border-white/[0.08] shadow-[0_10px_35px_rgba(0,0,0,0.6)] flex-shrink-0 backdrop-blur-2xl select-none",
+        isMobile ? "w-full" : "rounded-[28px]"
+      )}
     >
       {/* Mini Toggle Button */}
-      <button
-        onClick={handleToggle}
-        className="absolute -right-3 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-[#121622] border border-white/[0.12] text-white/60 hover:text-white transition-all z-30 opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
-        aria-label="Toggle Sidebar"
-      >
-        {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-      </button>
+      {!isMobile && (
+        <button
+          onClick={handleToggle}
+          className="absolute -right-3 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-[#121622] border border-white/[0.12] text-white/60 hover:text-white transition-all z-30 opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
+          aria-label="Toggle Sidebar"
+        >
+          {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
+        </button>
+      )}
 
       {/* Top: Geometric Minimal Emblem */}
       <div 
