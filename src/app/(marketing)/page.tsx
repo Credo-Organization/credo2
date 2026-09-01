@@ -131,18 +131,10 @@ function HeroSection() {
         </p>
 
         {/* Unified CTA Button */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
+        <div className="mt-8 flex items-center justify-center animate-fade-in-up [animation-delay:300ms]">
           <LoginModal>
             <GetStartedButton text="Get started" />
           </LoginModal>
-          {/* Second entry point. The hero sits on a dark image, so this stays
-              light-on-dark even though the rest of the page is now light. */}
-          <Link
-            href="/recruiter-signup"
-            className="inline-flex h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-          >
-            I&apos;m a recruiter
-          </Link>
         </div>
       </div>
     </section>
