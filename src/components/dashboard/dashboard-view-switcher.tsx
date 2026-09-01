@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { SkillPassportCard, SkillPassportData } from "@/components/dashboard/skill-passport-card";
 import { StudentPassportIdCard, StudentPassportProps } from "@/components/passport/student-id-card";
 import { CreditCard, LayoutDashboard, Share2, Printer } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 interface Props {
@@ -30,57 +29,58 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
   };
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-[440px] flex-shrink-0">
-      {/* Top Controls Bar - Unified Theme */}
-      <div className="flex items-center justify-between gap-3 p-1.5 bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-sm backdrop-blur-xl transition-colors">
-        <div className="flex items-center gap-1 bg-stone-100 dark:bg-zinc-800 p-1 rounded-xl border border-stone-200 dark:border-zinc-700">
+    <div className="flex flex-col gap-4 w-full max-w-[440px] flex-shrink-0">
+      {/* Top Controls Bar - Unified Tactile Neobrutalist Theme & Perfect Alignment */}
+      <div className="flex items-center justify-between gap-2 p-2 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl shadow-[3px_3px_0px_0px_#18181B] transition-colors">
+        
+        {/* Left Segmented Switcher */}
+        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl border border-zinc-300 dark:border-zinc-700">
           <button
             type="button"
             onClick={() => setViewMode("id-card")}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 h-7.5 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
               viewMode === "id-card"
-                ? "bg-white dark:bg-zinc-950 text-stone-900 dark:text-zinc-100 shadow-sm scale-[1.02]"
-                : "text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100"
+                ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[1px_1px_0px_0px_#18181B]"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
             }`}
           >
-            <CreditCard className="w-3.5 h-3.5" />
-            Official ID Card
+            <CreditCard className="w-3.5 h-3.5 shrink-0" />
+            <span>ID Card</span>
           </button>
 
           <button
             type="button"
             onClick={() => setViewMode("analytics")}
-            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 h-7.5 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
               viewMode === "analytics"
-                ? "bg-white dark:bg-zinc-950 text-stone-900 dark:text-zinc-100 shadow-sm scale-[1.02]"
-                : "text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100"
+                ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[1px_1px_0px_0px_#18181B]"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            Interactive Matrix
+            <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
+            <span>Matrix</span>
           </button>
         </div>
 
-        <div className="flex items-center gap-1.5 pr-1">
-          <Button
-            size="sm"
-            variant="ghost"
+        {/* Right Action Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
             onClick={handleShare}
-            className="h-8 px-2.5 text-xs text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-stone-100 dark:hover:bg-zinc-800 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-bold shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
           >
-            <Share2 className="w-3.5 h-3.5" />
-            Share
-          </Button>
+            <Share2 className="w-3.5 h-3.5 shrink-0" />
+            <span>Share</span>
+          </button>
 
-          <Button
-            size="sm"
-            variant="ghost"
+          <button
+            type="button"
             onClick={handlePrint}
-            className="h-8 px-2.5 text-xs text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-stone-100 dark:hover:bg-zinc-800 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-bold shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
           >
-            <Printer className="w-3.5 h-3.5" />
-            Print
-          </Button>
+            <Printer className="w-3.5 h-3.5 shrink-0" />
+            <span>Print</span>
+          </button>
         </div>
       </div>
 

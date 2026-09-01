@@ -7,14 +7,12 @@ import {
   Sparkles,
   FileBadge,
   Target,
-  User,
-  CheckCircle2,
-  Code2,
   Lock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { CertificateUploader } from "@/components/certificates/certificate-uploader";
+import { GitHubCalendar, GITHUB_GREENS } from "@/components/ui/github-map";
 
 // Skill Icons Mapping
 const SKILL_ICONS: Record<string, string> = {
@@ -38,7 +36,7 @@ function getIconForSkill(name: string) {
   const key = name.toLowerCase().replace(/[^a-z0-9]/g, "");
   const glyph = SKILL_ICONS[key] || name.slice(0, 2).toUpperCase();
   return (
-    <span className="font-mono font-black text-[10px] tracking-tighter text-[#0b2559] dark:text-[#a5c7ff]">
+    <span className="font-mono font-black text-[10px] tracking-tighter text-zinc-950 dark:text-zinc-100">
       {glyph}
     </span>
   );
@@ -56,7 +54,7 @@ function GithubIcon({ className }: { className?: string }) {
 function CredifyVerificationSeal() {
   return (
     <div className="relative w-20 h-20 flex items-center justify-center select-none shrink-0">
-      <svg viewBox="0 0 120 120" className="w-full h-full text-[#0b2559] dark:text-[#7baaff]">
+      <svg viewBox="0 0 120 120" className="w-full h-full text-zinc-900 dark:text-zinc-100">
         <defs>
           <path id="matrixSealTop" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0" fill="none" />
           <path id="matrixSealBottom" d="M 60,60 m 45,0 a 45,45 0 1,1 -90,0" fill="none" />
@@ -97,7 +95,7 @@ function CredifyVerificationSeal() {
 // --- Circuit Badge Icon ---
 function CircuitBadgeIcon() {
   return (
-    <svg viewBox="0 0 40 24" className="w-8 h-5 text-[#0b2559] dark:text-[#7baaff] shrink-0">
+    <svg viewBox="0 0 40 24" className="w-8 h-5 text-zinc-900 dark:text-zinc-100 shrink-0">
       <rect x="2" y="2" width="36" height="20" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
       <line x1="0" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="2" />
       <line x1="26" y1="12" x2="40" y2="12" stroke="currentColor" strokeWidth="2" />
@@ -106,18 +104,6 @@ function CircuitBadgeIcon() {
     </svg>
   );
 }
-
-// Month Labels for Heatmap
-const MONTH_LABELS = ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"];
-
-// Authentic GitHub Contribution Colors
-const GITHUB_GREENS = [
-  "transparent",
-  "#9be9a8",
-  "#40c463",
-  "#30a14e",
-  "#216e39",
-];
 
 export type SkillPassportData = {
   cardId?: string;
@@ -136,7 +122,7 @@ export type SkillPassportData = {
     recommendedTechStack: string[];
     suggestedProjects?: { name: string; description: string }[];
   };
-  githubHeatmap: number[][];
+  githubHeatmap?: number[][];
   evidence: {
     githubRepos: { name: string; url: string; language: string; stars: number }[];
     certificates: { name: string; issuer: string; url: string }[];
@@ -169,7 +155,6 @@ const DUMMY_DATA: SkillPassportData = {
     description: "Strong software engineering foundation with room to expand in distributed architectures and model serving pipelines.",
     recommendedTechStack: ["PostgreSQL", "Go", "Docker", "GraphQL"]
   },
-  githubHeatmap: Array(7).fill(0).map((_, r) => Array(52).fill(0).map((_, c) => (r * 7 + c * 13) % 5)),
   evidence: {
     githubRepos: [
       { name: "ai-orchestrator", url: "https://github.com/developer/ai-orchestrator", language: "TypeScript", stars: 12 },
@@ -184,8 +169,8 @@ const DUMMY_DATA: SkillPassportData = {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-[11px] font-extrabold uppercase tracking-widest text-[#0b2559] dark:text-[#a5c7ff] flex items-center gap-1.5 mb-2.5 select-none">
-      <Sparkles className="w-3.5 h-3.5 text-[#0b2559] dark:text-[#a5c7ff]" />
+    <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 mb-2 select-none font-mono">
+      <Sparkles className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
       {children}
     </h3>
   );
@@ -193,7 +178,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportData }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [, setHoveredCell] = useState<{ count: number; x: number; y: number } | null>(null);
 
   const cardId = data.cardId || "CDY2026-0004611";
 
@@ -209,29 +193,18 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
     return raw;
   }, [data.profileImage, data.gender]);
 
-  // Ensure 7 rows by 52 columns matrix
-  const heatmapData = useMemo(() => {
-    if (data.githubHeatmap && data.githubHeatmap.length === 7) {
-      return data.githubHeatmap;
-    }
-    return Array(7).fill(0).map((_, r) => Array(52).fill(0).map((_, c) => (r * 7 + c * 13) % 5));
-  }, [data.githubHeatmap]);
-
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
-      className="w-full max-w-[440px] mx-auto bg-[#f8fbff] dark:bg-[#071329] text-[#091b3d] dark:text-[#e0edff] rounded-[32px] border border-[#d2e2f8] dark:border-[#1e3a6a] relative font-sans select-none overflow-hidden transition-colors"
-      style={{
-        boxShadow: "0 30px 80px -15px rgba(11, 37, 89, 0.22), 0 0 0 1.5px rgba(11, 37, 89, 0.10)",
-      }}
+      className="w-full max-w-[440px] mx-auto bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] relative font-sans select-none overflow-hidden transition-all"
     >
       {/* Background Watermark Security Dot Grid */}
       <div 
-        className="absolute inset-0 opacity-[0.035] dark:opacity-[0.05] pointer-events-none" 
+        className="absolute inset-0 opacity-[0.04] pointer-events-none" 
         style={{
-          backgroundImage: `radial-gradient(#0b2559 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(#18181B 1px, transparent 1px)`,
           backgroundSize: "16px 16px",
         }}
       />
@@ -239,18 +212,18 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       <div className="relative z-10 p-5 sm:p-6 pb-4">
         
         {/* Top Header: ID & Circuit Microchip Icon */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#e1ecfb] dark:border-[#1e3a6a]">
-          <span className="text-[11px] font-extrabold tracking-wider text-[#0b2559] dark:text-[#a5c7ff] uppercase">
+        <div className="flex items-center justify-between pb-3 border-b-2 border-zinc-900 dark:border-zinc-700">
+          <span className="text-[11px] font-black tracking-wider text-zinc-950 dark:text-zinc-100 uppercase font-mono">
             ID: {cardId}
           </span>
           <CircuitBadgeIcon />
         </div>
 
         {/* SECTION 1: IDENTITY (Avatar, Holder Info & Verification Seal) */}
-        <div className="pt-3.5 pb-3 flex items-center justify-between gap-3">
+        <div className="pt-3 pb-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {/* Illustrated Doodle Avatar Container */}
-            <div className="w-[72px] h-[72px] rounded-2xl bg-[#fdf8ee] dark:bg-[#0e2249] border-2 border-[#d2e2f8] dark:border-[#274b85] p-1 flex items-center justify-center relative overflow-hidden shadow-xs shrink-0">
+            <div className="w-[68px] h-[68px] rounded-2xl bg-[#FEF08A] border-2 border-zinc-900 dark:border-zinc-700 p-1 flex items-center justify-center relative overflow-hidden shadow-[2px_2px_0px_0px_#18181B] shrink-0">
               <img 
                 src={avatarUrl} 
                 alt={data.name} 
@@ -260,15 +233,15 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
 
             {/* Holder Metadata */}
             <div className="flex flex-col justify-center min-w-0">
-              <span className="text-[9px] font-extrabold tracking-widest text-[#4b648b] dark:text-[#8ba7d6] uppercase block">
+              <span className="text-[9px] font-black tracking-widest text-zinc-500 uppercase block font-mono">
                 HOLDER
               </span>
-              <h1 className="text-xl font-black tracking-tight text-[#08152e] dark:text-[#f0f6ff] leading-tight truncate">
+              <h1 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white leading-tight truncate">
                 {data.name}
               </h1>
 
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-[#304870] dark:text-[#a0bee8] pt-0.5 truncate">
-                <Target className="w-3 h-3 text-[#0b2559] dark:text-[#7baaff] shrink-0" />
+              <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 pt-0.5 truncate">
+                <Target className="w-3 h-3 text-zinc-900 dark:text-zinc-100 shrink-0" />
                 <span className="truncate">{data.careerGoal}</span>
               </div>
             </div>
@@ -280,62 +253,62 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           </div>
         </div>
 
-        {/* SECTION 2: CREDENTIAL TRIPLE METRIC ROW (Inspired by Official ID Card) */}
-        <div className="my-2 py-2.5 px-3 rounded-2xl bg-white/70 dark:bg-[#0a1e42]/60 border border-[#e1ecfb] dark:border-[#1e3a6a] grid grid-cols-3 divide-x divide-[#e1ecfb] dark:divide-[#1e3a6a] text-center shadow-2xs">
+        {/* SECTION 2: CREDENTIAL TRIPLE METRIC ROW */}
+        <div className="my-2 py-2 px-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B]">
           <div className="px-1">
-            <div className="flex items-center justify-center gap-1 text-[9px] font-extrabold text-[#4b648b] dark:text-[#8ba7d6] uppercase tracking-wider mb-0.5">
-              <GithubIcon className="w-2.5 h-2.5 text-[#0b2559] dark:text-[#7baaff]" />
+            <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
+              <GithubIcon className="w-2.5 h-2.5 text-zinc-900 dark:text-zinc-100" />
               <span>REPOS</span>
             </div>
-            <div className="text-lg sm:text-xl font-black text-[#08152e] dark:text-[#f0f6ff] leading-none">
+            <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
               {String(data.githubRepos).padStart(2, "0")}
             </div>
           </div>
 
           <div className="px-1">
-            <div className="flex items-center justify-center gap-1 text-[9px] font-extrabold text-[#4b648b] dark:text-[#8ba7d6] uppercase tracking-wider mb-0.5">
-              <ShieldCheck className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
+              <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" />
               <span>VERIFIED</span>
             </div>
-            <div className="text-lg sm:text-xl font-black text-[#08152e] dark:text-[#f0f6ff] leading-none">
+            <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
               {String(data.verifiedSkillsCount).padStart(2, "0")}
             </div>
           </div>
 
           <div className="px-1">
-            <div className="flex items-center justify-center gap-1 text-[9px] font-extrabold text-[#4b648b] dark:text-[#8ba7d6] uppercase tracking-wider mb-0.5">
-              <FileBadge className="w-2.5 h-2.5 text-[#0b2559] dark:text-[#7baaff]" />
+            <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
+              <FileBadge className="w-2.5 h-2.5 text-zinc-900 dark:text-zinc-100" />
               <span>CERTS</span>
             </div>
-            <div className="text-lg sm:text-xl font-black text-[#08152e] dark:text-[#f0f6ff] leading-none">
+            <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
               {String(data.certificates).padStart(2, "0")}
             </div>
           </div>
         </div>
 
         {/* SECTION 3: VERIFIED SKILLS GRID */}
-        <div className="pt-3 pb-2">
+        <div className="pt-2 pb-2">
           <SectionTitle>Verified Competency Matrix</SectionTitle>
           <div className="grid grid-cols-2 gap-2">
             {data.verifiedSkills.map((skill) => (
               <div 
                 key={skill.name}
-                className="flex items-center justify-between bg-white dark:bg-[#0a1e42] border border-[#d2e2f8] dark:border-[#1e3a6a] p-2 rounded-xl shadow-2xs"
+                className="flex items-center justify-between bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 p-2 rounded-xl shadow-2xs"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-6 h-6 rounded-lg bg-[#f0f6ff] dark:bg-[#142d59] border border-[#d2e2f8] dark:border-[#274b85] flex items-center justify-center shrink-0">
+                  <div className="w-6 h-6 rounded-lg bg-zinc-100 dark:bg-zinc-700 border border-zinc-900 dark:border-zinc-600 flex items-center justify-center shrink-0">
                     {getIconForSkill(skill.name)}
                   </div>
-                  <span className="text-[#08152e] dark:text-[#f0f6ff] font-bold text-xs truncate">
+                  <span className="text-zinc-950 dark:text-zinc-100 font-bold text-xs truncate">
                     {skill.name}
                   </span>
                 </div>
                 
                 <span className={cn(
-                  "px-2 py-0.5 rounded text-[9px] font-extrabold border shrink-0",
+                  "px-1.5 py-0.2 rounded text-[8px] font-black border font-mono shrink-0",
                   skill.confidence === "High" 
-                    ? "bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800" 
-                    : "bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800"
+                    ? "bg-emerald-100 text-emerald-950 border-emerald-400" 
+                    : "bg-blue-100 text-blue-950 border-blue-400"
                 )}>
                   {skill.confidence}
                 </span>
@@ -344,159 +317,64 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           </div>
         </div>
 
-        {/* SECTION 4: GITHUB ACTIVITY HEATMAP */}
-        <div className="pt-2 pb-1">
+        {/* SECTION 4: GITHUB ACTIVITY HEATMAP (Full Verified Engine) */}
+        <div className="pt-1 pb-1">
           <SectionTitle>Deterministic Code Contribution</SectionTitle>
-          <div className="w-full bg-white dark:bg-[#0a1e42] border border-[#d2e2f8] dark:border-[#1e3a6a] rounded-2xl p-3 shadow-2xs overflow-x-auto custom-scrollbar">
-            
-            <div className="flex gap-2 min-w-max items-start">
-              {/* Row Day Labels */}
-              <div className="flex flex-col justify-between text-[9px] font-bold text-[#8ba7d6] dark:text-[#5a7eb8] pt-4 pb-0.5 h-[68px]">
-                <span>Mon</span>
-                <span>Wed</span>
-                <span>Fri</span>
-              </div>
+          <GitHubCalendar
+            showSummary={false}
+            showLegend={true}
+            blockSize={8}
+            blockMargin={2.5}
+            blockRadius={2}
+            colors={GITHUB_GREENS}
+            className="border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-800 rounded-2xl p-3 shadow-2xs"
+          />
+        </div>
 
-              <div className="flex flex-col gap-1">
-                {/* Months Header */}
-                <div className="flex text-[8px] font-bold text-[#5e7ea8] dark:text-[#8ba7d6] h-3.5">
-                  {MONTH_LABELS.map((month, i) => (
-                    <div key={i} className="w-[36px] text-left shrink-0">
-                      {month}
+        {/* SECTION 5: EVIDENCE VAULT DRAWER */}
+        <div className="pt-2 border-t-2 border-zinc-900 dark:border-zinc-700 mt-2">
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(!drawerOpen)}
+            className="w-full flex items-center justify-between text-xs font-black text-zinc-900 dark:text-zinc-100 hover:text-blue-600 transition-colors p-1 cursor-pointer font-mono"
+          >
+            <div className="flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" />
+              <span>EVIDENCE VAULT ({data.evidence.githubRepos.length + data.evidence.certificates.length})</span>
+            </div>
+            <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", drawerOpen && "rotate-180")} />
+          </button>
+
+          <AnimatePresence>
+            {drawerOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden space-y-2 pt-2"
+              >
+                {/* Repos list */}
+                <div className="space-y-1">
+                  <span className="text-[9px] font-black uppercase text-zinc-500 font-mono block">Linked Repositories:</span>
+                  {data.evidence.githubRepos.map((repo, i) => (
+                    <div key={i} className="flex items-center justify-between p-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[10px]">
+                      <span className="font-bold text-zinc-950 dark:text-zinc-100">{repo.name}</span>
+                      <span className="text-zinc-500 font-mono">{repo.language}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* 7 rows x 52 columns Grid */}
-                <div className="flex flex-col gap-[2px]">
-                  {heatmapData.map((row, rowIndex) => (
-                    <div key={`row-${rowIndex}`} className="flex gap-[2px]">
-                      {row.map((intensity, colIndex) => {
-                        const levelColor = GITHUB_GREENS[Math.min(intensity, 4)];
-                        return (
-                          <div 
-                            key={`cell-${rowIndex}-${colIndex}`} 
-                            onMouseEnter={(e) => {
-                              const rect = e.currentTarget.getBoundingClientRect();
-                              setHoveredCell({ count: intensity, x: rect.left, y: rect.top });
-                            }}
-                            onMouseLeave={() => setHoveredCell(null)}
-                            style={{
-                              backgroundColor: intensity === 0 ? undefined : levelColor,
-                            }}
-                            className={cn(
-                              "w-[6px] h-[6px] rounded-[1px] flex-shrink-0 transition-transform hover:scale-125 cursor-pointer",
-                              intensity === 0 && "bg-[#e8f1fc] dark:bg-[#13284d]"
-                            )}
-                          />
-                        );
-                      })}
-                    </div>
-                  ))}
+                {/* Cert Uploader */}
+                <div className="pt-2">
+                  <CertificateUploader />
                 </div>
-              </div>
-            </div>
-
-            {/* Caption & Legend */}
-            <div className="flex items-center justify-between text-[10px] font-medium text-[#4b648b] dark:text-[#8ba7d6] mt-2 min-w-max pl-4 pr-1">
-              <span>Learned consistency. Built momentum.</span>
-              <div className="flex items-center gap-1 text-[9px] text-[#5e7ea8] dark:text-[#7baaff]">
-                <span>Less</span>
-                <div className="flex gap-[2px] items-center">
-                  <div className="w-[6px] h-[6px] rounded-[1px] bg-[#e8f1fc] dark:bg-[#13284d]" />
-                  <div className="w-[6px] h-[6px] rounded-[1px] bg-[#9be9a8]" />
-                  <div className="w-[6px] h-[6px] rounded-[1px] bg-[#40c463]" />
-                  <div className="w-[6px] h-[6px] rounded-[1px] bg-[#30a14e]" />
-                  <div className="w-[6px] h-[6px] rounded-[1px] bg-[#216e39]" />
-                </div>
-                <span>More</span>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
       </div>
-
-      {/* SECTION 5: EVIDENCE SOURCES DRAWER */}
-      <div className="border-t border-[#e1ecfb] dark:border-[#1e3a6a] bg-white/40 dark:bg-[#071329]/40 transition-colors">
-        <button 
-          onClick={() => setDrawerOpen(!drawerOpen)}
-          className="w-full flex items-center justify-between p-3 px-5 text-[#304870] dark:text-[#a0bee8] hover:bg-white dark:hover:bg-[#0a1e42] hover:text-[#08152e] dark:hover:text-[#f0f6ff] transition-colors cursor-pointer"
-        >
-          <span className="text-[10px] font-extrabold tracking-wider uppercase flex items-center gap-2">
-            <Lock className="w-3.5 h-3.5 text-[#0b2559] dark:text-[#7baaff]" />
-            Accredited Evidence & Repositories
-          </span>
-          <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", drawerOpen && "rotate-180")} />
-        </button>
-
-        <AnimatePresence>
-          {drawerOpen && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="px-5 pb-4 pt-1 space-y-3"
-            >
-              <div>
-                <span className="text-[9px] font-extrabold text-[#4b648b] dark:text-[#8ba7d6] uppercase tracking-wider block mb-1.5">
-                  Verified Repositories ({data.evidence.githubRepos.length})
-                </span>
-                <div className="space-y-1.5">
-                  {data.evidence.githubRepos.map((repo) => (
-                    <a 
-                      key={repo.name}
-                      href={repo.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-[#0a1e42] border border-[#d2e2f8] dark:border-[#1e3a6a] text-xs font-semibold text-[#08152e] dark:text-[#f0f6ff] hover:border-[#b5d3fb] transition-all"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <GithubIcon className="w-3 h-3 text-[#0b2559] dark:text-[#7baaff] shrink-0" />
-                        <span className="truncate font-mono text-[11px]">{repo.name}</span>
-                      </div>
-                      <span className="text-[10px] text-[#4b648b] dark:text-[#8ba7d6] font-mono">
-                        {repo.language}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <span className="text-[9px] font-extrabold text-[#4b648b] dark:text-[#8ba7d6] uppercase tracking-wider block mb-1.5">
-                  Accredited Certificates ({data.evidence.certificates.length})
-                </span>
-                <div className="space-y-1.5">
-                  {data.evidence.certificates.map((cert) => (
-                    <a 
-                      key={cert.name}
-                      href={cert.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-[#0a1e42] border border-[#d2e2f8] dark:border-[#1e3a6a] text-xs font-semibold text-[#08152e] dark:text-[#f0f6ff] hover:border-[#b5d3fb] transition-all"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <FileBadge className="w-3 h-3 text-[#0b2559] dark:text-[#7baaff] shrink-0" />
-                        <span className="truncate text-[11px]">{cert.name}</span>
-                      </div>
-                      <span className="text-[10px] text-[#4b648b] dark:text-[#8ba7d6]">
-                        {cert.issuer}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-
-                <div className="mt-2.5">
-                  <CertificateUploader />
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
     </motion.div>
   );
 }
