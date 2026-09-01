@@ -126,7 +126,10 @@ def compute_match(state: GraphState):
         # 1. Try AICredits / OpenRouter Gateway with Grok-2 or Gemini 2.5 Flash
         if api_key and api_key != "mock_key_for_now":
             # Attempt 1a: Grok-2 / Gemini 2.5 Flash via Gateway
-            for model_candidate in ["x-ai/grok-2", "google/gemini-2.5-flash", "openai/gpt-4o-mini"]:
+            # grok-2 was first in this list and returns 404 "No endpoints found"
+            # on this gateway, so every match paid for a failed round trip before
+            # reaching a model that answers.
+            for model_candidate in ["google/gemini-2.5-flash", "openai/gpt-4o-mini"]:
                 try:
                     print(f"--- Attempting Match Evaluator via Gateway ({model_candidate}) ---")
                     llm = ChatOpenAI(base_url=base_url, api_key=api_key, model=model_candidate, timeout=10)
