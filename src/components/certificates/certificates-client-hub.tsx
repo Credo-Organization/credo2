@@ -93,11 +93,11 @@ export function CertificatesClientHub({
 
   return (
     <div className="w-full space-y-8 select-none">
-      {/* Top Banner: Cryptographic Trust & Verification HUD */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 p-8 rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[6px_6px_0px_0px_#18181B] dark:shadow-[6px_6px_0px_0px_#000000] relative overflow-hidden transition-colors">
-        <div className="space-y-2 relative z-10">
+      {/* Top Header: Clean Editorial Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-[11px] font-black tracking-wide uppercase bg-blue-100 dark:bg-blue-950/60 border-2 border-zinc-900 dark:border-zinc-700 text-blue-950 dark:text-blue-300 flex items-center gap-1.5 shadow-xs">
+            <span className="px-3 py-1 rounded-full text-[11px] font-black tracking-wide uppercase bg-[#E0F2FE] dark:bg-blue-950/60 border-2 border-zinc-900 dark:border-zinc-700 text-blue-950 dark:text-blue-300 flex items-center gap-1.5 shadow-xs">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               W3C DID & Ed25519 Cryptographic Registry
             </span>
@@ -109,15 +109,12 @@ export function CertificatesClientHub({
           <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
             Verifiable Credentials & Certificates
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-medium">
-            All uploaded credentials undergo multimodal LLM tamper verification, SHA-256 integrity hashing, and Ed25519 cryptographic signing to eliminate resume fraud.
-          </p>
         </div>
 
         {/* Action Button: Uploader Modal */}
-        <div className="flex items-center gap-3 relative z-10 self-start lg:self-auto">
+        <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
           <CertificateUploader>
-            <Button className="h-11 px-5 text-xs font-black bg-blue-600 hover:bg-blue-700 text-white rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all flex items-center gap-1.5 cursor-pointer">
+            <Button className="h-10 px-5 text-xs font-black bg-blue-600 hover:bg-blue-700 text-white rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all flex items-center gap-1.5 cursor-pointer">
               <Plus className="w-4 h-4" />
               Verify New Certificate / Credly
             </Button>

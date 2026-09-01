@@ -210,27 +210,24 @@ export function TeamsClientHub({
 
   return (
     <div className="w-full space-y-8 select-none">
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-7 sm:p-8 rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[6px_6px_0px_0px_rgba(24,24,27,0.95)] dark:shadow-[6px_6px_0px_0px_#000000] relative overflow-hidden transition-colors">
-        <div className="space-y-2 relative z-10">
+      {/* Top Header: Clean Editorial Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+        <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="font-doodle text-xl sm:text-2xl text-blue-600 dark:text-blue-400 font-bold -rotate-1">
+            <span className="font-doodle text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-bold -rotate-1 select-none">
               ✨ SIH 2026 Dream Team Matcher
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
             Hackathon Squad Matcher
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-normal">
-            Discover squads seeking your verified skills or recruit complementary teammates with cryptographically proven GitHub and certificate evidence.
-          </p>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 self-start md:self-auto relative z-10 shadow-xs">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 self-start sm:self-auto shadow-xs shrink-0">
           <button
             onClick={() => setActiveTab("browse")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               activeTab === "browse"
                 ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000] border-2 border-zinc-900 dark:border-zinc-700"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
@@ -242,7 +239,7 @@ export function TeamsClientHub({
 
           <button
             onClick={() => setActiveTab("create")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
               activeTab === "create"
                 ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000] border-2 border-zinc-900 dark:border-zinc-700"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
@@ -281,11 +278,8 @@ export function TeamsClientHub({
                 )}
               </div>
 
-              {/* Controls: Stats & Sorter */}
-              <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                <span className="px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 whitespace-nowrap font-bold shadow-xs">
-                  <strong className="text-blue-600 dark:text-blue-400 font-black">{filteredSquads.length}</strong> Squads
-                </span>
+              {/* Controls: Sorter */}
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
 
                 <div className="flex items-center gap-1.5">
                   <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-bold">Sort:</span>

@@ -14,7 +14,6 @@ import {
   Award,
   Settings,
   LogOut,
-  ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -130,23 +129,6 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
               <div className="flex items-center gap-3">
                 <LayoutDashboard className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Dashboard Overview</span>}
-              </div>
-            </div>
-          </Link>
-
-          {/* Direct Passport & Proof Link */}
-          <Link href="/dashboard#passport-view" className="block">
-            <div
-              className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
-                pathname.includes("passport")
-                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
-                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <ShieldCheck className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
-                {!isCollapsed && <span>Passport & Proof</span>}
               </div>
             </div>
           </Link>
