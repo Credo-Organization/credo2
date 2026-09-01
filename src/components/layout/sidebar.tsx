@@ -66,7 +66,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       animate={{ width: isMobile ? "100%" : (isCollapsed ? 76 : 260) }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
       className={cn(
-        "group relative flex flex-col h-full bg-[#fdf8f0] dark:bg-[#111114] border border-stone-200 dark:border-zinc-800 flex-shrink-0 select-none transition-colors",
+        "group relative flex flex-col h-full bg-[#FAF9F6] dark:bg-[#111114] border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] flex-shrink-0 select-none transition-colors",
         isMobile ? "w-full" : "rounded-[28px]"
       )}
     >
@@ -74,7 +74,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       {!isMobile && (
         <button
           onClick={handleToggle}
-          className="absolute -right-3 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-zinc-300 hover:text-stone-900 dark:hover:text-white transition-all z-30 opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
+          className="absolute -right-3.5 top-7 flex h-7 w-7 items-center justify-center rounded-full bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 transition-all z-30 opacity-0 group-hover:opacity-100 shadow-[2px_2px_0px_0px_#18181B] cursor-pointer"
           aria-label="Toggle Sidebar"
         >
           {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
@@ -84,14 +84,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       {/* Top: Geometric Minimal Emblem */}
       <div 
         className={cn(
-          "flex items-center h-20 px-5 border-b border-stone-200 dark:border-zinc-800",
+          "flex items-center h-20 px-5 border-b-2 border-zinc-900 dark:border-zinc-700",
           isCollapsed ? "justify-center px-0" : "justify-between"
         )}
       >
         <Link href="/dashboard" className="flex items-center space-x-3 group/logo">
           {/* Geometric 4-Quadrant Emblem */}
-          <div className="w-8 h-8 rounded-xl bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 group-hover/logo:scale-105 transition-all">
-            <svg className="w-4 h-4 text-stone-900 dark:text-zinc-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-8 h-8 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 shadow-[2px_2px_0px_0px_#18181B] group-hover/logo:scale-105 transition-all">
+            <svg className="w-4 h-4 text-zinc-950 dark:text-zinc-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
             </svg>
           </div>
@@ -116,9 +116,9 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       {/* Navigation Tree Section */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3.5 py-4 space-y-4 custom-scrollbar">
         {/* Section 1: MAIN NAVIGATION */}
-        <div className="space-y-1">
+        <div className="space-y-1.5">
           {!isCollapsed && (
-            <span className="text-[10px] font-bold text-stone-600 dark:text-zinc-400 uppercase tracking-widest px-2.5 block mb-1">
+            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest px-2.5 block mb-1 font-mono">
               Main
             </span>
           )}
@@ -127,14 +127,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           <Link href="/dashboard" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
                 pathname === "/dashboard"
-                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
-                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <LayoutDashboard className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <LayoutDashboard className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Dashboard Overview</span>}
               </div>
             </div>
@@ -145,16 +145,16 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
             <button
               onClick={() => toggleSection("passport")}
               className={cn(
-                "w-full flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100 group cursor-pointer",
-                openSection === "passport" && "text-stone-900 dark:text-zinc-100"
+                "w-full flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100 group cursor-pointer",
+                openSection === "passport" && "text-zinc-950 dark:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <ShieldCheck className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Passport & Proof</span>}
               </div>
               {!isCollapsed && (
-                <ChevronDown className={cn("w-3.5 h-3.5 text-stone-400 dark:text-zinc-500 transition-transform duration-200", openSection === "passport" && "rotate-180")} />
+                <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-500 transition-transform duration-200", openSection === "passport" && "rotate-180")} />
               )}
             </button>
 
@@ -169,21 +169,21 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
                   className="overflow-hidden pl-7 pr-1 pt-1 space-y-1"
                 >
                   <Link href="/dashboard#passport-view" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <CreditCard className="w-3 h-3 text-stone-500 dark:text-zinc-400" />
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                      <CreditCard className="w-3 h-3 text-zinc-700 dark:text-zinc-300" />
                       <span>Skill Passport</span>
                     </div>
                   </Link>
 
                   <Link href="/dashboard#gap-analysis" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                       <span>Gap Analysis</span>
                     </div>
                   </Link>
 
                   <Link href="/dashboard#audit-console" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       <span>Audit Logs</span>
                     </div>
@@ -197,14 +197,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           <Link href="/dashboard/internships" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
                 pathname.startsWith("/dashboard/internships")
-                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
-                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Briefcase className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <Briefcase className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Internships</span>}
               </div>
             </div>
@@ -214,14 +214,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           <Link href="/dashboard/teams" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
                 pathname.startsWith("/dashboard/teams")
-                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
-                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Users className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <Users className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Hackathon Squads</span>}
               </div>
             </div>
@@ -231,14 +231,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           <Link href="/dashboard/certificates" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
                 pathname.startsWith("/dashboard/certificates")
-                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
-                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Award className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <Award className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Certificates</span>}
               </div>
             </div>
@@ -248,14 +248,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           <Link href="/dashboard/settings" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
                 pathname.startsWith("/dashboard/settings")
-                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
-                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <Settings className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                <Settings className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Settings</span>}
               </div>
             </div>
@@ -264,18 +264,17 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       </nav>
 
       {/* Bottom: Minimal User Profile Capsule */}
-      <div className="p-3 border-t border-stone-200 dark:border-zinc-800 mt-auto space-y-2">
-
+      <div className="p-3 border-t-2 border-zinc-900 dark:border-zinc-700 mt-auto space-y-2">
         <div
           className={cn(
-            "flex items-center rounded-2xl p-2 bg-white dark:bg-zinc-800/90 border border-stone-200 dark:border-zinc-700 transition-all",
+            "flex items-center rounded-2xl p-2 bg-white dark:bg-zinc-800/90 border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] transition-all",
             isCollapsed ? "justify-center p-2" : "justify-between"
           )}
         >
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 border border-stone-200 dark:border-zinc-700 relative">
+            <div className="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 border-2 border-zinc-900 dark:border-zinc-700 relative bg-[#FEF08A]">
               <img
-                src={userProfile?.avatar || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80"}
+                src={userProfile?.avatar || "/avatar-male.webp"}
                 alt="Avatar"
                 className="w-full h-full object-cover"
               />
@@ -283,10 +282,10 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
 
             {!isCollapsed && (
               <div className="flex flex-col overflow-hidden whitespace-nowrap">
-                <span className="text-xs font-bold text-stone-900 dark:text-zinc-100 truncate">
+                <span className="text-xs font-black text-zinc-950 dark:text-zinc-100 truncate">
                   {userProfile?.name || "Subham Sarangi"}
                 </span>
-                <span className="text-[10px] text-stone-600 dark:text-zinc-400 truncate">
+                <span className="text-[10px] text-zinc-600 dark:text-zinc-400 font-medium truncate">
                   {userProfile?.headline || "Software Engineer"}
                 </span>
               </div>
@@ -296,7 +295,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           {!isCollapsed && (
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-stone-600 dark:text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-zinc-700 dark:text-zinc-400 hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
               title="Sign Out"
             >
               <LogOut className="w-3.5 h-3.5" />
