@@ -1,12 +1,13 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { embed } from "ai";
 import { createClient } from "@/lib/supabase/server";
+import { getAiCredentials } from "@/lib/ai-config";
 
-// We use AICredits platform for cost-effective embeddings
-const aicredit = createOpenAI({
-  baseURL: "https://aicredits.in/api/v1",
-  apiKey: process.env.AICREDIT_API_KEY || "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068",
-});
+// Embeddings run through the same provider config as every other AI call, so
+// there is one base URL and one key to rotate. This file previously pinned
+// "/api/v1" while the rest of the app used "/v1".
+const { apiKey, baseURL } = getAiCredentials();
+const aicredit = createOpenAI({ baseURL, apiKey });
 
 const embeddingModel = aicredit.embedding("text-embedding-3-small");
 

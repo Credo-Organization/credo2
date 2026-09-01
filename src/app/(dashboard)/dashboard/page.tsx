@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DashboardInternshipPreviewCard } from "@/components/dashboard/internship-preview-card";
 import { DashboardProofHUD } from "@/components/dashboard/proof-hud";
 import { generatePassport } from "@/actions/passport";
+import { agreementFromVotes } from "@/lib/ai/agreement";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -83,6 +84,7 @@ export default async function DashboardPage() {
           // "pending") as though it had passed.
           integrity_status: (r.integrity_status ?? "pending") as any,
           integrity_score: r.integrity_score ?? 0,
+          agreement: agreementFromVotes(r.audit_votes),
           skills: r.languages ? Object.keys(r.languages) : [r.primary_language].filter(Boolean)
         }));
 

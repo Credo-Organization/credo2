@@ -9,6 +9,7 @@ By connecting their GitHub profiles and uploading PDF certificates, users receiv
 ## 🌟 Key Features
 
 * **🛡️ AI Anti-Cheat Verification (GitProof)**: Evaluates GitHub repositories to detect cloned projects, low-effort forks, or boilerplate code using structured LLM evaluations, ensuring high integrity of all verified skills.
+* **Multi-Model Anti-Cheat Ensemble**: Repository integrity is decided by majority vote across three models from three different labs (`openai/gpt-4o-mini`, `google/gemini-2.0-flash`, `deepseek/deepseek-chat`). Model-supplied status labels are discarded and derived from a normalised score, because capability probing found models that contradicted their own scores. A tie, or fewer than two responses, resolves to `pending` rather than guessing. Every individual vote is stored on the repository row and surfaced in the audit console.
 * **🔐 Cryptographic Certificate Proof**: Every accepted certificate is fingerprinted server-side with a SHA-256 digest of the stored file bytes (`src/lib/crypto/certificate-proof.ts`), plus a deterministic issuer DID. Hosted badges (Credly / Open Badge) are committed to their canonical URL.
 * **⚡ Background AI Queuing**: Employs an asynchronous state-machine architecture to process heavy AI tasks without hitting serverless (Vercel) timeouts.
 * **🧠 Multi-Agent Orchestration**: Uses a deterministic LangGraph state machine and AICredits' high-performance OpenAI-compatible proxy to extract skills and match them semantically to industry requirements.

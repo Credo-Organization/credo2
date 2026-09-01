@@ -28,6 +28,8 @@ export interface RepoItem {
   forks?: number;
   integrity_status?: "verified" | "flagged" | "pending";
   integrity_score?: number;
+  /** e.g. "3/3" - how many responding models backed this verdict. */
+  agreement?: string;
   skills?: string[];
 }
 
@@ -268,6 +270,11 @@ export function AuditBreakdownPanel({
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-400">
                           <AlertTriangle className="w-3 h-3" />
                           Flagged
+                        </span>
+                      )}
+                      {repo.agreement && (
+                        <span className="text-[10px] font-mono text-muted-foreground ml-2">
+                          {repo.agreement} models agreed
                         </span>
                       )}
                     </div>
