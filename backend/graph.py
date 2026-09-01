@@ -24,8 +24,8 @@ if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = "mock_key_for_now"
 if "OPENROUTER_API_KEY" not in os.environ:
     os.environ["OPENROUTER_API_KEY"] = "mock_key_for_now"
-if "AICREDIT_API_KEY" not in os.environ:
-    os.environ["AICREDIT_API_KEY"] = "sk-live-3c1d02c99d29fbf0b826af39454c2944d7045dea6b4fe022f1ddbe72eaf05068"
+# No inline key fallback. A missing credential is a configuration error and
+# should surface as one rather than silently using a committed secret.
 
 # Define the State schema
 class GraphState(TypedDict):
