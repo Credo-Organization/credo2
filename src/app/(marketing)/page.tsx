@@ -92,7 +92,7 @@ function CustomUsersIcon(props: React.SVGProps<SVGSVGElement>) {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { StarButtonDemo } from "@/components/ui/star-button-demo";
+import MorphingLoginCta from "@/components/animata/button/morphing-login-cta";
 import { cn } from "@/lib/utils";
 import { ShimmerText } from "@/components/ui/shimmer-text";
 import { Highlighter } from "@/components/ui/highlighter";
@@ -105,48 +105,41 @@ import Marquee from "@/components/animata/container/marquee";
    ═══════════════════════════════════════════ */
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0 bg-[url('/bg-image.png')] bg-cover bg-center bg-no-repeat"
-      />
-      {/* Subtle overlay to ensure text readability */}
-      <div className="absolute inset-0 z-0 bg-black/10" />
+    <section className="relative h-screen w-full flex flex-col justify-center items-center pt-16 pb-8 px-4">
+      {/* Background Image — full 3:2 landscape fitted so whole image is visible */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <img
+          src="/bg-image.png"
+          alt="Hero Background"
+          className="w-full h-full object-fill object-center"
+        />
+      </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        {/* Spacer to push content down and vertically center the text better */}
-        <div className="h-[100px] sm:h-[140px]" />
-
+      <div className="relative z-10 mx-auto max-w-4xl text-center flex flex-col justify-center items-center">
         {/* Headline */}
         <h1 className="flex flex-col items-center justify-center font-bold tracking-tight leading-[1.1] animate-fade-in-up px-2">
-          <span className="text-3xl sm:text-4xl md:text-5xl text-white mb-2 font-medium tracking-normal text-center">
+          <span className="text-3xl sm:text-5xl md:text-6xl text-white mb-2 font-medium tracking-normal text-center">
             The Future of
           </span>
-          <ShimmerText text="Skill Identity." className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl pb-2 text-center" />
+          <ShimmerText text="Skill Identity." className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl pb-2 text-center" />
         </h1>
 
         {/* Subheadline */}
-        <p className="mt-6 text-lg sm:text-xl text-white max-w-2xl mx-auto leading-relaxed animate-fade-in-up [animation-delay:150ms]">
+        <p className="mt-6 text-base sm:text-xl md:text-2xl text-white max-w-2xl mx-auto leading-relaxed animate-fade-in-up [animation-delay:150ms]">
           Turn GitHub activity, certifications, and achievements into an evidence-backed skill passport and find the right teammates.
         </p>
 
-        {/* CTAs */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
-          <StarButtonDemo />
+        {/* Morphing CTA Button */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
+          <MorphingLoginCta text="Get started" />
+          {/* Second entry point. The hero sits on a dark image, so this stays
+              light-on-dark even though the rest of the page is now light. */}
           <Link
             href="/recruiter-signup"
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-3xl border border-white/20 px-4 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
+            className="inline-flex h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
           >
             I&apos;m a recruiter
           </Link>
-        </div>
-
-        {/* Hero visual — floating passport preview */}
-        <div className="mt-20 animate-fade-in-up [animation-delay:600ms] relative max-w-4xl mx-auto">
-          {/* Applying a mask-image to create a soft fade on the edges so it blends into the background */}
-          <div className="relative mx-auto max-w-4xl [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]">
-            <img src="/sample.png" alt="Skill Passport Preview" className="w-full h-auto block opacity-90" />
-          </div>
         </div>
       </div>
     </section>
@@ -588,89 +581,6 @@ function FullPassportPreview() {
         </div>
       </div>
     </div>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   SECTION 6 — TESTIMONIALS
-   ═══════════════════════════════════════════ */
-function TestimonialsSection() {
-  const testimonials = [
-    {
-      name: "Priya Sharma",
-      role: "3rd Year CS, IIT Delhi",
-      text: "Credify showed me I had 12 verified skills I didn't even list on my resume. The passport got me shortlisted at 3 startups within a week.",
-      avatar: "PS",
-      color: "bg-pink-500",
-    },
-    {
-      name: "Arjun Mehta",
-      role: "Final Year, NIT Trichy",
-      text: "The gap analysis was eye-opening. I thought I knew full-stack, but I was missing key DevOps skills. The roadmap got me up to speed in 2 months.",
-      avatar: "AM",
-      color: "bg-blue-500",
-    },
-    {
-      name: "Sara Khan",
-      role: "Fresher, Bangalore",
-      text: "Instead of sending a generic resume, I share my Credify passport. Recruiters can see real proof of my React and Node.js work. Night and day difference.",
-      avatar: "SK",
-      color: "bg-violet-500",
-    },
-  ];
-
-  return (
-    <section id="testimonials" className="py-24 sm:py-32 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/20 to-transparent" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4 text-xs">
-            Testimonials
-          </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Loved by <span className="gradient-text">students</span> everywhere
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            See how students are using Credify to land internships and build credible profiles.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
-            <div
-              key={t.name}
-              className="rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 hover:border-border/80 transition-all duration-300"
-            >
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-4 w-4 fill-amber-400 text-amber-400"
-                  />
-                ))}
-              </div>
-              <p className="text-sm leading-relaxed text-muted-foreground mb-6">
-                &ldquo;{t.text}&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div
-                  className={cn(
-                    "h-9 w-9 rounded-full flex items-center justify-center text-white text-xs font-bold",
-                    t.color
-                  )}
-                >
-                  {t.avatar}
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 

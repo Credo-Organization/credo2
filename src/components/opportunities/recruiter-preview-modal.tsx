@@ -76,9 +76,9 @@ export function RecruiterPreviewModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleResetAndClose()}>
-      <DialogContent className="sm:max-w-4xl md:max-w-4xl w-full bg-[#080a0f] border border-white/[0.12] text-white p-0 overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.8)] rounded-3xl">
+      <DialogContent className="sm:max-w-4xl md:max-w-4xl w-full bg-[#080a0f] border border-stone-200/[0.12] text-stone-900 p-0 overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.8)] rounded-3xl">
         {/* Top Header Banner */}
-        <div className="p-7 pb-6 border-b border-white/[0.08] bg-gradient-to-r from-emerald-950/20 via-black/80 to-blue-950/20 relative">
+        <div className="p-7 pb-6 border-b border-stone-200 bg-gradient-to-r from-emerald-950/20 via-black/80 to-blue-950/20 relative">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pr-8">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_20px_rgba(16,185,129,0.15)]">
@@ -89,24 +89,24 @@ export function RecruiterPreviewModal({
                   <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/25">
                     Blind Merit Review
                   </span>
-                  <Badge variant="outline" className="border-white/10 text-white/60 text-[11px] bg-white/[0.03]">
+                  <Badge variant="outline" className="border-stone-200 text-stone-500 text-[11px] bg-white">
                     PII Masked
                   </Badge>
                   <Badge variant="outline" className="border-blue-500/20 text-blue-300 text-[11px] bg-blue-500/5">
                     W3C DID Verified
                   </Badge>
                 </div>
-                <DialogTitle className="text-2xl font-black text-white tracking-tight">
+                <DialogTitle className="text-2xl font-black text-stone-900 tracking-tight">
                   Recruiter Perspective Preview
                 </DialogTitle>
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-stone-500">
                   This is the exact zero-bias merit dossier hiring managers review at {opportunity.org_name}.
                 </p>
               </div>
             </div>
 
             {/* Match Score Display */}
-            <div className="flex sm:flex-col items-center sm:items-end shrink-0 gap-2 sm:gap-1 bg-white/[0.02] sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-white/5 sm:border-0">
+            <div className="flex sm:flex-col items-center sm:items-end shrink-0 gap-2 sm:gap-1 bg-stone-50 sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-stone-200/5 sm:border-0">
               <span className="text-3xl font-black text-emerald-400 leading-none">
                 {matchScore}%
               </span>
@@ -120,18 +120,18 @@ export function RecruiterPreviewModal({
         {/* Modal Body: 2-Column Spacious Grid */}
         <div className="p-7 space-y-6 max-h-[75vh] overflow-y-auto custom-scrollbar">
           {/* Target Role Strip */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
-              <span className="text-[11px] text-white/40 uppercase tracking-wider font-semibold block">Target Role</span>
-              <h3 className="text-base font-bold text-white tracking-tight">{opportunity.title}</h3>
+              <span className="text-[11px] text-stone-400 uppercase tracking-wider font-semibold block">Target Role</span>
+              <h3 className="text-base font-bold text-stone-900 tracking-tight">{opportunity.title}</h3>
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-white/70">
-              <span className="flex items-center gap-1.5 bg-white/[0.04] px-3 py-1.5 rounded-xl border border-white/[0.06]">
-                <Building className="w-3.5 h-3.5 text-white/40" />
+            <div className="flex flex-wrap items-center gap-3 text-xs text-stone-600">
+              <span className="flex items-center gap-1.5 bg-stone-50 px-3 py-1.5 rounded-xl border border-stone-200">
+                <Building className="w-3.5 h-3.5 text-stone-400" />
                 <span>{opportunity.org_name}</span>
               </span>
-              <span className="flex items-center gap-1.5 bg-white/[0.04] px-3 py-1.5 rounded-xl border border-white/[0.06]">
-                <MapPin className="w-3.5 h-3.5 text-white/40" />
+              <span className="flex items-center gap-1.5 bg-stone-50 px-3 py-1.5 rounded-xl border border-stone-200">
+                <MapPin className="w-3.5 h-3.5 text-stone-400" />
                 <span>{opportunity.location}</span>
               </span>
             </div>
@@ -144,7 +144,7 @@ export function RecruiterPreviewModal({
               {/* Candidate Identity */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white/70 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center gap-1.5">
                     <Fingerprint className="w-4 h-4 text-blue-400" />
                     Candidate Identity Token
                   </span>
@@ -154,27 +154,27 @@ export function RecruiterPreviewModal({
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 text-xs">
-                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                    <span className="text-white/40 text-[11px] block font-medium">GitProof</span>
-                    <span className="text-white font-bold text-sm mt-0.5 block">99.4%</span>
+                  <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                    <span className="text-stone-400 text-[11px] block font-medium">GitProof</span>
+                    <span className="text-stone-900 font-bold text-sm mt-0.5 block">99.4%</span>
                     <span className="text-[10px] text-emerald-400">Physics Verified</span>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                    <span className="text-white/40 text-[11px] block font-medium">Credential</span>
-                    <span className="text-white font-bold text-sm mt-0.5 block">Ed25519</span>
+                  <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                    <span className="text-stone-400 text-[11px] block font-medium">Credential</span>
+                    <span className="text-stone-900 font-bold text-sm mt-0.5 block">Ed25519</span>
                     <span className="text-[10px] text-blue-400">DID Signed</span>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-                    <span className="text-white/40 text-[11px] block font-medium">Plagiarism</span>
+                  <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                    <span className="text-stone-400 text-[11px] block font-medium">Plagiarism</span>
                     <span className="text-emerald-400 font-bold text-sm mt-0.5 block">0 Flags</span>
-                    <span className="text-[10px] text-white/40">Clean Codebase</span>
+                    <span className="text-[10px] text-stone-400">Clean Codebase</span>
                   </div>
                 </div>
               </div>
 
               {/* Scanned Codebase Proofs */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-white/70 uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center gap-1.5">
                   <FileCheck className="w-4 h-4 text-purple-400" />
                   Audited Codebase Proof Vectors
                 </h4>
@@ -182,13 +182,13 @@ export function RecruiterPreviewModal({
                   {verifiedRepos.map((r: any, idx: number) => (
                     <div
                       key={idx}
-                      className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-xs hover:border-white/10 transition-colors"
+                      className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 flex items-center justify-between text-xs hover:border-stone-200 transition-colors"
                     >
                       <div className="flex items-center gap-2.5">
                         <Code2 className="w-4 h-4 text-purple-400 shrink-0" />
                         <div>
-                          <span className="font-semibold text-white block">{r.name}</span>
-                          <span className="text-white/40 font-mono text-[11px]">{r.language || "TypeScript"}</span>
+                          <span className="font-semibold text-stone-900 block">{r.name}</span>
+                          <span className="text-stone-400 font-mono text-[11px]">{r.language || "TypeScript"}</span>
                         </div>
                       </div>
                       <span className="text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">
@@ -204,7 +204,7 @@ export function RecruiterPreviewModal({
             <div className="space-y-6">
               {/* Verified Skills Chain */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-white/70 uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   Verified Skills Backed by Proof ({matchedSkills.length})
                 </h4>
@@ -232,7 +232,7 @@ export function RecruiterPreviewModal({
                   <Sparkles className="w-4 h-4 text-blue-400" />
                   AI Match Evaluator Verdict
                 </div>
-                <p className="text-xs text-white/80 leading-relaxed">
+                <p className="text-xs text-stone-700 leading-relaxed">
                   Candidate profile exhibits verified competency with <strong>{opportunity.title}</strong> requirements at {opportunity.org_name}. Automated commit analysis confirms high organic code entropy with verified Ed25519 identity backing.
                 </p>
               </div>
@@ -241,11 +241,11 @@ export function RecruiterPreviewModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="p-6 px-7 border-t border-white/[0.08] bg-black/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="p-6 px-7 border-t border-stone-200 bg-stone-500 flex flex-col sm:flex-row items-center justify-between gap-4">
           <Button
             variant="ghost"
             onClick={handleResetAndClose}
-            className="text-white/60 hover:text-white hover:bg-white/5 rounded-xl w-full sm:w-auto h-11"
+            className="text-stone-500 hover:text-stone-900 hover:bg-stone-50 rounded-xl w-full sm:w-auto h-11"
           >
             Close Preview
           </Button>

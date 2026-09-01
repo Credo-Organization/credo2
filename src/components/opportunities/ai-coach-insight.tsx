@@ -68,8 +68,8 @@ export function AiCoachInsight({ result, passportSnapshot }: { result: MatchResu
                     h1: ({node, ...props}) => <h3 className="text-lg font-bold text-emerald-300 mt-0" {...props} />,
                     h2: ({node, ...props}) => <h4 className="text-md font-semibold text-emerald-300 mt-4 mb-2" {...props} />,
                     h3: ({node, ...props}) => <h5 className="text-sm font-semibold text-emerald-300 mt-3 mb-1" {...props} />,
-                    p: ({node, ...props}) => <p className="text-white/70 leading-relaxed mb-3" {...props} />,
-                    ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-4 text-white/60 space-y-1" {...props} />,
+                    p: ({node, ...props}) => <p className="text-stone-600 leading-relaxed mb-3" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-4 text-stone-500 space-y-1" {...props} />,
                     li: ({node, ...props}) => <li className="" {...props} />,
                     strong: ({node, ...props}) => <strong className="text-emerald-200 font-semibold" {...props} />,
                   }}

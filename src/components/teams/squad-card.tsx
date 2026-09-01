@@ -36,14 +36,14 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
   return (
     <>
-      <div className="group relative rounded-3xl border border-white/[0.08] bg-[#0a0d14]/80 p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.16] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] flex flex-col justify-between">
+      <div className="group relative rounded-3xl border border-stone-200 bg-white shadow-sm p-6 backdrop-blur-xl transition-all duration-300 hover:border-stone-300 hover:shadow-lg flex flex-col justify-between">
         {/* Subtle Top Gradient Glow */}
         <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-3xl" />
 
         <div className="space-y-4">
           {/* Header: Track Pill & Synergy Rating */}
           <div className="flex items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-white/[0.04] border border-white/[0.08] text-white/80">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-stone-100 border border-stone-200 text-stone-700">
               {squad.track}
             </span>
 
@@ -61,22 +61,22 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
           {/* Squad Title & Lead */}
           <div className="flex items-start gap-3.5">
-            <div className="w-11 h-11 rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 bg-white/[0.02]">
+            <div className="w-11 h-11 rounded-2xl overflow-hidden border border-stone-200 flex-shrink-0 bg-stone-50">
               <img src={squad.avatar} alt={squad.name} className="w-full h-full object-cover" />
             </div>
 
             <div className="overflow-hidden flex-1">
-              <h3 className="text-base font-bold text-white tracking-tight group-hover:text-emerald-400 transition-colors truncate">
+              <h3 className="text-base font-bold text-stone-900 tracking-tight group-hover:text-emerald-400 transition-colors truncate">
                 {squad.name}
               </h3>
-              <p className="text-xs text-white/50 truncate flex items-center gap-1">
-                Lead: <span className="text-white/80 font-medium">{squad.leader}</span>
+              <p className="text-xs text-stone-500 truncate flex items-center gap-1">
+                Lead: <span className="text-stone-700 font-medium">{squad.leader}</span>
               </p>
             </div>
           </div>
 
           {/* Problem Statement */}
-          <p className="text-xs text-white/70 leading-relaxed line-clamp-2">
+          <p className="text-xs text-stone-600 leading-relaxed line-clamp-2">
             {squad.problem}
           </p>
 
@@ -89,12 +89,12 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
           )}
 
           {/* Open Roles & Skills Needed */}
-          <div className="space-y-2 pt-1 border-t border-white/[0.06]">
+          <div className="space-y-2 pt-1 border-t border-stone-200">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-white/40 uppercase tracking-wider font-bold">
+              <span className="text-stone-400 uppercase tracking-wider font-bold">
                 Looking For
               </span>
-              <span className="text-white/50 font-mono">
+              <span className="text-stone-500 font-mono">
                 {squad.current_members.length}/{squad.max_members} Filled
               </span>
             </div>
@@ -103,7 +103,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
               {squad.open_roles.map((role) => (
                 <span
                   key={role}
-                  className="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/[0.08] text-[11px] font-semibold text-white/90"
+                  className="px-2.5 py-1 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-semibold text-stone-800"
                 >
                   ⚡ {role}
                 </span>
@@ -119,7 +119,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-all ${
                       isMatched
                         ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300 font-bold"
-                        : "bg-white/[0.02] border-white/[0.05] text-white/50"
+                        : "bg-stone-50 border-stone-200 text-stone-500"
                     }`}
                   >
                     {isMatched ? `✓ ${skill}` : skill}
@@ -131,14 +131,14 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between gap-3 pt-5 mt-4 border-t border-white/[0.06]">
+        <div className="flex items-center justify-between gap-3 pt-5 mt-4 border-t border-stone-200">
           <div className="flex items-center gap-2">
             {squad.github_repo && (
               <a
                 href={`https://github.com/${squad.github_repo}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors"
+                className="p-2 rounded-xl bg-stone-100 border border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-white/[0.06] transition-colors"
                 title="View GitHub Repository"
               >
                 <GitBranch className="w-4 h-4" />
@@ -149,7 +149,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
                 href={`https://${squad.discord}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors"
+                className="p-2 rounded-xl bg-stone-100 border border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-white/[0.06] transition-colors"
                 title="Join Discord"
               >
                 <MessageSquare className="w-4 h-4" />

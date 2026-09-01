@@ -53,19 +53,23 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --animate-star-btn: star-btn calc(var(--duration) * 1s) linear infinite;
+
   @keyframes star-btn {
-  0% {
-    offset-distance: 0%;
+    0% {
+      offset-distance: 0%;
     }
-  100% {
-    offset-distance: 100%;
+
+    100% {
+      offset-distance: 100%;
     }
   }
 }
 
 /* ─── Light mode (secondary) ─── */
-:root, .dashboard-theme {
-  --background: oklch(0.985 0 0); /* zinc-50 */
+:root,
+.dashboard-theme {
+  --background: oklch(0.985 0 0);
+  /* zinc-50 */
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -83,8 +87,10 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.145 0 0); /* Stark black */
-  --chart-2: oklch(0.8 0 0);   /* Muted grey */
+  --chart-1: oklch(0.145 0 0);
+  /* Stark black */
+  --chart-2: oklch(0.8 0 0);
+  /* Muted grey */
   --chart-3: oklch(0.4 0 0);
   --chart-4: oklch(0.6 0 0);
   --chart-5: oklch(0.2 0 0);

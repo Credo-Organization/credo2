@@ -31,17 +31,17 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
   if (!passport) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-24 text-center">
-        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4">
-          <ShieldQuestion className="w-6 h-6 text-amber-400" aria-hidden="true" />
+        <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-4">
+          <ShieldQuestion className="w-6 h-6 text-amber-600" aria-hidden="true" />
         </div>
-        <h1 className="text-xl font-semibold text-white mb-2">No published passport found</h1>
-        <p className="text-[13px] text-white/45 max-w-sm mx-auto leading-relaxed">
-          Nothing matches <span className="font-mono text-white/70">{id}</span>. Either the
+        <h1 className="text-xl font-semibold text-stone-900 mb-2">No published passport found</h1>
+        <p className="text-[13px] text-stone-500 max-w-sm mx-auto leading-relaxed">
+          Nothing matches <span className="font-mono text-stone-700">{id}</span>. Either the
           identifier is wrong, or the student has not shared this passport.
         </p>
         <Link
           href="/recruiter"
-          className="inline-flex items-center gap-2 text-[13px] text-white/45 hover:text-white mt-6 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
+          className="inline-flex items-center gap-2 text-[13px] text-stone-500 hover:text-stone-900 mt-6 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" /> Back to shortlist
         </Link>
@@ -96,29 +96,29 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
       <Link
         href="/recruiter"
-        className="inline-flex items-center gap-1.5 text-[12px] text-white/40 hover:text-white w-fit transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
+        className="inline-flex items-center gap-1.5 text-[12px] text-stone-400 hover:text-stone-900 w-fit transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded"
       >
         <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> Shortlist
       </Link>
 
       <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             Candidate
           </span>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="text-2xl font-semibold tracking-tight text-stone-900">
             {profile?.full_name || snap.profile?.name || safeId}
           </h1>
-          <p className="text-[13px] text-white/45">
+          <p className="text-[13px] text-stone-500">
             {profile?.headline || snap.profile?.headline || "No headline"} ·{" "}
             {profile?.college_name || snap.profile?.college || "Institution not stated"} ·{" "}
-            <span className="font-mono text-white/35">{safeId}</span>
+            <span className="font-mono text-stone-500">{safeId}</span>
           </p>
         </div>
         <SaveButton passportId={safeId} initiallySaved={Boolean(saved)} />
       </header>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-stone-200 overflow-hidden">
         {[
           { k: "Repositories", v: list.length },
           { k: "Verified", v: verified },
@@ -127,46 +127,46 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         ].map((s, i) => (
           <div
             key={s.k}
-            className={`px-4 py-3 bg-white/[0.02] ${i < 3 ? "md:border-r border-white/[0.07]" : ""} ${
-              i < 2 ? "border-b md:border-b-0 border-white/[0.07]" : ""
+            className={`px-4 py-3 bg-white ${i < 3 ? "md:border-r border-stone-200" : ""} ${
+              i < 2 ? "border-b md:border-b-0 border-stone-200" : ""
             } ${i === 0 || i === 2 ? "border-r md:border-r" : ""}`}
           >
             <div
               className={`font-mono text-xl font-semibold tabular-nums leading-none ${
-                s.warn ? "text-rose-300" : "text-white"
+                s.warn ? "text-rose-600" : "text-stone-900"
               }`}
             >
               {s.v}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.12em] text-white/35 mt-1.5">{s.k}</div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-stone-500 mt-1.5">{s.k}</div>
           </div>
         ))}
       </div>
 
       <section className="flex flex-col gap-2.5">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             GitProof audit
           </h2>
-          <span className="text-[11px] text-white/30">lowest integrity first</span>
+          <span className="text-[11px] text-stone-400">lowest integrity first</span>
         </div>
         <RepoAuditTable repos={list} />
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <section className="rounded-xl border border-white/[0.07] p-4 flex flex-col gap-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+        <section className="rounded-xl border border-stone-200 p-4 flex flex-col gap-3">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             Verified skills
-            <span className="ml-1.5 font-mono tabular-nums text-white/25">{skills.length}</span>
+            <span className="ml-1.5 font-mono tabular-nums text-stone-300">{skills.length}</span>
           </h2>
           {skills.length === 0 ? (
-            <p className="text-[13px] text-white/40">No verified skills yet.</p>
+            <p className="text-[13px] text-stone-400">No verified skills yet.</p>
           ) : (
             <ul className="flex flex-wrap gap-1.5">
               {skills.map((s, i) => (
                 <li
                   key={i}
-                  className="px-2.5 py-1 rounded-md border border-white/[0.08] bg-white/[0.03] text-[12px] text-white/85"
+                  className="px-2.5 py-1 rounded-md border border-stone-200 bg-stone-50 text-[12px] text-stone-700"
                 >
                   {s.name}
                 </li>
@@ -175,21 +175,21 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
           )}
         </section>
 
-        <section className="rounded-xl border border-white/[0.07] p-4 flex flex-col gap-3">
-          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+        <section className="rounded-xl border border-stone-200 p-4 flex flex-col gap-3">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             Certificates
-            <span className="ml-1.5 font-mono tabular-nums text-white/25">{certs?.length ?? 0}</span>
+            <span className="ml-1.5 font-mono tabular-nums text-stone-300">{certs?.length ?? 0}</span>
           </h2>
           {(certs?.length ?? 0) === 0 ? (
-            <p className="text-[13px] text-white/40">No certificates uploaded.</p>
+            <p className="text-[13px] text-stone-400">No certificates uploaded.</p>
           ) : (
             <ul className="flex flex-col gap-2">
               {certs!.map((c, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <Award className="w-3.5 h-3.5 text-white/30 mt-0.5 shrink-0" aria-hidden="true" />
+                  <Award className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <span className="text-[13px] text-white block truncate leading-tight">{c.title}</span>
-                    <span className="text-[11px] text-white/40">
+                    <span className="text-[13px] text-stone-900 block truncate leading-tight">{c.title}</span>
+                    <span className="text-[11px] text-stone-400">
                       {c.issuer || "Issuer not stated"}
                       {c.sha256_hash ? " · SHA-256 verified" : ""}
                     </span>

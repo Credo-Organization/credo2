@@ -211,32 +211,32 @@ export function TeamsClientHub({
   return (
     <div className="w-full space-y-8">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl border border-white/[0.08] bg-[#0a0d14]/80 backdrop-blur-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl relative overflow-hidden">
         <div className="space-y-2 relative z-10">
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
               SIH 2026 Hackathon Network
             </span>
-            <span className="text-xs text-white/40 font-mono">
+            <span className="text-xs text-stone-400 font-mono">
               Live Team Matcher
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
             Hackathon Squad Matcher
           </h1>
-          <p className="text-xs sm:text-sm text-white/60 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-stone-500 max-w-2xl leading-relaxed">
             Discover squads seeking your verified skills or recruit complementary teammates with cryptographically proven GitHub and certificate evidence.
           </p>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.08] self-start md:self-auto relative z-10">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-stone-100 border border-stone-200 self-start md:self-auto relative z-10">
           <button
             onClick={() => setActiveTab("browse")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeTab === "browse"
-                ? "bg-white/[0.1] text-white shadow-sm border border-white/[0.1]"
-                : "text-white/60 hover:text-white"
+                ? "bg-stone-100 text-stone-900 shadow-sm border border-stone-200"
+                : "text-stone-500 hover:text-stone-900"
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -247,8 +247,8 @@ export function TeamsClientHub({
             onClick={() => setActiveTab("create")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeTab === "create"
-                ? "bg-white/[0.1] text-white shadow-sm border border-white/[0.1]"
-                : "text-white/60 hover:text-white"
+                ? "bg-stone-100 text-stone-900 shadow-sm border border-stone-200"
+                : "text-stone-500 hover:text-stone-900"
             }`}
           >
             <PlusCircle className="w-3.5 h-3.5" />
@@ -261,23 +261,23 @@ export function TeamsClientHub({
       {activeTab === "browse" && (
         <div className="space-y-6">
           {/* Redesigned 2-Tier Command & Filter Bar */}
-          <div className="p-4 rounded-3xl bg-[#0a0d14]/80 border border-white/[0.08] backdrop-blur-xl shadow-xl space-y-3.5">
+          <div className="p-4 rounded-3xl bg-white shadow-sm border border-stone-200 backdrop-blur-xl shadow-xl space-y-3.5">
             {/* Tier 1: Search & Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Search Bar */}
               <div className="relative w-full sm:flex-1">
-                <Search className="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search problem statement, open role, or tech stack (e.g. FastAPI, ZK, PyTorch)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl pl-9 pr-8 py-2.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-400 focus:bg-white/[0.05] transition-all"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl pl-9 pr-8 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 focus:bg-stone-100 transition-all"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-xs p-1"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-900 text-xs p-1"
                   >
                     ✕
                   </button>
@@ -286,27 +286,27 @@ export function TeamsClientHub({
 
               {/* Controls: Stats & Sorter */}
               <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                <span className="px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[11px] font-mono text-white/60 whitespace-nowrap">
+                <span className="px-3 py-1.5 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-mono text-stone-500 whitespace-nowrap">
                   <strong className="text-emerald-400 font-bold">{filteredSquads.length}</strong> Squads
                 </span>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-white/40 font-medium">Sort:</span>
+                  <span className="text-[11px] text-stone-400 font-medium">Sort:</span>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="bg-white/[0.03] border border-white/[0.08] rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-400 cursor-pointer"
+                    className="bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:border-emerald-400 cursor-pointer"
                   >
-                    <option value="synergy" className="bg-[#0a0d14] text-white">Top Synergy Fit</option>
-                    <option value="members" className="bg-[#0a0d14] text-white">Most Open Slots</option>
+                    <option value="synergy" className="bg-white text-stone-900">Top Synergy Fit</option>
+                    <option value="members" className="bg-white text-stone-900">Most Open Slots</option>
                   </select>
                 </div>
               </div>
             </div>
 
             {/* Tier 2: Track Filter Chips with Icons (No Scrollbars) */}
-            <div className="pt-2 border-t border-white/[0.05] flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest mr-1">
+            <div className="pt-2 border-t border-stone-200 flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest mr-1">
                 Tracks:
               </span>
               {TRACK_CHIPS.map((chip) => {
@@ -324,7 +324,7 @@ export function TeamsClientHub({
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer border ${
                       isSelected
                         ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-bold"
-                        : "bg-white/[0.02] text-white/60 border-white/[0.06] hover:text-white hover:bg-white/[0.05]"
+                        : "bg-stone-50 text-stone-500 border-stone-200 hover:text-stone-900 hover:bg-stone-100"
                     }`}
                   >
                     <span className="text-xs">{icon}</span>
@@ -337,10 +337,10 @@ export function TeamsClientHub({
 
           {/* Squads Grid */}
           {filteredSquads.length === 0 ? (
-            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-white/[0.08] bg-white/[0.01]">
-              <Users className="w-10 h-10 text-white/20 mb-3" />
-              <h3 className="text-base font-bold text-white">No squads match your filters</h3>
-              <p className="text-xs text-white/50 max-w-sm mt-1 mb-4">
+            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-stone-200 bg-white/[0.01]">
+              <Users className="w-10 h-10 text-stone-300 mb-3" />
+              <h3 className="text-base font-bold text-stone-900">No squads match your filters</h3>
+              <p className="text-xs text-stone-500 max-w-sm mt-1 mb-4">
                 Try adjusting your search query or track filter to explore other hackathon teams.
               </p>
               <Button
@@ -348,7 +348,7 @@ export function TeamsClientHub({
                   setSelectedTrack("All Tracks");
                   setSearchQuery("");
                 }}
-                className="text-xs bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.1] h-8 px-4 rounded-xl"
+                className="text-xs bg-white/[0.06] hover:bg-stone-100 text-stone-900 border border-stone-200 h-8 px-4 rounded-xl"
               >
                 Reset Filters
               </Button>
@@ -365,19 +365,19 @@ export function TeamsClientHub({
 
       {/* TAB 2: POST SQUAD REQUIREMENT */}
       {activeTab === "create" && (
-        <div className="max-w-2xl mx-auto p-8 rounded-3xl border border-white/[0.08] bg-[#0a0d14]/80 backdrop-blur-xl shadow-2xl">
+        <div className="max-w-2xl mx-auto p-8 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl shadow-2xl">
           <form onSubmit={handleCreateSquad} className="space-y-6">
             <div className="space-y-1">
-              <h3 className="text-lg font-bold text-white">Post Team Teammate Requirement</h3>
-              <p className="text-xs text-white/50">
+              <h3 className="text-lg font-bold text-stone-900">Post Team Teammate Requirement</h3>
+              <p className="text-xs text-stone-500">
                 Broadcast your hackathon problem statement to match with students carrying verified skills.
               </p>
             </div>
 
             {/* Team Name */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-white/80 flex items-center gap-1.5">
-                <Flag className="w-3.5 h-3.5 text-white/40" />
+              <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
+                <Flag className="w-3.5 h-3.5 text-stone-400" />
                 Squad / Team Name
               </label>
               <input
@@ -385,23 +385,23 @@ export function TeamsClientHub({
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="e.g. Quantum Coders"
-                className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
                 required
               />
             </div>
 
             {/* Track Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-white/80">
+              <label className="text-xs font-semibold text-stone-700">
                 Hackathon Track
               </label>
               <select
                 value={track}
                 onChange={(e) => setTrack(e.target.value)}
-                className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 transition-colors cursor-pointer"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-emerald-400 transition-colors cursor-pointer"
               >
                 {TRACK_CHIPS.filter((t) => t !== "All Tracks").map((t) => (
-                  <option key={t} value={t} className="bg-[#0a0d14] text-white">
+                  <option key={t} value={t} className="bg-white text-stone-900">
                     {t}
                   </option>
                 ))}
@@ -410,8 +410,8 @@ export function TeamsClientHub({
 
             {/* Problem Statement */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-white/80 flex items-center gap-1.5">
-                <AlignLeft className="w-3.5 h-3.5 text-white/40" />
+              <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
+                <AlignLeft className="w-3.5 h-3.5 text-stone-400" />
                 Problem Statement & Project Vision
               </label>
               <textarea
@@ -419,7 +419,7 @@ export function TeamsClientHub({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Explain the problem you're tackling and the architecture you're building..."
-                className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-400 transition-colors resize-none"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors resize-none"
                 required
               />
             </div>
@@ -427,7 +427,7 @@ export function TeamsClientHub({
             {/* Open Roles & Skills Needed */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-white/80">
+                <label className="text-xs font-semibold text-stone-700">
                   Open Roles (comma-separated)
                 </label>
                 <input
@@ -435,13 +435,13 @@ export function TeamsClientHub({
                   value={openRoles}
                   onChange={(e) => setOpenRoles(e.target.value)}
                   placeholder="e.g. Backend Lead, ZK Researcher"
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-400 transition-colors"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-white/80">
+                <label className="text-xs font-semibold text-stone-700">
                   Required Tech Stack
                 </label>
                 <input
@@ -449,14 +449,14 @@ export function TeamsClientHub({
                   value={requiredSkills}
                   onChange={(e) => setRequiredSkills(e.target.value)}
                   placeholder="e.g. FastAPI, Docker, PyTorch"
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-400 transition-colors"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
                 />
               </div>
             </div>
 
             {/* Discord / Contact Link */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-white/80">
+              <label className="text-xs font-semibold text-stone-700">
                 Squad Discord / Contact Invite
               </label>
               <input
@@ -464,17 +464,17 @@ export function TeamsClientHub({
                 value={discord}
                 onChange={(e) => setDiscord(e.target.value)}
                 placeholder="discord.gg/your-squad"
-                className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
               />
             </div>
 
             {/* Submit */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/[0.06]">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => setActiveTab("browse")}
-                className="text-xs text-white/60 hover:text-white h-9 px-4 rounded-xl"
+                className="text-xs text-stone-500 hover:text-stone-900 h-9 px-4 rounded-xl"
               >
                 Cancel
               </Button>

@@ -55,7 +55,7 @@ export function CandidateLookup() {
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search
-            className="w-4 h-4 text-white/25 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            className="w-4 h-4 text-stone-300 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
             aria-hidden="true"
           />
           <input
@@ -68,12 +68,12 @@ export function CandidateLookup() {
             aria-label="Passport ID or verification link"
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? "lookup-error" : undefined}
-            className="w-full h-10 pl-9 pr-3 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder:text-white/25 font-mono transition-colors focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+            className="w-full h-10 pl-9 pr-3 rounded-lg bg-stone-50 border border-stone-200 text-sm text-stone-900 placeholder:text-stone-300 font-mono transition-colors focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-300"
           />
         </div>
         <button
           type="submit"
-          className="h-10 px-4 rounded-lg bg-white text-black text-[13px] font-medium hover:bg-white/90 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="h-10 px-4 rounded-lg bg-stone-900 text-white text-[13px] font-medium hover:bg-stone-800 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
         >
           Look up
         </button>
@@ -83,7 +83,7 @@ export function CandidateLookup() {
         <p
           id="lookup-error"
           role="alert"
-          className="flex items-start gap-1.5 text-[12px] text-amber-300/90 leading-snug"
+          className="flex items-start gap-1.5 text-[12px] text-amber-600/90 leading-snug"
         >
           <AlertCircle className="w-3.5 h-3.5 mt-px shrink-0" aria-hidden="true" />
           {error}

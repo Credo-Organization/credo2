@@ -53,12 +53,12 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
     return (
       <div className="flex flex-col gap-5">
         <CandidateLookup />
-        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.015] px-6 py-10">
+        <div className="rounded-xl border border-dashed border-stone-200 bg-stone-50/60 px-6 py-10">
           <div className="max-w-md mx-auto flex flex-col gap-5">
             <div className="flex flex-col items-center text-center gap-1.5">
-              <Users className="w-6 h-6 text-white/20 mb-0.5" aria-hidden="true" />
-              <h2 className="text-sm font-semibold text-white">Your shortlist is empty</h2>
-              <p className="text-[13px] text-white/45 leading-relaxed">
+              <Users className="w-6 h-6 text-stone-300 mb-0.5" aria-hidden="true" />
+              <h2 className="text-sm font-semibold text-stone-900">Your shortlist is empty</h2>
+              <p className="text-[13px] text-stone-500 leading-relaxed">
                 Candidates appear here once you look one up and save them.
               </p>
             </div>
@@ -70,17 +70,17 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
                 "Paste either one above. Their audited evidence loads instantly.",
               ].map((step, i) => (
                 <li key={i} className="flex gap-2.5 items-start">
-                  <span className="font-mono text-[11px] text-white/30 tabular-nums mt-0.5 shrink-0 w-4">
+                  <span className="font-mono text-[11px] text-stone-400 tabular-nums mt-0.5 shrink-0 w-4">
                     {i + 1}
                   </span>
-                  <span className="text-[13px] text-white/55 leading-relaxed">{step}</span>
+                  <span className="text-[13px] text-stone-600 leading-relaxed">{step}</span>
                 </li>
               ))}
             </ol>
 
-            <p className="text-[12px] text-white/35 leading-relaxed border-t border-white/[0.06] pt-3.5">
+            <p className="text-[12px] text-stone-500 leading-relaxed border-t border-stone-200 pt-3.5">
               Passport IDs look like{" "}
-              <span className="font-mono text-white/60">CDY26S1104</span>. You can also paste a
+              <span className="font-mono text-stone-900/60">CDY26S1104</span>. You can also paste a
               full verification link. Only passports a student has chosen to publish will
               resolve.
             </p>
@@ -95,7 +95,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
       <CandidateLookup />
 
       {/* Dense metric strip. Every figure is counted from stored audit results. */}
-      <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-white/[0.07] overflow-hidden">
+      <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-stone-200 overflow-hidden">
         {[
           { k: "Candidates", v: totals.candidates },
           { k: "Repos audited", v: totals.audited },
@@ -104,18 +104,18 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
         ].map((s, i) => (
           <div
             key={s.k}
-            className={`px-4 py-3 bg-white/[0.02] ${i < 3 ? "md:border-r border-white/[0.07]" : ""} ${
-              i < 2 ? "border-b md:border-b-0 border-white/[0.07]" : ""
+            className={`px-4 py-3 bg-white ${i < 3 ? "md:border-r border-stone-200" : ""} ${
+              i < 2 ? "border-b md:border-b-0 border-stone-200" : ""
             } ${i === 0 ? "border-r md:border-r" : ""}`}
           >
             <div
               className={`font-mono text-xl font-semibold tabular-nums leading-none ${
-                s.warn ? "text-rose-300" : "text-white"
+                s.warn ? "text-rose-600" : "text-stone-900"
               }`}
             >
               {s.v}
             </div>
-            <div className="text-[10px] uppercase tracking-[0.12em] text-white/35 mt-1.5">{s.k}</div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-stone-500 mt-1.5">{s.k}</div>
           </div>
         ))}
       </div>
@@ -131,29 +131,29 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
               key={f.key}
               onClick={() => setFilter(f.key)}
               aria-pressed={active}
-              className={`h-8 px-3 rounded-lg text-xs font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+              className={`h-8 px-3 rounded-lg text-xs font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 ${
                 active
-                  ? "bg-white/[0.09] border-white/20 text-white"
-                  : "bg-transparent border-white/[0.07] text-white/45 hover:text-white/80 hover:border-white/15"
+                  ? "bg-stone-900 border-stone-300 text-stone-900"
+                  : "bg-transparent border-stone-200 text-stone-500 hover:text-stone-700 hover:border-stone-300"
               }`}
             >
               {f.label}
-              <span className="ml-1.5 font-mono tabular-nums text-white/40">{n}</span>
+              <span className="ml-1.5 font-mono tabular-nums text-stone-400">{n}</span>
             </button>
           );
         })}
       </div>
 
       {/* Table scrolls inside its own container so the page never scrolls sideways. */}
-      <div className="rounded-xl border border-white/[0.07] overflow-x-auto">
+      <div className="rounded-xl border border-stone-200 overflow-x-auto">
         <table className="w-full min-w-[46rem] text-sm border-collapse">
           <thead>
-            <tr className="bg-white/[0.03]">
+            <tr className="bg-stone-50">
               {["Candidate", "Institution", "Repos", "Verdict", "Skills", "Saved", ""].map((h, i) => (
                 <th
                   key={h || i}
                   scope="col"
-                  className={`text-left font-medium text-[10px] uppercase tracking-[0.12em] text-white/35 px-4 py-2.5 border-b border-white/[0.07] ${
+                  className={`text-left font-medium text-[10px] uppercase tracking-[0.12em] text-stone-500 px-4 py-2.5 border-b border-stone-200 ${
                     ["Repos", "Skills"].includes(h) ? "text-right" : ""
                   }`}
                 >
@@ -164,28 +164,28 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
           </thead>
           <tbody>
             {shown.map((r) => (
-              <tr key={r.passportId} className="group border-b border-white/[0.05] last:border-b-0 hover:bg-white/[0.035] transition-colors">
+              <tr key={r.passportId} className="group border-b border-stone-200 last:border-b-0 hover:bg-stone-50 transition-colors">
                 <td className="px-4 py-3">
                   <Link
                     href={`/recruiter/candidate/${r.passportId}`}
-                    className="flex flex-col gap-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
+                    className="flex flex-col gap-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded"
                   >
-                    <span className="text-white font-medium leading-tight">{r.name}</span>
-                    <span className="font-mono text-[11px] text-white/35">{r.passportId}</span>
+                    <span className="text-stone-900 font-medium leading-tight">{r.name}</span>
+                    <span className="font-mono text-[11px] text-stone-500">{r.passportId}</span>
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-white/55 text-[13px]">{r.college}</td>
-                <td className="px-4 py-3 text-right font-mono tabular-nums text-white/70">{r.repos}</td>
+                <td className="px-4 py-3 text-stone-600 text-[13px]">{r.college}</td>
+                <td className="px-4 py-3 text-right font-mono tabular-nums text-stone-700">{r.repos}</td>
                 <td className="px-4 py-3">
                   <VerdictPill verified={r.verified} flagged={r.flagged} total={r.repos} />
                 </td>
-                <td className="px-4 py-3 text-right font-mono tabular-nums text-white/70">{r.skills}</td>
-                <td className="px-4 py-3 text-white/40 text-[12px] whitespace-nowrap">{r.savedAt}</td>
+                <td className="px-4 py-3 text-right font-mono tabular-nums text-stone-700">{r.skills}</td>
+                <td className="px-4 py-3 text-stone-400 text-[12px] whitespace-nowrap">{r.savedAt}</td>
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={`/recruiter/candidate/${r.passportId}`}
                     aria-label={`Open ${r.name}`}
-                    className="inline-flex items-center justify-center w-11 h-11 -m-1.5 rounded-lg text-white/25 group-hover:text-white/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                    className="inline-flex items-center justify-center w-11 h-11 -m-1.5 rounded-lg text-stone-300 group-hover:text-stone-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
                   >
                     <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -196,7 +196,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
         </table>
 
         {shown.length === 0 && (
-          <div className="px-4 py-10 text-center text-[13px] text-white/40">
+          <div className="px-4 py-10 text-center text-[13px] text-stone-400">
             No candidate matches this filter.
           </div>
         )}
@@ -209,21 +209,21 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
 function VerdictPill({ verified, flagged, total }: { verified: number; flagged: number; total: number }) {
   if (total === 0) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] text-white/35">
+      <span className="inline-flex items-center gap-1.5 text-[11px] text-stone-500">
         <ShieldQuestion className="w-3.5 h-3.5" aria-hidden="true" /> not audited
       </span>
     );
   }
   if (flagged > 0) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-300">
+      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-600">
         <ShieldAlert className="w-3.5 h-3.5" aria-hidden="true" />
         <span className="font-mono tabular-nums">{flagged}</span> flagged
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-300">
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600">
       <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
       <span className="font-mono tabular-nums">{verified}</span> verified
     </span>

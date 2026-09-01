@@ -17,7 +17,7 @@ export function DashboardProofHUD({
   certCount = 2,
 }: ProofHUDProps) {
   return (
-    <div className="w-full rounded-2xl border border-white/[0.08] bg-gradient-to-r from-emerald-950/20 via-black/60 to-blue-950/20 p-4 backdrop-blur-xl shadow-xl flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    <div className="w-full rounded-2xl border border-stone-200 bg-gradient-to-r from-emerald-950/20 via-black/60 to-blue-950/20 p-4 backdrop-blur-xl shadow-xl flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
       {/* Left: Security & Proof Pill Badges */}
       <div className="flex flex-wrap items-center gap-2.5">
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-semibold">

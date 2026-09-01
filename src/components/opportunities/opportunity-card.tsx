@@ -47,7 +47,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
             ? "border-emerald-500/30 hover:border-emerald-500/50 hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
             : isModerateMatch
             ? "border-amber-500/20 hover:border-amber-500/40 hover:shadow-[0_10px_30px_rgba(245,158,11,0.08)]"
-            : "border-white/[0.06] hover:border-white/15"
+            : "border-stone-200 hover:border-stone-300"
         )}
       >
         {/* Dynamic Top Ambient Glow */}
@@ -65,45 +65,23 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         )}
 
         {/* Card Header */}
-        <div className="p-7 pb-5 border-b border-white/[0.06] relative z-10">
-          {/* Top Metadata Badges */}
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white/[0.04] border border-white/[0.08] text-white/70">
-                <EyeOff className="w-3 h-3 text-emerald-400" />
-                Blind Match Ready
-              </span>
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <ShieldCheck className="w-3 h-3" />
-                Ed25519 Verified
-              </span>
-            </div>
+        <div className="p-7 pb-5 border-b border-stone-200 relative z-10">
 
-            {/* Quick Diagnostic Toggle Button */}
-            <button
-              onClick={() => setShowRadar(!showRadar)}
-              className="text-[11px] text-white/60 hover:text-white flex items-center gap-1 bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-lg transition-colors border border-white/5 cursor-pointer"
-            >
-              <Layers className="w-3.5 h-3.5 text-blue-400" />
-              <span>{showRadar ? "Hide Diagnostic" : "4-Pillar Diagnostic"}</span>
-              {showRadar ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            </button>
-          </div>
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-white tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
+              <h3 className="text-xl font-bold text-stone-900 tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
                 {opportunity.title}
               </h3>
-              <div className="flex flex-wrap items-center gap-2.5 text-xs font-medium text-white/60">
-                <span className="flex items-center gap-1.5 bg-white/[0.04] px-2.5 py-1 rounded-xl border border-white/[0.06]">
-                  <Building className="w-3.5 h-3.5 text-white/50" /> {opportunity.org_name}
+              <div className="flex flex-wrap items-center gap-2.5 text-xs font-medium text-stone-500">
+                <span className="flex items-center gap-1.5 bg-stone-50 px-2.5 py-1 rounded-xl border border-stone-200">
+                  <Building className="w-3.5 h-3.5 text-stone-500" /> {opportunity.org_name}
                 </span>
-                <span className="flex items-center gap-1.5 bg-white/[0.04] px-2.5 py-1 rounded-xl border border-white/[0.06]">
-                  <MapPin className="w-3.5 h-3.5 text-white/50" /> {opportunity.location}
+                <span className="flex items-center gap-1.5 bg-stone-50 px-2.5 py-1 rounded-xl border border-stone-200">
+                  <MapPin className="w-3.5 h-3.5 text-stone-500" /> {opportunity.location}
                 </span>
-                <span className="flex items-center gap-1.5 bg-white/[0.04] px-2.5 py-1 rounded-xl border border-white/[0.06]">
-                  <Clock className="w-3.5 h-3.5 text-white/50" /> {opportunity.duration}
+                <span className="flex items-center gap-1.5 bg-stone-50 px-2.5 py-1 rounded-xl border border-stone-200">
+                  <Clock className="w-3.5 h-3.5 text-stone-500" /> {opportunity.duration}
                 </span>
               </div>
             </div>
@@ -136,13 +114,13 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
                 <span
                   className={cn(
                     "absolute text-base font-black tracking-tight",
-                    isHighMatch ? "text-emerald-400" : isModerateMatch ? "text-amber-400" : "text-white/80"
+                    isHighMatch ? "text-emerald-400" : isModerateMatch ? "text-amber-400" : "text-stone-700"
                   )}
                 >
                   {matchScore}<span className="text-[10px] font-bold">%</span>
                 </span>
               </div>
-              <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold sm:mt-1">
+              <span className="text-[10px] text-stone-400 uppercase tracking-widest font-bold sm:mt-1">
                 Match Fit
               </span>
             </div>
@@ -152,7 +130,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         {/* Card Body */}
         <div className="p-7 space-y-6 flex-1 relative z-10 flex flex-col">
           {/* Description */}
-          <p className="text-sm text-white/70 leading-relaxed line-clamp-3">
+          <p className="text-sm text-stone-600 leading-relaxed line-clamp-3">
             {opportunity.description}
           </p>
 
@@ -219,20 +197,20 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
           </div>
 
           {/* AI Coach Match Insight */}
-          <div className="pt-4 border-t border-white/[0.06]">
+          <div className="pt-4 border-t border-stone-200">
             <AiCoachInsight result={result} passportSnapshot={passportSnapshot} />
           </div>
         </div>
 
         {/* Card Footer Actions */}
-        <div className="p-5 bg-white/[0.02] border-t border-white/[0.06] relative z-10 mt-auto flex items-center gap-3">
+        <div className="p-5 bg-stone-50 border-t border-stone-200 relative z-10 mt-auto flex items-center gap-3">
           <Button
             onClick={() => setIsApplyModalOpen(true)}
             className={cn(
               "w-full rounded-2xl h-12 text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
               isHighMatch
                 ? "bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)]"
-                : "bg-white/10 text-white hover:bg-white/15 border border-white/10"
+                : "bg-stone-100 text-stone-900 hover:bg-stone-200 border border-stone-200"
             )}
           >
             {isHighMatch ? (

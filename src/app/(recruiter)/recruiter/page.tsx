@@ -95,11 +95,11 @@ export default async function RecruiterPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
       <header className="flex flex-col gap-1">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
           Recruiter console
         </span>
-        <h1 className="text-2xl font-semibold tracking-tight text-white">Candidate shortlist</h1>
-        <p className="text-[13px] text-white/45 max-w-2xl leading-relaxed">
+        <h1 className="text-2xl font-semibold tracking-tight text-stone-900">Candidate shortlist</h1>
+        <p className="text-[13px] text-stone-500 max-w-2xl leading-relaxed">
           Every figure below comes from an audit that actually ran. Open a candidate to see which
           models reached each verdict.
         </p>
