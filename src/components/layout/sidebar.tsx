@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { 
   LayoutDashboard,
-  ChevronDown,
   ChevronRight,
   ChevronLeft,
   Briefcase,
@@ -16,7 +15,6 @@ import {
   Settings,
   LogOut,
   ShieldCheck,
-  CreditCard,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -24,7 +22,6 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [openSection, setOpenSection] = useState<string | null>("passport");
   const [userProfile, setUserProfile] = useState<{ name: string; avatar: string; headline?: string } | null>(null);
 
   useEffect(() => {
@@ -56,9 +53,6 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
   };
 
   const handleToggle = () => setIsCollapsed(!isCollapsed);
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section);
-  };
 
   return (
     <motion.aside
@@ -140,58 +134,22 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
             </div>
           </Link>
 
-          {/* Expandable Passport & Verification Hub */}
-          <div>
-            <button
-              onClick={() => toggleSection("passport")}
+          {/* Direct Passport & Proof Link */}
+          <Link href="/dashboard#passport-view" className="block">
+            <div
               className={cn(
-                "w-full flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100 group cursor-pointer",
-                openSection === "passport" && "text-zinc-950 dark:text-zinc-100"
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
+                pathname.includes("passport")
+                  ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
+                  : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
                 <ShieldCheck className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
                 {!isCollapsed && <span>Passport & Proof</span>}
               </div>
-              {!isCollapsed && (
-                <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-500 transition-transform duration-200", openSection === "passport" && "rotate-180")} />
-              )}
-            </button>
-
-            {/* Nested Links */}
-            <AnimatePresence initial={false}>
-              {openSection === "passport" && !isCollapsed && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="overflow-hidden pl-7 pr-1 pt-1 space-y-1"
-                >
-                  <Link href="/dashboard#passport-view" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <CreditCard className="w-3 h-3 text-zinc-700 dark:text-zinc-300" />
-                      <span>Skill Passport</span>
-                    </div>
-                  </Link>
-
-                  <Link href="/dashboard#gap-analysis" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                      <span>Gap Analysis</span>
-                    </div>
-                  </Link>
-
-                  <Link href="/dashboard#audit-console" className="block">
-                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Audit Logs</span>
-                    </div>
-                  </Link>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            </div>
+          </Link>
 
           {/* Internships Link */}
           <Link href="/dashboard/internships" className="block">
