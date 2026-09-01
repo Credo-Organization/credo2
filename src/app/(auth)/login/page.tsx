@@ -7,10 +7,12 @@ import { Shield } from "lucide-react";
 export default function LoginPage() {
   const handleGoogleLogin = async () => {
     const supabase = createClient();
+    const next = new URLSearchParams(window.location.search).get("next");
+    const callback = `${window.location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ""}`;
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: callback,
       },
     });
   };

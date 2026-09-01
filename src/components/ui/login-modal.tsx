@@ -28,10 +28,12 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
     }
     try {
       const supabase = createClient();
+      const next = new URLSearchParams(window.location.search).get("next");
+      const callback = `${window.location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ""}`;
       await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callback,
         },
       });
     } catch (err: any) {
@@ -48,10 +50,12 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
     }
     try {
       const supabase = createClient();
+      const next = new URLSearchParams(window.location.search).get("next");
+      const callback = `${window.location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ""}`;
       await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callback,
         },
       });
     } catch (err: any) {
