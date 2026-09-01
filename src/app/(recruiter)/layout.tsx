@@ -2,15 +2,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RecruiterHeader } from "@/components/recruiter/recruiter-header";
 
-/**
- * The same shell the student dashboard uses - blurred backdrop, floating cream
- * panel - so the two consoles read as one product. The chrome differs because
- * the job does: a top bar instead of a navigation rail.
- *
- * Auth is checked here as well as in each page. The layout is the cheaper place
- * to catch a signed-out visitor, and a page that forgets the check later still
- * cannot render.
- */
 export default async function RecruiterLayout({
   children,
 }: {
@@ -27,18 +18,20 @@ export default async function RecruiterLayout({
 
   return (
     <div
-      className="light relative flex h-screen w-full flex-col overflow-hidden p-0 text-stone-900 md:p-[12px]"
+      className="light relative flex h-screen w-full flex-col overflow-hidden p-0 text-zinc-900 md:p-3 bg-[#FAF9F6]"
       style={{ colorScheme: "light" }}
     >
+      {/* Background Architectural Dot Grid */}
       <div
-        className="pointer-events-none absolute inset-0 -z-20 scale-110 bg-cover bg-center bg-no-repeat blur-md"
-        style={{ backgroundImage: "url('/bg-image.png')" }}
+        className="absolute inset-0 opacity-40 pointer-events-none -z-10"
+        style={{
+          backgroundImage: "radial-gradient(#D4D4D8 1.2px, transparent 1.2px)",
+          backgroundSize: "24px 24px",
+        }}
       />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-white/10" />
 
       <main
-        className="relative z-0 flex-1 overflow-y-auto rounded-none border-0 shadow-sm md:rounded-[24px] md:border md:border-stone-200/50"
-        style={{ backgroundColor: "#fdf8f0" }}
+        className="relative z-0 flex-1 overflow-y-auto rounded-none border-0 shadow-xs md:rounded-[28px] md:border md:border-stone-200/80 bg-white"
       >
         <RecruiterHeader
           name={name}

@@ -2,47 +2,36 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, AlertCircle } from "lucide-react";
+import { Search, AlertCircle, QrCode } from "lucide-react";
+import { PassportScannerModal } from "./passport-scanner-modal";
 
-/**
- * Accepts either a bare passport identifier or a full verification URL.
- *
- * Scanning the QR code on a passport yields a URL, not an identifier, and the
- * empty state tells recruiters to do exactly that - so pasting one has to work.
- * Stripping non-alphanumerics from a URL silently produces a run-together
- * string that resolves to nothing, which reads as "the candidate does not
- * exist" rather than "that is not what this field wanted".
- */
 export function extractPassportId(raw: string): string {
   const trimmed = raw.trim();
   const fromUrl =
-    trimmed.match(/\/verify\/passport\/([A-Za-z0-9-]+)/) ??
-    trimmed.match(/\/candidate\/([A-Za-z0-9-]+)/);
+    trimmed.match(/\/verify\/passport\/([A-Za-z0-9-_]+)/) ??
+    trimmed.match(/\/candidate\/([A-Za-z0-9-_]+)/) ??
+    trimmed.match(/\/p\/([A-Za-z0-9-_]+)/);
   const candidate = fromUrl ? fromUrl[1] : trimmed;
 
-  // Identifiers are generated uppercase (CDY26S1104) and matched with an exact
-  // comparison, so a lowercase paste would report "no passport found" when the
-  // passport exists. Normalise rather than blame the reader.
-  return candidate.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64).toUpperCase();
+  return candidate.replace(/[^A-Za-z0-9-_]/g, "").slice(0, 64).toUpperCase();
 }
 
 export function CandidateLookup() {
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const router = useRouter();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const id = extractPassportId(value);
 
-    // Validate on submit rather than on every keystroke, so the field does not
-    // scold someone who is still typing.
     if (!id) {
       setError("Enter a passport ID, or paste the link from a scanned QR code.");
       return;
     }
     if (id.length < 4) {
-      setError(`"${id}" is too short to be a passport ID. They look like CDY26S1104.`);
+      setError(`"${id}" is too short to be a passport ID. They look like MSK26S1104.`);
       return;
     }
 
@@ -51,44 +40,61 @@ export function CandidateLookup() {
   };
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-2">
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Search
-            className="w-4 h-4 text-stone-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            aria-hidden="true"
-          />
-          <input
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              if (error) setError(null);
-            }}
-            placeholder="Passport ID or scanned link"
-            aria-label="Passport ID or verification link"
-            aria-invalid={error ? true : undefined}
-            aria-describedby={error ? "lookup-error" : undefined}
-            className="w-full h-10 pl-9 pr-3 rounded-lg bg-stone-50 border border-stone-200 text-sm text-stone-900 placeholder:text-stone-500 font-mono transition-colors focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-300"
-          />
+    <>
+      <form onSubmit={submit} className="flex flex-col gap-2">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2">
+          <div className="relative flex-1 min-w-[240px]">
+            <Search
+              className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              aria-hidden="true"
+            />
+            <input
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                if (error) setError(null);
+              }}
+              placeholder="Search candidate by Passport ID or paste scanned link..."
+              aria-label="Passport ID or verification link"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "lookup-error" : undefined}
+              className="w-full h-11 pl-10 pr-4 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-sm text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 font-mono transition-all focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-xs"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsScannerOpen(true)}
+            className="h-11 px-4 rounded-xl bg-white dark:bg-zinc-800 hover:bg-zinc-50 text-zinc-900 dark:text-zinc-100 text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
+          >
+            <QrCode className="w-4 h-4 text-blue-600" />
+            <span>Scan QR / ID</span>
+          </button>
+
+          <button
+            type="submit"
+            className="h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer shrink-0"
+          >
+            Inspect Dossier
+          </button>
         </div>
-        <button
-          type="submit"
-          className="h-10 px-4 rounded-lg bg-stone-900 text-white text-[13px] font-medium hover:bg-stone-800 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
-        >
-          Look up
-        </button>
-      </div>
 
       {error && (
         <p
           id="lookup-error"
           role="alert"
-          className="flex items-start gap-1.5 text-[12px] text-amber-700/90 leading-snug"
+          className="flex items-start gap-1.5 text-xs text-rose-700 dark:text-rose-400 font-bold leading-snug"
         >
-          <AlertCircle className="w-3.5 h-3.5 mt-px shrink-0" aria-hidden="true" />
+          <AlertCircle className="w-4 h-4 mt-px shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
           {error}
         </p>
       )}
     </form>
+
+    <PassportScannerModal
+      isOpen={isScannerOpen}
+      onClose={() => setIsScannerOpen(false)}
+    />
+  </>
   );
 }

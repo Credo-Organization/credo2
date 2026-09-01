@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Briefcase, LogOut } from "lucide-react";
+import { Briefcase, LogOut, QrCode } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { PassportScannerModal } from "./passport-scanner-modal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +32,7 @@ export function RecruiterHeader({
   avatarUrl?: string;
 }) {
   const router = useRouter();
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   const handleSignOut = async () => {
     const supabase = createClient();
@@ -39,22 +42,33 @@ export function RecruiterHeader({
   };
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-stone-200/70 bg-[#fdf8f0]/85 px-4 py-3 backdrop-blur-md sm:px-6">
-      <Link href="/recruiter" className="flex items-center gap-2.5 min-w-0">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-navy-200 bg-navy-50 text-navy-700">
-          <Briefcase className="h-4 w-4" aria-hidden="true" />
-        </span>
-        <span className="flex min-w-0 flex-col leading-tight">
-          <span className="truncate text-sm font-semibold text-stone-900">Credify</span>
-          <span className="truncate text-[11px] text-stone-500">Recruiter console</span>
-        </span>
-      </Link>
+    <>
+      <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-stone-200/70 bg-[#fdf8f0]/85 px-4 py-3 backdrop-blur-md sm:px-6">
+        <Link href="/recruiter" className="flex items-center gap-2.5 min-w-0">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-navy-200 bg-navy-50 text-navy-700">
+            <Briefcase className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate text-sm font-semibold text-stone-900">Minskey</span>
+            <span className="truncate text-[11px] text-stone-500">Recruiter console</span>
+          </span>
+        </Link>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          aria-label="Account menu"
-          className="flex items-center gap-2.5 rounded-full border border-stone-200 bg-white py-1 pl-1 pr-3 outline-none transition-colors hover:bg-stone-50 focus-visible:ring-2 focus-visible:ring-stone-400"
-        >
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setIsScannerOpen(true)}
+            className="h-9 px-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-black border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <QrCode className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Scan Passport</span>
+          </button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label="Account menu"
+              className="flex items-center gap-2.5 rounded-full border border-stone-200 bg-white py-1 pl-1 pr-3 outline-none transition-colors hover:bg-stone-50 focus-visible:ring-2 focus-visible:ring-stone-400"
+            >
           <Avatar className="h-7 w-7 shrink-0">
             <AvatarImage src={avatarUrl} alt="" />
             <AvatarFallback className="bg-stone-100 text-[11px] text-stone-600">
@@ -77,6 +91,13 @@ export function RecruiterHeader({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </header>
+    </div>
+  </header>
+
+      <PassportScannerModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
+      />
+    </>
   );
 }
