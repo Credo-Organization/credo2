@@ -123,9 +123,6 @@ export function AuditBreakdownPanel({
           <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-100 flex items-center gap-2">
             Verification & Evidence Breakdown
           </h2>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 font-medium">
-            Real-time multi-extension repository inspection, language scores, commit velocity, and cryptographic certificate verification.
-          </p>
         </div>
 
         {/* Tab Buttons (Non-wrapping Single Line & Color Accented) */}

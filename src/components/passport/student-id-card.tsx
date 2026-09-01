@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { QRCodeSVG } from "qrcode.react";
 import { User, GraduationCap, BookOpen, Award, FileBadge } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // --- Deterministic Barcode SVG Generator ---
 function BarcodeSVG({ value, height = 40, className }: { value: string; height?: number; className?: string }) {
   const bars = useMemo(() => {
-    // Standard pseudo-Code128 deterministic pattern based on char codes
     const result: number[] = [2, 1, 2, 1]; // Start guard
     for (let i = 0; i < value.length; i++) {
       const code = value.charCodeAt(i);
@@ -39,7 +37,6 @@ function BarcodeSVG({ value, height = 40, className }: { value: string; height?:
 function CredifyVerificationSeal() {
   return (
     <div className="relative w-24 h-24 flex items-center justify-center select-none">
-      {/* Outer Rotated Badge SVG with Text on Path */}
       <svg viewBox="0 0 120 120" className="w-full h-full text-zinc-900 dark:text-zinc-100">
         <defs>
           <path
@@ -54,26 +51,22 @@ function CredifyVerificationSeal() {
           />
         </defs>
 
-        {/* Concentric Decorative Rings */}
         <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 2" />
         <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" strokeWidth="2" />
         <circle cx="60" cy="60" r="38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.6" />
 
-        {/* Top Text on Path */}
         <text className="text-[8px] font-black uppercase tracking-[0.24em] fill-current">
           <textPath href="#sealCircleTop" startOffset="50%" textAnchor="middle">
             • MINSKEY VERIFIED •
           </textPath>
         </text>
 
-        {/* Bottom Text on Path */}
         <text className="text-[7.5px] font-black uppercase tracking-[0.24em] fill-current opacity-80">
           <textPath href="#sealCircleBottom" startOffset="50%" textAnchor="middle">
             OFFICIAL IDENTITY
           </textPath>
         </text>
 
-        {/* Center Stylized Shield Monogram */}
         <g transform="translate(36, 36) scale(0.8)">
           <path
             d="M 30 5 L 10 15 L 10 35 C 10 48 30 58 30 58 C 30 58 50 48 50 35 L 50 15 Z"
@@ -198,7 +191,7 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
 
       {/* Photo & Seal Row */}
       <div className="grid grid-cols-2 gap-4 items-center my-3 relative z-10">
-        {/* Student Portrait */}
+        {/* Student Portrait in warm butter yellow */}
         <div className="w-32 h-36 sm:w-36 sm:h-40 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 bg-[#FEF08A] overflow-hidden shadow-[2px_2px_0px_0px_#18181B] flex items-center justify-center p-1">
           <img
             src={avatarUrl}
@@ -246,11 +239,11 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
         </div>
       </div>
 
-      {/* Statistics Row: Courses / Skills / Certs (Harmonized with Matrix Card) */}
-      <div className="my-2 py-2.5 px-2 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B] relative z-10">
+      {/* Statistics Row: Courses / Skills / Certs (Harmonized Pastel Accents) */}
+      <div className="my-2 py-2.5 px-2 rounded-2xl bg-[#FAF9F6] dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B] relative z-10">
         <div className="px-1 flex flex-col items-center">
-          <BookOpen className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 mb-0.5" />
-          <span className="text-[8px] font-black tracking-wider text-zinc-500 uppercase leading-tight font-mono">
+          <BookOpen className="w-3.5 h-3.5 text-blue-700 dark:text-sky-300 mb-0.5" />
+          <span className="text-[8px] font-black tracking-wider text-blue-800 dark:text-sky-300 uppercase leading-tight font-mono">
             COURSES COMPLETED
           </span>
           <span className="text-sm font-black text-zinc-950 dark:text-white mt-0.5 font-mono">
@@ -259,21 +252,21 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
         </div>
 
         <div className="px-1 flex flex-col items-center">
-          <Award className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 mb-0.5" />
-          <span className="text-[8px] font-black tracking-wider text-zinc-500 uppercase leading-tight font-mono">
+          <Award className="w-3.5 h-3.5 text-emerald-600 mb-0.5" />
+          <span className="text-[8px] font-black tracking-wider text-emerald-800 dark:text-emerald-300 uppercase leading-tight font-mono">
             SKILLS VERIFIED
           </span>
-          <span className="text-sm font-black text-zinc-950 dark:text-white mt-0.5 font-mono">
+          <span className="text-sm font-black text-emerald-700 dark:text-emerald-400 mt-0.5 font-mono">
             {skillsVerified.toString().padStart(2, "0")}
           </span>
         </div>
 
         <div className="px-1 flex flex-col items-center">
-          <FileBadge className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 mb-0.5" />
-          <span className="text-[8px] font-black tracking-wider text-zinc-500 uppercase leading-tight font-mono">
-            CERTIFICATES EARNED
+          <FileBadge className="w-3.5 h-3.5 text-purple-700 dark:text-purple-300 mb-0.5" />
+          <span className="text-[8px] font-black tracking-wider text-purple-800 dark:text-purple-300 uppercase leading-tight font-mono">
+            CERTS EARNED
           </span>
-          <span className="text-sm font-black text-zinc-950 dark:text-white mt-0.5 font-mono">
+          <span className="text-sm font-black text-purple-700 dark:text-purple-400 mt-0.5 font-mono">
             {certificatesEarned.toString().padStart(2, "0")}
           </span>
         </div>

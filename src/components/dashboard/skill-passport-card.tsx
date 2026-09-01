@@ -24,19 +24,29 @@ function getIconForSkill(name: string) {
     case "typescript":
       return <span className="font-mono text-[9px] font-black text-blue-600">TS</span>;
     case "javascript":
-      return <span className="font-mono text-[9px] font-black text-amber-500">JS</span>;
+      return <span className="font-mono text-[9px] font-black text-amber-600">JS</span>;
     case "python":
-      return <span className="font-mono text-[9px] font-black text-blue-500">PY</span>;
+      return <span className="font-mono text-[9px] font-black text-blue-600">PY</span>;
     case "next.js":
     case "nextjs":
       return <span className="font-mono text-[9px] font-black text-zinc-900 dark:text-zinc-100">N</span>;
     case "css":
     case "html":
-      return <span className="font-mono text-[9px] font-black text-orange-500">&lt;/&gt;</span>;
+      return <span className="font-mono text-[9px] font-black text-orange-600">&lt;/&gt;</span>;
     default:
       return <Sparkles className={iconClass} />;
   }
 }
+
+const SKILL_PASTEL_THEMES: Record<string, { bg: string; darkBg: string; border: string }> = {
+  typescript: { bg: "bg-[#F0F9FF]", darkBg: "dark:bg-sky-950/30", border: "border-blue-200 dark:border-blue-800/60" },
+  css: { bg: "bg-[#FAF5FF]", darkBg: "dark:bg-purple-950/30", border: "border-purple-200 dark:border-purple-800/60" },
+  javascript: { bg: "bg-[#FEFCE8]", darkBg: "dark:bg-amber-950/30", border: "border-amber-200 dark:border-amber-800/60" },
+  python: { bg: "bg-[#F0F4FF]", darkBg: "dark:bg-indigo-950/30", border: "border-indigo-200 dark:border-indigo-800/60" },
+  "next.js": { bg: "bg-[#F8FAFC]", darkBg: "dark:bg-zinc-800/60", border: "border-zinc-300 dark:border-zinc-700" },
+  nextjs: { bg: "bg-[#F8FAFC]", darkBg: "dark:bg-zinc-800/60", border: "border-zinc-300 dark:border-zinc-700" },
+  html: { bg: "bg-[#FFF7ED]", darkBg: "dark:bg-orange-950/30", border: "border-orange-200 dark:border-orange-800/60" },
+};
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -181,7 +191,7 @@ const DUMMY_DATA: SkillPassportData = {
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 mb-2 select-none font-mono">
-      <Sparkles className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
+      <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
       {children}
     </h3>
   );
@@ -231,8 +241,8 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       {/* SECTION 1: IDENTITY (Avatar, Holder Info & Verification Seal) */}
       <div className="pt-3 pb-2 flex items-center justify-between gap-3 relative z-10">
         <div className="flex items-center gap-3 min-w-0">
-          {/* Illustrated Doodle Avatar Container */}
-          <div className="w-[68px] h-[68px] rounded-2xl bg-[#FEF08A] border-2 border-zinc-900 dark:border-zinc-700 p-1 flex items-center justify-center relative overflow-hidden shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+          {/* Illustrated Doodle Avatar Container in warm butter yellow */}
+          <div className="w-[68px] h-[68px] rounded-2xl bg-[#FEF08A] dark:bg-amber-950/60 border-2 border-zinc-900 dark:border-zinc-700 p-1 flex items-center justify-center relative overflow-hidden shadow-[2px_2px_0px_0px_#18181B] shrink-0">
             <img 
               src={avatarUrl} 
               alt={data.name} 
@@ -262,11 +272,11 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
         </div>
       </div>
 
-      {/* SECTION 2: CREDENTIAL TRIPLE METRIC ROW */}
-      <div className="my-2.5 py-2 px-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B] relative z-10">
+      {/* SECTION 2: CREDENTIAL TRIPLE METRIC ROW (Pastel Color Accents) */}
+      <div className="my-2.5 py-2 px-3 rounded-2xl bg-[#FAF9F6] dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B] relative z-10">
         <div className="px-1">
-          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
-            <GithubIcon className="w-2.5 h-2.5 text-zinc-900 dark:text-zinc-100" />
+          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-blue-700 dark:text-sky-300 uppercase tracking-wider mb-0.5 font-mono">
+            <GithubIcon className="w-2.5 h-2.5 text-blue-700 dark:text-sky-300" />
             <span>REPOS</span>
           </div>
           <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
@@ -275,58 +285,70 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
         </div>
 
         <div className="px-1">
-          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
+          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-emerald-700 dark:text-emerald-300 uppercase tracking-wider mb-0.5 font-mono">
             <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" />
             <span>VERIFIED</span>
           </div>
-          <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
+          <div className="text-lg font-black text-emerald-700 dark:text-emerald-400 leading-none font-mono">
             {String(data.verifiedSkillsCount).padStart(2, "0")}
           </div>
         </div>
 
         <div className="px-1">
-          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-zinc-500 uppercase tracking-wider mb-0.5 font-mono">
-            <FileBadge className="w-2.5 h-2.5 text-zinc-900 dark:text-zinc-100" />
+          <div className="flex items-center justify-center gap-1 text-[9px] font-black text-purple-700 dark:text-purple-300 uppercase tracking-wider mb-0.5 font-mono">
+            <FileBadge className="w-2.5 h-2.5 text-purple-700 dark:text-purple-300" />
             <span>CERTS</span>
           </div>
-          <div className="text-lg font-black text-zinc-950 dark:text-white leading-none font-mono">
+          <div className="text-lg font-black text-purple-700 dark:text-purple-400 leading-none font-mono">
             {String(data.certificates).padStart(2, "0")}
           </div>
         </div>
       </div>
 
-      {/* SECTION 3: VERIFIED SKILLS GRID */}
+      {/* SECTION 3: VERIFIED SKILLS GRID (Artisan Pastel Cards) */}
       <div className="pt-2 pb-2 relative z-10">
         <SectionTitle>Verified Competency Matrix</SectionTitle>
         <div className="grid grid-cols-2 gap-2">
-          {data.verifiedSkills.map((skill) => (
-            <div 
-              key={skill.name}
-              className="flex items-center justify-between bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 p-2 rounded-xl shadow-2xs"
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="w-6 h-6 rounded-lg bg-zinc-100 dark:bg-zinc-700 border border-zinc-900 dark:border-zinc-600 flex items-center justify-center shrink-0">
-                  {getIconForSkill(skill.name)}
+          {data.verifiedSkills.map((skill) => {
+            const theme = SKILL_PASTEL_THEMES[skill.name.toLowerCase()] || {
+              bg: "bg-white",
+              darkBg: "dark:bg-zinc-800",
+              border: "border-zinc-300 dark:border-zinc-700",
+            };
+
+            return (
+              <div 
+                key={skill.name}
+                className={cn(
+                  "flex items-center justify-between border-2 border-zinc-900 dark:border-zinc-700 p-2 rounded-xl shadow-2xs transition-transform hover:-translate-y-0.5",
+                  theme.bg,
+                  theme.darkBg
+                )}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-900 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-2xs">
+                    {getIconForSkill(skill.name)}
+                  </div>
+                  <span className="text-zinc-950 dark:text-zinc-100 font-black text-xs truncate">
+                    {skill.name}
+                  </span>
                 </div>
-                <span className="text-zinc-950 dark:text-zinc-100 font-bold text-xs truncate">
-                  {skill.name}
+                
+                <span className={cn(
+                  "px-1.5 py-0.2 rounded text-[8px] font-black border font-mono shrink-0",
+                  skill.confidence === "High" 
+                    ? "bg-[#DCFCE7] text-emerald-950 border-emerald-400 dark:bg-emerald-950 dark:text-emerald-200" 
+                    : "bg-[#E0F2FE] text-blue-950 border-blue-400 dark:bg-sky-950 dark:text-sky-200"
+                )}>
+                  {skill.confidence}
                 </span>
               </div>
-              
-              <span className={cn(
-                "px-1.5 py-0.2 rounded text-[8px] font-black border font-mono shrink-0",
-                skill.confidence === "High" 
-                  ? "bg-emerald-100 text-emerald-950 border-emerald-400" 
-                  : "bg-blue-100 text-blue-950 border-blue-400"
-              )}>
-                {skill.confidence}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* SECTION 4: GITHUB ACTIVITY HEATMAP (Full Verified Engine) */}
+      {/* SECTION 4: GITHUB ACTIVITY HEATMAP */}
       <div className="pt-1 pb-1 relative z-10">
         <SectionTitle>Deterministic Code Contribution</SectionTitle>
         <GitHubCalendar
@@ -349,7 +371,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           className="w-full flex items-center justify-between text-xs font-black text-zinc-900 dark:text-zinc-100 hover:text-blue-600 transition-colors p-1 cursor-pointer font-mono"
         >
           <div className="flex items-center gap-1.5">
-            <Lock className="w-3.5 h-3.5" />
+            <Lock className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
             <span>EVIDENCE VAULT ({data.evidence.githubRepos.length + data.evidence.certificates.length})</span>
           </div>
           <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", drawerOpen && "rotate-180")} />

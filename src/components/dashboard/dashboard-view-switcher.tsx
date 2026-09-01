@@ -5,6 +5,7 @@ import { SkillPassportCard, SkillPassportData } from "@/components/dashboard/ski
 import { StudentPassportIdCard, StudentPassportProps } from "@/components/passport/student-id-card";
 import { CreditCard, LayoutDashboard, Share2, Printer } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 interface Props {
   mappedData: SkillPassportData;
@@ -31,18 +32,19 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
   return (
     <div className="flex flex-col gap-4 w-full max-w-[440px] flex-shrink-0">
       {/* Top Controls Bar - Unified Tactile Neobrutalist Theme & Perfect Alignment */}
-      <div className="flex items-center justify-between gap-2 p-2 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl shadow-[3px_3px_0px_0px_#18181B] transition-colors">
+      <div className="flex items-center justify-between gap-2 p-2 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] transition-colors">
         
         {/* Left Segmented Switcher */}
         <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl border border-zinc-300 dark:border-zinc-700">
           <button
             type="button"
             onClick={() => setViewMode("id-card")}
-            className={`flex items-center gap-1.5 px-3 h-7.5 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
+            className={cn(
+              "flex items-center gap-1.5 px-3.5 h-8 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer",
               viewMode === "id-card"
-                ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[1px_1px_0px_0px_#18181B]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
-            }`}
+                ? "bg-[#FEF08A] text-amber-950 border-2 border-zinc-900 shadow-[1.5px_1.5px_0px_0px_#18181B]"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200/60"
+            )}
           >
             <CreditCard className="w-3.5 h-3.5 shrink-0" />
             <span>ID Card</span>
@@ -51,11 +53,12 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
           <button
             type="button"
             onClick={() => setViewMode("analytics")}
-            className={`flex items-center gap-1.5 px-3 h-7.5 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer ${
+            className={cn(
+              "flex items-center gap-1.5 px-3.5 h-8 rounded-lg text-xs font-black whitespace-nowrap transition-all cursor-pointer",
               viewMode === "analytics"
-                ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[1px_1px_0px_0px_#18181B]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
-            }`}
+                ? "bg-[#BAE6FD] text-blue-950 border-2 border-zinc-900 shadow-[1.5px_1.5px_0px_0px_#18181B]"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-200/60"
+            )}
           >
             <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
             <span>Matrix</span>
@@ -67,7 +70,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
           <button
             type="button"
             onClick={handleShare}
-            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-bold shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
+            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-[#DCFCE7] hover:text-emerald-950 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-black shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
           >
             <Share2 className="w-3.5 h-3.5 shrink-0" />
             <span>Share</span>
@@ -76,7 +79,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
           <button
             type="button"
             onClick={handlePrint}
-            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-bold shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
+            className="h-8 px-3 text-xs text-zinc-950 dark:text-zinc-100 bg-white dark:bg-zinc-800 hover:bg-[#EDE9FE] hover:text-purple-950 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl flex items-center gap-1.5 font-black shadow-[2px_2px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer whitespace-nowrap"
           >
             <Printer className="w-3.5 h-3.5 shrink-0" />
             <span>Print</span>
