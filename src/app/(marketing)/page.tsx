@@ -131,8 +131,14 @@ function HeroSection() {
         </p>
 
         {/* CTAs */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
           <StarButtonDemo />
+          <Link
+            href="/recruiter-signup"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-3xl border border-white/20 px-4 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
+          >
+            I&apos;m a recruiter
+          </Link>
         </div>
 
         {/* Hero visual — floating passport preview */}
