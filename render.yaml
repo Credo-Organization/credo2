@@ -18,3 +18,13 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
+      # Comma-separated origins allowed to call this API, e.g.
+      # https://credo2-gamma.vercel.app
+      #
+      # The service previously sent allow_origins ["*"] alongside
+      # allow_credentials, which browsers reject for credentialed requests
+      # anyway, so the wildcard bought nothing while advertising an API that
+      # has no auth of its own. Leaving this unset falls back to localhost
+      # only, which will reject the deployed frontend.
+      - key: ALLOWED_ORIGINS
+        sync: false
