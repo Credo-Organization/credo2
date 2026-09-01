@@ -119,36 +119,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-center gap-7">
       {/* Logo & Heading */}
-      <div className="flex flex-col items-center gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/20">
-          <Shield className="h-7 w-7 text-primary-foreground" />
+      <div className="flex flex-col items-center gap-3.5">
+        <div className="flex h-13 w-13 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl shadow-black/50 text-white">
+          <Shield className="h-6 w-6 text-zinc-100" />
         </div>
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Welcome to Credify</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-white">Welcome to Credify</h1>
+          <p className="mt-1 text-sm text-zinc-400">
             Transform your skills into a verified passport
           </p>
         </div>
       </div>
 
       {/* Login Card */}
-      <div className="w-full glass rounded-2xl p-6 space-y-5 border border-white/10 shadow-2xl backdrop-blur-xl">
-        {/* Pill-shaped Frosted Glass Segmented Control */}
-        <div className="relative w-full p-1 rounded-full bg-white/5 backdrop-blur-md border border-white/10 grid grid-cols-2 gap-1 shadow-inner">
+      <div className="w-full bg-zinc-900/80 border border-zinc-800/90 rounded-3xl p-7 space-y-5 shadow-2xl shadow-black/80 backdrop-blur-2xl">
+        {/* Pill-shaped Segmented Control */}
+        <div className="relative w-full p-1 rounded-full bg-zinc-950/70 backdrop-blur-md border border-zinc-800/80 grid grid-cols-2 gap-1 shadow-inner">
           <button
             type="button"
             onClick={() => setRole("student")}
             className={cn(
-              "relative z-10 py-2 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
-              role === "student" ? "text-white" : "text-zinc-400 hover:text-white"
+              "relative z-10 py-2.5 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
+              role === "student" ? "text-white" : "text-zinc-400 hover:text-zinc-200"
             )}
           >
             {role === "student" && (
               <motion.div
                 layoutId="authPageRolePill"
-                className="absolute inset-0 rounded-full bg-zinc-800 border border-white/15 shadow-md"
+                className="absolute inset-0 rounded-full bg-zinc-800 border border-zinc-700/60 shadow-md"
                 transition={{
                   type: "spring",
                   stiffness: 450,
@@ -166,14 +166,14 @@ export default function LoginPage() {
             type="button"
             onClick={() => setRole("recruiter")}
             className={cn(
-              "relative z-10 py-2 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
-              role === "recruiter" ? "text-white" : "text-zinc-400 hover:text-white"
+              "relative z-10 py-2.5 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
+              role === "recruiter" ? "text-white" : "text-zinc-400 hover:text-zinc-200"
             )}
           >
             {role === "recruiter" && (
               <motion.div
                 layoutId="authPageRolePill"
-                className="absolute inset-0 rounded-full bg-zinc-800 border border-white/15 shadow-md"
+                className="absolute inset-0 rounded-full bg-zinc-800 border border-zinc-700/60 shadow-md"
                 transition={{
                   type: "spring",
                   stiffness: 450,
@@ -195,7 +195,7 @@ export default function LoginPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -3 }}
             transition={{ duration: 0.15 }}
-            className="text-center text-xs text-muted-foreground"
+            className="text-center text-xs text-zinc-400 leading-relaxed"
           >
             {role === "student"
               ? "Continue as a student to generate and share your verified skill passport."
@@ -204,40 +204,40 @@ export default function LoginPage() {
         </AnimatePresence>
 
         {error && (
-          <div className="text-red-400 text-xs bg-red-400/10 p-2.5 rounded-lg border border-red-400/20">
+          <div className="text-red-400 text-xs bg-red-400/10 p-2.5 rounded-xl border border-red-400/20">
             {error}
           </div>
         )}
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3.5">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="login-email" className="text-zinc-200 font-normal text-xs">Email</Label>
+            <Label htmlFor="login-email" className="text-zinc-300 font-medium text-xs">Email</Label>
             <Input
               id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="youremail@yourdomain.com"
-              className="h-11 bg-[#1c1c1c] border-0 text-white placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-700 rounded-lg text-sm"
+              className="h-11 bg-zinc-950/80 border border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:border-zinc-700 rounded-xl text-sm transition-colors"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="login-password" className="text-zinc-200 font-normal text-xs">Password</Label>
+            <Label htmlFor="login-password" className="text-zinc-300 font-medium text-xs">Password</Label>
             <Input
               id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Create or enter password"
-              className="h-11 bg-[#1c1c1c] border-0 text-white placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-700 rounded-lg text-sm"
+              className="h-11 bg-zinc-950/80 border border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:border-zinc-700 rounded-xl text-sm transition-colors"
             />
           </div>
 
           <Button
             onClick={handleEmailLogin}
             disabled={isLoading}
-            className="w-full h-11 text-xs font-semibold mt-1 bg-[#2a2a2a] hover:bg-white text-white hover:text-black rounded-lg border-0 transition-colors shadow-sm cursor-pointer"
+            className="w-full h-11 text-xs font-semibold mt-1 bg-white hover:bg-zinc-200 text-zinc-950 rounded-xl border-0 transition-all shadow-md active:scale-[0.99] cursor-pointer"
           >
             {isLoading ? "Signing in..." : `Sign in as ${role === "student" ? "Student" : "Recruiter"}`}
           </Button>
@@ -245,10 +245,10 @@ export default function LoginPage() {
 
         <div className="relative my-1">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-white/10" />
+            <span className="w-full border-t border-zinc-800" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-[#18181b] px-3 text-zinc-400 font-medium">or continue with</span>
+            <span className="bg-zinc-900 px-3 text-zinc-400 font-medium">or continue with</span>
           </div>
         </div>
 
@@ -257,9 +257,9 @@ export default function LoginPage() {
             onClick={handleGoogleLogin}
             variant="outline"
             size="lg"
-            className="w-full gap-2.5 h-11 text-xs font-medium bg-white/5 border-white/10 hover:bg-white/10 text-white cursor-pointer"
+            className="w-full gap-2.5 h-11 text-xs font-medium bg-zinc-950/50 border-zinc-800 hover:bg-zinc-800/80 hover:border-zinc-700 text-zinc-200 hover:text-white rounded-xl transition-all cursor-pointer"
           >
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
+            <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                 fill="#4285F4"
@@ -285,9 +285,9 @@ export default function LoginPage() {
               onClick={handleGithubLogin}
               variant="outline"
               size="lg"
-              className="w-full gap-2.5 h-11 text-xs font-medium bg-white/5 border-white/10 hover:bg-white/10 text-white cursor-pointer"
+              className="w-full gap-2.5 h-11 text-xs font-medium bg-zinc-950/50 border-zinc-800 hover:bg-zinc-800/80 hover:border-zinc-700 text-zinc-200 hover:text-white rounded-xl transition-all cursor-pointer"
             >
-              <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="h-4 w-4 shrink-0 text-zinc-200" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
               </svg>
               <span>GitHub</span>
@@ -296,14 +296,14 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500">
             By continuing, you agree to our Terms of Service and Privacy Policy
           </p>
         </div>
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-muted-foreground/60">
+      <p className="text-xs text-zinc-600">
         Powered by evidence-based skill verification
       </p>
     </div>
