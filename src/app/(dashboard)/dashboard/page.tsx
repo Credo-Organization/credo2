@@ -257,11 +257,11 @@ export default async function DashboardPage() {
           {/* Section 2: AI Skill Gap Intelligence */}
           <div id="gap-analysis" className="p-6 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl space-y-4 scroll-mt-24">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-700">
                 <Brain className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-[11px] font-bold tracking-widest text-blue-400 uppercase">
+                <span className="text-[11px] font-bold tracking-widest text-blue-700 uppercase">
                   AI Skill Intelligence
                 </span>
                 <h4 className="text-sm font-bold text-stone-900 tracking-tight">
@@ -295,11 +295,11 @@ export default async function DashboardPage() {
           {/* Section 3: Suggested Proof-of-Work Projects */}
           <div className="p-6 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-700">
                 <Briefcase className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-[11px] font-bold tracking-widest text-purple-400 uppercase">
+                <span className="text-[11px] font-bold tracking-widest text-purple-700 uppercase">
                   Proof-of-Work Blueprints
                 </span>
                 <h4 className="text-sm font-bold text-stone-900 tracking-tight">

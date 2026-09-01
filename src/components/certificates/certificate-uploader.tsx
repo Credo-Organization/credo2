@@ -133,7 +133,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
       <DialogContent className="sm:max-w-lg bg-white border border-stone-200 text-stone-900 p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-2xl">
         <DialogHeader className="space-y-1.5 text-left">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 rounded-full bg-navy-500/10 border border-navy-500/20 text-navy-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" />
               Cryptographic Ingestion
             </span>
@@ -158,7 +158,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
                 : "text-stone-500 hover:text-stone-900"
             }`}
           >
-            <Award className="w-3.5 h-3.5 text-emerald-400" />
+            <Award className="w-3.5 h-3.5 text-navy-700" />
             Credly / OpenBadge URL
           </button>
 
@@ -181,14 +181,14 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
                 <span>Credly Badge URL or Badge ID *</span>
-                <span className="text-[10px] text-emerald-400 font-mono">1-Click Live Sync</span>
+                <span className="text-[10px] text-navy-700 font-mono">1-Click Live Sync</span>
               </label>
               <input
                 value={credlyUrl}
                 onChange={(e) => setCredlyUrl(e.target.value)}
                 placeholder="e.g. https://www.credly.com/badges/abc-123 or badge ID"
                 required
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 font-mono transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 font-mono transition-colors"
               />
               <p className="text-[11px] text-stone-400 leading-relaxed pt-1">
                 Supports AWS, Google Cloud, Meta, IBM, Microsoft, CompTIA and all standard OpenBadges v2/v3.
@@ -198,7 +198,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             <Button
               type="submit"
               disabled={!credlyUrl.trim() || isUploading}
-              className="w-full h-10 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="w-full h-10 bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs rounded-xl shadow-lg shadow-navy-900/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {isUploading ? (
                 <>
@@ -221,9 +221,9 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
               </label>
               <label 
                 htmlFor="file"
-                className="w-full cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-stone-200 hover:border-emerald-400/50 bg-stone-50 rounded-2xl transition-colors group text-center"
+                className="w-full cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-stone-200 hover:border-navy-400/50 bg-stone-50 rounded-2xl transition-colors group text-center"
               >
-                <FileType2 className="w-8 h-8 text-stone-400 group-hover:text-emerald-400 mb-2 transition-colors" />
+                <FileType2 className="w-8 h-8 text-stone-400 group-hover:text-navy-700 mb-2 transition-colors" />
                 <span className="text-xs font-bold text-stone-900">
                   {file ? file.name : "Click or drag to select certificate"}
                 </span>
@@ -247,7 +247,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
                 onChange={(e) => setTitle(e.target.value)} 
                 placeholder="e.g. AWS Solutions Architect"
                 required
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 transition-colors"
               />
             </div>
 
@@ -257,14 +257,14 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
                 value={issuer} 
                 onChange={(e) => setIssuer(e.target.value)} 
                 placeholder="e.g. Amazon Web Services, Meta, Coursera"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 transition-colors"
               />
             </div>
 
             <Button
               type="submit"
               disabled={!file || !title || isUploading}
-              className="w-full h-10 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="w-full h-10 bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs rounded-xl shadow-lg shadow-navy-900/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {isUploading ? (
                 <>

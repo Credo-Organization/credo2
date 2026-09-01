@@ -111,11 +111,15 @@ OPENAI_API_KEY=your_aicredits_key_here
 
 Run `supabase-schema.sql` in the Supabase SQL editor to create the base tables, then apply the migration:
 
-```bash
-scripts/fix-profiles-schema.sql
-```
+Run these in the Supabase SQL editor, in this order. All four are **required**,
+not optional - the app returns 500s without them.
 
-This is **required**, not optional. It adds `gender`, `avatar_url` and `experience_level` to `profiles`, adds `sha256_hash` and `issuer_did` to `certificates`, and backfills `onboarding_completed` into Supabase Auth metadata. Without it, profile saves and certificate uploads are rejected by Postgres.
+| # | File | What it adds |
+|---|------|--------------|
+| 1 | `scripts/fix-profiles-schema.sql` | `gender`, `avatar_url`, `experience_level` on `profiles`; `sha256_hash`, `issuer_did` on `certificates`; backfills `onboarding_completed` into Auth metadata. Profile saves and certificate uploads fail without it. |
+| 2 | `scripts/add-audit-votes.sql` | `audit_votes` on `github_repos` and `evidence`, so the per-model ensemble verdicts can be stored and shown. |
+| 3 | `scripts/add-recruiter-role.sql` | `profiles.role` and the `saved_candidates` table with its RLS policies. The entire recruiter view 500s without it. |
+| 4 | `scripts/fix-rls-student-data.sql` | Replaces permissive `USING (true)` policies that exposed student rows to the anon key. Verify with `node scripts/verify-rls.mjs`. |
 
 ### 4. Run the Frontend
 

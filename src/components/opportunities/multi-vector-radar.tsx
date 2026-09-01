@@ -46,9 +46,9 @@ export function MultiVectorRadar({
       label: "GitProof Hygiene",
       score: hygieneScore,
       icon: ShieldCheck,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
-      bar: "bg-gradient-to-r from-emerald-600 to-emerald-400",
+      color: "text-navy-700",
+      bg: "bg-navy-500/10",
+      bar: "bg-gradient-to-r from-navy-600 to-navy-400",
       proof: "Commit physics & anti-cheat",
     },
     {
@@ -66,12 +66,12 @@ export function MultiVectorRadar({
     <div className={cn("rounded-2xl border border-stone-200 bg-stone-50 p-4.5 space-y-3.5 backdrop-blur-sm", className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <ShieldCheck className="w-4 h-4 text-navy-700" />
           <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
             4-Pillar Merit Diagnostic
           </h4>
         </div>
-        <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+        <span className="text-[11px] font-semibold text-navy-700 bg-navy-500/10 px-2 py-0.5 rounded-full border border-navy-500/20">
           {matchedCount} / {totalRequirements || 1} Skills Proven
         </span>
       </div>

@@ -214,10 +214,10 @@ export function TeamsClientHub({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl relative overflow-hidden">
         <div className="space-y-2 relative z-10">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-navy-500/10 border border-navy-500/20 text-navy-700">
               SIH 2026 Hackathon Network
             </span>
-            <span className="text-xs text-stone-400 font-mono">
+            <span className="text-xs text-stone-500 font-mono">
               Live Team Matcher
             </span>
           </div>
@@ -266,18 +266,18 @@ export function TeamsClientHub({
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Search Bar */}
               <div className="relative w-full sm:flex-1">
-                <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search problem statement, open role, or tech stack (e.g. FastAPI, ZK, PyTorch)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl pl-9 pr-8 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 focus:bg-stone-100 transition-all"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl pl-9 pr-8 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 focus:bg-stone-100 transition-all"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-900 text-xs p-1"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-900 text-xs p-1"
                   >
                     ✕
                   </button>
@@ -287,15 +287,15 @@ export function TeamsClientHub({
               {/* Controls: Stats & Sorter */}
               <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
                 <span className="px-3 py-1.5 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-mono text-stone-500 whitespace-nowrap">
-                  <strong className="text-emerald-400 font-bold">{filteredSquads.length}</strong> Squads
+                  <strong className="text-navy-700 font-bold">{filteredSquads.length}</strong> Squads
                 </span>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-stone-400 font-medium">Sort:</span>
+                  <span className="text-[11px] text-stone-500 font-medium">Sort:</span>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:border-emerald-400 cursor-pointer"
+                    className="bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:border-navy-400 cursor-pointer"
                   >
                     <option value="synergy" className="bg-white text-stone-900">Top Synergy Fit</option>
                     <option value="members" className="bg-white text-stone-900">Most Open Slots</option>
@@ -306,7 +306,7 @@ export function TeamsClientHub({
 
             {/* Tier 2: Track Filter Chips with Icons (No Scrollbars) */}
             <div className="pt-2 border-t border-stone-200 flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest mr-1">
+              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mr-1">
                 Tracks:
               </span>
               {TRACK_CHIPS.map((chip) => {
@@ -323,7 +323,7 @@ export function TeamsClientHub({
                     onClick={() => setSelectedTrack(chip)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer border ${
                       isSelected
-                        ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-bold"
+                        ? "bg-navy-500/15 text-navy-700 border-navy-500/30 shadow-[0_0_12px_rgba(43, 72, 135,0.15)] font-bold"
                         : "bg-stone-50 text-stone-500 border-stone-200 hover:text-stone-900 hover:bg-stone-100"
                     }`}
                   >
@@ -337,8 +337,8 @@ export function TeamsClientHub({
 
           {/* Squads Grid */}
           {filteredSquads.length === 0 ? (
-            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-stone-200 bg-white/[0.01]">
-              <Users className="w-10 h-10 text-stone-300 mb-3" />
+            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-stone-200 bg-stone-50/60">
+              <Users className="w-10 h-10 text-stone-400 mb-3" />
               <h3 className="text-base font-bold text-stone-900">No squads match your filters</h3>
               <p className="text-xs text-stone-500 max-w-sm mt-1 mb-4">
                 Try adjusting your search query or track filter to explore other hackathon teams.
@@ -348,7 +348,7 @@ export function TeamsClientHub({
                   setSelectedTrack("All Tracks");
                   setSearchQuery("");
                 }}
-                className="text-xs bg-white/[0.06] hover:bg-stone-100 text-stone-900 border border-stone-200 h-8 px-4 rounded-xl"
+                className="text-xs bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 h-8 px-4 rounded-xl"
               >
                 Reset Filters
               </Button>
@@ -377,7 +377,7 @@ export function TeamsClientHub({
             {/* Team Name */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
-                <Flag className="w-3.5 h-3.5 text-stone-400" />
+                <Flag className="w-3.5 h-3.5 text-stone-500" />
                 Squad / Team Name
               </label>
               <input
@@ -385,7 +385,7 @@ export function TeamsClientHub({
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="e.g. Quantum Coders"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
                 required
               />
             </div>
@@ -398,7 +398,7 @@ export function TeamsClientHub({
               <select
                 value={track}
                 onChange={(e) => setTrack(e.target.value)}
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-emerald-400 transition-colors cursor-pointer"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-navy-400 transition-colors cursor-pointer"
               >
                 {TRACK_CHIPS.filter((t) => t !== "All Tracks").map((t) => (
                   <option key={t} value={t} className="bg-white text-stone-900">
@@ -411,7 +411,7 @@ export function TeamsClientHub({
             {/* Problem Statement */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
-                <AlignLeft className="w-3.5 h-3.5 text-stone-400" />
+                <AlignLeft className="w-3.5 h-3.5 text-stone-500" />
                 Problem Statement & Project Vision
               </label>
               <textarea
@@ -419,7 +419,7 @@ export function TeamsClientHub({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Explain the problem you're tackling and the architecture you're building..."
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors resize-none"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors resize-none"
                 required
               />
             </div>
@@ -435,7 +435,7 @@ export function TeamsClientHub({
                   value={openRoles}
                   onChange={(e) => setOpenRoles(e.target.value)}
                   placeholder="e.g. Backend Lead, ZK Researcher"
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
                   required
                 />
               </div>
@@ -449,7 +449,7 @@ export function TeamsClientHub({
                   value={requiredSkills}
                   onChange={(e) => setRequiredSkills(e.target.value)}
                   placeholder="e.g. FastAPI, Docker, PyTorch"
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
                 />
               </div>
             </div>
@@ -464,7 +464,7 @@ export function TeamsClientHub({
                 value={discord}
                 onChange={(e) => setDiscord(e.target.value)}
                 placeholder="discord.gg/your-squad"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-emerald-400 transition-colors"
+                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
               />
             </div>
 
@@ -481,7 +481,7 @@ export function TeamsClientHub({
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-black h-9 px-6 rounded-xl shadow-lg shadow-emerald-500/20 cursor-pointer"
+                className="text-xs font-semibold bg-navy-900 hover:bg-navy-800 text-white h-9 px-6 rounded-xl shadow-lg shadow-navy-900/20 cursor-pointer"
               >
                 {isSubmitting ? "Publishing Squad..." : "Publish Squad Requirement"}
               </Button>

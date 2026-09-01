@@ -47,7 +47,7 @@ export function Header({ user }: HeaderProps) {
       <div className="ml-auto flex items-center gap-2">
         <Button variant="ghost" size="icon" className="relative text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
           <Bell className="h-4 w-4" />
-          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500" />
+          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-navy-500" />
         </Button>
       </div>
     </header>

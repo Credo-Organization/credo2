@@ -138,7 +138,7 @@ export const FileUpload = ({
                     </div>
                     
                     <div className="flex items-center space-x-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-navy-600" />
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();

@@ -44,7 +44,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         className={cn(
           "glass overflow-hidden rounded-[28px] border relative shadow-2xl transition-all duration-300 hover:-translate-y-1 group flex flex-col h-full",
           isHighMatch
-            ? "border-emerald-500/30 hover:border-emerald-500/50 hover:shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
+            ? "border-navy-500/30 hover:border-navy-500/50 hover:shadow-[0_10px_30px_rgba(43, 72, 135,0.1)]"
             : isModerateMatch
             ? "border-amber-500/20 hover:border-amber-500/40 hover:shadow-[0_10px_30px_rgba(245,158,11,0.08)]"
             : "border-stone-200 hover:border-stone-300"
@@ -53,8 +53,8 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         {/* Dynamic Top Ambient Glow */}
         {isHighMatch && (
           <>
-            <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 blur-[90px] rounded-full pointer-events-none" />
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/70 to-emerald-500/0" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-navy-500/10 blur-[90px] rounded-full pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-navy-500/0 via-navy-500/70 to-navy-500/0" />
           </>
         )}
         {isModerateMatch && (
@@ -70,7 +70,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-stone-900 tracking-tight leading-snug group-hover:text-emerald-300 transition-colors">
+              <h3 className="text-xl font-bold text-stone-900 tracking-tight leading-snug group-hover:text-navy-700 transition-colors">
                 {opportunity.title}
               </h3>
               <div className="flex flex-wrap items-center gap-2.5 text-xs font-medium text-stone-500">
@@ -114,7 +114,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
                 <span
                   className={cn(
                     "absolute text-base font-black tracking-tight",
-                    isHighMatch ? "text-emerald-400" : isModerateMatch ? "text-amber-400" : "text-stone-700"
+                    isHighMatch ? "text-navy-700" : isModerateMatch ? "text-amber-400" : "text-stone-700"
                   )}
                 >
                   {matchScore}<span className="text-[10px] font-bold">%</span>
@@ -150,7 +150,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
             {/* Matched Skills */}
             {matchedSkills.length > 0 && (
               <div>
-                <h4 className="text-[11px] font-bold mb-2.5 flex items-center gap-1.5 text-emerald-400 uppercase tracking-wider">
+                <h4 className="text-[11px] font-bold mb-2.5 flex items-center gap-1.5 text-emerald-700 uppercase tracking-wider">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Verified Skills Backed by Proof ({matchedSkills.length})
                 </h4>
@@ -159,7 +159,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
                     <Badge
                       key={skill.skill_id}
                       variant="secondary"
-                      className="bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/20 font-medium px-3 py-1 text-xs rounded-xl shadow-sm flex items-center gap-1"
+                      className="bg-navy-500/10 text-navy-700 hover:bg-navy-500/20 border border-navy-500/20 font-medium px-3 py-1 text-xs rounded-xl shadow-sm flex items-center gap-1"
                     >
                       <span>{skill.skill_name}</span>
                       {skill.is_critical && (
@@ -209,7 +209,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
             className={cn(
               "w-full rounded-2xl h-12 text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer",
               isHighMatch
-                ? "bg-emerald-500 text-black hover:bg-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)]"
+                ? "bg-navy-900 text-white hover:bg-navy-800 shadow-[0_0_25px_rgba(43, 72, 135,0.35)]"
                 : "bg-stone-100 text-stone-900 hover:bg-stone-200 border border-stone-200"
             )}
           >

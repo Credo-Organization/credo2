@@ -62,7 +62,7 @@ export function OpportunityFilterBar({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by role title, company, or required skill (e.g. TypeScript, React)..."
-            className="pl-10 pr-10 h-11 bg-white border-stone-200 text-stone-900 placeholder:text-stone-400 rounded-2xl focus-visible:ring-emerald-500/30 focus-visible:border-emerald-500/40 text-sm"
+            className="pl-10 pr-10 h-11 bg-white border-stone-200 text-stone-900 placeholder:text-stone-400 rounded-2xl focus-visible:ring-navy-500/30 focus-visible:border-navy-500/40 text-sm"
           />
           {searchQuery && (
             <button
@@ -80,7 +80,7 @@ export function OpportunityFilterBar({
           <select
             value={activeSort}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="h-11 px-3.5 rounded-2xl bg-stone-50 border border-stone-200 text-xs font-medium text-stone-800 focus:outline-none focus:ring-1 focus:ring-emerald-500/40 cursor-pointer"
+            className="h-11 px-3.5 rounded-2xl bg-stone-50 border border-stone-200 text-xs font-medium text-stone-800 focus:outline-none focus:ring-1 focus:ring-navy-500/40 cursor-pointer"
           >
             <option value="match-desc" className="bg-white text-stone-900">
               Highest Match %
@@ -109,7 +109,7 @@ export function OpportunityFilterBar({
               className={cn(
                 "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer",
                 isActive
-                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                  ? "bg-navy-500/15 border-navy-500/40 text-navy-700 shadow-[0_0_15px_rgba(43, 72, 135,0.15)]"
                   : "bg-stone-50 border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-stone-100"
               )}
             >
@@ -118,7 +118,7 @@ export function OpportunityFilterBar({
                 <span
                   className={cn(
                     "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
-                    isActive ? "bg-emerald-500/30 text-emerald-200" : "bg-stone-100 text-stone-500"
+                    isActive ? "bg-navy-500/30 text-navy-200" : "bg-stone-100 text-stone-500"
                   )}
                 >
                   {chip.count}

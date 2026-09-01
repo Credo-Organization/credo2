@@ -251,7 +251,7 @@ export function RoleCompetencyAnalyzer({
                 </div>
               </div>
 
-              <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-navy-500/10 border border-navy-500/30 text-navy-400">
                 {matchPercent}% Role Fit
               </span>
             </div>
@@ -276,13 +276,13 @@ export function RoleCompetencyAnalyzer({
                     className={cn(
                       "p-3.5 rounded-2xl border flex items-center justify-between transition-all",
                       isMatched
-                        ? "bg-[#121f38] border-emerald-500/30"
+                        ? "bg-[#121f38] border-navy-500/30"
                         : "bg-[#121a2e] border-white/[0.08]"
                     )}
                   >
                     <div className="flex items-center gap-2.5">
                       {isMatched ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-navy-400 flex-shrink-0" />
                       ) : (
                         <AlertCircle className="w-4 h-4 text-amber-400/80 flex-shrink-0" />
                       )}
@@ -296,7 +296,7 @@ export function RoleCompetencyAnalyzer({
                       className={cn(
                         "text-[11px] font-bold px-2 py-0.5 rounded-md",
                         isMatched
-                          ? "bg-emerald-500/20 text-emerald-300"
+                          ? "bg-navy-500/20 text-navy-300"
                           : "bg-amber-500/15 text-amber-300"
                       )}
                     >
@@ -373,7 +373,7 @@ export function RoleCompetencyAnalyzer({
 
           <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-300 flex items-center justify-between mt-4">
             <span className="font-semibold">All projects sync to GitProof</span>
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <ShieldCheck className="w-4 h-4 text-navy-400" />
           </div>
         </div>
       </div>

@@ -123,7 +123,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
       </div>
 
       <div className="flex justify-end pt-4 border-t border-border">
-        <Button type="submit" disabled={isSaving} className="bg-zinc-900 text-white hover:bg-zinc-800">
+        <Button type="submit" disabled={isSaving} className="bg-stone-900 text-white hover:bg-stone-800">
           {isSaving ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />

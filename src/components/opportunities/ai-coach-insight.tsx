@@ -38,7 +38,7 @@ export function AiCoachInsight({ result, passportSnapshot }: { result: MatchResu
         variant="ghost" 
         size="sm" 
         onClick={handleAskCoach}
-        className="w-full flex items-center justify-between text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/20 rounded-xl"
+        className="w-full flex items-center justify-between text-navy-700 hover:text-navy-700 hover:bg-navy-500/10 border border-navy-500/20 rounded-xl"
       >
         <span className="flex items-center gap-2 font-semibold">
           <Bot className="w-4 h-4" />
@@ -52,26 +52,26 @@ export function AiCoachInsight({ result, passportSnapshot }: { result: MatchResu
       </Button>
 
       {isOpen && (
-        <div className="mt-4 glass bg-emerald-500/5 border border-emerald-500/20 rounded-xl overflow-hidden animate-in slide-in-from-top-2 fade-in duration-200">
+        <div className="mt-4 glass bg-navy-500/5 border border-navy-500/20 rounded-xl overflow-hidden animate-in slide-in-from-top-2 fade-in duration-200">
           <div className="p-5 relative">
             {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-8 text-emerald-400/70 space-y-3">
+              <div className="flex flex-col items-center justify-center py-8 text-navy-700 space-y-3">
                 <Sparkles className="w-6 h-6 animate-pulse" />
                 <p className="text-sm font-medium animate-pulse tracking-wide">Analyzing semantic match...</p>
               </div>
             ) : error ? (
               <p className="text-sm text-rose-400 font-medium">{error}</p>
             ) : (
-              <div className="prose prose-sm prose-invert prose-emerald max-w-none">
+              <div className="prose prose-sm prose-invert prose-slate max-w-none">
                 <ReactMarkdown
                   components={{
-                    h1: ({node, ...props}) => <h3 className="text-lg font-bold text-emerald-300 mt-0" {...props} />,
-                    h2: ({node, ...props}) => <h4 className="text-md font-semibold text-emerald-300 mt-4 mb-2" {...props} />,
-                    h3: ({node, ...props}) => <h5 className="text-sm font-semibold text-emerald-300 mt-3 mb-1" {...props} />,
+                    h1: ({node, ...props}) => <h3 className="text-lg font-bold text-navy-700 mt-0" {...props} />,
+                    h2: ({node, ...props}) => <h4 className="text-md font-semibold text-navy-700 mt-4 mb-2" {...props} />,
+                    h3: ({node, ...props}) => <h5 className="text-sm font-semibold text-navy-700 mt-3 mb-1" {...props} />,
                     p: ({node, ...props}) => <p className="text-stone-600 leading-relaxed mb-3" {...props} />,
                     ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-4 text-stone-500 space-y-1" {...props} />,
                     li: ({node, ...props}) => <li className="" {...props} />,
-                    strong: ({node, ...props}) => <strong className="text-emerald-200 font-semibold" {...props} />,
+                    strong: ({node, ...props}) => <strong className="text-navy-200 font-semibold" {...props} />,
                   }}
                 >
                   {insight || ""}

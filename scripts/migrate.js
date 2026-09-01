@@ -25,9 +25,20 @@ async function applySchema() {
   /* eslint-disable @typescript-eslint/no-require-imports */
 const { execSync } = require('child_process');
   const { Client } = require('pg');
-  const client = new Client({
-    connectionString: "postgresql://postgres.wizuwacevushwlegfgyu:subham1234@aws-0-ap-south-1.pooler.supabase.com:6543/postgres"
-  });
+  // The pooler URL and password were previously hardcoded here and committed.
+  // Supply it in the environment instead:
+  //   DATABASE_URL=postgresql://postgres.<ref>:<password>@<host>:6543/postgres
+  if (!process.env.DATABASE_URL) {
+    console.error(
+      "DATABASE_URL is not set.
+" +
+      "Find it in Supabase under Project Settings > Database > Connection string (Session pooler),
+" +
+      "then run:  DATABASE_URL='postgresql://...' node scripts/migrate.js"
+    );
+    process.exit(1);
+  }
+  const client = new Client({ connectionString: process.env.DATABASE_URL });
 
   try {
     await client.connect();

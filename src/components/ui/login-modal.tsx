@@ -33,10 +33,13 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
     }
     try {
       const supabase = createClient();
+      // Constant callback URL so it always matches the Supabase redirect
+      // allowlist. The post-login destination travels in a cookie instead.
+      const callback = `${window.location.origin}/auth/callback`;
       await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callback,
         },
       });
     } catch (err: any) {
@@ -53,10 +56,13 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
     }
     try {
       const supabase = createClient();
+      // Constant callback URL so it always matches the Supabase redirect
+      // allowlist. The post-login destination travels in a cookie instead.
+      const callback = `${window.location.origin}/auth/callback`;
       await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callback,
         },
       });
     } catch (err: any) {
