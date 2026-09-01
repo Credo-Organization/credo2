@@ -19,7 +19,7 @@ export function RepoAuditTable({ repos }: { repos: AuditRow[] }) {
   if (repos.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-stone-200 bg-stone-50/60 px-5 py-10 text-center">
-        <ShieldQuestion className="w-6 h-6 text-stone-300 mx-auto mb-2" aria-hidden="true" />
+        <ShieldQuestion className="w-6 h-6 text-stone-400 mx-auto mb-2" aria-hidden="true" />
         <p className="text-[13px] text-stone-500">
           This candidate has no audited repositories yet.
         </p>
@@ -66,7 +66,7 @@ export function RepoAuditTable({ repos }: { repos: AuditRow[] }) {
                   {flags.length > 0 && (
                     <ul className="mt-1.5 flex flex-col gap-0.5">
                       {flags.slice(0, 3).map((f, k) => (
-                        <li key={k} className="text-[11px] text-rose-500 leading-snug">
+                        <li key={k} className="text-[11px] text-rose-700 leading-snug">
                           {f}
                         </li>
                       ))}
@@ -79,7 +79,7 @@ export function RepoAuditTable({ repos }: { repos: AuditRow[] }) {
                 <td className="px-4 py-3 text-right">
                   <span
                     className={`font-mono tabular-nums text-[13px] ${
-                      flagged ? "text-rose-600" : verified ? "text-emerald-600" : "text-stone-500"
+                      flagged ? "text-rose-700" : verified ? "text-emerald-700" : "text-stone-500"
                     }`}
                   >
                     {r.integrity_score ?? "—"}
@@ -88,7 +88,7 @@ export function RepoAuditTable({ repos }: { repos: AuditRow[] }) {
                 <td className="px-4 py-3">
                   <span
                     className={`inline-flex items-center gap-1.5 text-[11px] font-medium whitespace-nowrap ${
-                      flagged ? "text-rose-600" : verified ? "text-emerald-600" : "text-amber-600"
+                      flagged ? "text-rose-700" : verified ? "text-emerald-700" : "text-amber-700"
                     }`}
                   >
                     {flagged ? (
@@ -105,10 +105,10 @@ export function RepoAuditTable({ repos }: { repos: AuditRow[] }) {
                   {agreement ? (
                     <span className="font-mono tabular-nums text-[12px] text-stone-600">
                       {agreement}
-                      <span className="text-stone-400"> agreed</span>
+                      <span className="text-stone-500"> agreed</span>
                     </span>
                   ) : (
-                    <span className="text-[12px] text-stone-300">—</span>
+                    <span className="text-[12px] text-stone-500">—</span>
                   )}
                 </td>
               </tr>

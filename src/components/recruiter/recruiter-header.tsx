@@ -41,7 +41,7 @@ export function RecruiterHeader({
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-stone-200/70 bg-[#fdf8f0]/85 px-4 py-3 backdrop-blur-md sm:px-6">
       <Link href="/recruiter" className="flex items-center gap-2.5 min-w-0">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-600">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700">
           <Briefcase className="h-4 w-4" aria-hidden="true" />
         </span>
         <span className="flex min-w-0 flex-col leading-tight">

@@ -55,7 +55,7 @@ export function CandidateLookup() {
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Search
-            className="w-4 h-4 text-stone-300 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            className="w-4 h-4 text-stone-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
             aria-hidden="true"
           />
           <input
@@ -68,7 +68,7 @@ export function CandidateLookup() {
             aria-label="Passport ID or verification link"
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? "lookup-error" : undefined}
-            className="w-full h-10 pl-9 pr-3 rounded-lg bg-stone-50 border border-stone-200 text-sm text-stone-900 placeholder:text-stone-300 font-mono transition-colors focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-300"
+            className="w-full h-10 pl-9 pr-3 rounded-lg bg-stone-50 border border-stone-200 text-sm text-stone-900 placeholder:text-stone-500 font-mono transition-colors focus:outline-none focus:border-stone-400 focus:ring-1 focus:ring-stone-300"
           />
         </div>
         <button
@@ -83,7 +83,7 @@ export function CandidateLookup() {
         <p
           id="lookup-error"
           role="alert"
-          className="flex items-start gap-1.5 text-[12px] text-amber-600/90 leading-snug"
+          className="flex items-start gap-1.5 text-[12px] text-amber-700/90 leading-snug"
         >
           <AlertCircle className="w-3.5 h-3.5 mt-px shrink-0" aria-hidden="true" />
           {error}

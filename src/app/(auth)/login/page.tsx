@@ -26,8 +26,15 @@ export default function LoginPage() {
    * which silently drops the user on the project's Site URL.
    */
   const rememberRoleChoice = () => {
-    if (role !== "recruiter") return;
-    document.cookie = `post_login_next=${encodeURIComponent("/recruiter-signup")}; path=/; max-age=600; samesite=lax`;
+    if (role === "recruiter") {
+      document.cookie = `post_login_next=${encodeURIComponent("/recruiter-signup")}; path=/; max-age=600; samesite=lax`;
+      return;
+    }
+    // Selecting Student must clear the cookie, not merely decline to set it.
+    // Arriving from the landing page's recruiter link leaves one behind with a
+    // ten minute life; without this, toggling back to Student and signing in
+    // still routed through /recruiter-signup.
+    document.cookie = "post_login_next=; path=/; max-age=0; samesite=lax";
   };
 
   const handleGoogleLogin = async () => {
@@ -76,6 +83,11 @@ export default function LoginPage() {
     setError(null);
     setIsLoading(true);
     const supabase = createClient();
+    // The button reads "Sign in as Recruiter", so this path has to honour the
+    // choice too. It never reaches /auth/callback - it reloads in place - so
+    // the cookie alone would not be read; the reload target is set explicitly
+    // below once the sign-in succeeds.
+    rememberRoleChoice();
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
@@ -100,7 +112,8 @@ export default function LoginPage() {
         setError(signInError.message);
       }
     } else {
-      window.location.reload();
+      window.location.assign(role === "recruiter" ? "/recruiter-signup" : "/dashboard");
+      return;
     }
     setIsLoading(false);
   };

@@ -154,7 +154,19 @@ def compute_match(state: GraphState):
 
         # 3. Deterministic scoring fallback if all LLMs are unreachable
         if res is None:
-            print("--- Using deterministic match heuristic fallback ---")
+            # Loudly, and with the cause. This path answers HTTP 200 with a
+            # plausible score, so a misconfigured key looked like a working
+            # service for as long as nobody read the logs.
+            print(
+                "!!! MATCH EVALUATOR DEGRADED: every LLM provider failed; returning a "
+                "keyword-overlap heuristic, not an AI verdict.
+"
+                f"!!! AI_BASE_URL={base_url!r}  api_key_present={bool(api_key)}  "
+                f"google_key_present={bool(os.environ.get('GOOGLE_API_KEY') or os.environ.get('GEMINI_API_KEY'))}
+"
+                "!!! A 401 here usually means the key belongs to a different provider "
+                "than AI_BASE_URL points at."
+            )
             skills = [s.get("name", "") if isinstance(s, dict) else str(s) for s in sanitized.get("skills", [])]
             matched = [s for s in skills if s.lower() in job_desc.lower()]
             score = min(100, int((len(matched) / max(1, len(skills))) * 100)) if skills else 75

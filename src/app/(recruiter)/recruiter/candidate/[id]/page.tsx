@@ -32,7 +32,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     return (
       <div className="max-w-2xl mx-auto px-6 py-24 text-center">
         <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-4">
-          <ShieldQuestion className="w-6 h-6 text-amber-600" aria-hidden="true" />
+          <ShieldQuestion className="w-6 h-6 text-amber-700" aria-hidden="true" />
         </div>
         <h1 className="text-xl font-semibold text-stone-900 mb-2">No published passport found</h1>
         <p className="text-[13px] text-stone-500 max-w-sm mx-auto leading-relaxed">
@@ -50,9 +50,16 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
   }
 
   const snap = (passport.snapshot_data ?? {}) as {
+    student_id?: string;
     skills?: { name: string }[];
     profile?: { name?: string; college?: string; headline?: string };
   };
+
+  // This page resolves by student id or by the card id printed on the physical
+  // card, but the shortlist is keyed on the student id alone. Everything that
+  // touches saved_candidates below uses the resolved id rather than whichever
+  // one was typed, so saving, removing and the initial button state agree.
+  const canonicalId = snap.student_id ?? safeId;
   const profile = passport.profiles as {
     id?: string;
     full_name?: string;
@@ -80,7 +87,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         .from("saved_candidates")
         .select("id")
         .eq("recruiter_id", user.id)
-        .eq("passport_id", safeId)
+        .eq("passport_id", canonicalId)
         .maybeSingle()
     : { data: null };
 
@@ -96,7 +103,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
       <Link
         href="/recruiter"
-        className="inline-flex items-center gap-1.5 text-[12px] text-stone-400 hover:text-stone-900 w-fit transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded"
+        className="inline-flex items-center gap-1.5 text-[12px] text-stone-500 hover:text-stone-900 w-fit transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded"
       >
         <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> Shortlist
       </Link>
@@ -115,7 +122,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
             <span className="font-mono text-stone-500">{safeId}</span>
           </p>
         </div>
-        <SaveButton passportId={safeId} initiallySaved={Boolean(saved)} />
+        <SaveButton passportId={canonicalId} initiallySaved={Boolean(saved)} />
       </header>
 
       <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-stone-200 overflow-hidden">
@@ -133,7 +140,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
           >
             <div
               className={`font-mono text-xl font-semibold tabular-nums leading-none ${
-                s.warn ? "text-rose-600" : "text-stone-900"
+                s.warn ? "text-rose-700" : "text-stone-900"
               }`}
             >
               {s.v}
@@ -148,7 +155,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
           <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             GitProof audit
           </h2>
-          <span className="text-[11px] text-stone-400">lowest integrity first</span>
+          <span className="text-[11px] text-stone-500">lowest integrity first</span>
         </div>
         <RepoAuditTable repos={list} />
       </section>
@@ -157,10 +164,10 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         <section className="rounded-xl border border-stone-200 p-4 flex flex-col gap-3">
           <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             Verified skills
-            <span className="ml-1.5 font-mono tabular-nums text-stone-300">{skills.length}</span>
+            <span className="ml-1.5 font-mono tabular-nums text-stone-500">{skills.length}</span>
           </h2>
           {skills.length === 0 ? (
-            <p className="text-[13px] text-stone-400">No verified skills yet.</p>
+            <p className="text-[13px] text-stone-500">No verified skills yet.</p>
           ) : (
             <ul className="flex flex-wrap gap-1.5">
               {skills.map((s, i) => (
@@ -178,18 +185,18 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         <section className="rounded-xl border border-stone-200 p-4 flex flex-col gap-3">
           <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
             Certificates
-            <span className="ml-1.5 font-mono tabular-nums text-stone-300">{certs?.length ?? 0}</span>
+            <span className="ml-1.5 font-mono tabular-nums text-stone-500">{certs?.length ?? 0}</span>
           </h2>
           {(certs?.length ?? 0) === 0 ? (
-            <p className="text-[13px] text-stone-400">No certificates uploaded.</p>
+            <p className="text-[13px] text-stone-500">No certificates uploaded.</p>
           ) : (
             <ul className="flex flex-col gap-2">
               {certs!.map((c, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <Award className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" aria-hidden="true" />
+                  <Award className="w-3.5 h-3.5 text-stone-500 mt-0.5 shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
                     <span className="text-[13px] text-stone-900 block truncate leading-tight">{c.title}</span>
-                    <span className="text-[11px] text-stone-400">
+                    <span className="text-[11px] text-stone-500">
                       {c.issuer || "Issuer not stated"}
                       {c.sha256_hash ? " · SHA-256 verified" : ""}
                     </span>

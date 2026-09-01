@@ -56,7 +56,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
         <div className="rounded-xl border border-dashed border-stone-200 bg-stone-50/60 px-6 py-10">
           <div className="max-w-md mx-auto flex flex-col gap-5">
             <div className="flex flex-col items-center text-center gap-1.5">
-              <Users className="w-6 h-6 text-stone-300 mb-0.5" aria-hidden="true" />
+              <Users className="w-6 h-6 text-stone-400 mb-0.5" aria-hidden="true" />
               <h2 className="text-sm font-semibold text-stone-900">Your shortlist is empty</h2>
               <p className="text-[13px] text-stone-500 leading-relaxed">
                 Candidates appear here once you look one up and save them.
@@ -70,7 +70,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
                 "Paste either one above. Their audited evidence loads instantly.",
               ].map((step, i) => (
                 <li key={i} className="flex gap-2.5 items-start">
-                  <span className="font-mono text-[11px] text-stone-400 tabular-nums mt-0.5 shrink-0 w-4">
+                  <span className="font-mono text-[11px] text-stone-500 tabular-nums mt-0.5 shrink-0 w-4">
                     {i + 1}
                   </span>
                   <span className="text-[13px] text-stone-600 leading-relaxed">{step}</span>
@@ -110,7 +110,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
           >
             <div
               className={`font-mono text-xl font-semibold tabular-nums leading-none ${
-                s.warn ? "text-rose-600" : "text-stone-900"
+                s.warn ? "text-rose-700" : "text-stone-900"
               }`}
             >
               {s.v}
@@ -133,12 +133,12 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
               aria-pressed={active}
               className={`h-8 px-3 rounded-lg text-xs font-medium border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 ${
                 active
-                  ? "bg-stone-900 border-stone-300 text-stone-900"
+                  ? "bg-stone-900 border-stone-900 text-white"
                   : "bg-transparent border-stone-200 text-stone-500 hover:text-stone-700 hover:border-stone-300"
               }`}
             >
               {f.label}
-              <span className="ml-1.5 font-mono tabular-nums text-stone-400">{n}</span>
+              <span className="ml-1.5 font-mono tabular-nums text-stone-500">{n}</span>
             </button>
           );
         })}
@@ -180,12 +180,12 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
                   <VerdictPill verified={r.verified} flagged={r.flagged} total={r.repos} />
                 </td>
                 <td className="px-4 py-3 text-right font-mono tabular-nums text-stone-700">{r.skills}</td>
-                <td className="px-4 py-3 text-stone-400 text-[12px] whitespace-nowrap">{r.savedAt}</td>
+                <td className="px-4 py-3 text-stone-500 text-[12px] whitespace-nowrap">{r.savedAt}</td>
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={`/recruiter/candidate/${r.passportId}`}
                     aria-label={`Open ${r.name}`}
-                    className="inline-flex items-center justify-center w-11 h-11 -m-1.5 rounded-lg text-stone-300 group-hover:text-stone-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
+                    className="inline-flex items-center justify-center w-11 h-11 -m-1.5 rounded-lg text-stone-500 group-hover:text-stone-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400"
                   >
                     <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -196,7 +196,7 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
         </table>
 
         {shown.length === 0 && (
-          <div className="px-4 py-10 text-center text-[13px] text-stone-400">
+          <div className="px-4 py-10 text-center text-[13px] text-stone-500">
             No candidate matches this filter.
           </div>
         )}
@@ -216,14 +216,14 @@ function VerdictPill({ verified, flagged, total }: { verified: number; flagged: 
   }
   if (flagged > 0) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-600">
+      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-rose-700">
         <ShieldAlert className="w-3.5 h-3.5" aria-hidden="true" />
         <span className="font-mono tabular-nums">{flagged}</span> flagged
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600">
+    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-700">
       <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
       <span className="font-mono tabular-nums">{verified}</span> verified
     </span>

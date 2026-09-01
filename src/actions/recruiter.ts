@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 /** Identifiers come from a URL, so they are constrained before reaching a query. */
@@ -34,14 +35,42 @@ export async function saveCandidate(passportId: string) {
   const id = safeId(passportId);
   if (!id) return { success: false, error: "That passport ID is not valid." };
 
+  // A passport answers to two identifiers - the student id and the card id
+  // printed on the physical card - and the candidate page accepts either. The
+  // shortlist, however, matches on student_id alone, so saving a candidate by
+  // their card id stored a row that the shortlist could never render: the
+  // recruiter saw a success toast and then an empty list. Resolve to the
+  // student id here so one identifier is stored regardless of which was typed.
+  //
+  // Resolving also confirms the passport exists and is shared, which stops the
+  // shortlist accumulating rows for identifiers that match nothing.
+  const { data: passport } = await createAdminClient()
+    .from("passports")
+    .select("snapshot_data")
+    .eq("is_public", true)
+    .or(`snapshot_data->>student_id.eq.${id},snapshot_data->>card_id.eq.${id}`)
+    .limit(1)
+    .maybeSingle();
+
+  const canonicalId = (passport?.snapshot_data as { student_id?: string } | null)?.student_id;
+  if (!canonicalId) {
+    return {
+      success: false,
+      error: "No shared passport matches that ID. Check the ID, or ask the student to publish their passport.",
+    };
+  }
+
   const { error } = await supabase
     .from("saved_candidates")
-    .upsert({ recruiter_id: user.id, passport_id: id }, { onConflict: "recruiter_id,passport_id" });
+    .upsert(
+      { recruiter_id: user.id, passport_id: canonicalId },
+      { onConflict: "recruiter_id,passport_id" }
+    );
 
   if (error) return { success: false, error: "Could not save this candidate." };
 
   revalidatePath("/recruiter");
-  revalidatePath(`/recruiter/candidate/${id}`);
+  revalidatePath(`/recruiter/candidate/${canonicalId}`);
   return { success: true };
 }
 

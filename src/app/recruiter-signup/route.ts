@@ -36,14 +36,43 @@ export async function GET(request: Request) {
     return res;
   }
 
-  const role = user.user_metadata?.role;
+  // This guard previously read user_metadata.role and treated a missing value
+  // as "no role yet, safe to convert". Nothing in the application ever writes
+  // "student" there - onboarding writes only onboarding_completed - so every
+  // real student carried `undefined` and fell straight through to conversion.
+  // Opening this link cost them their dashboard, and nothing in the UI undid it.
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
 
-  // An account that already has a role keeps it. Converting a student to a
-  // recruiter because they opened a link would silently cost them their
-  // passport, their audited repositories and their internship matches.
-  if (role === "recruiter") return NextResponse.redirect(`${origin}/recruiter`);
-  if (role === "student") return NextResponse.redirect(`${origin}/dashboard`);
+  if (profile?.role === "recruiter") {
+    return NextResponse.redirect(`${origin}/recruiter`);
+  }
 
-  await setRoleRecruiter();
+  // profiles.role cannot stand in for the metadata field on its own: the
+  // on_auth_user_created trigger gives every account a row with the 'student'
+  // default, so a first-time recruiter is indistinguishable from a student by
+  // role alone. What separates them is whether the account has student-side
+  // history. An account that finished onboarding, or holds a passport or a
+  // linked GitHub account, has something to lose and keeps it.
+  if (user.user_metadata?.onboarding_completed) {
+    return NextResponse.redirect(`${origin}/dashboard`);
+  }
+
+  const [{ count: passports }, { count: connections }] = await Promise.all([
+    supabase.from("passports").select("id", { count: "exact", head: true }).eq("profile_id", user.id),
+    supabase.from("github_connections").select("id", { count: "exact", head: true }).eq("profile_id", user.id),
+  ]);
+
+  if ((passports ?? 0) > 0 || (connections ?? 0) > 0) {
+    return NextResponse.redirect(`${origin}/dashboard`);
+  }
+
+  const result = await setRoleRecruiter();
+  if (!result.success) {
+    return NextResponse.redirect(`${origin}/login?error=recruiter_signup_failed`);
+  }
   return NextResponse.redirect(`${origin}/recruiter`);
 }

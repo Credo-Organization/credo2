@@ -65,7 +65,7 @@ export default async function GitHubDashboardPage({
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 space-y-10">
       {error && (
-        <div className="max-w-md mx-auto p-4 rounded-2xl bg-red-950/40 border border-red-800/60 text-center">
+        <div className="max-w-md mx-auto p-4 rounded-2xl bg-red-50 border border-red-200 text-center">
           <h4 className="text-sm font-semibold text-red-700 mb-1">GitHub Authentication Notice</h4>
           <p className="text-xs text-stone-500">
             {error === "missing_code"
