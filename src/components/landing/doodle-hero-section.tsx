@@ -7,6 +7,7 @@ import {
   Award, 
   Trophy, 
   CheckCircle2,
+  Heart,
 } from "lucide-react";
 import { LoginModal } from "@/components/ui/login-modal";
 import {
@@ -16,10 +17,11 @@ import {
   PaperAirplane,
   DoodleCloud,
   DoodleLaptop,
+  CardBurstRays,
 } from "./doodle-elements";
 
 export function DoodleHeroSection() {
-  const [avatarGender, setAvatarGender] = useState<"male" | "female">("male");
+  const [avatarGender, setAvatarGender] = useState<"male" | "female">("female");
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   return (
@@ -27,14 +29,14 @@ export function DoodleHeroSection() {
       
       {/* Background Architectural Dot Grid */}
       <div 
-        className="absolute inset-0 opacity-25 pointer-events-none -z-10"
+        className="absolute inset-0 z-0 opacity-30 pointer-events-none"
         style={{
           backgroundImage: "radial-gradient(#71717A 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           
           {/* ═════════════════════════════════════════════════════════
@@ -81,7 +83,7 @@ export function DoodleHeroSection() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-base sm:text-lg text-zinc-600 max-w-xl leading-relaxed mb-7 font-normal"
             >
-              Turn real GitHub repositories, verified certifications, and achievements into an evidence-backed skill passport and find the right teammates.
+              Turn GitHub activity, certifications, and achievements into an evidence-backed skill passport and find the right teammates.
             </motion.p>
 
             {/* Action Buttons */}
@@ -124,14 +126,35 @@ export function DoodleHeroSection() {
           <div className="lg:col-span-6 relative flex items-center justify-center pt-4 lg:pt-0">
             
             {/* The Staged Canvas Container */}
-            <div className="relative w-full max-w-[540px] h-[460px] sm:h-[480px] select-none">
+            <div className="relative w-full max-w-[560px] h-[480px] sm:h-[500px] select-none">
               
-              {/* Soft Organic Pastel Watercolor Backing */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 via-sky-50/70 to-amber-50/70 rounded-[40px] border-2 border-zinc-900/10 pointer-events-none -z-10 shadow-xs" />
-              
-              {/* Hand-Drawn Organic Watercolor Wash Blobs */}
-              <div className="absolute -top-6 -right-6 w-56 h-56 bg-purple-200/40 rounded-full blur-2xl pointer-events-none -z-10" />
-              <div className="absolute -bottom-6 -left-6 w-56 h-56 bg-sky-200/40 rounded-full blur-2xl pointer-events-none -z-10" />
+              {/* ── PURE ORGANIC WATERCOLOR CLOUD WASHES (Zero Ghosting, 100% Crisp) ── */}
+              <div className="absolute inset-0 z-0 pointer-events-none">
+                {/* Upper Sky Blue Watercolor Cloud Wash */}
+                <div 
+                  className="absolute top-0 right-2 w-[420px] sm:w-[480px] h-[320px] rounded-[55%_45%_65%_35%/45%_55%_35%_65%] bg-gradient-to-br from-[#BAE6FD]/90 via-[#93C5FD]/60 to-[#E0F2FE]/40 blur-2xl"
+                />
+                
+                {/* Lower Lavender Purple Watercolor Cloud Wash */}
+                <div 
+                  className="absolute bottom-2 right-0 w-[340px] sm:w-[400px] h-[300px] rounded-[45%_55%_40%_60%/60%_40%_55%_45%] bg-gradient-to-tl from-[#DDD6FE]/90 via-[#C4B5FD]/70 to-[#EDE9FE]/50 blur-2xl"
+                />
+
+                {/* Center Soft Cyan/Amber Watercolor Blend */}
+                <div 
+                  className="absolute top-20 right-16 w-[280px] h-[260px] rounded-full bg-gradient-to-tr from-[#E0F2FE]/70 via-[#FEF3C7]/40 to-[#DDD6FE]/60 blur-3xl"
+                />
+
+                {/* Delicate Watercolor Stipple Speckles Texture */}
+                <div 
+                  className="absolute top-6 right-4 w-[400px] h-[420px] opacity-30"
+                  style={{
+                    backgroundImage: "radial-gradient(#4F46E5 0.75px, transparent 0.75px), radial-gradient(#0284C7 0.75px, transparent 0.75px)",
+                    backgroundSize: "16px 16px, 24px 24px",
+                    backgroundPosition: "0 0, 8px 8px",
+                  }}
+                />
+              </div>
 
               {/* Top-Left: Sketched Doodle Cloud */}
               <motion.div 
@@ -142,7 +165,7 @@ export function DoodleHeroSection() {
                 <DoodleCloud className="scale-90" />
               </motion.div>
 
-              {/* Top-Right: Sketched Paper Airplane */}
+              {/* Top-Right: Sketched Paper Airplane with Flight Trail */}
               <motion.div 
                 animate={{ 
                   x: [0, 8, 0], 
@@ -156,7 +179,7 @@ export function DoodleHeroSection() {
               </motion.div>
 
               {/* ── Left Half: Student Avatar & Laptop ── */}
-              <div className="absolute left-4 sm:left-7 top-[100px] z-20">
+              <div className="absolute left-4 sm:left-7 top-[110px] z-20">
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -169,15 +192,13 @@ export function DoodleHeroSection() {
                     title="Click to toggle male/female student doodle"
                     className="relative group cursor-pointer"
                   >
-                    <div className="w-[82px] h-[82px] sm:w-[90px] sm:h-[90px] rounded-full bg-[#FEF08A] border-2 border-zinc-900 flex items-center justify-center overflow-hidden shadow-xs group-hover:scale-105 transition-transform">
+                    <div className="w-[84px] h-[84px] sm:w-[92px] sm:h-[92px] rounded-full bg-[#FEF08A] border-2 border-zinc-900 flex items-center justify-center overflow-hidden shadow-xs group-hover:scale-105 transition-transform">
                       <img
                         src={avatarGender === "male" ? "/avatar-male.webp" : "/avatar-female.webp"}
                         alt="Student Doodle Avatar"
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    {/* Tiny hand-drawn spark accents */}
-                    <div className="absolute -top-1 -right-1 text-zinc-900 font-bold text-xs">✦</div>
                   </button>
                 </motion.div>
               </div>
@@ -191,40 +212,67 @@ export function DoodleHeroSection() {
                 <DoodleLaptop svgClassName="w-56 sm:w-64" />
               </motion.div>
 
-              {/* ── Dynamic Dashed Flow Connectors ── */}
+              {/* ── Dynamic Dashed Flow Connectors with Arrowheads ── */}
               <svg 
                 className="absolute inset-0 w-full h-full pointer-events-none z-10"
-                viewBox="0 0 540 480"
+                viewBox="0 0 560 500"
                 fill="none"
               >
+                <defs>
+                  <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                    <polygon points="0 0, 6 3, 0 6" fill="#18181B" />
+                  </marker>
+                </defs>
+
+                {/* Curved arrow from left to Card 1 */}
                 <path
-                  d="M 120 135 C 160 110, 190 70, 240 65"
+                  d="M 120 135 C 155 105, 185 70, 235 60"
                   stroke="#18181B"
                   strokeWidth="2"
                   strokeDasharray="5 5"
                   strokeLinecap="round"
-                  className={hoveredCard === 1 ? "stroke-emerald-600" : "opacity-40"}
+                  markerEnd="url(#arrowhead)"
+                  className={hoveredCard === 1 ? "stroke-emerald-600 opacity-100" : "opacity-60"}
                 />
+
+                {/* Dashed connector from Avatar to Card 2 */}
                 <path
                   d="M 130 165 C 165 180, 195 200, 240 215"
                   stroke="#18181B"
                   strokeWidth="2"
                   strokeDasharray="5 5"
                   strokeLinecap="round"
-                  className={hoveredCard === 2 ? "stroke-blue-600" : "opacity-40"}
+                  className={hoveredCard === 2 ? "stroke-blue-600 opacity-100" : "opacity-60"}
                 />
+
+                {/* Dashed connector from Card 1 to Airplane */}
                 <path
-                  d="M 120 370 C 160 370, 190 365, 240 360"
+                  d="M 460 70 C 500 50, 520 30, 525 20"
+                  stroke="#18181B"
+                  strokeWidth="1.8"
+                  strokeDasharray="4 4"
+                  strokeLinecap="round"
+                  className="opacity-50"
+                />
+
+                {/* Dashed connector from Laptop to Card 3 */}
+                <path
+                  d="M 120 380 C 160 380, 190 375, 240 370"
                   stroke="#18181B"
                   strokeWidth="2"
                   strokeDasharray="5 5"
                   strokeLinecap="round"
-                  className={hoveredCard === 3 ? "stroke-purple-600" : "opacity-40"}
+                  className={hoveredCard === 3 ? "stroke-purple-600 opacity-100" : "opacity-60"}
                 />
               </svg>
 
               {/* ── CARD 1: GitHub Activity (Top Right) ── */}
               <div className="absolute top-[28px] right-2 sm:right-5 z-20 w-[270px] sm:w-[295px]">
+                {/* 3 Accent Burst Rays Above Card 1 */}
+                <div className="absolute -top-5 right-12 pointer-events-none">
+                  <CardBurstRays />
+                </div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ 
@@ -266,7 +314,7 @@ export function DoodleHeroSection() {
               </div>
 
               {/* ── CARD 2: Certifications (Middle Right) ── */}
-              <div className="absolute top-[175px] right-1 sm:right-3 z-20 w-[270px] sm:w-[295px]">
+              <div className="absolute top-[180px] right-1 sm:right-3 z-20 w-[270px] sm:w-[295px]">
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ 
@@ -349,6 +397,18 @@ export function DoodleHeroSection() {
 
           </div>
 
+        </div>
+
+        {/* ── BOTTOM TAGLINE (Matching exact reference image) ── */}
+        <div className="w-full flex justify-center mt-12 sm:mt-16">
+          <div className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-zinc-900 select-none">
+            <Heart className="w-4 h-4 text-blue-600 fill-none stroke-[2.5]" />
+            <span className="relative font-extrabold text-zinc-950">
+              All your skills.
+              <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-blue-500 rounded-full" />
+            </span>
+            <span className="text-zinc-700">Verified. Organized. Ready to share.</span>
+          </div>
         </div>
 
       </div>
