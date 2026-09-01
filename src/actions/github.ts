@@ -108,8 +108,10 @@ export async function syncGitHub(username: string, token?: string) {
       let integrityData = {
         integrity_score: 95,
         integrity_flags: [] as string[],
-        integrity_status: "verified",
-        verified_skills: Object.keys(languages)
+        integrity_status: "verified" as "verified" | "flagged" | "pending",
+        verified_skills: Object.keys(languages),
+        audit_votes: undefined as unknown[] | undefined,
+        agreement: undefined as string | undefined,
       };
 
       try {
@@ -150,6 +152,7 @@ export async function syncGitHub(username: string, token?: string) {
           integrity_score: integrityData.integrity_score,
           integrity_flags: integrityData.integrity_flags,
           integrity_status: integrityData.integrity_status,
+          audit_votes: integrityData.audit_votes ?? null,
           synced_at: new Date().toISOString(),
         })
         .select("id")
@@ -179,7 +182,8 @@ export async function syncGitHub(username: string, token?: string) {
           status: "verified",
           integrity_score: integrityData.integrity_score,
           integrity_status: integrityData.integrity_status,
-          integrity_flags: integrityData.integrity_flags
+          integrity_flags: integrityData.integrity_flags,
+          audit_votes: integrityData.audit_votes ?? null
         }).select("id").single();
 
         if (evidenceRecord && !evError) {

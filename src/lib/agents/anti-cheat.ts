@@ -1,5 +1,6 @@
 import { generateObject } from "ai";
 import { antiCheatModel, extractorModel, multimodalModel } from "@/lib/ai-client";
+import { runEnsemble } from "@/lib/ai/ensemble";
 import { z } from "zod";
 
 const integritySchema = z.object({
@@ -18,6 +19,8 @@ const integritySchema = z.object({
 // a pass.
 export type IntegrityResult = Omit<z.infer<typeof integritySchema>, "integrity_status"> & {
   integrity_status: "verified" | "flagged" | "pending";
+  audit_votes?: unknown[];
+  agreement?: string;
 };
 
 /**
@@ -29,7 +32,7 @@ export type IntegrityResult = Omit<z.infer<typeof integritySchema>, "integrity_s
  * genuine pass. Failing to "pending" keeps users unblocked while making it
  * visible that nothing was actually checked.
  */
-export function auditUnavailableResult(): Required<IntegrityResult> {
+export function auditUnavailableResult(): IntegrityResult {
   return {
     integrity_score: 0,
     integrity_flags: ["audit_unavailable: integrity check could not be completed"],
@@ -131,17 +134,40 @@ Score: 95. Flags: []. Skills: ["TypeScript", "CSS", "Supabase", "PostgreSQL"]. S
       }
     }
 
+    if (type === "github") {
+      // Three models from three vendors vote. resolveModels throws when fewer
+      // than two are healthy, which is a precondition failure rather than a
+      // verdict, so it is caught here and reported as an audit that could not
+      // run - never as a pass.
+      let result;
+      try {
+        result = await runEnsemble("ANTI_CHEAT_VERDICT", integritySchema, messages);
+      } catch (e) {
+        console.error("[AntiCheatAgent] Ensemble unavailable:", e);
+        return auditUnavailableResult();
+      }
+
+      return {
+        integrity_score: result.integrity_score,
+        integrity_status: result.integrity_status,
+        integrity_flags: result.integrity_flags,
+        // Skills extracted cheaply earlier are additive, but only when the
+        // panel actually cleared the repository.
+        verified_skills:
+          result.integrity_status === "verified"
+            ? Array.from(new Set([...result.verified_skills, ...verifiedSkills]))
+            : result.verified_skills,
+        audit_votes: result.votes,
+        agreement: result.agreement,
+      };
+    }
+
     const { object } = await generateObject({
       model,
       schema: integritySchema,
       messages
     });
-    
-    // If it's github and verified, inject the skills we extracted cheaply
-    if (type === "github" && object.integrity_status === "verified") {
-      object.verified_skills = Array.from(new Set([...(object.verified_skills || []), ...verifiedSkills]));
-    }
-    
+
     return object;
   } catch (e) {
     console.error("[AntiCheatAgent] Evaluation failed:", e);
