@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/shared/page-header";
 import { SettingsForm } from "@/components/settings/settings-form";
 import { GitHubSettings } from "@/components/settings/github-settings";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -29,35 +28,31 @@ export default async function SettingsPage() {
     .eq("profile_id", user.id)
     .single();
 
-
-
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8 animate-fade-in">
+    <div className="p-6 sm:p-10 max-w-4xl mx-auto space-y-8 animate-fade-in select-none">
       <PageHeader
-        title="Settings"
-        description="Manage your profile, connections, and platform preferences."
+        title="Account & Profile Settings"
+        description="Manage your verified profile, linked GitHub account, and platform preferences."
       />
 
       <div className="grid gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Profile Information</CardTitle>
-            <CardDescription>Update your personal details and academic background.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <SettingsForm profile={profile} />
-          </CardContent>
-        </Card>
+        {/* Profile Information Card */}
+        <div className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl p-6 sm:p-8 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] space-y-6 transition-colors">
+          <div className="border-b-2 border-dashed border-zinc-200 dark:border-zinc-800 pb-4">
+            <h2 className="text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">Profile Information</h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium mt-0.5">Update your personal details and academic credentials reflected on your Skill Passport.</p>
+          </div>
+          <SettingsForm profile={profile} />
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Connected Accounts</CardTitle>
-            <CardDescription>Manage your connected external services.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <GitHubSettings connection={connection} />
-          </CardContent>
-        </Card>
+        {/* Connected Accounts Card */}
+        <div className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl p-6 sm:p-8 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] space-y-6 transition-colors">
+          <div className="border-b-2 border-dashed border-zinc-200 dark:border-zinc-800 pb-4">
+            <h2 className="text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">Connected Accounts</h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium mt-0.5">Manage external developer services used for code ingestion and verification.</p>
+          </div>
+          <GitHubSettings connection={connection} />
+        </div>
       </div>
     </div>
   );

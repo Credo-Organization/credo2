@@ -62,7 +62,7 @@ function CredifyVerificationSeal() {
         {/* Text Along Path */}
         <text fontSize="7.5" fontWeight="bold" letterSpacing="2.5" fill="#0b2559">
           <textPath href="#sealCircleTop" startOffset="50%" textAnchor="middle">
-            ★ CREDIFY VERIFIED ★
+            ★ MINSKEY VERIFIED ★
           </textPath>
         </text>
 
@@ -137,21 +137,23 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
     studentData?.verificationUrl ||
     (typeof window !== "undefined"
       ? `${window.location.origin}/verify/passport/${studentId}`
-      : `https://credify.dev/verify/passport/${studentId}`);
+      : `https://minskey.dev/verify/passport/${studentId}`);
 
-  // Default Illustrated Avatar if none provided
-  const fallbackFemale = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80";
-  const fallbackMale = "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&auto=format&fit=crop&q=80"; // A standard male portrait
+  // Default Illustrated Doodle Avatar if none provided
+  const fallbackFemale = "/avatar-female.webp";
+  const fallbackMale = "/avatar-male.webp";
   
+  const rawAvatar = studentData?.avatarUrl?.trim();
+  const isUnsplashOrEmpty = !rawAvatar || rawAvatar.includes("unsplash.com");
   const avatarUrl =
-    studentData?.avatarUrl && studentData.avatarUrl.trim() !== ""
-      ? studentData.avatarUrl
-      : (gender.toLowerCase() === "male" ? fallbackMale : fallbackFemale);
+    !isUnsplashOrEmpty
+      ? rawAvatar
+      : (gender.toLowerCase() === "female" ? fallbackFemale : fallbackMale);
 
   return (
     <div
       className={cn(
-        "w-full max-w-[420px] bg-[#f8fbff] text-[#091b3d] rounded-[32px] p-6 border border-[#d2e2f8] shadow-2xl relative font-sans select-none overflow-hidden",
+        "w-full max-w-[440px] bg-[#f8fbff] text-[#091b3d] rounded-[32px] p-6 border border-[#d2e2f8] shadow-2xl relative font-sans select-none overflow-hidden",
         className
       )}
       style={{

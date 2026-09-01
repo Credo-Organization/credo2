@@ -7,21 +7,21 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="light relative flex flex-col md:flex-row gap-0 md:gap-[12px] h-screen w-full p-0 md:p-[12px] overflow-hidden text-stone-900" style={{ colorScheme: "light" }}>
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none -z-20 blur-md scale-110"
-        style={{ backgroundImage: "url('/bg-image.png')" }}
+    <div className="relative flex flex-col md:flex-row gap-0 md:gap-3 h-screen w-full p-0 md:p-3 overflow-hidden text-zinc-900 dark:text-zinc-100 bg-[#FAF9F6] dark:bg-[#000000] transition-colors">
+      {/* Background Architectural Dot Grid */}
+      <div
+        className="absolute inset-0 opacity-40 dark:opacity-15 pointer-events-none -z-10"
+        style={{
+          backgroundImage: "radial-gradient(#52525B 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
       />
-      
-      {/* White Overlay */}
-      <div className="absolute inset-0 bg-white/10 pointer-events-none -z-10" />
 
       <MobileHeader />
       <div className="hidden md:flex h-full relative z-0">
         <Sidebar />
       </div>
-      <main className="flex-1 overflow-y-auto relative z-0 rounded-none md:rounded-[24px] border-0 md:border border-stone-200/50 shadow-sm" style={{ backgroundColor: "#fdf8f0" }}>
+      <main className="flex-1 overflow-y-auto relative z-0 rounded-none md:rounded-[28px] border-0 md:border md:border-stone-200/80 dark:md:border-zinc-800 shadow-xs bg-[#FAF9F6] dark:bg-[#050507] transition-colors">
         {children}
       </main>
     </div>

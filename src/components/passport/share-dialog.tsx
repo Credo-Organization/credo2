@@ -69,7 +69,7 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
       ctx?.drawImage(img, 0, 0);
       const pngFile = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
-      downloadLink.download = "credify-passport-qr.png";
+      downloadLink.download = "minskey-passport-qr.png";
       downloadLink.href = `${pngFile}`;
       downloadLink.click();
       toast.success("QR Code downloaded!");
@@ -104,7 +104,7 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
       // Add a slight margin
       const margin = 10;
       pdf.addImage(imgData, "PNG", margin, margin, pdfWidth - (margin*2), pdfHeight - (margin*2));
-      pdf.save(`credify-skill-passport-${username}.pdf`);
+      pdf.save(`minskey-skill-passport-${username}.pdf`);
       
       toast.success("PDF downloaded successfully!");
       setIsOpen(false);
