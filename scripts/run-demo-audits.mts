@@ -3,7 +3,7 @@
  *
  *   npx tsx scripts/run-demo-audits.mts
  *
- * seed-demo-students.sql deliberately leaves every integrity column NULL. This
+ * seed-demo-students.mts deliberately leaves every integrity column NULL. This
  * fills them by calling runEnsemble - the same function the product calls during
  * a GitHub sync, against the same three vendors, with the same schema. Nothing
  * here invents a score. If a repository comes back flagged, three models
@@ -47,24 +47,42 @@ Look for:
 - Generic default READMEs (for example "Create React App" or a Next.js template) indicating low-effort work.
 Return an integrity score 0-100, specific red flags, a status, and the verified skills.`;
 
-const DEMO_CONNECTIONS = [
-  "22222222-2222-4222-8222-222222222201",
-  "22222222-2222-4222-8222-222222222202",
-  "22222222-2222-4222-8222-222222222203",
-  "22222222-2222-4222-8222-222222222204",
-];
+// Resolve the demo cohort by username rather than a hardcoded id: the seeder
+// creates real auth users, so their ids differ per environment.
+const DEMO_USERNAMES = ["ananya-iyer", "rohan-d", "meera-nair", "karan-b"];
+
+const { data: profiles } = await db
+  .from("profiles")
+  .select("id")
+  .in("username", DEMO_USERNAMES);
+
+const { data: connections } = await db
+  .from("github_connections")
+  .select("id")
+  .in("profile_id", (profiles ?? []).map((p) => p.id));
+
+const connectionIds = (connections ?? []).map((c) => c.id);
+
+if (connectionIds.length === 0) {
+  console.error("No demo connections found. Run scripts/seed-demo-students.mts first.");
+  process.exit(1);
+}
 
 const { data: repos, error } = await db
   .from("github_repos")
   .select("id, name, description, primary_language, stars_count, forks_count, is_fork, integrity_status")
-  .in("connection_id", DEMO_CONNECTIONS);
+  .in("connection_id", connectionIds);
 
 if (error) {
   console.error("Could not read demo repositories:", error.message);
   process.exit(1);
 }
 
-const pending = (repos ?? []).filter((r) => !r.integrity_status);
+// The column defaults to 'pending', so an unaudited row is not null - it carries
+// that default. Both mean the same thing here: no verdict has been reached yet.
+const pending = (repos ?? []).filter(
+  (r) => !r.integrity_status || r.integrity_status === "pending"
+);
 console.log(`${repos?.length ?? 0} demo repositories, ${pending.length} awaiting audit\n`);
 
 if (pending.length === 0) {
