@@ -7,8 +7,9 @@ import { Shield } from "lucide-react";
 export default function LoginPage() {
   const handleGoogleLogin = async () => {
     const supabase = createClient();
-    const next = new URLSearchParams(window.location.search).get("next");
-    const callback = `${window.location.origin}/auth/callback${next ? `?next=${encodeURIComponent(next)}` : ""}`;
+      // Constant callback URL so it always matches the Supabase redirect
+      // allowlist. The post-login destination travels in a cookie instead.
+      const callback = `${window.location.origin}/auth/callback`;
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
