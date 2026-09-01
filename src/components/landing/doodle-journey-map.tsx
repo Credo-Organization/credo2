@@ -42,7 +42,7 @@ const STAGES: StageData[] = [
     id: "github",
     stepNumber: "01",
     tabLabel: "Connect GitHub",
-    tag: "⚡ 10-Sec Ingestion",
+    tag: "10-Sec Ingestion",
     title: "Instant GitHub Code Audit",
     subtitle: "Automated Commit & Repository Parser",
     description: "Link your GitHub account with OAuth. Our background ingestion engine parses commits, PRs, and language distributions, verifying authentic code authorship in seconds.",
@@ -53,7 +53,7 @@ const STAGES: StageData[] = [
     id: "ocr",
     stepNumber: "02",
     tabLabel: "Upload Proofs",
-    tag: "📜 Multimodal OCR",
+    tag: "Multimodal OCR",
     title: "Accredited Credential OCR",
     subtitle: "Tamper-Proof Document Analysis",
     description: "Upload hackathon awards, cloud certifications, and degree certificates. Vision AI extracts accredited competency claims and cryptographically fingerprints the file with SHA-256.",
@@ -64,7 +64,7 @@ const STAGES: StageData[] = [
     id: "mint",
     stepNumber: "03",
     tabLabel: "Mint Passport",
-    tag: "🔒 SHA-256 Consensus",
+    tag: "SHA-256 Consensus",
     title: "Multi-Agent Consensus Minting",
     subtitle: "Anti-Cheat Verification Ledger",
     description: "A 3-agent ensemble cross-references commits with claimed skills, weeds out boilerplate, and mints an immutable, portable skill passport with a unique Student ID.",
@@ -75,7 +75,7 @@ const STAGES: StageData[] = [
     id: "radar",
     stepNumber: "04",
     tabLabel: "Skill Gap Radar",
-    tag: "🎯 Role Calibration",
+    tag: "Role Calibration",
     title: "Market Role Benchmarking",
     subtitle: "Real-Time Competency Delta",
     description: "Calibrate your verified portfolio against target industry roles (e.g., AI Engineer, Full-Stack Lead). Pinpoint your exact lagging libraries and architecture milestones.",
@@ -86,7 +86,7 @@ const STAGES: StageData[] = [
     id: "roadmap",
     stepNumber: "05",
     tabLabel: "Dynamic Roadmap",
-    tag: "🗺️ AI Sprint Action",
+    tag: "AI Sprint Action",
     title: "Grounded AI Mentor Blueprint",
     subtitle: "14-Day Tactical Study Plan",
     description: "Your AI Career Mentor generates project blueprints, curated GitHub repositories, and simulated mock interview questions grounded strictly in your real skill gaps.",
@@ -97,7 +97,7 @@ const STAGES: StageData[] = [
     id: "hire",
     stepNumber: "06",
     tabLabel: "Team Up & Hire",
-    tag: "🎉 Recruiter Ledger",
+    tag: "Recruiter Ledger",
     title: "Direct Recruiter Verification",
     subtitle: "Bypass The Resume Black Hole",
     description: "Share your passport QR code with hiring managers. Recruiters inspect audited commit diffs and accredited proof ledgers in one click, skipping traditional resume filters.",
@@ -152,7 +152,7 @@ export function DoodleJourneyMap() {
           </div>
 
           <span className="font-doodle text-2xl sm:text-3xl text-blue-600 font-bold block mb-1">
-            ⚡ Click any pipeline stage to inspect the live engine
+            Click any pipeline stage to inspect the live engine
           </span>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tight leading-tight">
@@ -170,7 +170,7 @@ export function DoodleJourneyMap() {
           </p>
         </div>
 
-        {/* ── THE INTERACTIVE STUDIO STAGE (CONCEPT 1) ── */}
+        {/* ── THE INTERACTIVE STUDIO STAGE ── */}
         <div className="relative w-full rounded-3xl bg-[#FAF9F6] border-2 border-zinc-900 shadow-[6px_6px_0px_0px_#18181B] p-5 sm:p-8 overflow-hidden">
           {/* Top Washi Tape Sticker */}
           <div className="absolute -top-3 left-12 w-32 h-5.5 rounded-xs bg-[#FEF08A]/90 border-dashed border-t border-b border-zinc-500/60 shadow-xs -rotate-1 z-20 pointer-events-none" />
@@ -212,7 +212,6 @@ export function DoodleJourneyMap() {
             <div className="lg:col-span-5 flex flex-col gap-2.5">
               {STAGES.map((stage, idx) => {
                 const isActive = idx === activeIdx;
-                const Icon = stage.icon;
 
                 return (
                   <button
@@ -416,7 +415,7 @@ export function DoodleJourneyMap() {
                             ✓ Verified: TypeScript, Python, LLMs
                           </div>
                           <div className="p-2 rounded-lg bg-rose-100 border border-rose-400 text-rose-950">
-                            ⚠️ Gaps: PostgreSQL, Go Microservices
+                            Gaps: PostgreSQL, Go Microservices
                           </div>
                         </div>
                       </motion.div>
@@ -488,7 +487,7 @@ export function DoodleJourneyMap() {
           {/* Bottom Callout Ribbon */}
           <div className="mt-6 pt-4 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
             <span className="font-doodle text-xs sm:text-sm font-bold text-zinc-700">
-              ⚡ Over 1,200 student developers have minted tamper-proof skill passports.
+              Over 1,200 student developers have minted tamper-proof skill passports.
             </span>
             <a
               href="/login"
