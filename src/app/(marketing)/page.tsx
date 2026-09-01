@@ -92,7 +92,8 @@ function CustomUsersIcon(props: React.SVGProps<SVGSVGElement>) {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import MorphingLoginCta from "@/components/animata/button/morphing-login-cta";
+import GetStartedButton from "@/components/animata/button/get-started-button";
+import { LoginModal } from "@/components/ui/login-modal";
 import { cn } from "@/lib/utils";
 import { ShimmerText } from "@/components/ui/shimmer-text";
 import { Highlighter } from "@/components/ui/highlighter";
@@ -129,9 +130,11 @@ function HeroSection() {
           Turn GitHub activity, certifications, and achievements into an evidence-backed skill passport and find the right teammates.
         </p>
 
-        {/* Morphing CTA Button */}
+        {/* Unified CTA Button */}
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up [animation-delay:300ms]">
-          <MorphingLoginCta text="Get started" />
+          <LoginModal>
+            <GetStartedButton text="Get started" />
+          </LoginModal>
           {/* Second entry point. The hero sits on a dark image, so this stays
               light-on-dark even though the rest of the page is now light. */}
           <Link
