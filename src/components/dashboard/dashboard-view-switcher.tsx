@@ -39,7 +39,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             onClick={() => setViewMode("id-card")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === "id-card"
-                ? "bg-white text-zinc-950 shadow-md scale-[1.02]"
+                ? "bg-white text-stone-900 shadow-md scale-[1.02]"
                 : "text-stone-500 hover:text-stone-900"
             }`}
           >
@@ -52,7 +52,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             onClick={() => setViewMode("analytics")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === "analytics"
-                ? "bg-white text-zinc-950 shadow-md scale-[1.02]"
+                ? "bg-white text-stone-900 shadow-md scale-[1.02]"
                 : "text-stone-500 hover:text-stone-900"
             }`}
           >
@@ -66,7 +66,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             size="sm"
             variant="ghost"
             onClick={handleShare}
-            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg gap-1.5 font-medium cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             Share
@@ -76,7 +76,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             size="sm"
             variant="ghost"
             onClick={handlePrint}
-            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg gap-1.5 font-medium cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             Print

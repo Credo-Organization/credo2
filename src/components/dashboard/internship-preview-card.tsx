@@ -42,18 +42,18 @@ export function DashboardInternshipPreviewCard({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 border-t border-stone-200">
         <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span className="text-xs font-semibold text-stone-900 truncate">AI Engineering Intern</span>
           </div>
-          <span className="text-xs font-bold text-emerald-400 ml-2">100%</span>
+          <span className="text-xs font-bold text-emerald-700 ml-2">100%</span>
         </div>
 
         <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span className="text-xs font-semibold text-stone-900 truncate">Full-Stack Developer</span>
           </div>
-          <span className="text-xs font-bold text-emerald-400 ml-2">85%</span>
+          <span className="text-xs font-bold text-emerald-700 ml-2">85%</span>
         </div>
       </div>
     </div>

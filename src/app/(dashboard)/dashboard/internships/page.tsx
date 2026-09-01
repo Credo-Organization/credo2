@@ -101,7 +101,7 @@ export default async function InternshipsPage() {
         </div>
 
         {errorMsg && (
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-200/90 text-sm font-medium glass backdrop-blur-md">
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 text-sm font-medium glass backdrop-blur-md">
             {errorMsg}
           </div>
         )}

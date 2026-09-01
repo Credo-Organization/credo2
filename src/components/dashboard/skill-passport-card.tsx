@@ -174,7 +174,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
             <div className="inline-flex flex-col bg-stone-100 backdrop-blur-md border border-stone-200 rounded-lg p-2 pr-6 mt-1 relative overflow-hidden group w-fit">
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-stone-300" />
               <div className="flex items-center gap-1.5 mb-0.5">
-                <Target className="w-3 h-3 text-stone-400" />
+                <Target className="w-3 h-3 text-stone-500" />
                 <span className="text-[9px] text-stone-500 uppercase tracking-widest font-medium">Career Goal</span>
               </div>
               <span className="text-[13px] text-stone-900 font-medium pl-5">{data.careerGoal}</span>
@@ -210,7 +210,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                     "px-2 py-0.5 rounded-full text-[10px] font-medium border",
                     skill.confidence === "High" ? "border-stone-400 text-stone-900" :
                     skill.confidence === "Medium" ? "border-stone-300 text-stone-600" :
-                    "border-stone-200 text-stone-400"
+                    "border-stone-200 text-stone-500"
                   )}>
                     {skill.confidence}
                   </div>
@@ -271,7 +271,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           
           <div className="flex gap-1 min-w-max">
             {/* Row Labels */}
-            <div className="flex flex-col justify-between text-[9px] text-stone-400 pr-2 pb-[14px]">
+            <div className="flex flex-col justify-between text-[9px] text-stone-500 pr-2 pb-[14px]">
               <span className="mt-2">Mon</span>
               <span>Wed</span>
               <span className="mb-2">Fri</span>
@@ -279,7 +279,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
 
             <div className="flex flex-col gap-[3px]">
               {/* Months Row */}
-              <div className="flex text-[9px] text-stone-400 mb-1 pl-1">
+              <div className="flex text-[9px] text-stone-500 mb-1 pl-1">
                 {["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"].map((month, i) => (
                   <div key={i} className="flex-1 min-w-[21px]">{month}</div>
                 ))}
@@ -292,12 +292,12 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                     <div 
                       key={`cell-${rowIndex}-${colIndex}`} 
                       className={cn(
-                        "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:border hover:border-stone-1000",
+                        "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:ring-1 hover:ring-stone-400",
                         intensity === 0 ? "bg-stone-100" :
-                        intensity === 1 ? "bg-white/[0.25]" :
-                        intensity === 2 ? "bg-white/[0.50]" :
-                        intensity === 3 ? "bg-white/[0.75]" :
-                        "bg-white"
+                        intensity === 1 ? "bg-emerald-100" :
+                        intensity === 2 ? "bg-emerald-300" :
+                        intensity === 3 ? "bg-emerald-500" :
+                        "bg-emerald-700"
                       )}
                     />
                   ))}
@@ -306,18 +306,18 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[11px] text-stone-400 mt-3 min-w-max pl-8 pr-2">
+          <div className="flex items-center justify-between text-[11px] text-stone-500 mt-3 min-w-max pl-8 pr-2">
             <span>Learned consistency. Built momentum.</span>
-            <div className="flex items-center gap-1.5 text-[10px] text-stone-400">
+            <div className="flex items-center gap-1.5 text-[10px] text-stone-500">
               <span>Less</span>
               <div className="flex gap-[3px]">
                 {[0, 1, 2, 3, 4].map(i => (
                   <div key={i} className={cn(
                     "w-2.5 h-2.5 rounded-[3px]",
                     i === 0 ? "bg-stone-100" :
-                    i === 1 ? "bg-white/[0.25]" :
-                    i === 2 ? "bg-white/[0.50]" :
-                    i === 3 ? "bg-white/[0.75]" : "bg-white"
+                    i === 1 ? "bg-emerald-100" :
+                    i === 2 ? "bg-emerald-300" :
+                    i === 3 ? "bg-emerald-500" : "bg-emerald-700"
                   )} />
                 ))}
               </div>
@@ -361,7 +361,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                         <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors">
                           <div className="flex flex-col">
                             <span className="text-stone-900 text-[13px] font-medium">{repo.name}</span>
-                            <span className="text-[11px] text-stone-400">{repo.language}</span>
+                            <span className="text-[11px] text-stone-500">{repo.language}</span>
                           </div>
                           <div className="text-right flex flex-col items-end">
                             <span className="text-stone-900 text-[12px]">{repo.stars} stars</span>
@@ -370,7 +370,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                         </div>
                       ))
                     ) : (
-                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-400 text-[12px] text-center">
+                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-500 text-[12px] text-center">
                         No GitHub evidence available.
                       </div>
                     )}
@@ -388,13 +388,13 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                         <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors">
                           <div className="flex flex-col">
                             <span className="text-stone-900 text-[13px] font-medium">{cert.name}</span>
-                            <span className="text-[11px] text-stone-400">Issued by {cert.issuer}</span>
+                            <span className="text-[11px] text-stone-500">Issued by {cert.issuer}</span>
                           </div>
                           <a href={cert.url} target="_blank" rel="noreferrer" className="text-[11px] text-stone-500 hover:text-stone-900 transition-colors hover:underline">Verify Credential</a>
                         </div>
                       ))
                     ) : (
-                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-400 text-[12px] text-center">
+                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-500 text-[12px] text-center">
                         No certificates uploaded.
                       </div>
                     )}

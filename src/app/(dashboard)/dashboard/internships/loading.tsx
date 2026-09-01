@@ -11,7 +11,7 @@ export default function Loading() {
         <div className="relative flex items-center justify-center w-24 h-24">
           <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse" />
           <div className="w-20 h-20 bg-stone-50 rounded-2xl flex items-center justify-center border border-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] relative z-10">
-            <Sparkles className="w-10 h-10 text-emerald-400/80" />
+            <Sparkles className="w-10 h-10 text-emerald-700" />
           </div>
         </div>
         

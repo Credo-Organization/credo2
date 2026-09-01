@@ -80,7 +80,7 @@ const LANGUAGE_COLORS: Record<string, string> = {
 function AuditEmptyState({ label, hint }: { label: string; hint: string }) {
   return (
     <div className="py-14 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-stone-200 bg-white">
-      <ShieldCheck className="w-9 h-9 text-stone-300 mb-2.5" />
+      <ShieldCheck className="w-9 h-9 text-stone-400 mb-2.5" />
       <h4 className="text-sm font-bold text-stone-900">{label}</h4>
       <p className="text-xs text-stone-500 max-w-xs mt-1">{hint}</p>
     </div>
@@ -262,12 +262,12 @@ export function AuditBreakdownPanel({
                     {/* Anti-cheat status pill */}
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {isVerified ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 border border-emerald-500/30 text-emerald-400">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 border border-emerald-500/30 text-emerald-700">
                           <CheckCircle2 className="w-3 h-3" />
                           Verified ({repo.integrity_score ?? 98}%)
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-400">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-700">
                           <AlertTriangle className="w-3 h-3" />
                           Flagged
                         </span>
@@ -298,7 +298,7 @@ export function AuditBreakdownPanel({
                       )}
 
                       {typeof repo.stars === "number" && repo.stars > 0 && (
-                        <span className="flex items-center gap-1 text-amber-400 font-medium">
+                        <span className="flex items-center gap-1 text-amber-700 font-medium">
                           <Star className="w-3 h-3 fill-amber-400" />
                           {repo.stars}
                         </span>

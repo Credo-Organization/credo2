@@ -36,13 +36,13 @@ export function GitHubSettings({ connection }: { connection: GitHubConnection | 
         {connection?.avatar_url ? (
           <img src={connection.avatar_url} alt="GitHub Avatar" className="w-12 h-12 rounded-full border border-border" />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center border border-border">
-            <Code2 className="w-6 h-6 text-zinc-500" />
+          <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center border border-border">
+            <Code2 className="w-6 h-6 text-stone-500" />
           </div>
         )}
         
         <div>
-          <h4 className="font-medium text-zinc-900">
+          <h4 className="font-medium text-stone-900">
             {connection ? connection.github_username : "Connect GitHub"}
           </h4>
           <p className="text-sm text-muted-foreground">
@@ -58,7 +58,7 @@ export function GitHubSettings({ connection }: { connection: GitHubConnection | 
             Disconnect
           </Button>
         ) : (
-          <Button onClick={handleConnect} className="bg-zinc-900 text-white hover:bg-zinc-800">
+          <Button onClick={handleConnect} className="bg-stone-900 text-white hover:bg-stone-800">
             <Code2 className="w-4 h-4 mr-2" />
             Connect GitHub
           </Button>
