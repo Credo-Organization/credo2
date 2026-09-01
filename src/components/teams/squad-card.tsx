@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Users, ShieldCheck, Sparkles, Send, ExternalLink, GitBranch, MessageSquare, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Sparkles, Send, GitBranch, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SquadApplyModal } from "./squad-apply-modal";
 
@@ -36,65 +36,63 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
   return (
     <>
-      <div className="group relative rounded-3xl border border-stone-200 bg-white shadow-sm p-6 backdrop-blur-xl transition-all duration-300 hover:border-stone-300 hover:shadow-lg flex flex-col justify-between">
-        {/* Subtle Top Gradient Glow */}
-        <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-navy-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-3xl" />
-
+      <div className="group relative rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#18181B] dark:shadow-[5px_5px_0px_0px_#000000] hover:shadow-[7px_7px_0px_0px_#18181B] dark:hover:shadow-[7px_7px_0px_0px_#000000] hover:-translate-y-1 p-6 transition-all duration-300 flex flex-col justify-between select-none">
         <div className="space-y-4">
-          {/* Header: Track Pill & Synergy Rating */}
+          {/* Header: Track Badge & Stamped Synergy Seal */}
           <div className="flex items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-stone-100 border border-stone-200 text-stone-700">
+            <span className="px-3 py-1 rounded-full text-[11px] font-black tracking-wide uppercase bg-stone-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100">
               {squad.track}
             </span>
 
+            {/* Stamped Rubber Seal */}
             <div
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 text-xs font-black shadow-xs ${
                 isHighSynergy
-                  ? "bg-navy-500/10 border-navy-500/30 text-navy-700 shadow-[0_0_12px_rgba(43, 72, 135,0.15)]"
-                  : "bg-blue-500/10 border-blue-500/30 text-blue-700"
+                  ? "bg-emerald-100 dark:bg-emerald-950/70 text-emerald-950 dark:text-emerald-300"
+                  : "bg-sky-100 dark:bg-blue-950/70 text-blue-950 dark:text-blue-300"
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{synergyScore}% Synergy</span>
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>★ {synergyScore}% Synergy</span>
             </div>
           </div>
 
           {/* Squad Title & Lead */}
           <div className="flex items-start gap-3.5">
-            <div className="w-11 h-11 rounded-2xl overflow-hidden border border-stone-200 flex-shrink-0 bg-stone-50">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-zinc-900 dark:border-zinc-700 flex-shrink-0 bg-stone-50 dark:bg-zinc-800 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]">
               <img src={squad.avatar} alt={squad.name} className="w-full h-full object-cover" />
             </div>
 
             <div className="overflow-hidden flex-1">
-              <h3 className="text-base font-bold text-stone-900 tracking-tight group-hover:text-navy-700 transition-colors truncate">
+              <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-100 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                 {squad.name}
               </h3>
-              <p className="text-xs text-stone-500 truncate flex items-center gap-1">
-                Lead: <span className="text-stone-700 font-medium">{squad.leader}</span>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 truncate flex items-center gap-1 font-medium">
+                Lead: <span className="text-zinc-950 dark:text-zinc-100 font-bold">{squad.leader}</span>
               </p>
             </div>
           </div>
 
           {/* Problem Statement */}
-          <p className="text-xs text-stone-600 leading-relaxed line-clamp-2">
+          <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed line-clamp-2 font-normal">
             {squad.problem}
           </p>
 
           {/* Complementary AI Fit Callout */}
           {squad.complementary_note && (
-            <div className="p-3 rounded-2xl bg-navy-500/[0.04] border border-navy-500/15 text-[11px] text-navy-700 leading-relaxed flex items-start gap-2">
-              <ShieldCheck className="w-4 h-4 text-navy-700 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-2xl bg-sky-50 dark:bg-blue-950/40 border-2 border-zinc-900 dark:border-zinc-700 text-[11px] text-zinc-950 dark:text-zinc-100 leading-relaxed flex items-start gap-2 shadow-xs font-semibold">
+              <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
               <span>{squad.complementary_note}</span>
             </div>
           )}
 
-          {/* Open Roles & Skills Needed */}
-          <div className="space-y-2 pt-1 border-t border-stone-200">
+          {/* Open Roles: Perforated Detachable Ticket Look */}
+          <div className="space-y-2 pt-2 border-t-2 border-dashed border-zinc-300 dark:border-zinc-800">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="text-stone-500 uppercase tracking-wider font-bold">
-                Looking For
+              <span className="text-zinc-950 dark:text-zinc-100 uppercase tracking-wider font-black">
+                Open Squad Roles
               </span>
-              <span className="text-stone-500 font-mono">
+              <span className="text-zinc-600 dark:text-zinc-400 font-mono font-bold">
                 {squad.current_members.length}/{squad.max_members} Filled
               </span>
             </div>
@@ -103,23 +101,24 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
               {squad.open_roles.map((role) => (
                 <span
                   key={role}
-                  className="px-2.5 py-1 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-semibold text-stone-800"
+                  className="px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-2 border-dashed border-zinc-900 dark:border-zinc-700 text-[11px] font-black text-amber-950 dark:text-amber-300 shadow-xs"
                 >
                   ⚡ {role}
                 </span>
               ))}
             </div>
 
+            {/* Required Skills Badges */}
             <div className="flex flex-wrap gap-1.5 pt-1">
               {squad.required_skills.map((skill) => {
                 const isMatched = (squad.matched_skills || []).includes(skill) || userSkills.some(s => s.toLowerCase() === skill.toLowerCase());
                 return (
                   <span
                     key={skill}
-                    className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-all ${
+                    className={`px-2.5 py-0.5 rounded-lg text-[10px] font-mono border-2 border-zinc-900 dark:border-zinc-700 transition-all ${
                       isMatched
-                        ? "bg-navy-500/15 border-navy-500/30 text-navy-700 font-bold"
-                        : "bg-stone-50 border-stone-200 text-stone-500"
+                        ? "bg-emerald-100 dark:bg-emerald-950/70 text-emerald-950 dark:text-emerald-300 font-black shadow-xs"
+                        : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
                     }`}
                   >
                     {isMatched ? `✓ ${skill}` : skill}
@@ -131,14 +130,14 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between gap-3 pt-5 mt-4 border-t border-stone-200">
+        <div className="flex items-center justify-between gap-3 pt-5 mt-4 border-t-2 border-dashed border-zinc-300 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             {squad.github_repo && (
               <a
                 href={`https://github.com/${squad.github_repo}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-xl bg-stone-100 border border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-stone-200 transition-colors"
+                className="p-2 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all"
                 title="View GitHub Repository"
               >
                 <GitBranch className="w-4 h-4" />
@@ -149,7 +148,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
                 href={`https://${squad.discord}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-xl bg-stone-100 border border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-stone-200 transition-colors"
+                className="p-2 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all"
                 title="Join Discord"
               >
                 <MessageSquare className="w-4 h-4" />
@@ -159,10 +158,10 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
           <Button
             onClick={() => setIsApplyOpen(true)}
-            className="h-9 px-4 text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
+            className="h-10 px-4 text-xs font-black bg-blue-600 hover:bg-blue-700 text-white rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[2px] transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
           >
             <Send className="w-3.5 h-3.5" />
-            Apply with Passport
+            <span>Apply with Passport</span>
           </Button>
         </div>
       </div>

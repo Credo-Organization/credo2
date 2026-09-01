@@ -185,7 +185,7 @@ export function TeamsClientHub({
       track: track,
       problem: description,
       leader: leaderName,
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+      avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
       current_members: [{ name: leaderName, role: "Team Lead", skills: userSkills.slice(0, 3) }],
       open_roles: openRoles.split(",").map((s) => s.trim()).filter(Boolean),
       required_skills: requiredSkills.split(",").map((s) => s.trim()).filter(Boolean),
@@ -209,50 +209,47 @@ export function TeamsClientHub({
   };
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-8 select-none">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-7 sm:p-8 rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[6px_6px_0px_0px_rgba(24,24,27,0.95)] dark:shadow-[6px_6px_0px_0px_#000000] relative overflow-hidden transition-colors">
         <div className="space-y-2 relative z-10">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-navy-500/10 border border-navy-500/20 text-navy-700">
-              SIH 2026 Hackathon Network
-            </span>
-            <span className="text-xs text-stone-500 font-mono">
-              Live Team Matcher
+            <span className="font-doodle text-xl sm:text-2xl text-blue-600 dark:text-blue-400 font-bold -rotate-1">
+              ✨ SIH 2026 Dream Team Matcher
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
             Hackathon Squad Matcher
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-normal">
             Discover squads seeking your verified skills or recruit complementary teammates with cryptographically proven GitHub and certificate evidence.
           </p>
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-stone-100 border border-stone-200 self-start md:self-auto relative z-10">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 self-start md:self-auto relative z-10 shadow-xs">
           <button
             onClick={() => setActiveTab("browse")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "browse"
-                ? "bg-stone-100 text-stone-900 shadow-sm border border-stone-200"
-                : "text-stone-500 hover:text-stone-900"
+                ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000] border-2 border-zinc-900 dark:border-zinc-700"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
             }`}
           >
-            <Users className="w-3.5 h-3.5" />
-            Browse Squads ({squads.length})
+            <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <span>Browse Squads ({squads.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("create")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "create"
-                ? "bg-stone-100 text-stone-900 shadow-sm border border-stone-200"
-                : "text-stone-500 hover:text-stone-900"
+                ? "bg-white dark:bg-zinc-950 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000] border-2 border-zinc-900 dark:border-zinc-700"
+                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
             }`}
           >
-            <PlusCircle className="w-3.5 h-3.5" />
-            Post Requirement
+            <PlusCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <span>Post Requirement</span>
           </button>
         </div>
       </div>
@@ -261,23 +258,23 @@ export function TeamsClientHub({
       {activeTab === "browse" && (
         <div className="space-y-6">
           {/* Redesigned 2-Tier Command & Filter Bar */}
-          <div className="p-4 rounded-3xl bg-white shadow-sm border border-stone-200 backdrop-blur-xl shadow-xl space-y-3.5">
+          <div className="p-5 rounded-3xl bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_rgba(24,24,27,0.95)] dark:shadow-[5px_5px_0px_0px_#000000] border-2 border-zinc-900 dark:border-zinc-700 space-y-4 transition-colors">
             {/* Tier 1: Search & Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
               {/* Search Bar */}
               <div className="relative w-full sm:flex-1">
-                <Search className="w-4 h-4 text-stone-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search problem statement, open role, or tech stack (e.g. FastAPI, ZK, PyTorch)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl pl-9 pr-8 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 focus:bg-stone-100 transition-all"
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl pl-9 pr-8 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all font-medium"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-900 text-xs p-1"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-950 dark:hover:text-white text-xs p-1 font-bold cursor-pointer"
                   >
                     ✕
                   </button>
@@ -286,27 +283,27 @@ export function TeamsClientHub({
 
               {/* Controls: Stats & Sorter */}
               <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                <span className="px-3 py-1.5 rounded-xl bg-stone-100 border border-stone-200 text-[11px] font-mono text-stone-500 whitespace-nowrap">
-                  <strong className="text-navy-700 font-bold">{filteredSquads.length}</strong> Squads
+                <span className="px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 whitespace-nowrap font-bold shadow-xs">
+                  <strong className="text-blue-600 dark:text-blue-400 font-black">{filteredSquads.length}</strong> Squads
                 </span>
 
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-stone-500 font-medium">Sort:</span>
+                  <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-bold">Sort:</span>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as any)}
-                    className="bg-stone-100 border border-stone-200 rounded-xl px-3 py-1.5 text-xs text-stone-900 focus:outline-none focus:border-navy-400 cursor-pointer"
+                    className="bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-600 font-bold cursor-pointer"
                   >
-                    <option value="synergy" className="bg-white text-stone-900">Top Synergy Fit</option>
-                    <option value="members" className="bg-white text-stone-900">Most Open Slots</option>
+                    <option value="synergy" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">Top Synergy Fit</option>
+                    <option value="members" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">Most Open Slots</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* Tier 2: Track Filter Chips with Icons (No Scrollbars) */}
-            <div className="pt-2 border-t border-stone-200 flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest mr-1">
+            {/* Tier 2: Track Filter Chips with Icons */}
+            <div className="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mr-1">
                 Tracks:
               </span>
               {TRACK_CHIPS.map((chip) => {
@@ -321,10 +318,10 @@ export function TeamsClientHub({
                   <button
                     key={chip}
                     onClick={() => setSelectedTrack(chip)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all cursor-pointer border ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer border-2 border-zinc-900 dark:border-zinc-700 ${
                       isSelected
-                        ? "bg-navy-500/15 text-navy-700 border-navy-500/30 shadow-[0_0_12px_rgba(43, 72, 135,0.15)] font-bold"
-                        : "bg-stone-50 text-stone-500 border-stone-200 hover:text-stone-900 hover:bg-stone-100"
+                        ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000]"
+                        : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 shadow-xs"
                     }`}
                   >
                     <span className="text-xs">{icon}</span>
@@ -337,10 +334,10 @@ export function TeamsClientHub({
 
           {/* Squads Grid */}
           {filteredSquads.length === 0 ? (
-            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border border-dashed border-stone-200 bg-stone-50/60">
-              <Users className="w-10 h-10 text-stone-400 mb-3" />
-              <h3 className="text-base font-bold text-stone-900">No squads match your filters</h3>
-              <p className="text-xs text-stone-500 max-w-sm mt-1 mb-4">
+            <div className="py-20 flex flex-col items-center justify-center text-center rounded-3xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 transition-colors">
+              <Users className="w-10 h-10 text-zinc-400 dark:text-zinc-500 mb-3" />
+              <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-100">No squads match your filters</h3>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mt-1 mb-4 font-normal">
                 Try adjusting your search query or track filter to explore other hackathon teams.
               </p>
               <Button
@@ -348,7 +345,7 @@ export function TeamsClientHub({
                   setSelectedTrack("All Tracks");
                   setSearchQuery("");
                 }}
-                className="text-xs bg-white hover:bg-stone-100 text-stone-900 border border-stone-200 h-8 px-4 rounded-xl"
+                className="text-xs bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-700 h-9 px-4 rounded-xl shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000] font-bold cursor-pointer transition-all"
               >
                 Reset Filters
               </Button>
@@ -365,43 +362,46 @@ export function TeamsClientHub({
 
       {/* TAB 2: POST SQUAD REQUIREMENT */}
       {activeTab === "create" && (
-        <div className="max-w-2xl mx-auto p-8 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl shadow-2xl">
+        <div className="max-w-2xl mx-auto p-7 sm:p-9 rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] dark:shadow-[7px_7px_0px_0px_#000000] transition-colors">
           <form onSubmit={handleCreateSquad} className="space-y-6">
-            <div className="space-y-1">
-              <h3 className="text-lg font-bold text-stone-900">Post Team Teammate Requirement</h3>
-              <p className="text-xs text-stone-500">
+            <div className="space-y-1 text-center sm:text-left">
+              <span className="font-doodle text-xl text-blue-600 dark:text-blue-400 font-bold block mb-0.5">
+                ✨ Recruit Verified Teammates
+              </span>
+              <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-100">Post Team Requirement</h3>
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 font-normal">
                 Broadcast your hackathon problem statement to match with students carrying verified skills.
               </p>
             </div>
 
             {/* Team Name */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
-                <Flag className="w-3.5 h-3.5 text-stone-500" />
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100 flex items-center gap-1.5">
+                <Flag className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 Squad / Team Name
               </label>
               <input
                 type="text"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
-                placeholder="e.g. Quantum Coders"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
+                placeholder="e.g. NeuralForge AI"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium"
                 required
               />
             </div>
 
             {/* Track Selector */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700">
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                 Hackathon Track
               </label>
               <select
                 value={track}
                 onChange={(e) => setTrack(e.target.value)}
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-navy-400 transition-colors cursor-pointer"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-600 font-bold cursor-pointer"
               >
                 {TRACK_CHIPS.filter((t) => t !== "All Tracks").map((t) => (
-                  <option key={t} value={t} className="bg-white text-stone-900">
+                  <option key={t} value={t} className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
                     {t}
                   </option>
                 ))}
@@ -410,8 +410,8 @@ export function TeamsClientHub({
 
             {/* Problem Statement */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
-                <AlignLeft className="w-3.5 h-3.5 text-stone-500" />
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100 flex items-center gap-1.5">
+                <AlignLeft className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                 Problem Statement & Project Vision
               </label>
               <textarea
@@ -419,7 +419,7 @@ export function TeamsClientHub({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Explain the problem you're tackling and the architecture you're building..."
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors resize-none"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none font-medium"
                 required
               />
             </div>
@@ -427,7 +427,7 @@ export function TeamsClientHub({
             {/* Open Roles & Skills Needed */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700">
+                <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                   Open Roles (comma-separated)
                 </label>
                 <input
@@ -435,13 +435,13 @@ export function TeamsClientHub({
                   value={openRoles}
                   onChange={(e) => setOpenRoles(e.target.value)}
                   placeholder="e.g. Backend Lead, ZK Researcher"
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700">
+                <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                   Required Tech Stack
                 </label>
                 <input
@@ -449,14 +449,14 @@ export function TeamsClientHub({
                   value={requiredSkills}
                   onChange={(e) => setRequiredSkills(e.target.value)}
                   placeholder="e.g. FastAPI, Docker, PyTorch"
-                  className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium"
                 />
               </div>
             </div>
 
             {/* Discord / Contact Link */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700">
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                 Squad Discord / Contact Invite
               </label>
               <input
@@ -464,24 +464,24 @@ export function TeamsClientHub({
                 value={discord}
                 onChange={(e) => setDiscord(e.target.value)}
                 placeholder="discord.gg/your-squad"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-500 focus:outline-none focus:border-navy-400 transition-colors"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium"
               />
             </div>
 
             {/* Submit */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => setActiveTab("browse")}
-                className="text-xs text-stone-500 hover:text-stone-900 h-9 px-4 rounded-xl"
+                className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 font-bold h-10 px-4 rounded-xl cursor-pointer"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="text-xs font-semibold bg-navy-900 hover:bg-navy-800 text-white h-9 px-6 rounded-xl shadow-lg shadow-navy-900/20 cursor-pointer"
+                className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white h-11 px-6 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[3px_3px_0px_0px_rgba(24,24,27,0.95)] dark:shadow-[3px_3px_0px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] cursor-pointer transition-all"
               >
                 {isSubmitting ? "Publishing Squad..." : "Publish Squad Requirement"}
               </Button>
