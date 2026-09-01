@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { routeForRole } from "@/lib/auth/route-for-role";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -51,7 +52,8 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/certificates") ||
     request.nextUrl.pathname.startsWith("/passport") ||
     request.nextUrl.pathname.startsWith("/roadmap") ||
-    request.nextUrl.pathname.startsWith("/dashboard/settings");
+    request.nextUrl.pathname.startsWith("/dashboard/settings") ||
+    request.nextUrl.pathname.startsWith("/recruiter");
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
@@ -59,27 +61,29 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Handle Onboarding Flow
+  // Handle role-based routing. The decision is a pure function so it can be
+  // tested for redirect loops without a browser.
   if (user) {
-    const onboardingCompleted = user.user_metadata?.onboarding_completed;
-    
-    if (!onboardingCompleted && request.nextUrl.pathname !== "/onboarding") {
-      // Force user to onboarding if not completed
+    const target = routeForRole({
+      role: user.user_metadata?.role,
+      onboarded: Boolean(user.user_metadata?.onboarding_completed),
+      path: request.nextUrl.pathname,
+    });
+
+    if (target) {
       const url = request.nextUrl.clone();
-      url.pathname = "/onboarding";
-      return NextResponse.redirect(url);
-    } else if (onboardingCompleted && request.nextUrl.pathname === "/onboarding") {
-      // Prevent user from going back to onboarding if already done
-      const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
+      url.pathname = target;
       return NextResponse.redirect(url);
     }
   }
 
-  // Redirect authenticated users away from login
+  // Redirect authenticated users away from login, to their own home. Sending a
+  // recruiter to /dashboard would work, because the block above bounces them on
+  // to /recruiter, but it costs a needless round trip through a route they are
+  // not allowed to see.
   if (user && request.nextUrl.pathname === "/login") {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = user.user_metadata?.role === "recruiter" ? "/recruiter" : "/dashboard";
     return NextResponse.redirect(url);
   }
 
