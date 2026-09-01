@@ -1,358 +1,204 @@
-import Link from "next/link";
-import {
-  ArrowLeft,
-  ShieldQuestion,
-  FolderGit2,
-  CheckCircle2,
-  AlertTriangle,
-  Award,
-  ShieldCheck,
-  Sparkles,
-  GraduationCap,
-} from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { SaveButton } from "@/components/recruiter/save-button";
-import { agreementFromVotes } from "@/lib/ai/agreement";
+import { RepoAuditTable, type AuditRow } from "@/components/recruiter/repo-audit-table";
+import { ShieldQuestion, ArrowLeft, Award } from "lucide-react";
+import Link from "next/link";
 
-function safeId(raw: string): string {
-  return raw.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64);
-}
-
-interface RepoRow {
-  name: string;
-  primary_language: string | null;
-  integrity_status: string | null;
-  integrity_score: number | null;
-  integrity_flags: unknown;
-  audit_votes: unknown;
-}
-
-interface CertRow {
-  title: string;
-  issuer: string | null;
-  sha256_hash: string | null;
-}
-
-interface CandidateProfile {
-  id: string;
-  full_name: string | null;
-  college_name: string | null;
-  degree: string | null;
-}
-
-function flagsToList(flags: unknown): string[] {
-  if (!Array.isArray(flags)) return [];
-  return flags.filter((f): f is string => typeof f === "string");
-}
-
-function statusBadgeClasses(status: string | null): string {
-  if (status === "verified") return "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-  if (status === "flagged") return "bg-rose-500/10 border-rose-500/30 text-rose-400";
-  return "bg-amber-500/10 border-amber-500/30 text-amber-400";
-}
-
-function statusIcon(status: string | null) {
-  if (status === "verified") return <CheckCircle2 className="w-3 h-3" />;
-  if (status === "flagged") return <AlertTriangle className="w-3 h-3" />;
-  return <ShieldQuestion className="w-3 h-3" />;
-}
-
-export default async function CandidatePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function CandidatePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const safe = safeId(id);
+  const safeId = id.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64);
 
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // is_public is the authorisation. The service-role client is used because the
+  // student owns these rows and a recruiter is not the owner, so the filter has
+  // to be explicit rather than left to a policy.
   const admin = createAdminClient();
-
-  const { data: passport } = safe
+  const { data: passport } = safeId
     ? await admin
         .from("passports")
-        .select("*, profiles(id, full_name, college_name, degree)")
+        .select("*, profiles(id, full_name, college_name, degree, headline)")
         .eq("is_public", true)
-        .or(`snapshot_data->>student_id.eq.${safe},snapshot_data->>card_id.eq.${safe}`)
+        .or(`snapshot_data->>student_id.eq.${safeId},snapshot_data->>card_id.eq.${safeId}`)
         .limit(1)
         .maybeSingle()
     : { data: null };
 
   if (!passport) {
     return (
-      <div className="min-h-screen bg-[#050811] text-white flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-5">
-          <ShieldQuestion className="w-8 h-8 text-amber-400" />
+      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4">
+          <ShieldQuestion className="w-6 h-6 text-amber-400" aria-hidden="true" />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight mb-2">No published passport found</h1>
-        <p className="text-sm text-white/50 max-w-sm">
-          No published Credify passport matches
-          <span className="font-mono text-white/70"> {id}</span>. Either the
-          identifier is wrong, or the student has not shared this passport
-          publicly.
+        <h1 className="text-xl font-semibold text-white mb-2">No published passport found</h1>
+        <p className="text-[13px] text-white/45 max-w-sm mx-auto leading-relaxed">
+          Nothing matches <span className="font-mono text-white/70">{id}</span>. Either the
+          identifier is wrong, or the student has not shared this passport.
         </p>
         <Link
           href="/recruiter"
-          className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors mt-6"
+          className="inline-flex items-center gap-2 text-[13px] text-white/45 hover:text-white mt-6 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to shortlist
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" /> Back to shortlist
         </Link>
       </div>
     );
   }
 
-  const profile = (passport as { profiles?: CandidateProfile | null }).profiles ?? null;
+  const snap = (passport.snapshot_data ?? {}) as {
+    skills?: { name: string }[];
+    profile?: { name?: string; college?: string; headline?: string };
+  };
+  const profile = passport.profiles as {
+    id?: string;
+    full_name?: string;
+    college_name?: string;
+    headline?: string;
+  } | null;
 
-  let repos: RepoRow[] = [];
-  if (profile?.id) {
-    const { data: connection } = await admin
-      .from("github_connections")
-      .select("id")
-      .eq("profile_id", profile.id)
-      .maybeSingle();
+  const { data: connection } = profile?.id
+    ? await admin.from("github_connections").select("id").eq("profile_id", profile.id).maybeSingle()
+    : { data: null };
 
-    if (connection) {
-      const { data: repoRows } = await admin
+  const { data: repos } = connection
+    ? await admin
         .from("github_repos")
         .select("name, primary_language, integrity_status, integrity_score, integrity_flags, audit_votes")
         .eq("connection_id", connection.id)
-        .order("integrity_score", { ascending: true });
-      repos = repoRows ?? [];
-    }
-  }
+    : { data: [] };
 
-  const { data: certRows } = profile?.id
-    ? await admin
-        .from("certificates")
-        .select("title, issuer, sha256_hash")
-        .eq("profile_id", profile.id)
+  const { data: certs } = profile?.id
+    ? await admin.from("certificates").select("title, issuer, sha256_hash").eq("profile_id", profile.id)
+    : { data: [] };
+
+  const { data: saved } = user
+    ? await supabase
+        .from("saved_candidates")
+        .select("id")
+        .eq("recruiter_id", user.id)
+        .eq("passport_id", safeId)
+        .maybeSingle()
     : { data: null };
-  const certificates: CertRow[] = certRows ?? [];
 
-  // Whether this recruiter has already saved this candidate must respect RLS,
-  // so it goes through the normal client rather than the admin one used above.
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let initiallySaved = false;
-  if (user) {
-    const { data: savedRow } = await supabase
-      .from("saved_candidates")
-      .select("id")
-      .eq("recruiter_id", user.id)
-      .eq("passport_id", safe)
-      .maybeSingle();
-    initiallySaved = !!savedRow;
-  }
-
-  const snapshot = (passport as { snapshot_data?: Record<string, unknown> | null }).snapshot_data;
-  const rawSkills = snapshot && Array.isArray(snapshot.skills) ? snapshot.skills : [];
-  const skills = rawSkills.filter(
-    (s): s is { name: string } =>
-      typeof s === "object" && s !== null && typeof (s as { name?: unknown }).name === "string"
+  // Flagged first: the exception is what a recruiter needs to see, not the norm.
+  const list = ([...(repos ?? [])] as AuditRow[]).sort(
+    (a, b) => (a.integrity_score ?? 101) - (b.integrity_score ?? 101)
   );
-
-  const verifiedCount = repos.filter((r) => r.integrity_status === "verified").length;
-  const flaggedCount = repos.filter((r) => r.integrity_status === "flagged").length;
-
-  const displayName = profile?.full_name || "Unnamed Candidate";
-  const subtitle = [profile?.degree, profile?.college_name].filter(Boolean).join(" · ");
+  const verified = list.filter((r) => r.integrity_status === "verified").length;
+  const flagged = list.filter((r) => r.integrity_status === "flagged").length;
+  const skills = snap.skills ?? [];
 
   return (
-    <div className="min-h-screen bg-[#050811] text-white p-6 md:p-10">
-      <div className="max-w-5xl mx-auto space-y-6">
-        <Link
-          href="/recruiter"
-          className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to shortlist
-        </Link>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
+      <Link
+        href="/recruiter"
+        className="inline-flex items-center gap-1.5 text-[12px] text-white/40 hover:text-white w-fit transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded"
+      >
+        <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" /> Shortlist
+      </Link>
 
-        {/* Header */}
-        <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-2">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              Verified Credify Passport
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">{displayName}</h1>
-            {subtitle && <p className="text-sm text-white/50 mt-1">{subtitle}</p>}
-            <p className="text-xs font-mono text-white/40 mt-1">{safe}</p>
-          </div>
-          <SaveButton passportId={safe} initiallySaved={initiallySaved} />
+      <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+            Candidate
+          </span>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
+            {profile?.full_name || snap.profile?.name || safeId}
+          </h1>
+          <p className="text-[13px] text-white/45">
+            {profile?.headline || snap.profile?.headline || "No headline"} ·{" "}
+            {profile?.college_name || snap.profile?.college || "Institution not stated"} ·{" "}
+            <span className="font-mono text-white/35">{safeId}</span>
+          </p>
         </div>
+        <SaveButton passportId={safeId} initiallySaved={Boolean(saved)} />
+      </header>
 
-        {/* Stat strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4">
-            <span className="text-[11px] font-bold tracking-widest uppercase text-white/40 block mb-1.5">
-              Repositories
-            </span>
-            <span className="text-xl font-extrabold text-white">{repos.length}</span>
+      <div className="grid grid-cols-2 md:grid-cols-4 rounded-xl border border-white/[0.07] overflow-hidden">
+        {[
+          { k: "Repositories", v: list.length },
+          { k: "Verified", v: verified },
+          { k: "Flagged", v: flagged, warn: flagged > 0 },
+          { k: "Certificates", v: certs?.length ?? 0 },
+        ].map((s, i) => (
+          <div
+            key={s.k}
+            className={`px-4 py-3 bg-white/[0.02] ${i < 3 ? "md:border-r border-white/[0.07]" : ""} ${
+              i < 2 ? "border-b md:border-b-0 border-white/[0.07]" : ""
+            } ${i === 0 || i === 2 ? "border-r md:border-r" : ""}`}
+          >
+            <div
+              className={`font-mono text-xl font-semibold tabular-nums leading-none ${
+                s.warn ? "text-rose-300" : "text-white"
+              }`}
+            >
+              {s.v}
+            </div>
+            <div className="text-[10px] uppercase tracking-[0.12em] text-white/35 mt-1.5">{s.k}</div>
           </div>
-          <div className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4">
-            <span className="text-[11px] font-bold tracking-widest uppercase text-white/40 block mb-1.5">
-              Verified
-            </span>
-            <span className="text-xl font-extrabold text-emerald-400">{verifiedCount}</span>
-          </div>
-          <div className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4">
-            <span className="text-[11px] font-bold tracking-widest uppercase text-white/40 block mb-1.5">
-              Flagged
-            </span>
-            <span className="text-xl font-extrabold text-rose-400">{flaggedCount}</span>
-          </div>
-          <div className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4">
-            <span className="text-[11px] font-bold tracking-widest uppercase text-white/40 block mb-1.5">
-              Certificates
-            </span>
-            <span className="text-xl font-extrabold text-white">{certificates.length}</span>
-          </div>
+        ))}
+      </div>
+
+      <section className="flex flex-col gap-2.5">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+            GitProof audit
+          </h2>
+          <span className="text-[11px] text-white/30">lowest integrity first</span>
         </div>
+        <RepoAuditTable repos={list} />
+      </section>
 
-        {/* GitProof audit section */}
-        <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <FolderGit2 className="w-4 h-4 text-white" />
-            </div>
-            <h2 className="text-sm font-bold text-white">GitProof Audit</h2>
-          </div>
-
-          {repos.length === 0 ? (
-            <div className="py-10 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-white/[0.08]">
-              <FolderGit2 className="w-8 h-8 text-white/20 mb-2.5" />
-              <h4 className="text-sm font-bold text-white/70">No repositories audited</h4>
-              <p className="text-xs text-white/40 max-w-xs mt-1">
-                This candidate has not connected a GitHub account, or GitProof has not
-                completed a scan yet.
-              </p>
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <section className="rounded-xl border border-white/[0.07] p-4 flex flex-col gap-3">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+            Verified skills
+            <span className="ml-1.5 font-mono tabular-nums text-white/25">{skills.length}</span>
+          </h2>
+          {skills.length === 0 ? (
+            <p className="text-[13px] text-white/40">No verified skills yet.</p>
           ) : (
-            <div className="space-y-2.5">
-              {repos.map((repo, idx) => {
-                const flags = flagsToList(repo.integrity_flags);
-                const agreement = agreementFromVotes(repo.audit_votes);
-                return (
-                  <div
-                    key={idx}
-                    className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4 flex flex-col gap-2"
-                  >
-                    <div className="flex items-start justify-between gap-3 flex-wrap">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-sm font-bold text-white truncate">{repo.name}</span>
-                        {repo.primary_language && (
-                          <span className="text-xs text-white/40">{repo.primary_language}</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${statusBadgeClasses(
-                            repo.integrity_status
-                          )}`}
-                        >
-                          {statusIcon(repo.integrity_status)}
-                          {repo.integrity_status ?? "pending"} ({repo.integrity_score ?? 0}%)
-                        </span>
-                        {agreement && (
-                          <span className="text-[10px] font-mono text-white/40">
-                            {agreement} models agreed
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    {flags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {flags.map((flag, fIdx) => (
-                          <span
-                            key={fIdx}
-                            className="px-2 py-0.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-[10px] text-rose-400 font-medium"
-                          >
-                            {flag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <ul className="flex flex-wrap gap-1.5">
+              {skills.map((s, i) => (
+                <li
+                  key={i}
+                  className="px-2.5 py-1 rounded-md border border-white/[0.08] bg-white/[0.03] text-[12px] text-white/85"
+                >
+                  {s.name}
+                </li>
+              ))}
+            </ul>
           )}
-        </div>
+        </section>
 
-        {/* Skills & Certificates */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <h2 className="text-sm font-bold text-white">Verified Skills</h2>
-            </div>
-            {skills.length === 0 ? (
-              <div className="py-8 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-white/[0.08]">
-                <Sparkles className="w-7 h-7 text-white/20 mb-2" />
-                <p className="text-xs text-white/40 max-w-xs">
-                  No verified skills are attached to this passport yet.
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-1.5">
-                {skills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06] text-xs text-white/80 font-medium"
-                  >
-                    {skill.name}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 text-white" />
-              </div>
-              <h2 className="text-sm font-bold text-white">Certificates</h2>
-            </div>
-            {certificates.length === 0 ? (
-              <div className="py-8 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-white/[0.08]">
-                <Award className="w-7 h-7 text-white/20 mb-2" />
-                <p className="text-xs text-white/40 max-w-xs">
-                  No certificates have been uploaded for this candidate.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-2.5">
-                {certificates.map((cert, idx) => (
-                  <div
-                    key={idx}
-                    className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-3.5 flex items-start gap-3"
-                  >
-                    <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Award className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-bold text-white truncate">{cert.title}</h4>
-                      <p className="text-xs text-white/40 truncate">
-                        {cert.issuer || "Unknown issuer"}
-                      </p>
-                      {cert.sha256_hash && (
-                        <p className="text-[10px] font-mono text-white/30 truncate mt-0.5">
-                          sha256:{cert.sha256_hash.slice(0, 16)}...
-                        </p>
-                      )}
-                    </div>
+        <section className="rounded-xl border border-white/[0.07] p-4 flex flex-col gap-3">
+          <h2 className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+            Certificates
+            <span className="ml-1.5 font-mono tabular-nums text-white/25">{certs?.length ?? 0}</span>
+          </h2>
+          {(certs?.length ?? 0) === 0 ? (
+            <p className="text-[13px] text-white/40">No certificates uploaded.</p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {certs!.map((c, i) => (
+                <li key={i} className="flex items-start gap-2.5">
+                  <Award className="w-3.5 h-3.5 text-white/30 mt-0.5 shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <span className="text-[13px] text-white block truncate leading-tight">{c.title}</span>
+                    <span className="text-[11px] text-white/40">
+                      {c.issuer || "Issuer not stated"}
+                      {c.sha256_hash ? " · SHA-256 verified" : ""}
+                    </span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
   );

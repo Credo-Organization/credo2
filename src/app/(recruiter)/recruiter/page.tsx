@@ -1,104 +1,111 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Users, ChevronRight, ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { CandidateLookup } from "@/components/recruiter/candidate-lookup";
-
-interface SavedCandidateRow {
-  passport_id: string;
-  saved_at: string | null;
-}
+import { createAdminClient } from "@/lib/supabase/admin";
+import { redirect } from "next/navigation";
+import { ShortlistTable, type ShortlistRow } from "@/components/recruiter/shortlist-table";
 
 export default async function RecruiterPage() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  if (!user) {
-    redirect("/login");
-  }
-
-  const { data: savedRows } = await supabase
+  // Own shortlist only. RLS enforces this at the database, not here.
+  const { data: saved } = await supabase
     .from("saved_candidates")
     .select("passport_id, saved_at")
     .eq("recruiter_id", user.id)
     .order("saved_at", { ascending: false });
 
-  const candidates: SavedCandidateRow[] = savedRows ?? [];
+  const ids = (saved ?? []).map((s) => s.passport_id);
+  let rows: ShortlistRow[] = [];
+
+  if (ids.length > 0) {
+    // Passports, repositories and connections are read with the service-role
+    // client: their RLS policies scope reads to the owning student, and a
+    // recruiter is not the owner. is_public is what authorises this view, so it
+    // is applied as an explicit filter rather than left to the policy.
+    const admin = createAdminClient();
+
+    const { data: passports } = await admin
+      .from("passports")
+      .select("snapshot_data, profile_id, profiles(full_name, college_name, headline)")
+      .eq("is_public", true)
+      .in("snapshot_data->>student_id", ids);
+
+    const profileIds = (passports ?? []).map((p) => p.profile_id).filter(Boolean);
+
+    const { data: connections } = profileIds.length
+      ? await admin.from("github_connections").select("id, profile_id").in("profile_id", profileIds)
+      : { data: [] };
+
+    const connectionIds = (connections ?? []).map((c) => c.id);
+
+    const { data: repos } = connectionIds.length
+      ? await admin
+          .from("github_repos")
+          .select("connection_id, integrity_status")
+          .in("connection_id", connectionIds)
+      : { data: [] };
+
+    const connectionToProfile = new Map((connections ?? []).map((c) => [c.id, c.profile_id]));
+    const stats = new Map<string, { repos: number; verified: number; flagged: number }>();
+    for (const r of repos ?? []) {
+      const pid = connectionToProfile.get(r.connection_id);
+      if (!pid) continue;
+      const s = stats.get(pid) ?? { repos: 0, verified: 0, flagged: 0 };
+      s.repos++;
+      if (r.integrity_status === "verified") s.verified++;
+      if (r.integrity_status === "flagged") s.flagged++;
+      stats.set(pid, s);
+    }
+
+    const savedAt = new Map((saved ?? []).map((s) => [s.passport_id, s.saved_at]));
+
+    rows = (passports ?? [])
+      .map((p) => {
+        const snap = (p.snapshot_data ?? {}) as {
+          student_id?: string;
+          skills?: unknown[];
+          profile?: { name?: string; college?: string; headline?: string };
+        };
+        const prof = p.profiles as { full_name?: string; college_name?: string; headline?: string } | null;
+        const id = snap.student_id ?? "";
+        const s = stats.get(p.profile_id) ?? { repos: 0, verified: 0, flagged: 0 };
+        const when = savedAt.get(id);
+
+        return {
+          passportId: id,
+          name: prof?.full_name || snap.profile?.name || id,
+          college: prof?.college_name || snap.profile?.college || "Institution not stated",
+          headline: prof?.headline || snap.profile?.headline || "",
+          repos: s.repos,
+          verified: s.verified,
+          flagged: s.flagged,
+          skills: Array.isArray(snap.skills) ? snap.skills.length : 0,
+          savedAt: when
+            ? new Date(when).toLocaleDateString("en-IN", { day: "numeric", month: "short" })
+            : "",
+        };
+      })
+      // Preserve the order the recruiter saved them in.
+      .sort((a, b) => ids.indexOf(a.passportId) - ids.indexOf(b.passportId));
+  }
 
   return (
-    <div className="min-h-screen bg-[#050811] text-white p-6 md:p-10">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-3">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Recruiter Console
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">Candidate Shortlist</h1>
-          <p className="text-sm text-white/50 mt-1">
-            Look up a student&apos;s published Credify passport by ID, and keep track of the
-            candidates you&apos;re considering.
-          </p>
-        </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col gap-6">
+      <header className="flex flex-col gap-1">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
+          Recruiter console
+        </span>
+        <h1 className="text-2xl font-semibold tracking-tight text-white">Candidate shortlist</h1>
+        <p className="text-[13px] text-white/45 max-w-2xl leading-relaxed">
+          Every figure below comes from an audit that actually ran. Open a candidate to see which
+          models reached each verdict.
+        </p>
+      </header>
 
-        {/* Lookup */}
-        <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6">
-          <span className="text-[11px] font-bold tracking-widest uppercase text-white/40 block mb-3">
-            Find a candidate
-          </span>
-          <CandidateLookup />
-        </div>
-
-        {/* Shortlist */}
-        <div className="rounded-3xl border border-white/[0.06] bg-[#0a0d14]/70 backdrop-blur-xl p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <Users className="w-4 h-4 text-white" />
-            </div>
-            <h2 className="text-sm font-bold text-white">Saved Candidates ({candidates.length})</h2>
-          </div>
-
-          {candidates.length === 0 ? (
-            <div className="py-14 flex flex-col items-center justify-center text-center rounded-2xl border border-dashed border-white/[0.08]">
-              <Users className="w-9 h-9 text-white/20 mb-2.5" />
-              <h4 className="text-sm font-bold text-white/70">No candidates yet</h4>
-              <p className="text-xs text-white/40 max-w-xs mt-1">
-                Ask a student for their passport ID, or scan the QR code on their passport,
-                to look them up and add them to your shortlist.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {candidates.map((candidate) => (
-                <Link
-                  key={candidate.passport_id}
-                  href={`/recruiter/candidate/${candidate.passport_id}`}
-                  className="group flex items-center justify-between gap-3 rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-colors"
-                >
-                  <div className="min-w-0">
-                    <span className="text-sm font-mono font-semibold text-white block truncate">
-                      {candidate.passport_id}
-                    </span>
-                    <span className="text-xs text-white/40">
-                      Saved{" "}
-                      {candidate.saved_at
-                        ? new Date(candidate.saved_at).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "recently"}
-                    </span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-white/70 transition-colors flex-shrink-0" />
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <ShortlistTable rows={rows} />
     </div>
   );
 }
