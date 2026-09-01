@@ -32,15 +32,15 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
   return (
     <div className="flex flex-col gap-6 w-full max-w-[600px] flex-shrink-0">
       {/* Top Controls Bar - Unified Obsidian Theme */}
-      <div className="flex items-center justify-between gap-3 p-1.5 bg-[#0a0d14]/90 border border-white/[0.08] rounded-2xl backdrop-blur-xl shadow-lg">
-        <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/[0.04]">
+      <div className="flex items-center justify-between gap-3 p-1.5 bg-white shadow-sm border border-stone-200 rounded-2xl backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200">
           <button
             type="button"
             onClick={() => setViewMode("id-card")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === "id-card"
                 ? "bg-white text-zinc-950 shadow-md scale-[1.02]"
-                : "text-white/60 hover:text-white"
+                : "text-stone-500 hover:text-stone-900"
             }`}
           >
             <CreditCard className="w-3.5 h-3.5" />
@@ -53,7 +53,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === "analytics"
                 ? "bg-white text-zinc-950 shadow-md scale-[1.02]"
-                : "text-white/60 hover:text-white"
+                : "text-stone-500 hover:text-stone-900"
             }`}
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
@@ -66,7 +66,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             size="sm"
             variant="ghost"
             onClick={handleShare}
-            className="h-8 px-2.5 text-xs text-white/60 hover:text-white hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             Share
@@ -76,7 +76,7 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
             size="sm"
             variant="ghost"
             onClick={handlePrint}
-            className="h-8 px-2.5 text-xs text-white/60 hover:text-white hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
+            className="h-8 px-2.5 text-xs text-stone-500 hover:text-stone-900 hover:bg-white/10 rounded-lg gap-1.5 font-medium cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             Print

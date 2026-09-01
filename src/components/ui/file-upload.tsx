@@ -62,10 +62,10 @@ export const FileUpload = ({
     <div className="w-full mb-8">
       <div
         className={cn(
-          "relative flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-xl transition-all duration-300 ease-in-out cursor-pointer overflow-hidden group",
+          "relative flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-2xl transition-all duration-300 ease-in-out cursor-pointer overflow-hidden group",
           isDragActive
-            ? "border-cyan-500 bg-cyan-500/10"
-            : "border-zinc-800 hover:border-zinc-700 bg-zinc-900/50 hover:bg-zinc-900/80"
+            ? "border-amber-500 bg-amber-200/50"
+            : "border-amber-300/80 hover:border-amber-400 bg-white/80 hover:bg-white/95"
         )}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -82,25 +82,21 @@ export const FileUpload = ({
           accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
         />
         
-        {/* Subtle background grid */}
-        <div className="absolute inset-0 pointer-events-none opacity-20 [mask-image:linear-gradient(to_bottom,white,transparent)]" 
-             style={{ backgroundImage: "radial-gradient(#3f3f46 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
-
-        <div className="relative z-10 flex flex-col items-center space-y-4">
+        <div className="relative z-10 flex flex-col items-center space-y-3">
           <motion.div
-            animate={{ y: isDragActive ? -10 : 0, scale: isDragActive ? 1.1 : 1 }}
+            animate={{ y: isDragActive ? -6 : 0, scale: isDragActive ? 1.05 : 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="p-4 rounded-full bg-zinc-800/50 shadow-inner group-hover:bg-zinc-800 transition-colors"
+            className="p-3.5 rounded-full bg-amber-100 border border-amber-300/70 group-hover:bg-amber-200/60 transition-colors"
           >
-            <UploadCloud className="w-8 h-8 text-cyan-400" />
+            <UploadCloud className="w-6 h-6 text-amber-950" />
           </motion.div>
           
           <div className="text-center">
-            <p className="text-sm font-medium text-zinc-300">
+            <p className="text-xs sm:text-sm font-semibold text-zinc-900">
               {isDragActive ? "Drop files here to upload" : "Drag & drop certificates here"}
             </p>
-            <p className="text-xs text-zinc-500 mt-1">
-              or click to browse from your computer
+            <p className="text-[11px] text-amber-950/70 mt-0.5">
+              or click to browse from your computer (PDF, PNG, JPG)
             </p>
           </div>
         </div>
@@ -112,52 +108,51 @@ export const FileUpload = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-6 space-y-3 overflow-hidden"
+            className="mt-4 space-y-2.5 overflow-hidden"
           >
-            <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            <h4 className="text-[11px] font-semibold text-amber-950/70 uppercase tracking-wider mb-2">
               Selected Files ({files.length})
             </h4>
             {files.map((file, idx) => {
-              // Create an object URL for images to show preview
               const isImage = file.type.startsWith('image/');
               const previewUrl = isImage ? URL.createObjectURL(file) : null;
               
               return (
                 <motion.div
                   key={file.name + idx}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2, delay: idx * 0.05 }}
-                  className="flex flex-col rounded-lg border border-zinc-800 bg-zinc-900/50 overflow-hidden"
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2, delay: idx * 0.04 }}
+                  className="flex flex-col rounded-xl border border-amber-300/80 bg-white/90 overflow-hidden"
                 >
-                  <div className="flex items-center justify-between p-3">
-                    <div className="flex items-center space-x-3 overflow-hidden">
-                      <div className="p-2 rounded-md bg-zinc-800 text-cyan-400">
+                  <div className="flex items-center justify-between p-2.5">
+                    <div className="flex items-center space-x-2.5 overflow-hidden">
+                      <div className="p-1.5 rounded-lg bg-amber-100 border border-amber-300/70 text-amber-950">
                         <File className="w-4 h-4" />
                       </div>
                       <div className="flex flex-col overflow-hidden">
-                        <span className="text-sm font-medium text-zinc-200 truncate">{file.name}</span>
-                        <span className="text-xs text-zinc-500">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                        <span className="text-xs font-medium text-zinc-900 truncate">{file.name}</span>
+                        <span className="text-[10px] text-amber-950/60">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <div className="flex items-center space-x-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
                           removeFile(idx);
                         }}
-                        className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+                        className="p-1 rounded-md text-amber-900/50 hover:text-red-600 hover:bg-amber-100 transition-colors"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
                   
                   {isImage && previewUrl && (
-                    <div className="w-full h-32 bg-black/40 border-t border-zinc-800 flex items-center justify-center overflow-hidden">
+                    <div className="w-full h-28 bg-amber-50/50 border-t border-amber-200/80 flex items-center justify-center overflow-hidden">
                       <img src={previewUrl} alt={file.name} className="object-contain h-full w-full" />
                     </div>
                   )}

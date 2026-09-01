@@ -63,11 +63,11 @@ export function MultiVectorRadar({
   ];
 
   return (
-    <div className={cn("rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4.5 space-y-3.5 backdrop-blur-sm", className)}>
+    <div className={cn("rounded-2xl border border-stone-200 bg-stone-50 p-4.5 space-y-3.5 backdrop-blur-sm", className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <h4 className="text-xs font-bold uppercase tracking-wider text-white/80">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
             4-Pillar Merit Diagnostic
           </h4>
         </div>
@@ -82,10 +82,10 @@ export function MultiVectorRadar({
           return (
             <div
               key={p.label}
-              className="p-3 rounded-xl border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03] transition-colors"
+              className="p-3 rounded-xl border border-stone-200 bg-white hover:bg-white transition-colors"
             >
               <div className="flex items-center justify-between text-xs mb-1.5">
-                <div className="flex items-center gap-1.5 text-white/70 font-medium">
+                <div className="flex items-center gap-1.5 text-stone-600 font-medium">
                   <Icon className={cn("w-3.5 h-3.5", p.color)} />
                   <span>{p.label}</span>
                 </div>
@@ -95,14 +95,14 @@ export function MultiVectorRadar({
               </div>
               
               {/* Progress track */}
-              <div className="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden">
                 <div
                   className={cn("h-full rounded-full transition-all duration-700 ease-out", p.bar)}
                   style={{ width: `${p.score}%` }}
                 />
               </div>
 
-              <span className="text-[10px] text-white/40 block mt-1.5 truncate">
+              <span className="text-[10px] text-stone-400 block mt-1.5 truncate">
                 {p.proof}
               </span>
             </div>

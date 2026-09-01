@@ -155,7 +155,7 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
         className
       )}
       style={{
-        boxShadow: "0 25px 60px -15px rgba(11, 37, 89, 0.15), 0 0 0 1px rgba(11, 37, 89, 0.08)",
+        boxShadow: "0 30px 80px -15px rgba(11, 37, 89, 0.25), 0 0 0 1.5px rgba(11, 37, 89, 0.12)",
       }}
     >
       {/* Background Watermark Security Pattern */}

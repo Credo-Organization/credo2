@@ -214,12 +214,12 @@ export default async function DashboardPage() {
   if (!mappedData) {
     return (
       <div className="w-full h-full flex items-center justify-center p-8 relative overflow-hidden">
-        <div className="glass overflow-hidden rounded-[24px] border border-white/[0.05] relative shadow-2xl w-full max-w-2xl mx-auto p-12 text-center z-10 animate-fade-in-up">
-          <div className="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-            <UserCircle className="w-10 h-10 text-white/60" />
+        <div className="glass overflow-hidden rounded-[24px] border border-stone-200 relative shadow-2xl w-full max-w-2xl mx-auto p-12 text-center z-10 animate-fade-in-up">
+          <div className="w-20 h-20 bg-stone-100 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-stone-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <UserCircle className="w-10 h-10 text-stone-500" />
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-white mb-3">Welcome to Credify</h2>
-          <p className="text-white/60 max-w-md mx-auto text-lg leading-relaxed mb-8">
+          <h2 className="text-3xl font-bold tracking-tight text-stone-900 mb-3">Welcome to Credify</h2>
+          <p className="text-stone-500 max-w-md mx-auto text-lg leading-relaxed mb-8">
             Click below to generate your official Student ID Passport & GitProof audit.
           </p>
           <div className="flex justify-center gap-4">
@@ -231,13 +231,8 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="w-full min-h-full flex flex-col gap-8 px-4 sm:px-8 py-8 max-w-[1400px] mx-auto">
-      {/* TOP CRYPTOGRAPHIC PROOF HUD */}
-      <DashboardProofHUD
-        studentId={studentPassportData?.studentId}
-        repoCount={mappedData.githubRepos}
-        certCount={mappedData.certificates}
-      />
+    <div className="w-full min-h-full flex flex-col gap-5 px-4 sm:px-8 py-4 max-w-[1400px] mx-auto">
+
 
       {/* TOP ROW: Passport Card Switcher + Skill Gap Analysis */}
       <div className="w-full flex flex-col lg:flex-row items-start justify-start gap-8 lg:gap-12">
@@ -247,7 +242,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* RIGHT: Skill Gap Analysis & Career Recommendations */}
-        <div className="flex-1 w-full flex flex-col justify-start gap-7 pr-1 pb-4">
+        <div className="flex-1 w-full flex flex-col justify-start gap-7 pr-1 pb-4 lg:pt-14">
           {/* Section 1: Live Internship Match Engine Preview */}
           <div>
             <DashboardInternshipPreviewCard
@@ -256,8 +251,9 @@ export default async function DashboardPage() {
             />
           </div>
 
+
           {/* Section 2: AI Skill Gap Intelligence */}
-          <div id="gap-analysis" className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4 scroll-mt-24">
+          <div id="gap-analysis" className="p-6 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl space-y-4 scroll-mt-24">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <Brain className="w-4 h-4" />
@@ -266,26 +262,26 @@ export default async function DashboardPage() {
                 <span className="text-[11px] font-bold tracking-widest text-blue-400 uppercase">
                   AI Skill Intelligence
                 </span>
-                <h4 className="text-sm font-bold text-white tracking-tight">
+                <h4 className="text-sm font-bold text-stone-900 tracking-tight">
                   Target Career Benchmark
                 </h4>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-white/75 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-stone-500 leading-relaxed font-normal">
               {mappedData?.missingSkillsAnalysis?.description || "Keep building to unlock gap analysis."}
             </p>
 
             {/* Recommended Tech Stack Pills */}
-            <div className="pt-3 border-t border-white/[0.06] space-y-2.5">
-              <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider block">
+            <div className="pt-3 border-t border-stone-200 space-y-2.5">
+              <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">
                 Recommended Growth Vectors
               </span>
               <div className="flex flex-wrap gap-2">
                 {(mappedData?.missingSkillsAnalysis?.recommendedTechStack || []).map((tech: string) => (
                   <span
                     key={tech}
-                    className="px-3 py-1 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs text-white/90 font-medium tracking-wide shadow-sm"
+                    className="px-3 py-1 rounded-xl border border-stone-200 bg-stone-100 text-xs text-stone-700 font-medium tracking-wide shadow-sm"
                   >
                     {tech}
                   </span>
@@ -295,7 +291,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Section 3: Suggested Proof-of-Work Projects */}
-          <div className="p-6 rounded-3xl border border-white/[0.07] bg-[#0a0d14]/70 backdrop-blur-xl space-y-4">
+          <div className="p-6 rounded-3xl border border-stone-200 bg-white shadow-sm backdrop-blur-xl space-y-4">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
                 <Briefcase className="w-4 h-4" />
@@ -304,7 +300,7 @@ export default async function DashboardPage() {
                 <span className="text-[11px] font-bold tracking-widest text-purple-400 uppercase">
                   Proof-of-Work Blueprints
                 </span>
-                <h4 className="text-sm font-bold text-white tracking-tight">
+                <h4 className="text-sm font-bold text-stone-900 tracking-tight">
                   High-Impact Suggested Projects
                 </h4>
               </div>
@@ -314,13 +310,13 @@ export default async function DashboardPage() {
               {(mappedData?.missingSkillsAnalysis as any)?.suggestedProjects?.map((proj: any, idx: number) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] transition-all relative overflow-hidden group"
+                  className="p-4 rounded-2xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-all relative overflow-hidden group"
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500/40 to-purple-500/40 group-hover:from-blue-400 group-hover:to-purple-400 transition-colors" />
-                  <span className="text-xs sm:text-sm text-white font-bold tracking-tight block">
+                  <span className="text-xs sm:text-sm text-stone-900 font-bold tracking-tight block">
                     {proj.name}
                   </span>
-                  <span className="text-xs text-white/60 leading-relaxed mt-1 block">
+                  <span className="text-xs text-stone-500 leading-relaxed mt-1 block">
                     {proj.description}
                   </span>
                 </div>

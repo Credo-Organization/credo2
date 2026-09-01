@@ -11,33 +11,37 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
   
 
   let rawJobs: any[] = [];
+  const hasApiKey = process.env.OPENROUTER_API_KEY || process.env.AICREDIT_API_KEY;
 
-  try {
-    const { object } = await generateObject({
-      model: matcherModel,
-      schema: z.object({
-        jobs: z.array(z.object({
-          job_title: z.string(),
-          company_name: z.string(),
-          location: z.string(),
-          job_description: z.string().describe("A realistic 2-3 sentence job description containing specific technologies and frameworks required."),
-        })).min(4).max(4)
-      }),
-      prompt: `Generate 4 highly realistic internship or junior roles for a candidate in India.
-      Candidate's Career Goal: ${careerGoal}
-      Candidate's Current Verified Skills: ${skillNames || "None"}
+  if (hasApiKey) {
+    try {
+      const { object } = await generateObject({
+        model: matcherModel,
+        schema: z.object({
+          jobs: z.array(z.object({
+            job_title: z.string(),
+            company_name: z.string(),
+            location: z.string(),
+            job_description: z.string().describe("A realistic 2-3 sentence job description containing specific technologies and frameworks required."),
+          })).min(4).max(4)
+        }),
+        prompt: `Generate 4 highly realistic internship or junior roles for a candidate in India.
+        Candidate's Career Goal: ${careerGoal}
+        Candidate's Current Verified Skills: ${skillNames || "None"}
+        
+        Generate exactly 4 jobs:
+        - 2 "Perfect Match" roles that heavily rely on the skills they already have.
+        - 2 "Stretch" roles that require their current skills PLUS 1 or 2 new advanced skills they don't have yet (to demonstrate a gap analysis).
+        
+        Use real-sounding Indian tech company names or well-known startups.`
+      });
       
-      Generate exactly 4 jobs:
-      - 2 "Perfect Match" roles that heavily rely on the skills they already have.
-      - 2 "Stretch" roles that require their current skills PLUS 1 or 2 new advanced skills they don't have yet (to demonstrate a gap analysis).
-      
-      Use real-sounding Indian tech company names or well-known startups.`
-    });
-    
-    rawJobs = object.jobs;
-  } catch (error) {
-    console.error("[AI Jobs] Failed to generate jobs via AI:", error);
-    // Fallback to minimal mock if AI fails entirely
+      rawJobs = object.jobs;
+    } catch (error) {
+      console.warn("[AI Jobs] Failed to generate jobs via AI, falling back to mock:", error);
+      rawJobs = getMockIndianJobsResponse(careerGoal);
+    }
+  } else {
     rawJobs = getMockIndianJobsResponse(careerGoal);
   }
 

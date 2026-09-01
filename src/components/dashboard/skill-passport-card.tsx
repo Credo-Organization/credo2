@@ -100,23 +100,23 @@ const DUMMY_DATA: SkillPassportData = {
 // Simple mapping from name to a Lucide icon just for the visual layout
 const getIconForSkill = (name: string) => {
   const n = name.toLowerCase();
-  if (n.includes("react") || n.includes("vue") || n.includes("angular")) return <Code2 className="w-5 h-5 text-white" />;
-  if (n.includes("type") || n.includes("script") || n.includes("html") || n.includes("css")) return <Code className="w-5 h-5 text-white" />;
-  if (n.includes("node") || n.includes("backend") || n.includes("api")) return <Server className="w-5 h-5 text-white" />;
-  if (n.includes("sql") || n.includes("data") || n.includes("mongo") || n.includes("postgres")) return <Database className="w-5 h-5 text-white" />;
-  if (n.includes("ai") || n.includes("machine learning") || n.includes("python")) return <Brain className="w-5 h-5 text-white" />;
-  if (n.includes("cloud") || n.includes("aws") || n.includes("azure") || n.includes("gcp") || n.includes("docker")) return <Cloud className="w-5 h-5 text-white" />;
-  if (n.includes("design") || n.includes("figma") || n.includes("ui") || n.includes("ux")) return <PenTool className="w-5 h-5 text-white" />;
-  if (n.includes("git") || n.includes("version")) return <Boxes className="w-5 h-5 text-white" />;
-  return <Terminal className="w-5 h-5 text-white" />;
+  if (n.includes("react") || n.includes("vue") || n.includes("angular")) return <Code2 className="w-5 h-5 text-stone-900" />;
+  if (n.includes("type") || n.includes("script") || n.includes("html") || n.includes("css")) return <Code className="w-5 h-5 text-stone-900" />;
+  if (n.includes("node") || n.includes("backend") || n.includes("api")) return <Server className="w-5 h-5 text-stone-900" />;
+  if (n.includes("sql") || n.includes("data") || n.includes("mongo") || n.includes("postgres")) return <Database className="w-5 h-5 text-stone-900" />;
+  if (n.includes("ai") || n.includes("machine learning") || n.includes("python")) return <Brain className="w-5 h-5 text-stone-900" />;
+  if (n.includes("cloud") || n.includes("aws") || n.includes("azure") || n.includes("gcp") || n.includes("docker")) return <Cloud className="w-5 h-5 text-stone-900" />;
+  if (n.includes("design") || n.includes("figma") || n.includes("ui") || n.includes("ux")) return <PenTool className="w-5 h-5 text-stone-900" />;
+  if (n.includes("git") || n.includes("version")) return <Boxes className="w-5 h-5 text-stone-900" />;
+  return <Terminal className="w-5 h-5 text-stone-900" />;
 };
 
 const SectionDivider = () => (
-  <div className="h-px w-full bg-white/[0.06] my-6" />
+  <div className="h-px w-full bg-stone-200 my-6" />
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h3 className="text-[11px] font-medium tracking-wider text-white/50 uppercase mb-4">
+  <h3 className="text-[11px] font-medium tracking-wider text-stone-500 uppercase mb-4">
     {children}
   </h3>
 );
@@ -136,7 +136,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="w-full max-w-[600px] mx-auto bg-[#050505] rounded-[28px] border border-white/[0.12] overflow-hidden relative shadow-2xl"
+      className="w-full max-w-[600px] mx-auto bg-white rounded-[28px] border border-stone-200 overflow-hidden relative shadow-2xl"
     >
       {/* Noise Texture Overlay */}
       <div 
@@ -151,10 +151,10 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           
           {/* Avatar Container with concentric rings */}
           <div className="relative w-[100px] h-[100px] flex items-center justify-center flex-shrink-0">
-            <div className="absolute inset-0 border border-white/[0.04] rounded-full" />
-            <div className="absolute inset-2 border border-white/[0.06] rounded-full" />
-            <div className="absolute inset-4 border border-white/[0.08] rounded-full" />
-            <div className="w-[72px] h-[72px] rounded-full bg-[#111] border border-white/[0.15] overflow-hidden relative z-10 flex items-center justify-center">
+            <div className="absolute inset-0 border border-stone-200 rounded-full" />
+            <div className="absolute inset-2 border border-stone-200 rounded-full" />
+            <div className="absolute inset-4 border border-stone-200 rounded-full" />
+            <div className="w-[72px] h-[72px] rounded-full bg-stone-50 hover:bg-stone-100 border border-stone-200 overflow-hidden relative z-10 flex items-center justify-center">
               <img src={data.profileImage} alt={data.name} className="w-full h-full object-cover" />
             </div>
           </div>
@@ -162,22 +162,22 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           {/* Profile Info */}
           <div className="flex flex-col justify-center h-full pt-1 md:pt-2 space-y-2 text-center md:text-left">
             <div>
-              <h1 className="text-[24px] font-bold text-white leading-tight tracking-tight">
+              <h1 className="text-[24px] font-bold text-stone-900 leading-tight tracking-tight">
                 {data.name}
               </h1>
-              <div className="flex items-center justify-center md:justify-start gap-1.5 text-white/65 mt-0.5">
+              <div className="flex items-center justify-center md:justify-start gap-1.5 text-stone-500 mt-0.5">
                 <User className="w-3 h-3" />
                 <span className="text-[11px]">{data.gender}</span>
               </div>
             </div>
 
-            <div className="inline-flex flex-col bg-white/[0.03] backdrop-blur-md border border-white/[0.08] rounded-lg p-2 pr-6 mt-1 relative overflow-hidden group w-fit">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/20" />
+            <div className="inline-flex flex-col bg-stone-100 backdrop-blur-md border border-stone-200 rounded-lg p-2 pr-6 mt-1 relative overflow-hidden group w-fit">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-stone-300" />
               <div className="flex items-center gap-1.5 mb-0.5">
-                <Target className="w-3 h-3 text-white/40" />
-                <span className="text-[9px] text-white/50 uppercase tracking-widest font-medium">Career Goal</span>
+                <Target className="w-3 h-3 text-stone-400" />
+                <span className="text-[9px] text-stone-500 uppercase tracking-widest font-medium">Career Goal</span>
               </div>
-              <span className="text-[13px] text-white font-medium pl-5">{data.careerGoal}</span>
+              <span className="text-[13px] text-stone-900 font-medium pl-5">{data.careerGoal}</span>
             </div>
           </div>
         </div>
@@ -197,20 +197,20 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + idx * 0.05 }}
-                  className="flex items-center justify-between group bg-white/[0.01] hover:bg-white/[0.03] p-1.5 rounded-xl border border-transparent hover:border-white/[0.05] transition-all"
+                  className="flex items-center justify-between group bg-white hover:bg-stone-100 p-1.5 rounded-xl border border-transparent hover:border-stone-200 transition-all"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-[8px] bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:bg-white/[0.06] transition-colors">
+                    <div className="w-7 h-7 rounded-[8px] bg-stone-100 border border-stone-200 flex items-center justify-center group-hover:bg-stone-200 transition-colors">
                       <div className="scale-75 origin-center">{getIconForSkill(skill.name)}</div>
                     </div>
-                    <span className="text-white font-medium text-[12px]">{skill.name}</span>
+                    <span className="text-stone-900 font-medium text-[12px]">{skill.name}</span>
                   </div>
                   
                   <div className={cn(
                     "px-2 py-0.5 rounded-full text-[10px] font-medium border",
-                    skill.confidence === "High" ? "border-white/80 text-white" :
-                    skill.confidence === "Medium" ? "border-white/30 text-white/70" :
-                    "border-white/10 text-white/40"
+                    skill.confidence === "High" ? "border-stone-400 text-stone-900" :
+                    skill.confidence === "Medium" ? "border-stone-300 text-stone-600" :
+                    "border-stone-200 text-stone-400"
                   )}>
                     {skill.confidence}
                   </div>
@@ -224,35 +224,35 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
             <SectionTitle>Evidence Summary</SectionTitle>
             <div className="flex flex-col gap-3">
               
-              <motion.div whileHover={{ y: -4 }} className="bg-[#111] rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-                  <GithubIcon className="w-4 h-4 text-white" />
+              <motion.div whileHover={{ y: -4 }} className="bg-stone-50 hover:bg-stone-100 rounded-[12px] border border-stone-200 p-3 flex items-center gap-3 group transition-colors hover:border-stone-200">
+                <div className="w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center transition-colors group-hover:bg-stone-200">
+                  <GithubIcon className="w-4 h-4 text-stone-900" />
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white leading-tight">{data.githubRepos}</div>
-                  <div className="text-[10px] text-white/50">GitHub Repos</div>
+                  <div className="text-lg font-bold text-stone-900 leading-tight">{data.githubRepos}</div>
+                  <div className="text-[10px] text-stone-500">GitHub Repos</div>
                 </div>
               </motion.div>
 
               <CertificateUploader>
-                <motion.button whileHover={{ y: -4 }} className="w-full text-left bg-[#111] cursor-pointer rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-                    <FileBadge className="w-4 h-4 text-white" />
+                <motion.button whileHover={{ y: -4 }} className="w-full text-left bg-stone-50 hover:bg-stone-100 cursor-pointer rounded-[12px] border border-stone-200 p-3 flex items-center gap-3 group transition-colors hover:border-stone-200">
+                  <div className="w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center transition-colors group-hover:bg-stone-200">
+                    <FileBadge className="w-4 h-4 text-stone-900" />
                   </div>
                   <div className="text-left">
-                    <div className="text-lg font-bold text-white leading-tight">{data.certificates}</div>
-                    <div className="text-[10px] text-white/50">Certificates (Click to Upload)</div>
+                    <div className="text-lg font-bold text-stone-900 leading-tight">{data.certificates}</div>
+                    <div className="text-[10px] text-stone-500">Certificates (Click to Upload)</div>
                   </div>
                 </motion.button>
               </CertificateUploader>
 
-              <motion.div whileHover={{ y: -4 }} className="bg-[#111] rounded-[12px] border border-white/[0.08] p-3 flex items-center gap-3 group transition-colors hover:border-white/[0.15]">
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-                  <ShieldCheck className="w-4 h-4 text-white" />
+              <motion.div whileHover={{ y: -4 }} className="bg-stone-50 hover:bg-stone-100 rounded-[12px] border border-stone-200 p-3 flex items-center gap-3 group transition-colors hover:border-stone-200">
+                <div className="w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center transition-colors group-hover:bg-stone-200">
+                  <ShieldCheck className="w-4 h-4 text-stone-900" />
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white leading-tight">{data.verifiedSkillsCount}</div>
-                  <div className="text-[10px] text-white/50">Skills Verified</div>
+                  <div className="text-lg font-bold text-stone-900 leading-tight">{data.verifiedSkillsCount}</div>
+                  <div className="text-[10px] text-stone-500">Skills Verified</div>
                 </div>
               </motion.div>
 
@@ -271,7 +271,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
           
           <div className="flex gap-1 min-w-max">
             {/* Row Labels */}
-            <div className="flex flex-col justify-between text-[9px] text-white/40 pr-2 pb-[14px]">
+            <div className="flex flex-col justify-between text-[9px] text-stone-400 pr-2 pb-[14px]">
               <span className="mt-2">Mon</span>
               <span>Wed</span>
               <span className="mb-2">Fri</span>
@@ -279,7 +279,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
 
             <div className="flex flex-col gap-[3px]">
               {/* Months Row */}
-              <div className="flex text-[9px] text-white/40 mb-1 pl-1">
+              <div className="flex text-[9px] text-stone-400 mb-1 pl-1">
                 {["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May"].map((month, i) => (
                   <div key={i} className="flex-1 min-w-[21px]">{month}</div>
                 ))}
@@ -292,8 +292,8 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                     <div 
                       key={`cell-${rowIndex}-${colIndex}`} 
                       className={cn(
-                        "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:border hover:border-white/50",
-                        intensity === 0 ? "bg-white/[0.04]" :
+                        "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:border hover:border-stone-1000",
+                        intensity === 0 ? "bg-stone-100" :
                         intensity === 1 ? "bg-white/[0.25]" :
                         intensity === 2 ? "bg-white/[0.50]" :
                         intensity === 3 ? "bg-white/[0.75]" :
@@ -306,15 +306,15 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[11px] text-white/40 mt-3 min-w-max pl-8 pr-2">
+          <div className="flex items-center justify-between text-[11px] text-stone-400 mt-3 min-w-max pl-8 pr-2">
             <span>Learned consistency. Built momentum.</span>
-            <div className="flex items-center gap-1.5 text-[10px] text-white/40">
+            <div className="flex items-center gap-1.5 text-[10px] text-stone-400">
               <span>Less</span>
               <div className="flex gap-[3px]">
                 {[0, 1, 2, 3, 4].map(i => (
                   <div key={i} className={cn(
                     "w-2.5 h-2.5 rounded-[3px]",
-                    i === 0 ? "bg-white/[0.04]" :
+                    i === 0 ? "bg-stone-100" :
                     i === 1 ? "bg-white/[0.25]" :
                     i === 2 ? "bg-white/[0.50]" :
                     i === 3 ? "bg-white/[0.75]" : "bg-white"
@@ -331,10 +331,10 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       </div>
 
       {/* SECTION 5: EVIDENCE DRAWER */}
-      <div className="border-t border-white/[0.08]">
+      <div className="border-t border-stone-200">
         <button 
           onClick={() => setDrawerOpen(!drawerOpen)}
-          className="w-full flex items-center justify-between p-4 md:px-8 text-white/50 hover:bg-white/[0.02] hover:text-white transition-colors"
+          className="w-full flex items-center justify-between p-4 md:px-8 text-stone-500 hover:bg-stone-50 hover:text-stone-900 transition-colors"
         >
           <span className="text-[11px] font-medium tracking-wider uppercase">Evidence Sources</span>
           <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", drawerOpen && "rotate-180")} />
@@ -346,31 +346,31 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden bg-[#0a0a0a]"
+              className="overflow-hidden bg-stone-50"
             >
               <div className="p-4 md:px-8 md:pb-8 space-y-6">
                 
                 {/* GitHub Evidence List */}
                 <div>
-                  <h4 className="text-white text-[13px] font-medium mb-3 flex items-center gap-2">
+                  <h4 className="text-stone-900 text-[13px] font-medium mb-3 flex items-center gap-2">
                     <GithubIcon className="w-3.5 h-3.5" /> GitHub Evidence
                   </h4>
                   <div className="space-y-2">
                     {data.evidence.githubRepos.length > 0 ? (
                       data.evidence.githubRepos.map((repo, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors">
                           <div className="flex flex-col">
-                            <span className="text-white text-[13px] font-medium">{repo.name}</span>
-                            <span className="text-[11px] text-white/40">{repo.language}</span>
+                            <span className="text-stone-900 text-[13px] font-medium">{repo.name}</span>
+                            <span className="text-[11px] text-stone-400">{repo.language}</span>
                           </div>
                           <div className="text-right flex flex-col items-end">
-                            <span className="text-white text-[12px]">{repo.stars} stars</span>
-                            <a href={repo.url} target="_blank" rel="noreferrer" className="block text-[11px] text-white/50 hover:text-white transition-colors hover:underline">View Repository</a>
+                            <span className="text-stone-900 text-[12px]">{repo.stars} stars</span>
+                            <a href={repo.url} target="_blank" rel="noreferrer" className="block text-[11px] text-stone-500 hover:text-stone-900 transition-colors hover:underline">View Repository</a>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <div className="p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] text-white/40 text-[12px] text-center">
+                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-400 text-[12px] text-center">
                         No GitHub evidence available.
                       </div>
                     )}
@@ -379,22 +379,22 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
 
                 {/* Certificates List */}
                 <div>
-                  <h4 className="text-white text-[13px] font-medium mb-3 flex items-center gap-2">
+                  <h4 className="text-stone-900 text-[13px] font-medium mb-3 flex items-center gap-2">
                     <FileBadge className="w-3.5 h-3.5" /> Certificate Evidence
                   </h4>
                   <div className="space-y-2">
                     {data.evidence.certificates.length > 0 ? (
                       data.evidence.certificates.map((cert, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+                        <div key={i} className="flex items-center justify-between p-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors">
                           <div className="flex flex-col">
-                            <span className="text-white text-[13px] font-medium">{cert.name}</span>
-                            <span className="text-[11px] text-white/40">Issued by {cert.issuer}</span>
+                            <span className="text-stone-900 text-[13px] font-medium">{cert.name}</span>
+                            <span className="text-[11px] text-stone-400">Issued by {cert.issuer}</span>
                           </div>
-                          <a href={cert.url} target="_blank" rel="noreferrer" className="text-[11px] text-white/50 hover:text-white transition-colors hover:underline">Verify Credential</a>
+                          <a href={cert.url} target="_blank" rel="noreferrer" className="text-[11px] text-stone-500 hover:text-stone-900 transition-colors hover:underline">Verify Credential</a>
                         </div>
                       ))
                     ) : (
-                      <div className="p-3 rounded-xl border border-white/[0.08] bg-white/[0.02] text-white/40 text-[12px] text-center">
+                      <div className="p-3 rounded-xl border border-stone-200 bg-stone-50 text-stone-400 text-[12px] text-center">
                         No certificates uploaded.
                       </div>
                     )}

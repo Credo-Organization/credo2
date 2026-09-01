@@ -87,7 +87,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl bg-[#090b10] border border-white/[0.1] text-white p-6 sm:p-8 rounded-3xl shadow-2xl backdrop-blur-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <DialogContent className="sm:max-w-2xl bg-white border border-stone-200 text-stone-900 p-6 sm:p-8 rounded-3xl shadow-2xl backdrop-blur-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
         <DialogHeader className="space-y-2 text-left">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -95,32 +95,32 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Ed25519 Cryptographically Verified
               </span>
-              <span className="text-xs text-white/40 font-mono">
+              <span className="text-xs text-stone-400 font-mono">
                 W3C VC v1.0
               </span>
             </div>
 
-            <span className="text-[11px] text-white/50 flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-white/40" />
+            <span className="text-[11px] text-stone-500 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-stone-400" />
               {new Date(cert.issue_date || cert.created_at || Date.now()).toLocaleDateString()}
             </span>
           </div>
 
-          <DialogTitle className="text-2xl font-black text-white tracking-tight pt-1">
+          <DialogTitle className="text-2xl font-black text-stone-900 tracking-tight pt-1">
             {cert.title}
           </DialogTitle>
-          <DialogDescription className="text-xs text-white/60 flex items-center gap-2">
-            Issued by <strong className="text-white">{cert.issuer || "Accredited Authority"}</strong>
+          <DialogDescription className="text-xs text-stone-500 flex items-center gap-2">
+            Issued by <strong className="text-stone-900">{cert.issuer || "Accredited Authority"}</strong>
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 pt-4">
           {/* Cryptographic Trust Seal Card */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.07] space-y-3.5">
-            <div className="flex items-center justify-between border-b border-white/[0.05] pb-3">
+          <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-3.5">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-3">
               <div className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-bold text-white tracking-wide">
+                <span className="text-xs font-bold text-stone-900 tracking-wide">
                   Cryptographic Integrity Verification
                 </span>
               </div>
@@ -131,16 +131,16 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-white/40 uppercase tracking-wider block">
+                <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">
                   Issuer Public DID
                 </span>
-                <span className="font-mono text-white/80 text-[11px] truncate block bg-white/[0.02] px-2.5 py-1.5 rounded-lg border border-white/[0.04]">
+                <span className="font-mono text-stone-700 text-[11px] truncate block bg-stone-50 px-2.5 py-1.5 rounded-lg border border-stone-200">
                   {issuerDid}
                 </span>
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-white/40 uppercase tracking-wider block">
+                <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">
                   Signature Algorithm
                 </span>
                 <span className="font-mono text-emerald-400 text-[11px] truncate block bg-emerald-500/[0.03] px-2.5 py-1.5 rounded-lg border border-emerald-500/15">
@@ -149,10 +149,10 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
               </div>
 
               <div className="sm:col-span-2 space-y-1">
-                <span className="text-[10px] font-mono text-white/40 uppercase tracking-wider block">
+                <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">
                   SHA-256 Document Hash Digest
                 </span>
-                <span className="font-mono text-white/70 text-[11px] truncate block bg-white/[0.02] px-2.5 py-1.5 rounded-lg border border-white/[0.04]">
+                <span className="font-mono text-stone-600 text-[11px] truncate block bg-stone-50 px-2.5 py-1.5 rounded-lg border border-stone-200">
                   {sha256Digest ?? "Not yet computed"}
                 </span>
               </div>
@@ -163,18 +163,18 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
           <div className="p-4 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/15 space-y-2">
             <div className="flex items-center gap-2">
               <Cpu className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs font-bold text-white">
+              <span className="text-xs font-bold text-stone-900">
                 Multimodal Anti-Cheat Scan Report
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
-              <div className="flex items-center gap-1.5 text-white/70">
+              <div className="flex items-center gap-1.5 text-stone-600">
                 <span className="text-emerald-400">✓</span> No Image Splicing
               </div>
-              <div className="flex items-center gap-1.5 text-white/70">
+              <div className="flex items-center gap-1.5 text-stone-600">
                 <span className="text-emerald-400">✓</span> Issuer Authority Match
               </div>
-              <div className="flex items-center gap-1.5 text-white/70">
+              <div className="flex items-center gap-1.5 text-stone-600">
                 <span className="text-emerald-400">✓</span> Clean Metadata Header
               </div>
             </div>
@@ -185,7 +185,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowRawJson(!showRawJson)}
-                className="text-xs font-mono text-white/60 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="text-xs font-mono text-stone-500 hover:text-stone-900 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <FileCode className="w-3.5 h-3.5 text-blue-400" />
                 {showRawJson ? "Hide Raw Verifiable Credential JSON" : "View Raw W3C JSON-LD Payload"}
@@ -194,7 +194,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
               {showRawJson && (
                 <button
                   onClick={handleCopyJson}
-                  className="text-xs text-white/50 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
+                  className="text-xs text-stone-500 hover:text-stone-900 flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                   {copied ? "Copied" : "Copy Payload"}
@@ -203,14 +203,14 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
             </div>
 
             {showRawJson && (
-              <pre className="p-4 rounded-2xl bg-black/70 border border-white/[0.08] text-[11px] font-mono text-emerald-300/90 overflow-x-auto max-h-56 custom-scrollbar leading-relaxed">
+              <pre className="p-4 rounded-2xl bg-black/70 border border-stone-200 text-[11px] font-mono text-emerald-300/90 overflow-x-auto max-h-56 custom-scrollbar leading-relaxed">
                 {JSON.stringify(rawPayload, null, 2)}
               </pre>
             )}
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/[0.06]">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-stone-200">
             <div className="flex items-center gap-2">
               {cert.file_url && (
                 <a
@@ -221,7 +221,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
                 >
                   <Button
                     variant="outline"
-                    className="h-9 px-3.5 text-xs font-semibold text-white bg-white/[0.04] border-white/[0.1] hover:bg-white/[0.08] rounded-xl flex items-center gap-1.5 cursor-pointer"
+                    className="h-9 px-3.5 text-xs font-semibold text-stone-900 bg-stone-100 border-stone-200 hover:bg-stone-100 rounded-xl flex items-center gap-1.5 cursor-pointer"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     View Original
