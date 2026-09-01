@@ -1,10 +1,10 @@
 export const siteConfig = {
-  name: "Credify",
+  name: "Minskey",
   description:
     "AI-powered Skill Passport that transforms your GitHub activity and certifications into an evidence-backed professional identity.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ogImage: "/og.png",
-  creator: "Credify",
+  creator: "Minskey",
   keywords: [
     "skill passport",
     "github analysis",
@@ -16,6 +16,6 @@ export const siteConfig = {
     "skill gap analysis",
   ],
   links: {
-    github: "https://github.com/soumxyz/credify",
+    github: "https://github.com/soumxyz/minskey",
   },
 } as const;

@@ -32,10 +32,15 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase.from('profiles').select('full_name, avatar_url, headline').eq('id', user.id).single();
+        const { data: profile } = await supabase.from('profiles').select('full_name, avatar_url, headline, gender').eq('id', user.id).single();
+        const isFemale = profile?.gender?.toLowerCase() === "female";
+        const rawAvatar = profile?.avatar_url || "";
+        const isUnsplashOrEmpty = !rawAvatar || rawAvatar.includes("unsplash.com");
         setUserProfile({
           name: profile?.full_name || user.email?.split('@')[0] || "Subham Sarangi",
-          avatar: profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+          avatar: !isUnsplashOrEmpty 
+            ? rawAvatar
+            : (isFemale ? "/avatar-female.webp" : "/avatar-male.webp"),
           headline: profile?.headline || "Software Engineer",
         });
       }
@@ -61,16 +66,15 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       animate={{ width: isMobile ? "100%" : (isCollapsed ? 76 : 260) }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
       className={cn(
-        "group relative flex flex-col h-full border border-stone-200 flex-shrink-0 select-none",
+        "group relative flex flex-col h-full bg-[#fdf8f0] dark:bg-[#111114] border border-stone-200 dark:border-zinc-800 flex-shrink-0 select-none transition-colors",
         isMobile ? "w-full" : "rounded-[28px]"
       )}
-      style={{ backgroundColor: "#fdf8f0" }}
     >
       {/* Mini Toggle Button */}
       {!isMobile && (
         <button
           onClick={handleToggle}
-          className="absolute -right-3 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-white border border-stone-200 text-stone-600 hover:text-stone-900 transition-all z-30 opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
+          className="absolute -right-3 top-7 flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-zinc-300 hover:text-stone-900 dark:hover:text-white transition-all z-30 opacity-0 group-hover:opacity-100 shadow-md cursor-pointer"
           aria-label="Toggle Sidebar"
         >
           {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
@@ -80,14 +84,14 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
       {/* Top: Geometric Minimal Emblem */}
       <div 
         className={cn(
-          "flex items-center h-20 px-5 border-b border-stone-200",
+          "flex items-center h-20 px-5 border-b border-stone-200 dark:border-zinc-800",
           isCollapsed ? "justify-center px-0" : "justify-between"
         )}
       >
         <Link href="/dashboard" className="flex items-center space-x-3 group/logo">
           {/* Geometric 4-Quadrant Emblem */}
-          <div className="w-8 h-8 rounded-xl bg-white border border-stone-200 flex items-center justify-center flex-shrink-0 group-hover/logo:bg-white transition-all">
-            <svg className="w-4 h-4 text-stone-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-8 h-8 rounded-xl bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 group-hover/logo:scale-105 transition-all">
+            <svg className="w-4 h-4 text-stone-900 dark:text-zinc-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
             </svg>
           </div>
@@ -100,8 +104,8 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
                 exit={{ opacity: 0, width: 0 }}
                 className="flex items-center gap-2 overflow-hidden whitespace-nowrap"
               >
-                <span className="font-bold text-sm text-stone-900 tracking-tight">
-                  Credo
+                <span className="font-black text-base text-zinc-950 dark:text-zinc-100 tracking-tight">
+                  Minskey
                 </span>
               </motion.div>
             )}
@@ -114,92 +118,127 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
         {/* Section 1: MAIN NAVIGATION */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest px-2.5 block mb-1">
+            <span className="text-[10px] font-bold text-stone-600 dark:text-zinc-400 uppercase tracking-widest px-2.5 block mb-1">
               Main
             </span>
           )}
 
-          {/* Group 1: Skill Passport & Sub-tree */}
+          {/* Direct Dashboard Link */}
           <Link href="/dashboard" className="block">
             <div
               className={cn(
-                "flex items-center justify-between rounded-xl p-2.5 transition-all group cursor-pointer text-xs font-semibold",
+                "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
                 pathname === "/dashboard"
-                  ? "bg-white text-stone-900 shadow-sm border border-stone-200"
-                  : "text-stone-600 hover:bg-white hover:text-stone-900"
+                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
+                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <LayoutDashboard className="w-4 h-4 text-stone-600 group-hover:text-stone-900" />
-                {!isCollapsed && <span>Passport</span>}
+                <LayoutDashboard className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                {!isCollapsed && <span>Dashboard Overview</span>}
               </div>
             </div>
           </Link>
-        </div>
 
-        {/* Section 2: OPPORTUNITIES & TEAMS */}
-        <div className="space-y-1">
-          {!isCollapsed && (
-            <span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest px-2.5 block mb-1">
-              Explore
-            </span>
-          )}
+          {/* Expandable Passport & Verification Hub */}
+          <div>
+            <button
+              onClick={() => toggleSection("passport")}
+              className={cn(
+                "w-full flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100 group cursor-pointer",
+                openSection === "passport" && "text-stone-900 dark:text-zinc-100"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
+                {!isCollapsed && <span>Passport & Proof</span>}
+              </div>
+              {!isCollapsed && (
+                <ChevronDown className={cn("w-3.5 h-3.5 text-stone-400 dark:text-zinc-500 transition-transform duration-200", openSection === "passport" && "rotate-180")} />
+              )}
+            </button>
 
-          {/* Internships Item */}
+            {/* Nested Links */}
+            <AnimatePresence initial={false}>
+              {openSection === "passport" && !isCollapsed && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="overflow-hidden pl-7 pr-1 pt-1 space-y-1"
+                >
+                  <Link href="/dashboard#passport-view" className="block">
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                      <CreditCard className="w-3 h-3 text-stone-500 dark:text-zinc-400" />
+                      <span>Skill Passport</span>
+                    </div>
+                  </Link>
+
+                  <Link href="/dashboard#gap-analysis" className="block">
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                      <span>Gap Analysis</span>
+                    </div>
+                  </Link>
+
+                  <Link href="/dashboard#audit-console" className="block">
+                    <div className="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[11px] font-medium text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 hover:bg-white/50 dark:hover:bg-zinc-800/50 transition-colors">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>Audit Logs</span>
+                    </div>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Internships Link */}
           <Link href="/dashboard/internships" className="block">
             <div
               className={cn(
                 "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
                 pathname.startsWith("/dashboard/internships")
-                  ? "bg-white text-stone-900 shadow-sm border border-stone-200"
-                  : "text-stone-600 hover:bg-white hover:text-stone-900"
+                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
+                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Briefcase className="w-4 h-4 text-stone-600 group-hover:text-stone-900" />
+                <Briefcase className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
                 {!isCollapsed && <span>Internships</span>}
               </div>
             </div>
           </Link>
 
-          {/* Hackathon Teams Item */}
-          <Link href="/dashboard/find-team" className="block">
+          {/* Hackathon Squads Link */}
+          <Link href="/dashboard/teams" className="block">
             <div
               className={cn(
                 "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
-                pathname.startsWith("/dashboard/find-team") || pathname.startsWith("/dashboard/create-teammates")
-                  ? "bg-white text-stone-900 shadow-sm border border-stone-200"
-                  : "text-stone-600 hover:bg-white hover:text-stone-900"
+                pathname.startsWith("/dashboard/teams")
+                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
+                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Users className="w-4 h-4 text-stone-600 group-hover:text-stone-900" />
+                <Users className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
                 {!isCollapsed && <span>Hackathon Squads</span>}
               </div>
             </div>
           </Link>
-        </div>
 
-        {/* Section 3: ACCREDITATION & PREFERENCES */}
-        <div className="space-y-1">
-          {!isCollapsed && (
-            <span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest px-2.5 block mb-1">
-              Accreditation
-            </span>
-          )}
-
-          {/* Certificates Item */}
+          {/* Certificates Link */}
           <Link href="/dashboard/certificates" className="block">
             <div
               className={cn(
                 "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
                 pathname.startsWith("/dashboard/certificates")
-                  ? "bg-white text-stone-900 shadow-sm border border-stone-200"
-                  : "text-stone-600 hover:bg-white hover:text-stone-900"
+                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
+                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Award className="w-4 h-4 text-stone-600 group-hover:text-stone-900" />
+                <Award className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
                 {!isCollapsed && <span>Certificates</span>}
               </div>
             </div>
@@ -211,12 +250,12 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
               className={cn(
                 "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-semibold group cursor-pointer",
                 pathname.startsWith("/dashboard/settings")
-                  ? "bg-white text-stone-900 shadow-sm border border-stone-200"
-                  : "text-stone-600 hover:bg-white hover:text-stone-900"
+                  ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-zinc-100 shadow-sm border border-stone-200 dark:border-zinc-700"
+                  : "text-stone-600 dark:text-zinc-400 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-stone-900 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <Settings className="w-4 h-4 text-stone-600 group-hover:text-stone-900" />
+                <Settings className="w-4 h-4 text-stone-600 dark:text-zinc-400 group-hover:text-stone-900 dark:group-hover:text-zinc-100" />
                 {!isCollapsed && <span>Settings</span>}
               </div>
             </div>
@@ -224,18 +263,19 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
         </div>
       </nav>
 
-      {/* Bottom: Minimal User Profile Capsule (Inspired by Image 2 & 3) */}
-      <div className="p-3 border-t border-stone-200 mt-auto">
+      {/* Bottom: Minimal User Profile Capsule */}
+      <div className="p-3 border-t border-stone-200 dark:border-zinc-800 mt-auto space-y-2">
+
         <div
           className={cn(
-            "flex items-center rounded-2xl p-2 bg-white border border-stone-200 hover:border-stone-200 transition-all",
+            "flex items-center rounded-2xl p-2 bg-white dark:bg-zinc-800/90 border border-stone-200 dark:border-zinc-700 transition-all",
             isCollapsed ? "justify-center p-2" : "justify-between"
           )}
         >
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 border border-stone-200 relative">
+            <div className="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 border border-stone-200 dark:border-zinc-700 relative">
               <img
-                src={userProfile?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80"}
+                src={userProfile?.avatar || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&auto=format&fit=crop&q=80"}
                 alt="Avatar"
                 className="w-full h-full object-cover"
               />
@@ -243,10 +283,10 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
 
             {!isCollapsed && (
               <div className="flex flex-col overflow-hidden whitespace-nowrap">
-                <span className="text-xs font-bold text-stone-900 truncate">
+                <span className="text-xs font-bold text-stone-900 dark:text-zinc-100 truncate">
                   {userProfile?.name || "Subham Sarangi"}
                 </span>
-                <span className="text-[10px] text-stone-600 truncate">
+                <span className="text-[10px] text-stone-600 dark:text-zinc-400 truncate">
                   {userProfile?.headline || "Software Engineer"}
                 </span>
               </div>
@@ -256,7 +296,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
           {!isCollapsed && (
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-stone-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg text-stone-600 dark:text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
               title="Sign Out"
             >
               <LogOut className="w-3.5 h-3.5" />

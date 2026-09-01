@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Patrick+Hand&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -135,45 +136,47 @@
   --brand-foreground: oklch(1 0 0);
   --success: oklch(0.723 0.191 149.579);
   --warning: oklch(0.828 0.189 84.429);
+  --heatmap-level-0: #e4e4e7;
 }
 
-/* ─── Dark mode (default for Credify) ─── */
+/* ─── Dark mode (Pitch Midnight Dark) ─── */
 .dark {
-  --background: oklch(0.09 0.005 270);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.13 0.005 270);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.13 0.005 270);
-  --popover-foreground: oklch(0.95 0 0);
+  --background: #000000;
+  --foreground: oklch(0.98 0 0);
+  --card: #09090b;
+  --card-foreground: oklch(0.98 0 0);
+  --popover: #09090b;
+  --popover-foreground: oklch(0.98 0 0);
   --primary: oklch(0.637 0.237 275.508);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.18 0.005 270);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.18 0.005 270);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.18 0.01 270);
-  --accent-foreground: oklch(0.95 0 0);
+  --secondary: #121215;
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: #121215;
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: #18181b;
+  --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
+  --border: #27272a;
+  --input: #27272a;
   --ring: oklch(0.637 0.237 275.508);
   --chart-1: oklch(0.637 0.237 275.508);
   --chart-2: oklch(0.6 0.2 160);
   --chart-3: oklch(0.7 0.15 60);
   --chart-4: oklch(0.65 0.2 330);
   --chart-5: oklch(0.55 0.15 200);
-  --sidebar: oklch(0.11 0.005 270);
-  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar: #000000;
+  --sidebar-foreground: oklch(0.98 0 0);
   --sidebar-primary: oklch(0.637 0.237 275.508);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.18 0.01 270);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: #27272a;
   --sidebar-ring: oklch(0.637 0.237 275.508);
   --brand: oklch(0.637 0.237 275.508);
   --brand-foreground: oklch(1 0 0);
   --success: oklch(0.723 0.191 149.579);
   --warning: oklch(0.828 0.189 84.429);
+  --heatmap-level-0: #18181b;
 }
 
 @layer base {
@@ -312,4 +315,44 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: oklch(1 0 0 / 20%);
+}
+
+/* ─── Doodle & Sketch Utilities ─── */
+.font-doodle {
+  font-family: 'Caveat', cursive, sans-serif;
+}
+
+.font-hand {
+  font-family: 'Patrick Hand', cursive, sans-serif;
+}
+
+.bg-dot-grid {
+  background-image: radial-gradient(#d6d3c9 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+@keyframes doodle-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(1.5deg);
+  }
+}
+
+@keyframes doodle-drift {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+
+.animate-doodle-float {
+  animation: doodle-float 4s ease-in-out infinite;
+}
+
+.animate-doodle-drift {
+  animation: doodle-drift 7s ease-in-out infinite;
 }

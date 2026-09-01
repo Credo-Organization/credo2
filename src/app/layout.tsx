@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Credify — AI-Powered Skill Passport",
-    template: "%s | Credify",
+    default: "Minskey — AI-Powered Skill Passport",
+    template: "%s | Minskey",
   },
   description:
     "Transform your GitHub activity and certifications into an evidence-backed professional identity. Understand your strengths, identify skill gaps, and get personalized career roadmaps.",
@@ -28,25 +29,25 @@ export const metadata: Metadata = {
     "skill verification",
     "professional identity",
   ],
-  authors: [{ name: "Credify" }],
+  authors: [{ name: "Minskey" }],
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    title: "Credify — AI-Powered Skill Passport",
+    title: "Minskey — AI-Powered Skill Passport",
     description:
       "Transform your GitHub activity and certifications into an evidence-backed professional identity.",
-    siteName: "Credify",
+    siteName: "Minskey",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Credify — AI-Powered Skill Passport",
+    title: "Minskey — AI-Powered Skill Passport",
     description:
       "Transform your GitHub activity and certifications into an evidence-backed professional identity.",
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -54,10 +55,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <TooltipProvider>
-          {children}
-        </TooltipProvider>
-        <Toaster richColors position="bottom-right" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
+          <Toaster richColors position="bottom-right" />
+        </ThemeProvider>
       </body>
     </html>
   );
