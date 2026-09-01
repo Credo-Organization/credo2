@@ -1,18 +1,8 @@
 "use client";
 
 import React from "react";
+import { Search, X, SlidersHorizontal, Sparkles, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Search,
-  SlidersHorizontal,
-  Sparkles,
-  ShieldCheck,
-  Building,
-  CheckCircle2,
-  TrendingUp,
-  X,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type FilterCategory = "all" | "high-match" | "direct-fit" | "remote" | "verified-only";
@@ -20,7 +10,7 @@ export type SortOption = "match-desc" | "match-asc" | "company-az" | "title-az";
 
 interface OpportunityFilterBarProps {
   searchQuery: string;
-  onSearchChange: (val: string) => void;
+  onSearchChange: (query: string) => void;
   activeFilter: FilterCategory;
   onFilterChange: (filter: FilterCategory) => void;
   activeSort: SortOption;
@@ -41,33 +31,30 @@ export function OpportunityFilterBar({
   highMatchCount,
   avgMatch,
 }: OpportunityFilterBarProps) {
-  const filterChips: { id: FilterCategory; label: string; icon?: React.ElementType; count?: number }[] = [
+  const filterChips: { id: FilterCategory; label: string; count?: number }[] = [
     { id: "all", label: "All Opportunities", count: totalCount },
-    { id: "high-match", label: "Top Match (≥75%)", count: highMatchCount },
-    { id: "direct-fit", label: "Direct Fit Ready" },
+    { id: "high-match", label: "★ 75%+ High Match", count: highMatchCount },
+    { id: "direct-fit", label: "Direct Skill Fit" },
     { id: "remote", label: "Remote / Hybrid" },
-    { id: "verified-only", label: "100% Backed Proof" },
   ];
 
   return (
     <div className="space-y-4">
-
-
-      {/* Search and Sort Controls */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
-        {/* Search Input */}
+      {/* Search Input and Sort Row */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        {/* Search Bar */}
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+          <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <Input
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by role title, company, or required skill (e.g. TypeScript, React)..."
-            className="pl-10 pr-10 h-11 bg-white border-stone-200 text-stone-900 placeholder:text-stone-400 rounded-2xl focus-visible:ring-navy-500/30 focus-visible:border-navy-500/40 text-sm"
+            className="pl-10 pr-10 h-11 bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 rounded-xl focus-visible:ring-2 focus-visible:ring-blue-600 text-sm shadow-xs font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-900 p-1"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-950 dark:hover:text-zinc-100 p-1 font-bold cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -76,22 +63,22 @@ export function OpportunityFilterBar({
 
         {/* Sort Dropdown */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-stone-500 whitespace-nowrap hidden sm:inline">Sort by:</span>
+          <span className="text-xs text-zinc-700 dark:text-zinc-300 font-bold whitespace-nowrap hidden sm:inline">Sort:</span>
           <select
             value={activeSort}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="h-11 px-3.5 rounded-2xl bg-stone-50 border border-stone-200 text-xs font-medium text-stone-800 focus:outline-none focus:ring-1 focus:ring-navy-500/40 cursor-pointer"
+            className="h-11 px-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-xs font-bold text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer shadow-xs"
           >
-            <option value="match-desc" className="bg-white text-stone-900">
+            <option value="match-desc" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
               Highest Match %
             </option>
-            <option value="match-asc" className="bg-white text-stone-900">
+            <option value="match-asc" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
               Lowest Match %
             </option>
-            <option value="company-az" className="bg-white text-stone-900">
+            <option value="company-az" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
               Company (A–Z)
             </option>
-            <option value="title-az" className="bg-white text-stone-900">
+            <option value="title-az" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
               Role Title (A–Z)
             </option>
           </select>
@@ -107,18 +94,18 @@ export function OpportunityFilterBar({
               key={chip.id}
               onClick={() => onFilterChange(chip.id)}
               className={cn(
-                "px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer",
+                "px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border-2 border-zinc-900 dark:border-zinc-700 cursor-pointer",
                 isActive
-                  ? "bg-navy-500/15 border-navy-500/40 text-navy-700 shadow-[0_0_15px_rgba(43, 72, 135,0.15)]"
-                  : "bg-stone-50 border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-stone-100"
+                  ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
+                  : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-700 shadow-xs"
               )}
             >
               <span>{chip.label}</span>
               {chip.count !== undefined && (
                 <span
                   className={cn(
-                    "text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold",
-                    isActive ? "bg-navy-500/30 text-navy-200" : "bg-stone-100 text-stone-500"
+                    "text-[10px] px-1.5 py-0.5 rounded-md font-mono font-black",
+                    isActive ? "bg-zinc-800 dark:bg-zinc-200 text-white dark:text-zinc-950" : "bg-zinc-100 dark:bg-zinc-700 text-zinc-950 dark:text-zinc-100"
                   )}
                 >
                   {chip.count}

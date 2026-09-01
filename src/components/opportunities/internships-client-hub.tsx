@@ -103,12 +103,12 @@ export function InternshipsClientHub({
 
       {/* Grid of Results */}
       {filteredAndSortedResults.length === 0 ? (
-        <div className="text-center py-16 px-6 border border-white/[0.06] rounded-3xl bg-white/[0.01] backdrop-blur-md">
-          <div className="w-14 h-14 rounded-2xl bg-white/5 border border-stone-200 flex items-center justify-center mx-auto mb-4">
-            <FilterX className="w-7 h-7 text-stone-400" />
+        <div className="text-center py-16 px-6 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-3xl bg-white dark:bg-zinc-900 transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center mx-auto mb-4 shadow-xs">
+            <FilterX className="w-7 h-7 text-zinc-500 dark:text-zinc-400" />
           </div>
-          <h3 className="text-lg font-bold text-stone-900 mb-2">No Matching Opportunities Found</h3>
-          <p className="text-sm text-stone-500 max-w-md mx-auto mb-6">
+          <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-100 mb-2">No Matching Opportunities Found</h3>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto mb-6 font-medium">
             No internships match your current search criteria or active filters. Try loosening your filter criteria.
           </p>
           <Button
@@ -117,7 +117,7 @@ export function InternshipsClientHub({
               setSearchQuery("");
               setActiveFilter("all");
             }}
-            className="border-stone-200 text-stone-900 hover:bg-white/5 rounded-full px-6"
+            className="border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl px-6 font-bold shadow-xs active:translate-y-[1px] cursor-pointer transition-all"
           >
             Reset Filters
           </Button>

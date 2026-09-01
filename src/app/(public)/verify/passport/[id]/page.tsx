@@ -42,7 +42,7 @@ export default async function VerifyPassportPage({ params }: Props) {
         </div>
         <h1 className="text-2xl font-bold tracking-tight mb-2">Passport Not Found</h1>
         <p className="text-sm text-zinc-400 max-w-sm">
-          No published Credify passport matches
+          No published Minskey passport matches
           <span className="font-mono text-zinc-300"> {id}</span>. Either the
           identifier is wrong, or the student has not shared this passport
           publicly.
@@ -51,7 +51,7 @@ export default async function VerifyPassportPage({ params }: Props) {
           href="/"
           className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors mt-6"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Credify Home
+          <ArrowLeft className="w-4 h-4" /> Back to Minskey Home
         </Link>
       </div>
     );
@@ -64,16 +64,18 @@ export default async function VerifyPassportPage({ params }: Props) {
     cardId: snap?.card_id || `CDY2025-${id.slice(-6)}`,
     studentId: snap?.student_id || id,
     name: snap?.profile?.name || profile?.full_name || "Unnamed Student",
-    gender: snap?.gender || profile?.gender || "Female",
+    gender: snap?.gender || profile?.gender || "male",
     degree: snap?.degree || profile?.degree || "B.Tech – Computer Science Engineering",
     college: snap?.profile?.college || profile?.college_name || "",
-    avatarUrl: snap?.profile?.avatar_url || profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+    avatarUrl: snap?.profile?.avatar_url && !snap.profile.avatar_url.includes("unsplash.com")
+      ? snap.profile.avatar_url 
+      : ((snap?.gender || profile?.gender || "male").toLowerCase() === "female" ? "/avatar-female.webp" : "/avatar-male.webp"),
     issueDate: snap?.issue_date || "18 MAY 2025",
     expiryDate: snap?.expiry_date || "17 MAY 2027",
     coursesCompleted: snap?.courses_completed ?? 0,
     skillsVerified: snap?.skills_verified ?? 0,
     certificatesEarned: snap?.certificates_earned ?? 0,
-    verificationUrl: snap?.verification_url || `https://credify.dev/verify/passport/${id}`,
+    verificationUrl: snap?.verification_url || `https://minskey.dev/verify/passport/${id}`,
   };
 
   return (
@@ -86,14 +88,14 @@ export default async function VerifyPassportPage({ params }: Props) {
         <div className="flex flex-col items-center text-center space-y-2">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold tracking-wide shadow-lg shadow-emerald-500/5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>Cryptographically Verified Credify Credential</span>
+            <span>Cryptographically Verified Minskey Credential</span>
           </div>
 
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mt-2">
             Official Student Skill Passport
           </h1>
           <p className="text-sm text-zinc-400 max-w-md">
-            This verifiable passport is authenticated via Credify GitProof integrity checks and Ed25519-compatible proof signatures.
+            This verifiable passport is authenticated via Minskey GitProof integrity checks and Ed25519-compatible proof signatures.
           </p>
         </div>
 
@@ -120,7 +122,7 @@ export default async function VerifyPassportPage({ params }: Props) {
 
           <div className="flex justify-between border-t border-[#1e2a4a] pt-2">
             <span className="text-zinc-500">Issuer Authority</span>
-            <span className="font-semibold text-white">Credify Global Trust Registry</span>
+            <span className="font-semibold text-white">Minskey Global Trust Registry</span>
           </div>
         </div>
 
@@ -128,7 +130,7 @@ export default async function VerifyPassportPage({ params }: Props) {
           href="/"
           className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Credify Home
+          <ArrowLeft className="w-4 h-4" /> Back to Minskey Home
         </Link>
       </div>
     </div>

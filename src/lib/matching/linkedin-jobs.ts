@@ -4,11 +4,24 @@ import { matcherModel } from "@/lib/ai-client";
 import { generateObject } from "ai";
 import { z } from "zod";
 
+interface CacheEntry {
+  timestamp: number;
+  data: Opportunity[];
+}
+
+const OPPORTUNITY_CACHE = new Map<string, CacheEntry>();
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+
 export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?: string): Promise<Opportunity[]> {
   const userSkills = passportSnapshot?.skills || [];
   const careerGoal = passportSnapshot?.profile?.headline || "Software Engineer";
   const skillNames = userSkills.map((s: any) => s.name).join(", ");
-  
+  const cacheKey = `${careerGoal}::${skillNames}`;
+
+  const cached = OPPORTUNITY_CACHE.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+    return cached.data;
+  }
 
   let rawJobs: any[] = [];
   const hasApiKey = process.env.OPENROUTER_API_KEY || process.env.AICREDIT_API_KEY;
@@ -45,7 +58,9 @@ export async function fetchLiveOpportunities(passportSnapshot: any, rapidApiKey?
     rawJobs = getMockIndianJobsResponse(careerGoal);
   }
 
-  return transformLinkedInToOpportunities(rawJobs);
+  const opportunities = transformLinkedInToOpportunities(rawJobs);
+  OPPORTUNITY_CACHE.set(cacheKey, { timestamp: Date.now(), data: opportunities });
+  return opportunities;
 }
 
 /**

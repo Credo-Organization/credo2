@@ -108,11 +108,12 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
       toast.success("Certificate uploaded and verified successfully!");
       setIsOpen(false);
       
+      // Reset form
       setFile(null);
       setTitle("");
       setIssuer("");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to upload certificate");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to process certificate");
     } finally {
       setIsUploading(false);
     }
@@ -130,35 +131,35 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
           </button>
         )
       } />
-      <DialogContent className="sm:max-w-lg bg-white border border-stone-200 text-stone-900 p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-2xl">
+      <DialogContent className="sm:max-w-lg bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 text-stone-900 dark:text-zinc-100 p-6 sm:p-7 rounded-3xl shadow-[6px_6px_0px_0px_#18181B] dark:shadow-[6px_6px_0px_0px_#000000] transition-colors">
         <DialogHeader className="space-y-1.5 text-left">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-navy-500/10 border border-navy-500/20 text-navy-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900/60 text-blue-900 dark:text-blue-300 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               Cryptographic Ingestion
             </span>
           </div>
 
-          <DialogTitle className="text-xl font-bold text-stone-900 tracking-tight pt-1">
+          <DialogTitle className="text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight pt-1">
             Add & Verify Certificate
           </DialogTitle>
-          <DialogDescription className="text-xs text-stone-500">
+          <DialogDescription className="text-xs text-stone-500 dark:text-zinc-400">
             Verify directly via Credly / OpenBadges API or upload your certificate document for multimodal anti-cheat validation.
           </DialogDescription>
         </DialogHeader>
 
         {/* Mode Selector Tabs */}
-        <div className="flex gap-1.5 p-1 bg-stone-100 border border-stone-200 rounded-2xl mt-3">
+        <div className="flex gap-1.5 p-1 bg-stone-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl mt-3">
           <button
             type="button"
             onClick={() => setUploadMode("credly")}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               uploadMode === "credly"
-                ? "bg-stone-100 text-stone-900 border border-stone-200 shadow-sm font-bold"
-                : "text-stone-500 hover:text-stone-900"
+                ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-700 shadow-xs font-bold"
+                : "text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100"
             }`}
           >
-            <Award className="w-3.5 h-3.5 text-navy-700" />
+            <Award className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             Credly / OpenBadge URL
           </button>
 
@@ -167,11 +168,11 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             onClick={() => setUploadMode("file")}
             className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
               uploadMode === "file"
-                ? "bg-stone-100 text-stone-900 border border-stone-200 shadow-sm font-bold"
-                : "text-stone-500 hover:text-stone-900"
+                ? "bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-700 shadow-xs font-bold"
+                : "text-stone-500 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100"
             }`}
           >
-            <UploadCloud className="w-3.5 h-3.5 text-blue-400" />
+            <UploadCloud className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
             Upload PDF / Image
           </button>
         </div>
@@ -179,18 +180,18 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
         {uploadMode === "credly" ? (
           <form onSubmit={handleCredlyVerify} className="space-y-4 mt-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100 flex items-center justify-between">
                 <span>Credly Badge URL or Badge ID *</span>
-                <span className="text-[10px] text-navy-700 font-mono">1-Click Live Sync</span>
+                <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono">1-Click Live Sync</span>
               </label>
               <input
                 value={credlyUrl}
                 onChange={(e) => setCredlyUrl(e.target.value)}
                 placeholder="e.g. https://www.credly.com/badges/abc-123 or badge ID"
                 required
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 font-mono transition-colors"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono transition-colors"
               />
-              <p className="text-[11px] text-stone-400 leading-relaxed pt-1">
+              <p className="text-[11px] text-stone-500 dark:text-zinc-400 leading-relaxed pt-1">
                 Supports AWS, Google Cloud, Meta, IBM, Microsoft, CompTIA and all standard OpenBadges v2/v3.
               </p>
             </div>
@@ -198,7 +199,7 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             <Button
               type="submit"
               disabled={!credlyUrl.trim() || isUploading}
-              className="w-full h-10 bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs rounded-xl shadow-lg shadow-navy-900/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {isUploading ? (
                 <>
@@ -216,18 +217,18 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700">
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                 Certificate Document (PDF, PNG, JPG) *
               </label>
               <label 
                 htmlFor="file"
-                className="w-full cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-stone-200 hover:border-navy-400/50 bg-stone-50 rounded-2xl transition-colors group text-center"
+                className="w-full cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-blue-500 bg-zinc-50 dark:bg-zinc-800/80 rounded-2xl transition-colors group text-center"
               >
-                <FileType2 className="w-8 h-8 text-stone-400 group-hover:text-navy-700 mb-2 transition-colors" />
-                <span className="text-xs font-bold text-stone-900">
+                <FileType2 className="w-8 h-8 text-zinc-400 dark:text-zinc-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-2 transition-colors" />
+                <span className="text-xs font-bold text-zinc-950 dark:text-zinc-100">
                   {file ? file.name : "Click or drag to select certificate"}
                 </span>
-                <span className="text-[10px] text-stone-400 font-mono uppercase tracking-wider mt-0.5">
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono uppercase tracking-wider mt-0.5">
                   Max size: 5MB • Multimodal OCR Scanned
                 </span>
               </label>
@@ -241,30 +242,30 @@ export function CertificateUploader({ children }: { children?: React.ReactNode }
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700">Certificate Name *</label>
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">Certificate Name *</label>
               <input 
                 value={title} 
                 onChange={(e) => setTitle(e.target.value)} 
                 placeholder="e.g. AWS Solutions Architect"
                 required
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 transition-colors"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors font-medium"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-stone-700">Issuing Organization</label>
+              <label className="text-xs font-bold text-zinc-950 dark:text-zinc-100">Issuing Organization</label>
               <input 
                 value={issuer} 
                 onChange={(e) => setIssuer(e.target.value)} 
                 placeholder="e.g. Amazon Web Services, Meta, Coursera"
-                className="w-full bg-stone-100 border border-stone-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-navy-400 transition-colors"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors font-medium"
               />
             </div>
 
             <Button
               type="submit"
               disabled={!file || !title || isUploading}
-              className="w-full h-10 bg-navy-900 hover:bg-navy-800 text-white font-semibold text-xs rounded-xl shadow-lg shadow-navy-900/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {isUploading ? (
                 <>
