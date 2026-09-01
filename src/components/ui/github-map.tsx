@@ -44,6 +44,7 @@ export interface GitHubCalendarProps {
   showSummary?: boolean;
   className?: string;
   title?: string;
+  maxWeeks?: number;
 }
 
 const MONTH_NAMES = [
@@ -71,6 +72,7 @@ export function GitHubCalendar({
   showSummary = true,
   className,
   title = "GitProof™ Activity Log & Commit Velocity",
+  maxWeeks,
 }: GitHubCalendarProps) {
   const [hoveredDay, setHoveredDay] = useState<{
     date: string;
@@ -89,7 +91,7 @@ export function GitHubCalendar({
     return calendarData.reduce((acc, curr) => acc + curr.count, 0);
   }, [calendarData]);
 
-  // Organize data into 53 week columns of 7 days
+  // Organize data into week columns of 7 days
   const { weeks, monthHeaders } = useMemo(() => {
     const sorted = [...calendarData].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -132,8 +134,19 @@ export function GitHubCalendar({
       weekColumns.push({ days: currentWeek });
     }
 
-    return { weeks: weekColumns, monthHeaders: months };
-  }, [calendarData]);
+    let finalWeeks = weekColumns;
+    let finalMonths = months;
+
+    if (maxWeeks && maxWeeks > 0 && weekColumns.length > maxWeeks) {
+      const offset = weekColumns.length - maxWeeks;
+      finalWeeks = weekColumns.slice(offset);
+      finalMonths = months
+        .filter((m) => m.colIndex >= offset)
+        .map((m) => ({ label: m.label, colIndex: m.colIndex - offset }));
+    }
+
+    return { weeks: finalWeeks, monthHeaders: finalMonths };
+  }, [calendarData, maxWeeks]);
 
   // Helper to map commit count to color index (0..4)
   const getLevelColor = (count: number) => {
@@ -182,16 +195,16 @@ export function GitHubCalendar({
       )}
 
       {/* Calendar Grid Container */}
-      <div className="overflow-x-auto pb-2 custom-scrollbar">
+      <div className="overflow-x-auto pb-1 custom-scrollbar">
         <div className="min-w-fit flex flex-col gap-1">
           {/* Month Labels Row */}
-          <div className="flex text-[10px] font-bold text-zinc-500 font-mono pl-8 h-4 relative">
+          <div className="flex text-[10px] font-bold text-zinc-500 font-mono pl-7 h-4 relative">
             {monthHeaders.map((m, idx) => (
               <span
                 key={`${m.label}-${idx}`}
                 className="absolute"
                 style={{
-                  left: `${m.colIndex * (blockSize + blockMargin) + 32}px`,
+                  left: `${m.colIndex * (blockSize + blockMargin) + 28}px`,
                 }}
               >
                 {m.label}
@@ -200,7 +213,7 @@ export function GitHubCalendar({
           </div>
 
           {/* Grid: Day labels + Week Columns */}
-          <div className="flex items-start gap-1.5">
+          <div className="flex items-start gap-1">
             {/* Day Labels Column (Mon, Wed, Fri) */}
             <div
               className="flex flex-col text-[9px] font-bold font-mono text-zinc-400 w-6 shrink-0 justify-between select-none"
@@ -273,24 +286,24 @@ export function GitHubCalendar({
 
       {/* Footer / Legend */}
       {showLegend && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-4 mt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400 font-medium">
-          <span className="font-mono text-[10px] text-zinc-500">
-            Source: Scanned GitHub commit history & PR merges
+        <div className="flex items-center justify-between gap-2 pt-2.5 mt-2.5 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 text-[10px] text-zinc-600 dark:text-zinc-400 font-medium">
+          <span className="font-mono text-[9px] text-zinc-500 truncate">
+            {maxWeeks ? "Source: Scanned GitHub commits" : "Source: Scanned GitHub commit history & PR merges"}
           </span>
 
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold">Less</span>
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[9px] font-bold">Less</span>
+            <div className="flex items-center gap-0.5">
               {colors.map((c, i) => (
                 <div
                   key={i}
-                  className="w-3 h-3 rounded-xs border border-zinc-900/40 dark:border-zinc-600 shadow-2xs"
+                  className="w-2.5 h-2.5 rounded-xs border border-zinc-900/40 dark:border-zinc-600 shadow-2xs"
                   style={{ backgroundColor: c }}
                   title={`Level ${i}`}
                 />
               ))}
             </div>
-            <span className="text-[10px] font-bold">More</span>
+            <span className="text-[9px] font-bold">More</span>
           </div>
         </div>
       )}

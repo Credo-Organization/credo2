@@ -59,21 +59,29 @@ function CredifyVerificationSeal() {
         <circle cx="60" cy="60" r="52" fill="none" stroke="currentColor" strokeWidth="2" />
         <circle cx="60" cy="60" r="38" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.6" />
 
-        {/* Text Along Path */}
-        <text fontSize="7.5" fontWeight="bold" letterSpacing="2.5" fill="currentColor">
+        {/* Top Text on Path */}
+        <text className="text-[8px] font-black uppercase tracking-[0.24em] fill-current">
           <textPath href="#sealCircleTop" startOffset="50%" textAnchor="middle">
-            ★ MINSKEY VERIFIED ★
+            • MINSKEY VERIFIED •
           </textPath>
         </text>
 
-        <text fontSize="6" fontWeight="bold" letterSpacing="1.8" fill="currentColor">
+        {/* Bottom Text on Path */}
+        <text className="text-[7.5px] font-black uppercase tracking-[0.24em] fill-current opacity-80">
           <textPath href="#sealCircleBottom" startOffset="50%" textAnchor="middle">
-            ACHIEVEMENTS · TRUST · IMPACT
+            OFFICIAL IDENTITY
           </textPath>
         </text>
 
-        {/* Inner Double-C Monogram Emblem */}
-        <g transform="translate(42, 42) scale(0.6)">
+        {/* Center Stylized Shield Monogram */}
+        <g transform="translate(36, 36) scale(0.8)">
+          <path
+            d="M 30 5 L 10 15 L 10 35 C 10 48 30 58 30 58 C 30 58 50 48 50 35 L 50 15 Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinejoin="round"
+          />
           <path
             d="M 40 10 L 20 10 C 10 10 5 15 5 25 L 5 35 C 5 45 10 50 20 50 L 40 50 L 40 42 L 20 42 C 15 42 13 40 13 35 L 13 25 C 13 20 15 18 20 18 L 40 18 Z"
             fill="currentColor"
@@ -92,7 +100,7 @@ function CredifyVerificationSeal() {
 // --- Circuit Badge Icon ---
 function CircuitBadgeIcon() {
   return (
-    <svg viewBox="0 0 40 24" className="w-8 h-5 text-zinc-900 dark:text-zinc-100">
+    <svg viewBox="0 0 40 24" className="w-8 h-5 text-zinc-900 dark:text-zinc-100 shrink-0">
       <rect x="2" y="2" width="36" height="20" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
       <line x1="0" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="2" />
       <line x1="26" y1="12" x2="40" y2="12" stroke="currentColor" strokeWidth="2" />
@@ -109,7 +117,6 @@ export interface StudentPassportProps {
     name?: string;
     gender?: string;
     degree?: string;
-    college?: string;
     avatarUrl?: string;
     issueDate?: string;
     expiryDate?: string;
@@ -125,19 +132,13 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
   const cardId = studentData?.cardId || "CDY2026-0004611";
   const studentId = studentData?.studentId || "CDY26S4611";
   const name = studentData?.name || "Subham Sarangi";
-  const gender = studentData?.gender || "male";
+  const gender = studentData?.gender || "Male";
   const degree = studentData?.degree || "Bachelor of Technology";
   const issueDate = studentData?.issueDate || "01 SEP 2026";
   const expiryDate = studentData?.expiryDate || "01 SEP 2028";
   const coursesCompleted = studentData?.coursesCompleted ?? 14;
   const skillsVerified = studentData?.skillsVerified ?? 6;
   const certificatesEarned = studentData?.certificatesEarned ?? 1;
-
-  const verificationUrl =
-    studentData?.verificationUrl ||
-    (typeof window !== "undefined"
-      ? `${window.location.origin}/verify/passport/${studentId}`
-      : `https://minskey.dev/verify/passport/${studentId}`);
 
   // Default Illustrated Doodle Avatar if none provided
   const fallbackFemale = "/avatar-female.webp";
@@ -153,7 +154,7 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
   return (
     <div
       className={cn(
-        "w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] relative font-sans select-none overflow-hidden transition-all",
+        "w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] relative font-sans select-none overflow-hidden transition-all",
         className
       )}
     >
@@ -245,11 +246,8 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="h-0.5 w-full bg-zinc-900 dark:bg-zinc-700 my-2" />
-
-      {/* Statistics Row: Courses / Skills / Certs */}
-      <div className="grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center py-1.5 relative z-10">
+      {/* Statistics Row: Courses / Skills / Certs (Harmonized with Matrix Card) */}
+      <div className="my-2 py-2.5 px-2 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 grid grid-cols-3 divide-x-2 divide-zinc-900 dark:divide-zinc-700 text-center shadow-[2px_2px_0px_0px_#18181B] relative z-10">
         <div className="px-1 flex flex-col items-center">
           <BookOpen className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 mb-0.5" />
           <span className="text-[8px] font-black tracking-wider text-zinc-500 uppercase leading-tight font-mono">
