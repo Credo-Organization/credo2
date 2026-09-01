@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { GraduationCap, Briefcase, Shield } from "lucide-react";
+import { GraduationCap, Briefcase, ShieldCheck, ArrowRight, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,72 +102,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-7">
-      {/* Logo & Heading */}
-      <div className="flex flex-col items-center gap-3.5">
-        <div className="flex h-13 w-13 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl shadow-black/50 text-white">
-          <Shield className="h-6 w-6 text-zinc-100" />
+    <div className="flex flex-col items-center gap-6 select-none">
+      {/* Header with Blueprint Emblem */}
+      <div className="flex flex-col items-center text-center gap-2">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border-2 border-zinc-900 shadow-[3px_3px_0px_0px_#18181B] text-blue-600">
+          <ShieldCheck className="h-8 w-8 stroke-[2.2]" />
         </div>
-        <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-white">Welcome to Credify</h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Transform your skills into a verified passport
+
+        <div>
+          <span className="font-doodle text-2xl sm:text-3xl text-blue-600 font-bold block -rotate-1">
+            ✨ Your Skill Passport
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-zinc-950">
+            Welcome to Minskey
+          </h1>
+          <p className="mt-1 text-sm text-zinc-600 max-w-xs mx-auto font-normal">
+            Sign in to access your verified credentials and hackathon squad.
           </p>
         </div>
       </div>
 
-      {/* Login Card */}
-      <div className="w-full bg-zinc-900/80 border border-zinc-800/90 rounded-3xl p-7 space-y-5 shadow-2xl shadow-black/80 backdrop-blur-2xl">
-        {/* Student / Recruiter Segmented Control */}
-        <div className="relative w-full p-1 rounded-full bg-zinc-950/70 backdrop-blur-md border border-zinc-800/80 grid grid-cols-2 gap-1 shadow-inner">
+      {/* Hand-Crafted Tactile Card */}
+      <div className="w-full bg-white border-2 border-zinc-900 rounded-3xl p-7 sm:p-8 space-y-5 shadow-[6px_6px_0px_0px_#18181B] relative">
+        {/* Student / Recruiter Tactile Switch */}
+        <div className="relative w-full p-1 rounded-2xl bg-zinc-100 border-2 border-zinc-900 grid grid-cols-2 gap-1 shadow-xs">
           <button
             type="button"
             onClick={() => setRole("student")}
             className={cn(
-              "relative z-10 py-2.5 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
-              role === "student" ? "text-white" : "text-zinc-400 hover:text-zinc-200"
+              "relative z-10 py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer select-none",
+              role === "student"
+                ? "bg-white text-zinc-950 border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B]"
+                : "text-zinc-600 hover:text-zinc-950"
             )}
           >
-            {role === "student" && (
-              <motion.div
-                layoutId="authPageRolePill"
-                className="absolute inset-0 rounded-full bg-zinc-800 border border-zinc-700/60 shadow-md"
-                transition={{
-                  type: "spring",
-                  stiffness: 450,
-                  damping: 25,
-                }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-1.5">
-              <GraduationCap className="h-3.5 w-3.5" />
-              Student
-            </span>
+            <GraduationCap className="h-4 w-4 text-blue-600" />
+            <span>Student</span>
           </button>
 
           <button
             type="button"
             onClick={() => setRole("recruiter")}
             className={cn(
-              "relative z-10 py-2.5 px-4 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer select-none",
-              role === "recruiter" ? "text-white" : "text-zinc-400 hover:text-zinc-200"
+              "relative z-10 py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer select-none",
+              role === "recruiter"
+                ? "bg-white text-zinc-950 border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B]"
+                : "text-zinc-600 hover:text-zinc-950"
             )}
           >
-            {role === "recruiter" && (
-              <motion.div
-                layoutId="authPageRolePill"
-                className="absolute inset-0 rounded-full bg-zinc-800 border border-zinc-700/60 shadow-md"
-                transition={{
-                  type: "spring",
-                  stiffness: 450,
-                  damping: 25,
-                }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-1.5">
-              <Briefcase className="h-3.5 w-3.5" />
-              Recruiter
-            </span>
+            <Briefcase className="h-4 w-4 text-purple-600" />
+            <span>Recruiter</span>
           </button>
         </div>
 
@@ -178,69 +162,80 @@ export default function LoginPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -3 }}
             transition={{ duration: 0.15 }}
-            className="text-center text-xs text-zinc-400 leading-relaxed"
+            className="text-center text-xs text-zinc-700 leading-relaxed font-medium"
           >
             {role === "student"
               ? "Continue as a student to generate and share your verified skill passport."
-              : "Continue as a recruiter to discover and evaluate verified talent."}
+              : "Continue as a recruiter to discover and evaluate verified student talent."}
           </motion.p>
         </AnimatePresence>
 
+        {/* High-Contrast Error Alert */}
         {error && (
-          <div className="text-red-400 text-xs bg-red-400/10 p-2.5 rounded-xl border border-red-400/20">
-            {error}
+          <div role="alert" className="flex items-center gap-2 text-rose-950 text-xs bg-rose-50 p-3 rounded-xl border-2 border-rose-600 font-bold">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
-        <div className="flex flex-col gap-3.5">
+        {/* Stable, Accessible Form Inputs (Strictly 0deg tilt) */}
+        <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="login-email" className="text-zinc-300 font-medium text-xs">Email</Label>
+            <Label htmlFor="login-email" className="text-zinc-950 font-black text-xs uppercase tracking-wide">
+              Email Address
+            </Label>
             <Input
               id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="youremail@yourdomain.com"
-              className="h-11 bg-zinc-950/80 border border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:border-zinc-700 rounded-xl text-sm transition-colors"
+              placeholder="you@college.edu"
+              className="h-11 bg-zinc-50/80 border-2 border-zinc-900 text-zinc-950 placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 focus-visible:bg-white rounded-xl text-sm transition-all"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="login-password" className="text-zinc-300 font-medium text-xs">Password</Label>
+            <Label htmlFor="login-password" className="text-zinc-950 font-black text-xs uppercase tracking-wide">
+              Password
+            </Label>
             <Input
               id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Create or enter password"
-              className="h-11 bg-zinc-950/80 border border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-zinc-600 focus-visible:border-zinc-700 rounded-xl text-sm transition-colors"
+              placeholder="Enter your password"
+              className="h-11 bg-zinc-50/80 border-2 border-zinc-900 text-zinc-950 placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 focus-visible:bg-white rounded-xl text-sm transition-all"
             />
           </div>
 
           <Button
             onClick={handleEmailLogin}
             disabled={isLoading}
-            className="w-full h-11 text-xs font-semibold mt-1 bg-white hover:bg-zinc-200 text-zinc-950 rounded-xl border-0 transition-all shadow-md active:scale-[0.99] cursor-pointer"
+            className="w-full h-12 text-sm font-black mt-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl border-2 border-zinc-900 shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            {isLoading ? "Signing in..." : `Sign in as ${role === "student" ? "Student" : "Recruiter"}`}
+            <span>{isLoading ? "Signing in..." : `Sign in as ${role === "student" ? "Student" : "Recruiter"}`}</span>
+            <ArrowRight className="w-4 h-4" />
           </Button>
         </div>
 
-        <div className="relative my-1">
+        {/* Tactile Divider */}
+        <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-zinc-800" />
+            <span className="w-full border-t-2 border-dashed border-zinc-300" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-zinc-900 px-3 text-zinc-400 font-medium">or continue with</span>
+            <span className="bg-white px-3 font-doodle text-base font-bold text-zinc-700">
+              or quick sign-in with
+            </span>
           </div>
         </div>
 
+        {/* Social Buttons with Physical Keypress Physics */}
         <div className={cn("grid gap-3", role === "student" ? "grid-cols-2" : "grid-cols-1")}>
           <Button
             onClick={handleGoogleLogin}
             variant="outline"
-            size="lg"
-            className="w-full gap-2.5 h-11 text-xs font-medium bg-zinc-950/50 border-zinc-800 hover:bg-zinc-800/80 hover:border-zinc-700 text-zinc-200 hover:text-white rounded-xl transition-all cursor-pointer"
+            className="w-full gap-2.5 h-11 text-xs font-black bg-white border-2 border-zinc-900 hover:bg-zinc-50 text-zinc-950 rounded-xl shadow-[3px_3px_0px_0px_#18181B] active:translate-y-[2px] transition-all cursor-pointer"
           >
             <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -252,43 +247,42 @@ export default function LoginPage() {
                 fill="#34A853"
               />
               <path
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
                 fill="#FBBC05"
               />
               <path
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 fill="#EA4335"
               />
             </svg>
-            <span>{role === "student" ? "Google" : "Continue with Google"}</span>
+            <span>Google</span>
           </Button>
 
-          {role === "student" && (
+            {role === "student" && (
             <Button
               onClick={handleGithubLogin}
               variant="outline"
-              size="lg"
-              className="w-full gap-2.5 h-11 text-xs font-medium bg-zinc-950/50 border-zinc-800 hover:bg-zinc-800/80 hover:border-zinc-700 text-zinc-200 hover:text-white rounded-xl transition-all cursor-pointer"
+              className="w-full gap-2.5 h-11 text-xs font-black bg-white border-2 border-zinc-900 hover:bg-zinc-50 text-zinc-950 rounded-xl shadow-[3px_3px_0px_0px_#18181B] active:translate-y-[2px] transition-all cursor-pointer"
             >
-              <svg className="h-4 w-4 shrink-0 text-zinc-200" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+              <svg className="h-4 w-4 shrink-0 fill-current text-zinc-950" viewBox="0 0 24 24">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
               </svg>
               <span>GitHub</span>
             </Button>
           )}
         </div>
 
-        <div className="text-center">
-          <p className="text-xs text-zinc-500">
-            By continuing, you agree to our Terms of Service and Privacy Policy
-          </p>
+        {/* Quick Demo Bypass */}
+        <div className="pt-2 border-t border-dashed border-zinc-300">
+          <button
+            type="button"
+            onClick={() => window.location.assign(role === "recruiter" ? "/recruiter" : "/dashboard")}
+            className="w-full py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 border-2 border-zinc-900 text-amber-950 font-black text-xs shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <span>⚡ Instant Demo Access ({role === "recruiter" ? "Recruiter Portal" : "Student Dashboard"})</span>
+          </button>
         </div>
       </div>
-
-      {/* Footer */}
-      <p className="text-xs text-zinc-600">
-        Powered by evidence-based skill verification
-      </p>
     </div>
   );
 }
