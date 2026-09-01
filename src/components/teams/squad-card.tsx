@@ -38,7 +38,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
     <>
       <div className="group relative rounded-3xl border border-stone-200 bg-white shadow-sm p-6 backdrop-blur-xl transition-all duration-300 hover:border-stone-300 hover:shadow-lg flex flex-col justify-between">
         {/* Subtle Top Gradient Glow */}
-        <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-3xl" />
+        <div className="absolute top-0 right-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-navy-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-3xl" />
 
         <div className="space-y-4">
           {/* Header: Track Pill & Synergy Rating */}
@@ -50,7 +50,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
             <div
               className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${
                 isHighSynergy
-                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700 shadow-[0_0_12px_rgba(16,185,129,0.15)]"
+                  ? "bg-navy-500/10 border-navy-500/30 text-navy-700 shadow-[0_0_12px_rgba(43, 72, 135,0.15)]"
                   : "bg-blue-500/10 border-blue-500/30 text-blue-700"
               }`}
             >
@@ -66,7 +66,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
             </div>
 
             <div className="overflow-hidden flex-1">
-              <h3 className="text-base font-bold text-stone-900 tracking-tight group-hover:text-emerald-700 transition-colors truncate">
+              <h3 className="text-base font-bold text-stone-900 tracking-tight group-hover:text-navy-700 transition-colors truncate">
                 {squad.name}
               </h3>
               <p className="text-xs text-stone-500 truncate flex items-center gap-1">
@@ -82,8 +82,8 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
           {/* Complementary AI Fit Callout */}
           {squad.complementary_note && (
-            <div className="p-3 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/15 text-[11px] text-emerald-700 leading-relaxed flex items-start gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-700 flex-shrink-0 mt-0.5" />
+            <div className="p-3 rounded-2xl bg-navy-500/[0.04] border border-navy-500/15 text-[11px] text-navy-700 leading-relaxed flex items-start gap-2">
+              <ShieldCheck className="w-4 h-4 text-navy-700 flex-shrink-0 mt-0.5" />
               <span>{squad.complementary_note}</span>
             </div>
           )}
@@ -118,7 +118,7 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
                     key={skill}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-all ${
                       isMatched
-                        ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-700 font-bold"
+                        ? "bg-navy-500/15 border-navy-500/30 text-navy-700 font-bold"
                         : "bg-stone-50 border-stone-200 text-stone-500"
                     }`}
                   >

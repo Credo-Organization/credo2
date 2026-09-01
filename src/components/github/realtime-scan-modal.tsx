@@ -104,7 +104,7 @@ export function RealtimeScanModal({
           <div className="flex items-center gap-2.5">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            <div className="w-3 h-3 rounded-full bg-navy-500/80" />
             <span className="text-xs font-mono text-white/50 ml-2 flex items-center gap-1.5">
               <Terminal className="w-3.5 h-3.5 text-blue-400" />
               gitproof://scan/{githubUsername}
@@ -124,11 +124,11 @@ export function RealtimeScanModal({
                 <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
                 Live Portfolio Deep Scanner
               </span>
-              <span className="text-emerald-400 font-bold">{isFinished ? "✓ READY" : "SCANNING..."}</span>
+              <span className="text-navy-400 font-bold">{isFinished ? "✓ READY" : "SCANNING..."}</span>
             </div>
             <div className="w-full h-2.5 bg-[#141d33] rounded-full overflow-hidden p-0.5 border border-[#233357]">
               <div
-                className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+                className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-navy-400 rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(59,130,246,0.6)]"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -147,12 +147,12 @@ export function RealtimeScanModal({
                   className={cn(
                     "flex items-center gap-3 text-xs transition-all p-1.5 rounded-lg",
                     isCurrent && "bg-blue-500/10 text-blue-300 font-semibold",
-                    isDone && "text-emerald-400 font-medium",
+                    isDone && "text-navy-400 font-medium",
                     idx > currentStepIndex && "text-white/30"
                   )}
                 >
                   {isDone ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-navy-400 flex-shrink-0" />
                   ) : isCurrent ? (
                     <StepIcon className="w-4 h-4 text-blue-400 animate-spin flex-shrink-0" />
                   ) : (
@@ -183,7 +183,7 @@ export function RealtimeScanModal({
                   className="flex items-center justify-between p-2 rounded-xl bg-[#121a2e] border border-[#1e2a4a] text-xs font-mono animate-fade-in"
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-navy-400 flex-shrink-0" />
                     <span className="text-white font-semibold truncate">{repo.name}</span>
                     <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300">
                       {repo.lang}

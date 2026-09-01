@@ -120,7 +120,7 @@ export function AuditBreakdownPanel({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-200 relative z-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 text-xs font-semibold mb-1.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-navy-50 border border-navy-200 text-navy-600 text-xs font-semibold mb-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
             GitProof™ Deep Audit Engine
           </div>
@@ -183,7 +183,7 @@ export function AuditBreakdownPanel({
         <div className="pt-6 space-y-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
             <div className="bg-white border border-stone-200 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+              <div className="w-10 h-10 rounded-xl bg-navy-50 border border-navy-200 flex items-center justify-center text-navy-600">
                 <FolderGit2 className="w-5 h-5" />
               </div>
               <div>
@@ -195,7 +195,7 @@ export function AuditBreakdownPanel({
             </div>
 
             <div className="bg-white border border-stone-200 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-500">
+              <div className="w-10 h-10 rounded-xl bg-navy-50 border border-navy-200 flex items-center justify-center text-navy-700">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
@@ -209,7 +209,7 @@ export function AuditBreakdownPanel({
             </div>
 
             <div className="bg-white border border-stone-200 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+              <div className="w-10 h-10 rounded-xl bg-navy-50 border border-navy-200 flex items-center justify-center text-navy-600">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -244,7 +244,7 @@ export function AuditBreakdownPanel({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-sm font-bold text-stone-900 group-hover:text-emerald-600 transition-colors truncate">
+                      <span className="text-sm font-bold text-stone-900 group-hover:text-navy-600 transition-colors truncate">
                         {repo.name}
                       </span>
                       {repo.url && (
@@ -368,7 +368,7 @@ export function AuditBreakdownPanel({
 
                   <div className="flex items-center justify-between text-xs text-stone-500 pt-1 border-t border-stone-200">
                     <span>{lang.repoCount} active repos</span>
-                    <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                    <span className="text-navy-700 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" />
                       {lang.confidence} Mastery
                     </span>
@@ -386,7 +386,7 @@ export function AuditBreakdownPanel({
           {/* Summary Stats */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white border border-stone-200 rounded-2xl p-3.5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-500">
+              <div className="w-10 h-10 rounded-xl bg-navy-50 border border-navy-200 flex items-center justify-center text-navy-700">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
@@ -428,7 +428,7 @@ export function AuditBreakdownPanel({
                   className={cn(
                     "bg-white border rounded-2xl p-4 flex flex-col gap-3 transition-all",
                     isAccepted
-                      ? "border-stone-200/50 hover:border-emerald-500/40"
+                      ? "border-stone-200/50 hover:border-navy-500/40"
                       : "border-rose-500/30 bg-rose-500/5"
                   )}
                 >
@@ -438,7 +438,7 @@ export function AuditBreakdownPanel({
                         className={cn(
                           "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5",
                           isAccepted
-                            ? "bg-emerald-50 border border-emerald-200 text-emerald-600"
+                            ? "bg-navy-50 border border-navy-200 text-navy-600"
                             : "bg-rose-500/10 border border-rose-500/20 text-rose-500"
                         )}
                       >

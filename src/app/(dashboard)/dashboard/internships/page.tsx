@@ -84,7 +84,7 @@ export default async function InternshipsPage() {
   return (
     <div className="w-full min-h-full p-6 sm:p-10 relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="fixed top-0 right-0 w-[800px] h-[800px] bg-emerald-500/[0.03] blur-[120px] rounded-full -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+      <div className="fixed top-0 right-0 w-[800px] h-[800px] bg-navy-500/[0.03] blur-[120px] rounded-full -translate-y-1/3 translate-x-1/3 pointer-events-none" />
       <div className="fixed bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/[0.03] blur-[120px] rounded-full translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">

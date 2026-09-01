@@ -4,6 +4,32 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ─── Brand: deep navy ───
+ *
+ * The product's accent used to be emerald, which also happens to be the colour
+ * of a passing integrity verdict. Green therefore meant both "Credify" and
+ * "this evidence is authentic", and the second meaning was drowned out by the
+ * first. Navy carries the brand; green now appears only where it is a verdict.
+ *
+ * Contrast measured against #ffffff and the #fdf8f0 dashboard panel:
+ *   navy-600  8.8:1   navy-700 11.4:1   navy-900 16.3:1 (white text on it)
+ *   navy-700 on a navy-50 badge: 10.4:1
+ * Steps 50-300 are surfaces and borders only; they are far below the text floor.
+ */
+@theme {
+  --color-navy-50: #f1f5fb;
+  --color-navy-100: #dde7f6;
+  --color-navy-200: #c2d3ec;
+  --color-navy-300: #94aedb;
+  --color-navy-400: #5f83c0;
+  --color-navy-500: #3c60a3;
+  --color-navy-600: #2b4887;
+  --color-navy-700: #20386c;
+  --color-navy-800: #182a51;
+  --color-navy-900: #121f3c;
+  --color-navy-950: #0a1226;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

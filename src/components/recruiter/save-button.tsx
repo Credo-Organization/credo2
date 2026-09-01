@@ -39,7 +39,7 @@ export function SaveButton({ passportId, initiallySaved }: SaveButtonProps) {
       className={cn(
         "inline-flex items-center gap-2 rounded-2xl border px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed",
         saved
-          ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
+          ? "bg-navy-50 border-navy-200 text-navy-700 hover:bg-navy-100"
           : "bg-stone-900 border-stone-900 text-white hover:bg-stone-800"
       )}
     >

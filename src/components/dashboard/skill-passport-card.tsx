@@ -294,10 +294,10 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                       className={cn(
                         "w-2.5 h-2.5 rounded-[3px] flex-shrink-0 transition-colors hover:ring-1 hover:ring-stone-400",
                         intensity === 0 ? "bg-stone-100" :
-                        intensity === 1 ? "bg-emerald-100" :
-                        intensity === 2 ? "bg-emerald-300" :
-                        intensity === 3 ? "bg-emerald-500" :
-                        "bg-emerald-700"
+                        intensity === 1 ? "bg-navy-100" :
+                        intensity === 2 ? "bg-navy-300" :
+                        intensity === 3 ? "bg-navy-500" :
+                        "bg-navy-700"
                       )}
                     />
                   ))}
@@ -315,9 +315,9 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
                   <div key={i} className={cn(
                     "w-2.5 h-2.5 rounded-[3px]",
                     i === 0 ? "bg-stone-100" :
-                    i === 1 ? "bg-emerald-100" :
-                    i === 2 ? "bg-emerald-300" :
-                    i === 3 ? "bg-emerald-500" : "bg-emerald-700"
+                    i === 1 ? "bg-navy-100" :
+                    i === 2 ? "bg-navy-300" :
+                    i === 3 ? "bg-navy-500" : "bg-navy-700"
                   )} />
                 ))}
               </div>

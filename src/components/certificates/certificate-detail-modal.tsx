@@ -91,7 +91,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
         <DialogHeader className="space-y-2 text-left">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 Ed25519 Cryptographically Verified
               </span>
@@ -119,12 +119,12 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
           <div className="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-3.5">
             <div className="flex items-center justify-between border-b border-stone-200 pb-3">
               <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-emerald-400" />
+                <Lock className="w-4 h-4 text-emerald-700" />
                 <span className="text-xs font-bold text-stone-900 tracking-wide">
                   Cryptographic Integrity Verification
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">
                 100% Authenticity Score
               </span>
             </div>
@@ -143,7 +143,7 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
                 <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider block">
                   Signature Algorithm
                 </span>
-                <span className="font-mono text-emerald-400 text-[11px] truncate block bg-emerald-500/[0.03] px-2.5 py-1.5 rounded-lg border border-emerald-500/15">
+                <span className="font-mono text-navy-700 text-[11px] truncate block bg-navy-500/[0.03] px-2.5 py-1.5 rounded-lg border border-navy-500/15">
                   {signatureAlgorithm}
                 </span>
               </div>
@@ -160,22 +160,22 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
           </div>
 
           {/* Anti-Cheat Verification Report */}
-          <div className="p-4 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/15 space-y-2">
+          <div className="p-4 rounded-2xl bg-navy-500/[0.03] border border-navy-500/15 space-y-2">
             <div className="flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-emerald-400" />
+              <Cpu className="w-4 h-4 text-navy-700" />
               <span className="text-xs font-bold text-stone-900">
                 Multimodal Anti-Cheat Scan Report
               </span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
               <div className="flex items-center gap-1.5 text-stone-600">
-                <span className="text-emerald-400">✓</span> No Image Splicing
+                <span className="text-navy-700">✓</span> No Image Splicing
               </div>
               <div className="flex items-center gap-1.5 text-stone-600">
-                <span className="text-emerald-400">✓</span> Issuer Authority Match
+                <span className="text-navy-700">✓</span> Issuer Authority Match
               </div>
               <div className="flex items-center gap-1.5 text-stone-600">
-                <span className="text-emerald-400">✓</span> Clean Metadata Header
+                <span className="text-navy-700">✓</span> Clean Metadata Header
               </div>
             </div>
           </div>
@@ -196,14 +196,14 @@ export function CertificateDetailModal({ cert, isOpen, onClose, onDelete }: Cert
                   onClick={handleCopyJson}
                   className="text-xs text-stone-500 hover:text-stone-900 flex items-center gap-1 transition-colors cursor-pointer"
                 >
-                  {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copied ? <Check className="w-3 h-3 text-navy-700" /> : <Copy className="w-3 h-3" />}
                   {copied ? "Copied" : "Copy Payload"}
                 </button>
               )}
             </div>
 
             {showRawJson && (
-              <pre className="p-4 rounded-2xl bg-black/70 border border-stone-200 text-[11px] font-mono text-emerald-300/90 overflow-x-auto max-h-56 custom-scrollbar leading-relaxed">
+              <pre className="p-4 rounded-2xl bg-black/70 border border-stone-200 text-[11px] font-mono text-navy-300/90 overflow-x-auto max-h-56 custom-scrollbar leading-relaxed">
                 {JSON.stringify(rawPayload, null, 2)}
               </pre>
             )}

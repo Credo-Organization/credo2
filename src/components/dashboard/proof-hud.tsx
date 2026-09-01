@@ -41,7 +41,7 @@ export function DashboardProofHUD({
         <Link href="/dashboard/internships">
           <Button
             size="sm"
-            className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl text-xs h-9 px-4 shadow-sm flex items-center gap-1.5"
+            className="bg-navy-700 hover:bg-navy-800 text-white font-semibold rounded-xl text-xs h-9 px-4 shadow-sm flex items-center gap-1.5"
           >
             <span>Live Internship Matches</span>
             <ArrowRight className="w-3.5 h-3.5" />

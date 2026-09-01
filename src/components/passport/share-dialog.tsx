@@ -191,7 +191,7 @@ export function ShareDialog({ isPublic: initialIsPublic, username }: ShareDialog
                   className="bg-white text-zinc-900 border-zinc-200 focus-visible:ring-zinc-900"
                 />
                 <Button size="icon" variant="outline" onClick={copyToClipboard} className="shrink-0 border-zinc-200 hover:bg-zinc-100 text-zinc-900">
-                  {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-navy-600" /> : <Copy className="w-4 h-4" />}
                 </Button>
                 <Button size="icon" variant="outline" onClick={() => window.open(shareUrl, '_blank')} className="shrink-0 border-zinc-200 hover:bg-zinc-100 text-zinc-900">
                   <ExternalLink className="w-4 h-4" />

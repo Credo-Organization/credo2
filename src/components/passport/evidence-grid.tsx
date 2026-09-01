@@ -23,7 +23,7 @@ export function EvidenceGrid({ skills }: EvidenceGridProps) {
   }
 
   const confidenceColors = {
-    High: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+    High: "bg-navy-500/10 text-navy-700 border-navy-500/20",
     Medium: "bg-amber-500/10 text-amber-500 border-amber-500/20",
     Low: "bg-slate-500/10 text-slate-500 border-slate-500/20",
   };
@@ -38,7 +38,7 @@ export function EvidenceGrid({ skills }: EvidenceGridProps) {
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <ShieldCheck className={cn("w-4 h-4", 
-                skill.confidence === "High" ? "text-emerald-500" : 
+                skill.confidence === "High" ? "text-navy-700" : 
                 skill.confidence === "Medium" ? "text-amber-500" : "text-slate-500"
               )} />
               <h4 className="font-semibold text-foreground tracking-tight">{skill.name}</h4>

@@ -78,15 +78,15 @@ export function RecruiterPreviewModal({
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleResetAndClose()}>
       <DialogContent className="sm:max-w-4xl md:max-w-4xl w-full bg-[#080a0f] border border-stone-200/[0.12] text-stone-900 p-0 overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.8)] rounded-3xl">
         {/* Top Header Banner */}
-        <div className="p-7 pb-6 border-b border-stone-200 bg-gradient-to-r from-emerald-950/20 via-black/80 to-blue-950/20 relative">
+        <div className="p-7 pb-6 border-b border-stone-200 bg-gradient-to-r from-navy-950/20 via-black/80 to-blue-950/20 relative">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pr-8">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_20px_rgba(16,185,129,0.15)]">
-                <EyeOff className="w-6 h-6 text-emerald-400" />
+              <div className="w-12 h-12 rounded-2xl bg-navy-500/10 border border-navy-500/30 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_20px_rgba(43, 72, 135,0.15)]">
+                <EyeOff className="w-6 h-6 text-navy-700" />
               </div>
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/25">
+                  <span className="text-[11px] font-bold text-navy-700 uppercase tracking-widest bg-navy-500/10 px-2.5 py-0.5 rounded-full border border-navy-500/25">
                     Blind Merit Review
                   </span>
                   <Badge variant="outline" className="border-stone-200 text-stone-500 text-[11px] bg-white">
@@ -107,10 +107,10 @@ export function RecruiterPreviewModal({
 
             {/* Match Score Display */}
             <div className="flex sm:flex-col items-center sm:items-end shrink-0 gap-2 sm:gap-1 bg-stone-50 sm:bg-transparent p-3 sm:p-0 rounded-2xl border border-stone-200/5 sm:border-0">
-              <span className="text-3xl font-black text-emerald-400 leading-none">
+              <span className="text-3xl font-black text-navy-700 leading-none">
                 {matchScore}%
               </span>
-              <span className="text-[10px] text-emerald-400/80 uppercase tracking-widest font-bold">
+              <span className="text-[10px] text-emerald-700 uppercase tracking-widest font-bold">
                 Verified Fit
               </span>
             </div>
@@ -148,7 +148,7 @@ export function RecruiterPreviewModal({
                     <Fingerprint className="w-4 h-4 text-blue-400" />
                     Candidate Identity Token
                   </span>
-                  <span className="font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/25 text-xs font-semibold">
+                  <span className="font-mono text-navy-700 bg-navy-500/10 px-3 py-1 rounded-full border border-navy-500/25 text-xs font-semibold">
                     {anonymizedId}
                   </span>
                 </div>
@@ -157,7 +157,7 @@ export function RecruiterPreviewModal({
                   <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                     <span className="text-stone-400 text-[11px] block font-medium">GitProof</span>
                     <span className="text-stone-900 font-bold text-sm mt-0.5 block">99.4%</span>
-                    <span className="text-[10px] text-emerald-400">Physics Verified</span>
+                    <span className="text-[10px] text-emerald-700">Physics Verified</span>
                   </div>
                   <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                     <span className="text-stone-400 text-[11px] block font-medium">Credential</span>
@@ -166,7 +166,7 @@ export function RecruiterPreviewModal({
                   </div>
                   <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                     <span className="text-stone-400 text-[11px] block font-medium">Plagiarism</span>
-                    <span className="text-emerald-400 font-bold text-sm mt-0.5 block">0 Flags</span>
+                    <span className="text-navy-700 font-bold text-sm mt-0.5 block">0 Flags</span>
                     <span className="text-[10px] text-stone-400">Clean Codebase</span>
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export function RecruiterPreviewModal({
                           <span className="text-stone-400 font-mono text-[11px]">{r.language || "TypeScript"}</span>
                         </div>
                       </div>
-                      <span className="text-[11px] text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">
+                      <span className="text-[11px] text-navy-700 font-semibold bg-navy-500/10 px-2.5 py-1 rounded-xl border border-navy-500/20">
                         Audited
                       </span>
                     </div>
@@ -205,16 +205,16 @@ export function RecruiterPreviewModal({
               {/* Verified Skills Chain */}
               <div className="space-y-3">
                 <h4 className="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700" />
                   Verified Skills Backed by Proof ({matchedSkills.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {matchedSkills.map((s) => (
                     <span
                       key={s.skill_id}
-                      className="px-3.5 py-2 rounded-xl text-xs font-medium bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 flex items-center gap-1.5 shadow-sm"
+                      className="px-3.5 py-2 rounded-xl text-xs font-medium bg-navy-500/10 border border-navy-500/25 text-navy-700 flex items-center gap-1.5 shadow-sm"
                     >
-                      <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <Code2 className="w-3.5 h-3.5 text-navy-700" />
                       <span>{s.skill_name}</span>
                       {s.is_critical && (
                         <span className="text-[10px] text-amber-300 font-bold ml-1 bg-amber-400/15 px-1.5 py-0.2 rounded border border-amber-400/20">
@@ -253,16 +253,16 @@ export function RecruiterPreviewModal({
           {isSubmitted ? (
             <Button
               disabled
-              className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-xl px-8 h-12 font-bold flex items-center justify-center gap-2 w-full sm:w-auto"
+              className="bg-navy-500/20 text-navy-700 border border-navy-500/40 rounded-xl px-8 h-12 font-bold flex items-center justify-center gap-2 w-full sm:w-auto"
             >
-              <Check className="w-4 h-4 text-emerald-400" />
+              <Check className="w-4 h-4 text-navy-700" />
               Application Sent ({shortToken})
             </Button>
           ) : (
             <Button
               onClick={handleApply}
               disabled={isSubmitting}
-              className="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold rounded-xl px-8 h-12 shadow-[0_0_25px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
+              className="bg-navy-900 hover:bg-navy-800 text-white font-extrabold rounded-xl px-8 h-12 shadow-[0_0_25px_rgba(43, 72, 135,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
             >
               {isSubmitting ? (
                 <>
