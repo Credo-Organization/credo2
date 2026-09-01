@@ -75,131 +75,136 @@ export async function syncGitHub(username: string, token?: string) {
 
     const extractedAccountSkills = new Set<string>();
 
-    await Promise.all(relevantRepos.map(async (repo) => {
-      let languages: Record<string, number> = {};
-      try {
-        const { data: langData } = await octokit.rest.repos.listLanguages({
-          owner: repo.owner.login || username,
-          repo: repo.name,
-        });
-        languages = langData as Record<string, number>;
-        Object.keys(languages).forEach(l => extractedAccountSkills.add(l));
-      } catch (langError) {
-        if (repo.language) {
-          languages[repo.language] = 1000;
-          extractedAccountSkills.add(repo.language);
+    // Process repositories in bounded concurrent chunks (4 at a time) to prevent GitHub rate limits and LLM concurrency exhaustion
+    const CHUNK_SIZE = 4;
+    for (let i = 0; i < relevantRepos.length; i += CHUNK_SIZE) {
+      const chunk = relevantRepos.slice(i, i + CHUNK_SIZE);
+      await Promise.all(chunk.map(async (repo) => {
+        let languages: Record<string, number> = {};
+        try {
+          const { data: langData } = await octokit.rest.repos.listLanguages({
+            owner: repo.owner.login || username,
+            repo: repo.name,
+          });
+          languages = langData as Record<string, number>;
+          Object.keys(languages).forEach(l => extractedAccountSkills.add(l));
+        } catch (langError) {
+          if (repo.language) {
+            languages[repo.language] = 1000;
+            extractedAccountSkills.add(repo.language);
+          }
         }
-      }
 
-      let readmeSnippet = "None";
-      try {
-        const { data: readmeData } = await octokit.rest.repos.getReadme({
-          owner: repo.owner.login || username,
-          repo: repo.name,
-        });
-        if (readmeData && !Array.isArray(readmeData) && readmeData.content) {
-          const decoded = Buffer.from(readmeData.content, 'base64').toString('utf-8');
-          readmeSnippet = decoded.substring(0, 1500);
+        let readmeSnippet = "None";
+        try {
+          const { data: readmeData } = await octokit.rest.repos.getReadme({
+            owner: repo.owner.login || username,
+            repo: repo.name,
+          });
+          if (readmeData && !Array.isArray(readmeData) && readmeData.content) {
+            const decoded = Buffer.from(readmeData.content, 'base64').toString('utf-8');
+            readmeSnippet = decoded.substring(0, 1500);
+          }
+        } catch (readmeError) {
+          // Ignore 404s
         }
-      } catch (readmeError) {
-        // Ignore 404s
-      }
 
-      let integrityData = {
-        integrity_score: 95,
-        integrity_flags: [] as string[],
-        integrity_status: "verified" as "verified" | "flagged" | "pending",
-        verified_skills: Object.keys(languages),
-        audit_votes: undefined as unknown[] | undefined,
-        agreement: undefined as string | undefined,
-      };
+        let integrityData = {
+          integrity_score: 95,
+          integrity_flags: [] as string[],
+          integrity_status: "verified" as "verified" | "flagged" | "pending",
+          verified_skills: Object.keys(languages),
+          audit_votes: undefined as unknown[] | undefined,
+          agreement: undefined as string | undefined,
+        };
 
-      try {
-        const aiResult = await evaluateEvidenceIntegrity("github", {
-          githubData: {
+        try {
+          const aiResult = await evaluateEvidenceIntegrity("github", {
+            githubData: {
+              name: repo.name,
+              description: repo.description,
+              size: repo.size,
+              stargazers_count: repo.stargazers_count,
+              forks_count: repo.forks_count,
+              open_issues_count: repo.open_issues_count,
+              pushed_at: repo.pushed_at,
+              created_at: repo.created_at,
+              updated_at: repo.updated_at,
+              languages: languages,
+              readme_snippet: readmeSnippet
+            }
+          });
+          integrityData = { ...integrityData, ...aiResult } as any;
+          if (integrityData.verified_skills) {
+            integrityData.verified_skills.forEach(s => extractedAccountSkills.add(s));
+          }
+        } catch (e) {
+          console.error(`[AntiCheat] Failed to verify GitHub repo ${repo.name}`, e);
+        }
+
+        const { data: savedRepo, error: repoError } = await supabase
+          .from("github_repos")
+          .insert({
+            connection_id: connection.id,
             name: repo.name,
             description: repo.description,
-            size: repo.size,
-            stargazers_count: repo.stargazers_count,
-            forks_count: repo.forks_count,
-            open_issues_count: repo.open_issues_count,
-            pushed_at: repo.pushed_at,
-            created_at: repo.created_at,
-            updated_at: repo.updated_at,
-            languages: languages,
-            readme_snippet: readmeSnippet
-          }
-        });
-        integrityData = { ...integrityData, ...aiResult } as any;
-        if (integrityData.verified_skills) {
-          integrityData.verified_skills.forEach(s => extractedAccountSkills.add(s));
+            is_fork: repo.fork,
+            primary_language: repo.language || Object.keys(languages)[0] || "Code",
+            stars_count: repo.stargazers_count || 0,
+            forks_count: repo.forks_count || 0,
+            html_url: repo.html_url,
+            integrity_score: integrityData.integrity_score,
+            integrity_flags: integrityData.integrity_flags,
+            integrity_status: integrityData.integrity_status,
+            audit_votes: integrityData.audit_votes ?? null,
+            synced_at: new Date().toISOString(),
+          })
+          .select("id")
+          .single();
+
+        if (repoError || !savedRepo) {
+          console.error("Repo save error:", repoError);
+          return;
         }
-      } catch (e) {
-        console.error(`[AntiCheat] Failed to verify GitHub repo ${repo.name}`, e);
-      }
 
-      const { data: savedRepo, error: repoError } = await supabase
-        .from("github_repos")
-        .insert({
-          connection_id: connection.id,
-          name: repo.name,
-          description: repo.description,
-          is_fork: repo.fork,
-          primary_language: repo.language || Object.keys(languages)[0] || "Code",
-          stars_count: repo.stargazers_count || 0,
-          forks_count: repo.forks_count || 0,
-          html_url: repo.html_url,
-          integrity_score: integrityData.integrity_score,
-          integrity_flags: integrityData.integrity_flags,
-          integrity_status: integrityData.integrity_status,
-          audit_votes: integrityData.audit_votes ?? null,
-          synced_at: new Date().toISOString(),
-        })
-        .select("id")
-        .single();
+        const langInserts = Object.entries(languages).map(([lang, bytes]) => ({
+          repo_id: savedRepo.id,
+          language: lang,
+          bytes: bytes as number,
+        }));
 
-      if (repoError || !savedRepo) {
-        console.error("Repo save error:", repoError);
-        return;
-      }
+        if (langInserts.length > 0) {
+          await supabase.from("repo_languages").insert(langInserts);
+        }
 
-      const langInserts = Object.entries(languages).map(([lang, bytes]) => ({
-        repo_id: savedRepo.id,
-        language: lang,
-        bytes: bytes as number,
+        // Save extracted skills to evidence table if verified
+        if (integrityData.integrity_status === "verified" && integrityData.verified_skills && integrityData.verified_skills.length > 0) {
+          const { data: evidenceRecord, error: evError } = await supabase.from("evidence").insert({
+            user_id: user.id,
+            source_type: "github",
+            raw_ref: repo.html_url,
+            status: "verified",
+            integrity_score: integrityData.integrity_score,
+            integrity_status: integrityData.integrity_status,
+            integrity_flags: integrityData.integrity_flags,
+            audit_votes: integrityData.audit_votes ?? null
+          }).select("id").single();
+
+          if (evidenceRecord && !evError) {
+            const claims = integrityData.verified_skills.map((skill: string) => ({
+              evidence_id: evidenceRecord.id,
+              extracted_text: `Used ${skill} in repository ${repo.name}`,
+              unmapped_label: skill,
+              match_confidence: 1.0,
+              llm_model: "amazon/nova-micro-v1:0"
+            }));
+            if (claims.length > 0) {
+              await supabase.from("evidence_claims").insert(claims);
+            }
+          }
+        }
       }));
-
-      if (langInserts.length > 0) {
-        await supabase.from("repo_languages").insert(langInserts);
-      }
-
-      // Save extracted skills to evidence table if verified
-      if (integrityData.integrity_status === "verified" && integrityData.verified_skills && integrityData.verified_skills.length > 0) {
-        const { data: evidenceRecord, error: evError } = await supabase.from("evidence").insert({
-          user_id: user.id,
-          source_type: "github",
-          raw_ref: repo.html_url,
-          status: "verified",
-          integrity_score: integrityData.integrity_score,
-          integrity_status: integrityData.integrity_status,
-          integrity_flags: integrityData.integrity_flags,
-          audit_votes: integrityData.audit_votes ?? null
-        }).select("id").single();
-
-        if (evidenceRecord && !evError) {
-          const claims = integrityData.verified_skills.map((skill: string) => ({
-            evidence_id: evidenceRecord.id,
-            extracted_text: `Used ${skill} in repository ${repo.name}`,
-            unmapped_label: skill,
-            match_confidence: 1.0,
-            llm_model: "amazon/nova-micro-v1:0"
-          }));
-          if (claims.length > 0) {
-            await supabase.from("evidence_claims").insert(claims);
-          }
-        }
-      }
-    }));
+    }
 
     revalidatePath("/github");
     revalidatePath("/dashboard");
@@ -249,7 +254,7 @@ export async function analyzeGitHubRealtime(username: string, token?: string) {
 
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
-    "User-Agent": "Credify-GitProof/2.0",
+    "User-Agent": "Minskey-GitProof/2.0",
   };
 
   if (token) {

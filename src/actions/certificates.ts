@@ -222,7 +222,7 @@ export async function verifyCredlyBadge(badgeUrlOrId: string) {
     const credlyRes = await fetch(`https://www.credly.com/badges/${badgeId}.json`, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "Credify-CredentialVerifier/2.0",
+        "User-Agent": "Minskey-CredentialVerifier/2.0",
       },
     });
 

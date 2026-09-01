@@ -213,8 +213,10 @@ export async function POST(request: Request) {
         headline: profile?.headline || "Software Engineer",
         country: profile?.country,
         college: profile?.college_name || "",
-        avatar_url: profile?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
-        gender: profile?.gender || "Female",
+        avatar_url: profile?.avatar_url && !profile.avatar_url.includes("unsplash.com")
+          ? profile.avatar_url 
+          : (profile?.gender?.toLowerCase() === "female" ? "/avatar-female.webp" : "/avatar-male.webp"),
+        gender: profile?.gender || "male",
         degree: profile?.degree || "B.Tech – Computer Science Engineering",
       },
       github: {

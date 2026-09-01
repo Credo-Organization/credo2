@@ -43,14 +43,23 @@ export async function POST(request: Request) {
       .update({ status: "processing", updated_at: new Date().toISOString() })
       .eq("id", jobId);
 
-    // 3. Fetch the user's passport data (snapshot_data)
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("snapshot_data, github_token")
-      .eq("id", job.profile_id)
-      .single();
+    // 3. Fetch the user's passport data (snapshot_data) from passports table
+    const [{ data: passport, error: passportError }, { data: profile }] = await Promise.all([
+      supabase
+        .from("passports")
+        .select("snapshot_data")
+        .eq("profile_id", job.profile_id)
+        .order("version", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from("profiles")
+        .select("github_token")
+        .eq("id", job.profile_id)
+        .maybeSingle()
+    ]);
 
-    if (profileError || !profile || !profile.snapshot_data) {
+    if (passportError || !passport || !passport.snapshot_data) {
       await supabase
         .from("match_jobs")
         .update({ status: "failed", error_message: "Passport not found. Generate a passport first." })
@@ -58,9 +67,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { code: 'VALIDATION_ERROR', message: "Passport not found" } }, { status: 400 });
     }
 
-    const passportObj = typeof profile.snapshot_data === "string" 
-      ? JSON.parse(profile.snapshot_data) 
-      : profile.snapshot_data;
+    const passportObj = typeof passport.snapshot_data === "string" 
+      ? JSON.parse(passport.snapshot_data) 
+      : passport.snapshot_data;
 
     let matchScore = 75;
     let gapAnalysis = "Candidate matched against core skill requirements.";
@@ -75,7 +84,7 @@ export async function POST(request: Request) {
       const evaluatePayload = {
         passport: passportObj,
         job_description: job.job_description,
-        github_token: profile.github_token || null,
+        github_token: profile?.github_token || null,
       };
 
       const controller = new AbortController();

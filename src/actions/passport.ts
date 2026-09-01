@@ -158,8 +158,10 @@ export async function generatePassport(skipRevalidate: boolean = false) {
         headline: profile?.headline || "Software Engineer",
         country: profile?.country || "India",
         college: profile?.college_name || "",
-        avatar_url: profile?.avatar_url || "",
-        gender: profile?.gender || "Female",
+        avatar_url: profile?.avatar_url && !profile.avatar_url.includes("unsplash.com") 
+          ? profile.avatar_url 
+          : (profile?.gender?.toLowerCase() === "female" ? "/avatar-female.webp" : "/avatar-male.webp"),
+        gender: profile?.gender || "male",
         degree: profile?.degree || "B.Tech – Computer Science Engineering",
       },
       github: {

@@ -30,10 +30,8 @@ const { execSync } = require('child_process');
   //   DATABASE_URL=postgresql://postgres.<ref>:<password>@<host>:6543/postgres
   if (!process.env.DATABASE_URL) {
     console.error(
-      "DATABASE_URL is not set.
-" +
-      "Find it in Supabase under Project Settings > Database > Connection string (Session pooler),
-" +
+      "DATABASE_URL is not set.\n" +
+      "Find it in Supabase under Project Settings > Database > Connection string (Session pooler),\n" +
       "then run:  DATABASE_URL='postgresql://...' node scripts/migrate.js"
     );
     process.exit(1);
