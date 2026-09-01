@@ -47,16 +47,44 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
   );
 
   if (rows.length === 0) {
+    // An empty first screen is a poor introduction, but the answer is to teach
+    // the flow rather than to invent candidates. Everything here is instruction,
+    // not fabricated data.
     return (
       <div className="flex flex-col gap-5">
         <CandidateLookup />
-        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.015] px-6 py-14 flex flex-col items-center text-center gap-2.5">
-          <Users className="w-7 h-7 text-white/20" aria-hidden="true" />
-          <h2 className="text-sm font-semibold text-white">No candidates yet</h2>
-          <p className="text-[13px] text-white/45 max-w-sm leading-relaxed">
-            Ask a student for the ID on their Credify passport, or scan its QR code. Their
-            audited evidence appears here.
-          </p>
+        <div className="rounded-xl border border-dashed border-white/10 bg-white/[0.015] px-6 py-10">
+          <div className="max-w-md mx-auto flex flex-col gap-5">
+            <div className="flex flex-col items-center text-center gap-1.5">
+              <Users className="w-6 h-6 text-white/20 mb-0.5" aria-hidden="true" />
+              <h2 className="text-sm font-semibold text-white">Your shortlist is empty</h2>
+              <p className="text-[13px] text-white/45 leading-relaxed">
+                Candidates appear here once you look one up and save them.
+              </p>
+            </div>
+
+            <ol className="flex flex-col gap-2.5">
+              {[
+                "A student opens their Credify passport and shares it with you.",
+                "Scan the QR code, or copy the ID printed on the card.",
+                "Paste either one above. Their audited evidence loads instantly.",
+              ].map((step, i) => (
+                <li key={i} className="flex gap-2.5 items-start">
+                  <span className="font-mono text-[11px] text-white/30 tabular-nums mt-0.5 shrink-0 w-4">
+                    {i + 1}
+                  </span>
+                  <span className="text-[13px] text-white/55 leading-relaxed">{step}</span>
+                </li>
+              ))}
+            </ol>
+
+            <p className="text-[12px] text-white/35 leading-relaxed border-t border-white/[0.06] pt-3.5">
+              Passport IDs look like{" "}
+              <span className="font-mono text-white/60">CDY26S1104</span>. You can also paste a
+              full verification link. Only passports a student has chosen to publish will
+              resolve.
+            </p>
+          </div>
         </div>
       </div>
     );

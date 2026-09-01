@@ -2,38 +2,93 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, AlertCircle } from "lucide-react";
+
+/**
+ * Accepts either a bare passport identifier or a full verification URL.
+ *
+ * Scanning the QR code on a passport yields a URL, not an identifier, and the
+ * empty state tells recruiters to do exactly that - so pasting one has to work.
+ * Stripping non-alphanumerics from a URL silently produces a run-together
+ * string that resolves to nothing, which reads as "the candidate does not
+ * exist" rather than "that is not what this field wanted".
+ */
+export function extractPassportId(raw: string): string {
+  const trimmed = raw.trim();
+  const fromUrl =
+    trimmed.match(/\/verify\/passport\/([A-Za-z0-9-]+)/) ??
+    trimmed.match(/\/candidate\/([A-Za-z0-9-]+)/);
+  const candidate = fromUrl ? fromUrl[1] : trimmed;
+
+  // Identifiers are generated uppercase (CDY26S1104) and matched with an exact
+  // comparison, so a lowercase paste would report "no passport found" when the
+  // passport exists. Normalise rather than blame the reader.
+  return candidate.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64).toUpperCase();
+}
 
 export function CandidateLookup() {
   const [value, setValue] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    const id = value.replace(/[^A-Za-z0-9-]/g, "");
-    if (!id) return;
+    const id = extractPassportId(value);
+
+    // Validate on submit rather than on every keystroke, so the field does not
+    // scold someone who is still typing.
+    if (!id) {
+      setError("Enter a passport ID, or paste the link from a scanned QR code.");
+      return;
+    }
+    if (id.length < 4) {
+      setError(`"${id}" is too short to be a passport ID. They look like CDY26S1104.`);
+      return;
+    }
+
+    setError(null);
     router.push(`/recruiter/candidate/${id}`);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-3">
-      <div className="relative flex-1">
-        <Search className="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Passport ID, e.g. CDY26S7421"
-          aria-label="Look up a candidate by passport ID"
-          className="w-full h-11 pl-10 pr-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20 transition-colors"
-        />
+    <form onSubmit={submit} className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search
+            className="w-4 h-4 text-white/25 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+            aria-hidden="true"
+          />
+          <input
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              if (error) setError(null);
+            }}
+            placeholder="Passport ID or scanned link"
+            aria-label="Passport ID or verification link"
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? "lookup-error" : undefined}
+            className="w-full h-10 pl-9 pr-3 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder:text-white/25 font-mono transition-colors focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+          />
+        </div>
+        <button
+          type="submit"
+          className="h-10 px-4 rounded-lg bg-white text-black text-[13px] font-medium hover:bg-white/90 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        >
+          Look up
+        </button>
       </div>
-      <button
-        type="submit"
-        className="h-11 px-5 rounded-2xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/80 transition-colors flex-shrink-0"
-      >
-        Look up
-      </button>
+
+      {error && (
+        <p
+          id="lookup-error"
+          role="alert"
+          className="flex items-start gap-1.5 text-[12px] text-amber-300/90 leading-snug"
+        >
+          <AlertCircle className="w-3.5 h-3.5 mt-px shrink-0" aria-hidden="true" />
+          {error}
+        </p>
+      )}
     </form>
   );
 }
