@@ -1,23 +1,54 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import {
-  FileBadge,
   GitBranch,
+  Upload,
   ShieldCheck,
   Target,
-  Compass,
   Users,
   CheckCircle2,
   Sparkles,
   ArrowRight,
+  Terminal,
+  FileCheck,
+  Lock,
+  Award,
+  Pin,
   ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { LoginModal } from "@/components/ui/login-modal";
+
+/** Handcrafted Sketched Pushpin */
+function PushPin({ color = "#3B82F6", className }: { color?: string; className?: string }) {
+  return (
+    <div className={cn("absolute -top-3 left-4 w-6 h-6 z-30 pointer-events-none drop-shadow-xs", className)}>
+      <svg viewBox="0 0 32 32" fill="none" className="w-full h-full">
+        <circle cx="16" cy="12" r="6" fill={color} stroke="#18181B" strokeWidth="2" />
+        <circle cx="14" cy="10" r="2" fill="#FFFFFF" opacity="0.6" />
+        <path d="M16 18L16 26" stroke="#18181B" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    </div>
+  );
+}
+
+/** Handcrafted Washi Tape */
+function WashiTape({ className, color = "bg-amber-300/80" }: { className?: string; color?: string }) {
+  return (
+    <div
+      className={cn(
+        "absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-5 rounded-xs border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none -rotate-1 z-20",
+        color,
+        className
+      )}
+    />
+  );
+}
 
 export function DoodleFeaturesSection() {
+  const [activeTab, setActiveTab] = useState<string>("all");
+
   return (
     <section id="features" className="py-20 sm:py-28 relative bg-[#FAF9F6] border-b border-zinc-200/80 overflow-hidden select-none">
       {/* Subtle Dot Grid Background */}
@@ -31,354 +62,345 @@ export function DoodleFeaturesSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
-        <div className="text-center mb-16 sm:mb-20 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-emerald-100 border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-            <span className="font-bold text-xs uppercase tracking-wider text-emerald-950">
-              The Proof Toolbelt
+        <div className="text-center mb-14 sm:mb-20 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-amber-100 border-2 border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] mb-4">
+            <Pin className="w-3.5 h-3.5 text-amber-800" />
+            <span className="font-bold text-xs uppercase tracking-wider text-amber-950">
+              The Proof Whiteboard
             </span>
           </div>
 
-          <span className="font-doodle text-3xl sm:text-4xl text-emerald-600 font-bold block mb-1">
-            Engineered for developers who prefer code over talk 🛠️
+          <span className="font-doodle text-2xl sm:text-3xl text-amber-700 font-bold block mb-1">
+            📌 Real artifacts pinned across an engineer&apos;s working canvas
           </span>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tight leading-tight">
             Everything you need to{" "}
-            <span className="relative inline-block text-blue-600">
+            <span className="relative inline-block text-amber-600">
               prove your skills.
-              <svg viewBox="0 0 160 14" fill="none" className="w-full h-3 text-blue-500 pointer-events-none absolute -bottom-1 left-0">
+              <svg viewBox="0 0 160 14" fill="none" className="w-full h-3 text-amber-500 pointer-events-none absolute -bottom-1 left-0">
                 <path d="M3 8C35 3 75 12 115 6C135 3 145 9 157 7" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
               </svg>
             </span>
           </h2>
 
           <p className="mt-4 text-zinc-600 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed">
-            Replace self-reported ratings with evidence-backed engineering tools built for campus developers, hackathon competitors, and technical recruiters.
+            No rigid split containers or resume summaries. Real code diffs, OCR scans, and anti-cheat consensus pinned into an authentic proof ecosystem.
           </p>
         </div>
 
-        {/* ── BENTO SKETCHBOOK GRID (No moving marquee!) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 1: The Evidence-Backed Skill Passport (Hero Bento - Spans 2 Cols)
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="lg:col-span-2 relative rounded-2xl border-2 border-zinc-900 bg-[#ECFDF5] p-6 sm:p-8 shadow-[5px_5px_0px_0px_#18181B] flex flex-col justify-between transition-transform duration-200"
-          >
-            {/* Top Washi Tape */}
-            <div className="absolute -top-3 left-12 w-28 h-5 rounded-xs bg-emerald-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none -rotate-1" />
+        {/* ── THE FREEFORM WHITEBOARD CANVAS (OPTION 2) ── */}
+        <div className="relative w-full min-h-[820px] lg:min-h-[700px] flex flex-col justify-between">
+          
+          {/* BACKGROUND HAND-DRAWN CONNECTING ARROWS (Desktop Only) */}
+          <div className="hidden lg:block absolute inset-0 pointer-events-none z-0">
+            {/* Arrow 1: AST (Top Left) -> Center Anti-Cheat */}
+            <svg className="absolute top-28 left-[38%] w-32 h-20 text-zinc-400" viewBox="0 0 120 80" fill="none">
+              <path d="M10 20C40 10 80 40 105 60" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+              <path d="M95 58L105 60L103 48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <text x="30" y="32" className="text-[10px] font-doodle fill-zinc-600 font-bold">audited for forks</text>
+            </svg>
 
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <FileBadge className="w-6 h-6 stroke-[2.2]" />
-                </div>
-                <span className="font-doodle font-bold text-2xl text-emerald-800 rotate-1">
-                  ★ Core Credential
+            {/* Arrow 2: OCR Certificate (Top Right) -> Center Anti-Cheat */}
+            <svg className="absolute top-28 right-[36%] w-32 h-20 text-zinc-400" viewBox="0 0 120 80" fill="none">
+              <path d="M110 20C80 10 40 40 15 60" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+              <path d="M17 48L15 60L25 58" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <text x="35" y="32" className="text-[10px] font-doodle fill-zinc-600 font-bold">issuer DID scan</text>
+            </svg>
+
+            {/* Arrow 3: Center Anti-Cheat -> Bottom Left Gap Radar */}
+            <svg className="absolute bottom-40 left-[34%] w-36 h-28 text-zinc-400" viewBox="0 0 140 100" fill="none">
+              <path d="M80 10C50 30 20 60 15 85" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+              <path d="M10 75L15 85L25 80" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <text x="40" y="55" className="text-[10px] font-doodle fill-zinc-600 font-bold">benchmarked</text>
+            </svg>
+
+            {/* Arrow 4: Center Anti-Cheat -> Bottom Right Recruiter Ticket */}
+            <svg className="absolute bottom-40 right-[34%] w-36 h-28 text-zinc-400" viewBox="0 0 140 100" fill="none">
+              <path d="M60 10C90 30 120 60 125 85" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" strokeLinecap="round" />
+              <path d="M115 80L125 85L130 75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <text x="45" y="55" className="text-[10px] font-doodle fill-zinc-600 font-bold">fast-tracked</text>
+            </svg>
+          </div>
+
+          {/* ── WHITEBOARD ARTIFACTS (Scattered Organic Grid) ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6 relative z-10 items-start">
+            
+            {/* ────────────────────────────────────────────────────────
+                ARTIFACT 1: AST Code Ingestion Sticky Note (Top Left, 4 Cols)
+                ──────────────────────────────────────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.02, rotate: 0 }}
+              className="lg:col-span-4 rounded-3xl bg-[#FEF08A] border-2 border-zinc-900 p-6 shadow-[5px_5px_0px_0px_#18181B] rotate-[-2.5deg] relative transition-transform"
+            >
+              <PushPin color="#EF4444" />
+              <div className="flex items-center justify-between mb-3 pt-2">
+                <span className="font-mono text-[10px] font-black px-2.5 py-0.5 rounded-md bg-white border border-zinc-900 shadow-2xs">
+                  ARTIFACT #01
+                </span>
+                <span className="font-doodle text-xs font-bold text-amber-900">
+                  ⚡ 10-Sec AST Sieve
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight mb-3">
-                The Evidence-Backed Skill Passport
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-xl bg-white border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-2xs">
+                  <GitBranch className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-black text-zinc-950">
+                  Deep Git Code Ingestion
+                </h3>
+              </div>
 
-              <p className="text-zinc-700 text-sm sm:text-base leading-relaxed mb-6 max-w-xl">
-                A living, cryptographic record of your engineering capability. Instead of listing words like &quot;React&quot; or &quot;Node.js&quot;, every single competency is linked to public git commits, pull requests, and verified certificates.
+              <p className="text-xs text-zinc-800 leading-relaxed mb-4">
+                Parses raw Abstract Syntax Trees, commit velocity, and branch history to prove authentic code contribution.
               </p>
 
-              {/* Hand-drawn Proof Pill Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                {[
-                  "Tamper-proof SHA-256 integrity hash",
-                  "Direct code diff and commit attribution",
-                  "Accredited license and certificate OCR",
-                  "One-click verified public profile link",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-white/80 rounded-xl border border-zinc-900/20 px-3 py-2 text-xs sm:text-sm font-semibold text-zinc-800">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>{item}</span>
+              {/* Code Snippet */}
+              <div className="rounded-xl bg-zinc-950 p-3 font-mono text-[10px] text-zinc-300 border border-zinc-800 shadow-inner space-y-1">
+                <div className="flex items-center justify-between text-zinc-500 border-b border-zinc-800 pb-1 text-[9px]">
+                  <span>git-ingest ~ live</span>
+                  <span className="text-emerald-400">PASSED</span>
+                </div>
+                <p className="text-emerald-400">✓ 14 public repos (1,420 commits)</p>
+                <p className="text-zinc-400">↳ 94% original author contribution</p>
+                <p className="text-zinc-300">↳ TypeScript (65%) · Go (25%) · Python (10%)</p>
+              </div>
+
+              <div className="mt-3 pt-2 border-t border-amber-400/80 flex items-center justify-between text-[11px] font-doodle font-bold text-amber-950">
+                <span>↳ &quot;Zero fake lines.&quot;</span>
+                <span className="font-mono text-[9px] bg-white px-2 py-0.5 rounded border border-zinc-900">SHA: a1c94f</span>
+              </div>
+            </motion.div>
+
+            {/* ────────────────────────────────────────────────────────
+                ARTIFACT 2: Anti-Cheat Sentinel Center Seal (Center, 4 Cols)
+                ──────────────────────────────────────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: 0 }}
+              className="lg:col-span-4 rounded-3xl bg-[#FAF5FF] border-2 border-zinc-900 p-6 sm:p-7 shadow-[6px_6px_0px_0px_#18181B] rotate-[1.5deg] relative transition-transform flex flex-col justify-between"
+            >
+              <WashiTape color="bg-purple-300/90" />
+              
+              <div>
+                <div className="flex items-center justify-between mb-3 pt-1">
+                  <span className="font-mono text-[10px] font-black px-2.5 py-0.5 rounded-md bg-purple-950 text-white border border-purple-800">
+                    CENTRAL INTEGRITY CORE
+                  </span>
+                  <span className="font-doodle text-xs font-bold text-purple-700">
+                    3/3 Consensus
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-8 h-8 rounded-xl bg-purple-200 border-2 border-zinc-900 flex items-center justify-center text-purple-950 shadow-2xs">
+                    <ShieldCheck className="w-4 h-4" />
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-emerald-300/80 mt-2 flex items-center justify-between">
-              <span className="font-doodle text-lg font-bold text-emerald-950">
-                ↳ &quot;Your real code is your ultimate credential.&quot;
-              </span>
-              <span className="text-xs font-black bg-emerald-300 text-zinc-950 px-3 py-1 rounded-full border border-emerald-800/40">
-                100% Cryptographic
-              </span>
-            </div>
-          </motion.div>
-
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 2: AI GitHub Analyzer
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative rounded-2xl border-2 border-zinc-900 bg-[#F0F9FF] p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] flex flex-col justify-between rotate-[0.8deg] transition-transform duration-200"
-          >
-            <div className="absolute -top-3 right-10 w-24 h-5 rounded-xs bg-sky-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none rotate-1" />
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <GitBranch className="w-6 h-6 stroke-[2.2]" />
+                  <h3 className="text-lg font-black text-zinc-950">
+                    Anti-Cheat Sentinel
+                  </h3>
                 </div>
-                <span className="font-doodle font-bold text-2xl text-sky-800 -rotate-1">
-                  ⚡ AST Code Parser
+
+                <p className="text-xs text-zinc-700 leading-relaxed mb-4">
+                  Multi-agent ensemble that filters out cloned repositories, tutorial copy-pasting, and AI boilerplate dumps.
+                </p>
+
+                {/* Status Indicator Box */}
+                <div className="p-3 rounded-2xl bg-white border-2 border-zinc-900 shadow-xs space-y-2 mb-3">
+                  <div className="flex items-center justify-between text-xs font-black">
+                    <span className="text-purple-900">Plagiarism Sieve:</span>
+                    <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-mono text-[10px] border border-emerald-300">
+                      0 FORK VIOLATIONS
+                    </span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-zinc-100 border border-zinc-300 overflow-hidden">
+                    <div className="w-[98%] h-full bg-purple-600 rounded-full" />
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
+                    <span>Authenticity: 98.4%</span>
+                    <span>Entropy: High</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-purple-200 flex items-center justify-between">
+                <span className="font-doodle text-xs font-bold text-purple-900">
+                  ★ Cryptographically Signed
+                </span>
+                <span className="font-mono text-[9px] bg-purple-100 text-purple-950 px-2 py-0.5 rounded border border-purple-300 font-black">
+                  CDY26S7421
+                </span>
+              </div>
+            </motion.div>
+
+            {/* ────────────────────────────────────────────────────────
+                ARTIFACT 3: Multimodal Vision OCR Document (Top Right, 4 Cols)
+                ──────────────────────────────────────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.02, rotate: 0 }}
+              className="lg:col-span-4 rounded-3xl bg-[#F0F9FF] border-2 border-zinc-900 p-6 shadow-[5px_5px_0px_0px_#18181B] rotate-[-1.8deg] relative transition-transform"
+            >
+              <PushPin color="#0EA5E9" />
+              <div className="flex items-center justify-between mb-3 pt-2">
+                <span className="font-mono text-[10px] font-black px-2.5 py-0.5 rounded-md bg-white border border-zinc-900 shadow-2xs">
+                  ARTIFACT #02
+                </span>
+                <span className="font-doodle text-xs font-bold text-sky-900">
+                  📜 Vision OCR
                 </span>
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight mb-2">
-                Deep Git Code Ingestion
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-xl bg-sky-200 border-2 border-zinc-900 flex items-center justify-center text-sky-950 shadow-2xs">
+                  <Upload className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-black text-zinc-950">
+                  Accredited Proof OCR
+                </h3>
+              </div>
 
-              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
-                Analyzes commit velocity, codebase complexity, code review habits, and branch architecture to surface skills you didn&apos;t even know you had.
+              <p className="text-xs text-zinc-800 leading-relaxed mb-4">
+                Multimodal OCR extracts accredited skill claims, issuing authority DIDs, and timestamps from certificates.
               </p>
 
-              {/* Sketched Code Chip Box */}
-              <div className="bg-white/80 rounded-xl border border-dashed border-zinc-400 p-3 my-2 text-xs font-mono text-zinc-700 flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-                  <span>commit: 4f9a2e</span>
-                  <span className="text-emerald-700 font-bold">14 repos parsed</span>
-                </div>
-                <div className="font-bold text-zinc-900">
-                  TypeScript · Go · Python · Docker
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-sky-300/80 mt-2 flex items-center justify-between">
-              <span className="font-doodle text-lg font-bold text-sky-950">
-                ↳ Automated audit
-              </span>
-              <span className="text-xs font-black bg-sky-300 text-zinc-950 px-2.5 py-0.5 rounded-full border border-sky-800/40">
-                10-sec Sync
-              </span>
-            </div>
-          </motion.div>
-
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 3: Plagiarism & Anti-Cheat Sentinel
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative rounded-2xl border-2 border-zinc-900 bg-[#FEFCE8] p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] flex flex-col justify-between rotate-[-1deg] transition-transform duration-200"
-          >
-            <div className="absolute -top-3 left-8 w-24 h-5 rounded-xs bg-amber-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none -rotate-1" />
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <ShieldCheck className="w-6 h-6 stroke-[2.2]" />
-                </div>
-                <span className="font-doodle font-bold text-2xl text-amber-900 rotate-1">
-                  🛡️ Anti-Cheat
-                </span>
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight mb-2">
-                Anti-Cheat Sentinel
-              </h3>
-
-              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
-                Detects forked repositories, tutorial copy-pasting, and AI-generated commit spam so honest student engineers get the credit they deserve.
-              </p>
-
-              {/* Status Box */}
-              <div className="bg-white/80 rounded-xl border border-dashed border-zinc-400 p-3 my-2 text-xs flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-zinc-900">Fork Detection: Clean</div>
-                  <div className="text-zinc-500 text-[11px]">Authenticity Score: 98%</div>
-                </div>
-                <span className="px-2 py-1 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 text-[11px] font-black uppercase">
-                  VERIFIED
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-amber-300/80 mt-2 flex items-center justify-between">
-              <span className="font-doodle text-lg font-bold text-amber-950">
-                ↳ Fair for builders
-              </span>
-              <span className="text-xs font-black bg-amber-300 text-zinc-950 px-2.5 py-0.5 rounded-full border border-amber-800/40">
-                Zero Plagiarism
-              </span>
-            </div>
-          </motion.div>
-
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 4: Skill Gap Radar
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative rounded-2xl border-2 border-zinc-900 bg-[#FAF5FF] p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] flex flex-col justify-between rotate-[1deg] transition-transform duration-200"
-          >
-            <div className="absolute -top-3 right-8 w-24 h-5 rounded-xs bg-purple-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none rotate-1" />
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-purple-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <Target className="w-6 h-6 stroke-[2.2]" />
-                </div>
-                <span className="font-doodle font-bold text-2xl text-purple-900 -rotate-1">
-                  🎯 Spider Radar
-                </span>
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight mb-2">
-                Live Skill Gap Radar
-              </h3>
-
-              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
-                Benchmark your proven stack against your dream company role (e.g. Senior Full-Stack at Google/Stripe) to see what to build next.
-              </p>
-
-              {/* Spider Chart Mockup Box */}
-              <div className="bg-white/80 rounded-xl border border-dashed border-zinc-400 p-3 my-2 text-xs flex items-center justify-between">
-                <div>
-                  <span className="font-bold text-zinc-900 block">Target: Distributed Systems</span>
-                  <span className="text-zinc-500 text-[11px]">Match: 82% · Gap: gRPC, Redis</span>
-                </div>
-                <span className="font-doodle font-bold text-lg text-purple-700">
-                  +18% to Goal
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-purple-300/80 mt-2 flex items-center justify-between">
-              <span className="font-doodle text-lg font-bold text-purple-950">
-                ↳ Clear direction
-              </span>
-              <span className="text-xs font-black bg-purple-300 text-zinc-950 px-2.5 py-0.5 rounded-full border border-purple-800/40">
-                Real-Time
-              </span>
-            </div>
-          </motion.div>
-
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 5: Dynamic Milestone Roadmap
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.25 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative rounded-2xl border-2 border-zinc-900 bg-[#EFF6FF] p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] flex flex-col justify-between rotate-[-0.8deg] transition-transform duration-200"
-          >
-            <div className="absolute -top-3 left-10 w-24 h-5 rounded-xs bg-blue-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none -rotate-1" />
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <Compass className="w-6 h-6 stroke-[2.2]" />
-                </div>
-                <span className="font-doodle font-bold text-2xl text-blue-900 rotate-1">
-                  🗺️ Action Plan
-                </span>
-              </div>
-
-              <h3 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight mb-2">
-                Personalized Roadmaps
-              </h3>
-
-              <p className="text-zinc-700 text-sm leading-relaxed mb-4">
-                Never wonder what to code on weekends. AI generates a personalized milestone learning path with real GitHub issues to build and ship.
-              </p>
-
-              {/* Milestone Box */}
-              <div className="bg-white/80 rounded-xl border border-dashed border-zinc-400 p-3 my-2 text-xs flex flex-col gap-1">
+              {/* Verified Document Pill */}
+              <div className="p-3 rounded-xl bg-white border-2 border-zinc-900 shadow-xs space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-zinc-900">Sprint 1: Dockerize Node App</span>
-                  <span className="text-emerald-700 font-bold">Done ✓</span>
+                  <div className="flex items-center gap-2">
+                    <FileCheck className="w-4 h-4 text-sky-600" />
+                    <span className="text-xs font-black text-zinc-950">AWS Solutions Architect</span>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded bg-sky-100 text-sky-900 font-mono text-[9px] font-black border border-sky-300">
+                    VERIFIED
+                  </span>
                 </div>
-                <div className="flex items-center justify-between text-zinc-600">
-                  <span>Sprint 2: Redis Caching Layer</span>
-                  <span className="text-blue-700 font-bold">In Progress</span>
-                </div>
+                <p className="text-[10px] text-zinc-600 font-mono">
+                  Issuer: Amazon Web Services · DID Signature: 0x8f4a...92b1
+                </p>
               </div>
-            </div>
 
-            <div className="pt-4 border-t border-blue-300/80 mt-2 flex items-center justify-between">
-              <span className="font-doodle text-lg font-bold text-blue-950">
-                ↳ Stop guessing
-              </span>
-              <span className="text-xs font-black bg-blue-300 text-zinc-950 px-2.5 py-0.5 rounded-full border border-blue-800/40">
-                Actionable
-              </span>
-            </div>
-          </motion.div>
+              <div className="mt-3 pt-2 border-t border-sky-300/80 flex items-center justify-between text-[11px] font-doodle font-bold text-sky-950">
+                <span>↳ &quot;Tamper-proof credentials.&quot;</span>
+                <span className="font-mono text-[9px] bg-sky-200 px-2 py-0.5 rounded border border-sky-400 font-bold">100% Match</span>
+              </div>
+            </motion.div>
 
-          {/* ────────────────────────────────────────────────────────
-              FEATURE 6: SIH Hackathon Squad Matcher (Large - Spans full or 2 on desktop)
-              ──────────────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            whileHover={{ y: -6, scale: 1.01 }}
-            className="relative lg:col-span-3 rounded-2xl border-2 border-zinc-900 bg-[#FFF1F2] p-6 sm:p-8 shadow-[5px_5px_0px_0px_#18181B] flex flex-col sm:flex-row items-center justify-between gap-6 transition-transform duration-200"
-          >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-5 rounded-xs bg-rose-300/80 border-dashed border-t border-b border-zinc-400/50 backdrop-blur-xs shadow-xs pointer-events-none rotate-1" />
-
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-xl bg-rose-200 border-2 border-zinc-900 flex items-center justify-center text-zinc-950 shadow-[2px_2px_0px_0px_#18181B]">
-                  <Users className="w-6 h-6 stroke-[2.2]" />
-                </div>
-                <span className="font-doodle font-bold text-2xl text-rose-800">
-                  🤝 Smart India Hackathon & Peer Matcher
+            {/* ────────────────────────────────────────────────────────
+                ARTIFACT 4: Skill Gap Spider Radar (Bottom Left, 6 Cols)
+                ──────────────────────────────────────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.01, rotate: 0 }}
+              className="lg:col-span-6 rounded-3xl bg-[#ECFDF5] border-2 border-zinc-900 p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] rotate-[1.2deg] relative transition-transform"
+            >
+              <WashiTape color="bg-emerald-300/90" />
+              <div className="flex items-center justify-between mb-3 pt-1">
+                <span className="font-mono text-[10px] font-black px-2.5 py-0.5 rounded-md bg-white border border-zinc-900 shadow-2xs">
+                  ARTIFACT #03
+                </span>
+                <span className="font-doodle text-xs font-bold text-emerald-800">
+                  🎯 Role Calibration
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight mb-2">
-                Team Up With Verified Engineers
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-xl bg-emerald-200 border-2 border-zinc-900 flex items-center justify-center text-emerald-950 shadow-2xs">
+                  <Target className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-black text-zinc-950">
+                  Skill Gap Spider Radar
+                </h3>
+              </div>
 
-              <p className="text-zinc-700 text-sm sm:text-base leading-relaxed font-normal">
-                Winning hackathons and shipping great software requires complementary skills, not friends who all code frontend. Find teammates with verified backend, ML, or cloud capabilities and form unstoppable squads.
+              <p className="text-xs text-zinc-800 leading-relaxed mb-4">
+                Calibrates your verified competencies against 50+ real-world industry hiring rubrics (AI Engineer, Full-Stack Lead).
               </p>
-            </div>
 
-            <div className="shrink-0 flex flex-col items-center sm:items-end gap-3 w-full sm:w-auto">
-              <LoginModal>
-                <button
-                  type="button"
-                  className="w-full sm:w-auto h-12 px-7 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-xs active:scale-[0.98] cursor-pointer"
+              {/* Interactive Radar Pill Bar */}
+              <div className="p-3.5 rounded-2xl bg-white border-2 border-zinc-900 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-zinc-950">Target Benchmark: AI Engineer</span>
+                  <span className="font-doodle text-xs font-bold text-rose-600">60% Match (2 Gaps)</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-[10px] font-bold">
+                  <div className="p-1.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-900">
+                    ✓ Verified: Python, TypeScript, LLMs
+                  </div>
+                  <div className="p-1.5 rounded-lg bg-rose-50 border border-rose-300 text-rose-900">
+                    ⚠️ Gap: Distributed Systems, Go
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ────────────────────────────────────────────────────────
+                ARTIFACT 5: Recruiter Verification Boarding Pass (Bottom Right, 6 Cols)
+                ──────────────────────────────────────────────────────── */}
+            <motion.div
+              whileHover={{ scale: 1.01, rotate: 0 }}
+              className="lg:col-span-6 rounded-3xl bg-[#FFF1F2] border-2 border-zinc-900 p-6 sm:p-7 shadow-[5px_5px_0px_0px_#18181B] rotate-[-1.5deg] relative transition-transform"
+            >
+              <PushPin color="#F43F5E" />
+              <div className="flex items-center justify-between mb-3 pt-1">
+                <span className="font-mono text-[10px] font-black px-2.5 py-0.5 rounded-md bg-white border border-zinc-900 shadow-2xs">
+                  ARTIFACT #04
+                </span>
+                <span className="font-doodle text-xs font-bold text-rose-800">
+                  🎉 Fast-Track Hiring
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 rounded-xl bg-rose-200 border-2 border-zinc-900 flex items-center justify-center text-rose-950 shadow-2xs">
+                  <Users className="w-4 h-4" />
+                </div>
+                <h3 className="text-lg font-black text-zinc-950">
+                  Recruiter Verification Ledger
+                </h3>
+              </div>
+
+              <p className="text-xs text-zinc-800 leading-relaxed mb-4">
+                Recruiters scan student passport QR codes to inspect commit evidence in under 10 seconds, bypassing resume screening.
+              </p>
+
+              {/* Recruiter Boarding Pass Pill */}
+              <div className="p-3.5 rounded-2xl bg-white border-2 border-zinc-900 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-700">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black text-zinc-950 block">Direct Interview Invite</span>
+                    <span className="text-[10px] text-zinc-600 font-mono">1-Click Recruiter Handoff Cleared</span>
+                  </div>
+                </div>
+                <a
+                  href="/recruiter"
+                  className="px-3 py-1.5 rounded-xl bg-zinc-950 text-white font-bold text-xs border border-zinc-900 hover:bg-zinc-800 transition-colors shadow-2xs"
                 >
-                  <span>Explore Squads</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </LoginModal>
-              <span className="font-doodle text-base font-bold text-rose-800">
-                ↳ 100% verified skills, zero freeloaders
+                  Recruiter Portal →
+                </a>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Bottom Floating Whiteboard Banner */}
+          <div className="mt-14 text-center">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-3 p-4 px-6 rounded-2xl bg-white border-2 border-zinc-900 shadow-[4px_4px_0px_0px_#18181B]">
+              <span className="font-doodle text-sm sm:text-base font-bold text-zinc-900">
+                🚀 All 5 whiteboard artifacts compile into your single verifiable Skill Passport ID.
               </span>
+              <a
+                href="/login"
+                className="px-4 py-1.5 rounded-xl bg-amber-400 text-zinc-950 text-xs font-black border-2 border-zinc-900 hover:bg-amber-300 transition-colors shadow-2xs"
+              >
+                Mint Yours Free →
+              </a>
             </div>
-          </motion.div>
+          </div>
+
         </div>
+
       </div>
     </section>
   );

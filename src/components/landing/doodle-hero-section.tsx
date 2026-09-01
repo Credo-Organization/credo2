@@ -6,6 +6,7 @@ import {
   ArrowRight, 
   Award, 
   Trophy, 
+  CheckCircle2,
 } from "lucide-react";
 import { LoginModal } from "@/components/ui/login-modal";
 import {
@@ -15,7 +16,6 @@ import {
   PaperAirplane,
   DoodleCloud,
   DoodleLaptop,
-  BottomTrustBadge,
 } from "./doodle-elements";
 
 export function DoodleHeroSection() {
@@ -38,7 +38,7 @@ export function DoodleHeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           
           {/* ═════════════════════════════════════════════════════════
-              LEFT COLUMN: HERO HEADLINE & VALUE PROP (APPROVED)
+              LEFT COLUMN: HERO HEADLINE & VALUE PROP
               ═════════════════════════════════════════════════════════ */}
           <div className="lg:col-span-6 flex flex-col items-start text-left z-10">
 
@@ -123,7 +123,7 @@ export function DoodleHeroSection() {
               ═════════════════════════════════════════════════════════ */}
           <div className="lg:col-span-6 relative flex items-center justify-center pt-4 lg:pt-0">
             
-            {/* The Staged Canvas Container (Strictly 540px wide x 460px high, NO overflow into navbar) */}
+            {/* The Staged Canvas Container */}
             <div className="relative w-full max-w-[540px] h-[460px] sm:h-[480px] select-none">
               
               {/* Soft Organic Pastel Watercolor Backing */}
@@ -162,7 +162,7 @@ export function DoodleHeroSection() {
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="flex flex-col items-center"
                 >
-                  {/* Avatar Yellow Circle (Interactive: Click to switch male/female doodle) */}
+                  {/* Avatar Yellow Circle */}
                   <button
                     type="button"
                     onClick={() => setAvatarGender(avatarGender === "male" ? "female" : "male")}
@@ -197,7 +197,6 @@ export function DoodleHeroSection() {
                 viewBox="0 0 540 480"
                 fill="none"
               >
-                {/* Curve from Avatar to Card 1 */}
                 <path
                   d="M 120 135 C 160 110, 190 70, 240 65"
                   stroke="#18181B"
@@ -206,8 +205,6 @@ export function DoodleHeroSection() {
                   strokeLinecap="round"
                   className={hoveredCard === 1 ? "stroke-emerald-600" : "opacity-40"}
                 />
-
-                {/* Curve from Avatar to Card 2 */}
                 <path
                   d="M 130 165 C 165 180, 195 200, 240 215"
                   stroke="#18181B"
@@ -216,8 +213,6 @@ export function DoodleHeroSection() {
                   strokeLinecap="round"
                   className={hoveredCard === 2 ? "stroke-blue-600" : "opacity-40"}
                 />
-
-                {/* Curve from Laptop to Card 3 */}
                 <path
                   d="M 120 370 C 160 370, 190 365, 240 360"
                   stroke="#18181B"
@@ -245,21 +240,11 @@ export function DoodleHeroSection() {
                   onMouseLeave={() => setHoveredCard(null)}
                   className="relative bg-white rounded-2xl border-2 border-zinc-900 p-3.5 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] hover:shadow-[5px_5px_0px_0px_#18181B] transition-all cursor-pointer"
                 >
-                  {/* Emerald Checkmark Badge */}
                   <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-[#34D399] border-2 border-zinc-900 flex items-center justify-center shadow-xs">
-                    <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-zinc-950">
-                      <path
-                        d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />
                   </div>
 
                   <div className="flex items-center gap-3.5">
-                    {/* Mint Green GitHub Glyph */}
                     <div className="w-12 h-12 rounded-full bg-[#A7F3D0] flex items-center justify-center shrink-0 border border-emerald-300">
                       <svg className="w-7 h-7 text-zinc-950" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -297,21 +282,11 @@ export function DoodleHeroSection() {
                   onMouseLeave={() => setHoveredCard(null)}
                   className="relative bg-white rounded-2xl border-2 border-zinc-900 p-3.5 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] hover:shadow-[5px_5px_0px_0px_#18181B] transition-all cursor-pointer"
                 >
-                  {/* Emerald Checkmark Badge */}
                   <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-[#34D399] border-2 border-zinc-900 flex items-center justify-center shadow-xs">
-                    <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-zinc-950">
-                      <path
-                        d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />
                   </div>
 
                   <div className="flex items-center gap-3.5">
-                    {/* Sky Blue Medal Glyph */}
                     <div className="w-12 h-12 rounded-full bg-[#BAE6FD] flex items-center justify-center shrink-0 border border-sky-300">
                       <Award className="w-7 h-7 text-blue-600 stroke-[2.4]" />
                     </div>
@@ -347,21 +322,11 @@ export function DoodleHeroSection() {
                   onMouseLeave={() => setHoveredCard(null)}
                   className="relative bg-white rounded-2xl border-2 border-zinc-900 p-3.5 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] hover:shadow-[5px_5px_0px_0px_#18181B] transition-all cursor-pointer"
                 >
-                  {/* Emerald Checkmark Badge */}
                   <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-[#34D399] border-2 border-zinc-900 flex items-center justify-center shadow-xs">
-                    <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-zinc-950">
-                      <path
-                        d="M3.5 8.5L6.5 11.5L12.5 4.5"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />
                   </div>
 
                   <div className="flex items-center gap-3.5">
-                    {/* Lilac Purple Trophy Glyph */}
                     <div className="w-12 h-12 rounded-full bg-[#DDD6FE] flex items-center justify-center shrink-0 border border-purple-300">
                       <Trophy className="w-7 h-7 text-purple-600 stroke-[2.4]" />
                     </div>
@@ -384,11 +349,6 @@ export function DoodleHeroSection() {
 
           </div>
 
-        </div>
-
-        {/* ── BOTTOM TRUST BADGE BANNER ── */}
-        <div className="w-full flex justify-center mt-12 sm:mt-16">
-          <BottomTrustBadge />
         </div>
 
       </div>
