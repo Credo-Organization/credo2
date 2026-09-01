@@ -11,10 +11,8 @@ import {
   ExternalLink,
   ShieldCheck,
   Star,
-  Layers,
   Sparkles,
   Award,
-  ChevronRight,
   GitCommit,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -97,10 +95,6 @@ export function AuditBreakdownPanel({
 }: AuditBreakdownProps) {
   const [activeTab, setActiveTab] = useState<"repos" | "languages" | "certificates" | "activity">("repos");
 
-  // These arrays are rendered as audited evidence with integrity scores. Filling
-  // them with sample repositories when a user has none would put fabricated
-  // "99% verified" results in front of a recruiter, which is precisely what
-  // GitProof exists to detect. Empty stays empty.
   const displayRepos: RepoItem[] = repos;
   const displayLanguages: LanguageScore[] = languages;
   const displayCerts: CertificateItem[] = certificates;
@@ -120,10 +114,10 @@ export function AuditBreakdownPanel({
       )}
     >
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950/60 border border-zinc-900/30 dark:border-zinc-700 text-blue-950 dark:text-blue-300 text-xs font-black mb-1.5 shadow-xs">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#BAE6FD] dark:bg-blue-950/60 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-blue-300 text-xs font-black mb-1.5 shadow-[2px_2px_0px_0px_#18181B]">
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-700 dark:text-blue-400 stroke-[2.5]" />
             GitProof™ Deep Audit Engine
           </div>
           <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-100 flex items-center gap-2">
@@ -134,105 +128,150 @@ export function AuditBreakdownPanel({
           </p>
         </div>
 
-        {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 self-start sm:self-auto shadow-xs">
+        {/* Tab Buttons (Non-wrapping Single Line & Color Accented) */}
+        <div className="flex items-center gap-1 sm:gap-1.5 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 self-start lg:self-auto shadow-xs overflow-x-auto no-scrollbar max-w-full">
+          
+          {/* Repos Tab */}
           <button
             type="button"
             onClick={() => setActiveTab("repos")}
             className={cn(
-              "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+              "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap h-8.5 shrink-0",
               activeTab === "repos"
                 ? "bg-white dark:bg-zinc-950 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
+                : "text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-200/50"
             )}
           >
-            <FolderGit2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            Repos ({displayRepos.length})
+            <FolderGit2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 stroke-[2.2] shrink-0" />
+            <span>Repos</span>
+            <span
+              className={cn(
+                "px-1.5 py-0.2 rounded-md font-mono text-[10px] font-black border",
+                activeTab === "repos"
+                  ? "bg-[#BAE6FD] text-blue-950 border-blue-400"
+                  : "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
+              )}
+            >
+              {displayRepos.length}
+            </span>
           </button>
 
+          {/* Languages Tab */}
           <button
             type="button"
             onClick={() => setActiveTab("languages")}
             className={cn(
-              "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+              "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap h-8.5 shrink-0",
               activeTab === "languages"
                 ? "bg-white dark:bg-zinc-950 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
+                : "text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-200/50"
             )}
           >
-            <Code2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-            Languages ({displayLanguages.length})
+            <Code2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 stroke-[2.2] shrink-0" />
+            <span>Languages</span>
+            <span
+              className={cn(
+                "px-1.5 py-0.2 rounded-md font-mono text-[10px] font-black border",
+                activeTab === "languages"
+                  ? "bg-[#DDD6FE] text-purple-950 border-purple-400"
+                  : "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
+              )}
+            >
+              {displayLanguages.length}
+            </span>
           </button>
 
+          {/* Certs Tab */}
           <button
             type="button"
             onClick={() => setActiveTab("certificates")}
             className={cn(
-              "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+              "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap h-8.5 shrink-0",
               activeTab === "certificates"
                 ? "bg-white dark:bg-zinc-950 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
+                : "text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-200/50"
             )}
           >
-            <FileCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            Certs ({displayCerts.length})
+            <FileCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2.2] shrink-0" />
+            <span>Certs</span>
+            <span
+              className={cn(
+                "px-1.5 py-0.2 rounded-md font-mono text-[10px] font-black border",
+                activeTab === "certificates"
+                  ? "bg-[#A7F3D0] text-emerald-950 border-emerald-400"
+                  : "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
+              )}
+            >
+              {displayCerts.length}
+            </span>
           </button>
 
+          {/* Activity Tab */}
           <button
             type="button"
             onClick={() => setActiveTab("activity")}
             className={cn(
-              "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer",
+              "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap h-8.5 shrink-0",
               activeTab === "activity"
                 ? "bg-white dark:bg-zinc-950 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100"
+                : "text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-200/50"
             )}
           >
-            <GitCommit className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            Activity Log
+            <GitCommit className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 stroke-[2.2] shrink-0" />
+            <span>Activity Log</span>
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
           </button>
+
         </div>
       </div>
 
       {/* TAB CONTENT 1: REPOSITORIES */}
       {activeTab === "repos" && (
         <div className="pt-6 space-y-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
-            <div className="bg-zinc-50 dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3.5 flex items-center gap-3 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-xs">
-                <FolderGit2 className="w-5 h-5" />
+          
+          {/* 3 COLORFUL TOP STAT CARDS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-2">
+            
+            {/* Card 1: Sky-Blue Scanned Repos */}
+            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex items-center gap-3.5 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] hover:translate-x-0.5 hover:-translate-y-0.5 transition-transform">
+              <div className="w-11 h-11 rounded-xl bg-[#BAE6FD] dark:bg-sky-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-blue-700 dark:text-sky-300 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <FolderGit2 className="w-5 h-5 stroke-[2.3]" />
               </div>
-              <div>
-                <span className="text-[11px] text-zinc-600 dark:text-zinc-400 uppercase font-black tracking-wider block">
+              <div className="min-w-0">
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase font-black tracking-wider block">
                   Scanned Repos
                 </span>
-                <span className="text-lg font-black text-zinc-950 dark:text-zinc-100">{displayRepos.length} Repositories</span>
+                <span className="text-lg font-black text-zinc-950 dark:text-zinc-100 block truncate">
+                  {displayRepos.length} Repositories
+                </span>
               </div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3.5 flex items-center gap-3 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-xs">
-                <CheckCircle2 className="w-5 h-5" />
+            {/* Card 2: Mint-Emerald Integrity Verified */}
+            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex items-center gap-3.5 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] hover:translate-x-0.5 hover:-translate-y-0.5 transition-transform">
+              <div className="w-11 h-11 rounded-xl bg-[#A7F3D0] dark:bg-emerald-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <CheckCircle2 className="w-5 h-5 stroke-[2.3]" />
               </div>
-              <div>
-                <span className="text-[11px] text-zinc-600 dark:text-zinc-400 uppercase font-black tracking-wider block">
+              <div className="min-w-0">
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase font-black tracking-wider block">
                   Integrity Verified
                 </span>
-                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">
+                <span className="text-lg font-black text-emerald-700 dark:text-emerald-400 block truncate">
                   {displayRepos.filter((r) => r.integrity_status === "verified").length} Clean
                 </span>
               </div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3.5 flex items-center gap-3 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]">
-              <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-purple-600 dark:text-purple-400 shadow-xs">
-                <Sparkles className="w-5 h-5" />
+            {/* Card 3: Lavender-Purple Anti-Cheat Score */}
+            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex items-center gap-3.5 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] hover:translate-x-0.5 hover:-translate-y-0.5 transition-transform">
+              <div className="w-11 h-11 rounded-xl bg-[#DDD6FE] dark:bg-purple-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-purple-800 dark:text-purple-300 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <Sparkles className="w-5 h-5 stroke-[2.3]" />
               </div>
-              <div>
-                <span className="text-[11px] text-zinc-600 dark:text-zinc-400 uppercase font-black tracking-wider block">
+              <div className="min-w-0">
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase font-black tracking-wider block">
                   Anti-Cheat Score
                 </span>
-                <span className="text-lg font-black text-zinc-950 dark:text-zinc-100">
+                <span className="text-lg font-black text-purple-700 dark:text-purple-400 block truncate">
                   {displayRepos.length === 0
                     ? "No scan yet"
                     : `${Math.round(
@@ -242,6 +281,7 @@ export function AuditBreakdownPanel({
                 </span>
               </div>
             </div>
+
           </div>
 
           {/* Repo List */}
@@ -256,7 +296,7 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-zinc-800/80 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group shadow-xs"
+                  className="bg-white dark:bg-zinc-800/80 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
@@ -275,16 +315,16 @@ export function AuditBreakdownPanel({
                       )}
                     </div>
 
-                    {/* Anti-cheat status pill */}
+                    {/* Anti-cheat status pill with clean tactile styling */}
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {isVerified ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-300">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-600 shadow-[1.5px_1.5px_0px_0px_#18181B] dark:shadow-[1.5px_1.5px_0px_0px_#000000]">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
                           Verified ({repo.integrity_score ?? 98}%)
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-950 dark:text-rose-300">
-                          <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-600 shadow-[1.5px_1.5px_0px_0px_#18181B] dark:shadow-[1.5px_1.5px_0px_0px_#000000]">
+                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 stroke-[2.5]" />
                           Flagged
                         </span>
                       )}
@@ -355,7 +395,7 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex flex-col justify-between gap-3 relative overflow-hidden shadow-xs"
+                  className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex flex-col justify-between gap-3 relative overflow-hidden shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
@@ -384,8 +424,8 @@ export function AuditBreakdownPanel({
 
                   <div className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 pt-1 border-t border-zinc-200 dark:border-zinc-700">
                     <span>{lang.repoCount} active repos</span>
-                    <span className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" />
+                    <span className="text-zinc-950 dark:text-zinc-100 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                       {lang.confidence} Mastery
                     </span>
                   </div>
@@ -401,29 +441,29 @@ export function AuditBreakdownPanel({
         <div className="pt-6 space-y-4">
           {/* Summary Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3.5 flex items-center gap-3 shadow-xs">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shadow-xs">
-                <CheckCircle2 className="w-5 h-5" />
+            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex items-center gap-3.5 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+              <div className="w-11 h-11 rounded-xl bg-[#A7F3D0] dark:bg-emerald-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-emerald-800 dark:text-emerald-300 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <CheckCircle2 className="w-5 h-5 stroke-[2.3]" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase font-bold tracking-wider block">
                   Accepted & Verified
                 </span>
-                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">
+                <span className="text-lg font-black text-emerald-700 dark:text-emerald-400 block truncate">
                   {verifiedCertsCount} Certificates
                 </span>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3.5 flex items-center gap-3 shadow-xs">
-              <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 flex items-center justify-center text-rose-700 dark:text-rose-400 shadow-xs">
-                <XCircle className="w-5 h-5" />
+            <div className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex items-center gap-3.5 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+              <div className="w-11 h-11 rounded-xl bg-[#FECDD3] dark:bg-rose-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-rose-800 dark:text-rose-300 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <XCircle className="w-5 h-5 stroke-[2.3]" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <span className="text-[11px] text-zinc-500 dark:text-zinc-400 uppercase font-bold tracking-wider block">
                   Rejected / Flagged
                 </span>
-                <span className="text-lg font-black text-rose-600 dark:text-rose-400">
+                <span className="text-lg font-black text-rose-700 dark:text-rose-400 block truncate">
                   {flaggedCertsCount} Certificates
                 </span>
               </div>
@@ -441,24 +481,12 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className={cn(
-                    "bg-white dark:bg-zinc-800/80 border-2 rounded-2xl p-4 flex flex-col gap-3 transition-all shadow-xs",
-                    isAccepted
-                      ? "border-zinc-900 dark:border-zinc-700 hover:border-blue-500"
-                      : "border-rose-500/50 bg-rose-500/5 dark:bg-rose-950/20"
-                  )}
+                  className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex flex-col gap-3 transition-all shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div
-                        className={cn(
-                          "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs border",
-                          isAccepted
-                            ? "bg-blue-100 dark:bg-blue-950/60 border-blue-200 dark:border-blue-900/60 text-blue-700 dark:text-blue-400"
-                            : "bg-rose-100 dark:bg-rose-950/60 border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-400"
-                        )}
-                      >
-                        <Award className="w-5 h-5" />
+                      <div className="w-11 h-11 rounded-xl bg-[#BAE6FD] dark:bg-sky-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 text-blue-700 dark:text-sky-300 shadow-[2px_2px_0px_0px_#18181B]">
+                        <Award className="w-5 h-5 stroke-[2.3]" />
                       </div>
                       <div>
                         <h4 className="text-sm font-black text-zinc-950 dark:text-zinc-100 leading-tight">
@@ -470,15 +498,15 @@ export function AuditBreakdownPanel({
                       </div>
                     </div>
 
-                    {/* Status badge */}
+                    {/* Status badge with tactile neobrutalist style */}
                     {isAccepted ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-300 shadow-xs flex-shrink-0">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-600 shadow-[1.5px_1.5px_0px_0px_#18181B] dark:shadow-[1.5px_1.5px_0px_0px_#000000] flex-shrink-0">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
                         ACCEPTED & VERIFIED
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-950 dark:text-rose-300 shadow-xs flex-shrink-0">
-                        <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-600 shadow-[1.5px_1.5px_0px_0px_#18181B] dark:shadow-[1.5px_1.5px_0px_0px_#000000] flex-shrink-0">
+                        <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 stroke-[2.5]" />
                         REJECTED / FLAGGED
                       </span>
                     )}
@@ -486,7 +514,7 @@ export function AuditBreakdownPanel({
 
                   {/* If rejected, show reason */}
                   {!isAccepted && cert.rejection_reason && (
-                    <div className="p-2.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-xs text-rose-950 dark:text-rose-300 flex items-center gap-2">
+                    <div className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 text-xs text-zinc-900 dark:text-zinc-100 font-mono flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />
                       <span>Rejection reason: {cert.rejection_reason}</span>
                     </div>
