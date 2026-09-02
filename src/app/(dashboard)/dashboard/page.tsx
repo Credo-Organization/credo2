@@ -166,7 +166,7 @@ export default async function DashboardPage() {
         profileImage: studentAvatar,
         verifiedSkills: (snap.skills || []).map((s: any) => ({
           name: s.name,
-          confidence: s.confidence,
+          confidence: s.confidence || "High",
         })),
         githubRepos: snap.github?.total_repos || repoItems.length || 0,
         certificates: snap.certificates || (certs || []).length || 0,

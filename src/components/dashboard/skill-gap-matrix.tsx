@@ -19,26 +19,16 @@ interface SkillGapMatrixProps {
 }
 
 export function SkillGapMatrix({
-  careerGoal = "AI Engineer",
-  verifiedSkills = [
-    { name: "TypeScript", confidence: "High" },
-    { name: "CSS", confidence: "Medium" },
-    { name: "JavaScript", confidence: "High" },
-    { name: "Python", confidence: "High" },
-  ],
-  missingSkillsList = [
-    { name: "PostgreSQL", category: "critical", rationale: "Core prerequisite for backend scalability & data pipelines" },
-    { name: "Go", category: "critical", rationale: "Standard production deployment & microservice requirement" },
-    { name: "Docker", category: "recommended", rationale: "High-value differentiator for modern AI & web architectures" },
-    { name: "GraphQL", category: "recommended", rationale: "High-value differentiator for modern AI & web architectures" },
-  ],
+  careerGoal = "Software Engineer",
+  verifiedSkills = [],
+  missingSkillsList = [],
   gapDescription,
   onAskMentorForGap,
 }: SkillGapMatrixProps) {
   const totalRelevantSkills = verifiedSkills.length + missingSkillsList.length;
   const readinessPercent = totalRelevantSkills > 0 
     ? Math.round((verifiedSkills.length / totalRelevantSkills) * 100)
-    : 60;
+    : verifiedSkills.length > 0 ? 100 : 0;
 
   const defaultDescription =
     gapDescription ||
@@ -95,25 +85,36 @@ export function SkillGapMatrix({
             </span>
           </div>
 
-          <div className="space-y-2">
-            {verifiedSkills.slice(0, 4).map((skill, idx) => (
-              <div
-                key={idx}
-                className="p-2.5 px-3 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-xs font-black text-zinc-950 dark:text-zinc-100">
-                    {skill.name}
+          {verifiedSkills.length === 0 ? (
+            <div className="p-4 rounded-xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 bg-white/60 dark:bg-zinc-800/40 text-center">
+              <p className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                No verified skills detected yet
+              </p>
+              <p className="text-[10px] text-zinc-500 dark:text-zinc-500 mt-1">
+                Sync your GitHub account or upload accredited certificates to prove competencies
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {verifiedSkills.slice(0, 6).map((skill, idx) => (
+                <div
+                  key={idx}
+                  className="p-2.5 px-3 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span className="text-xs font-black text-zinc-950 dark:text-zinc-100">
+                      {skill.name}
+                    </span>
+                  </div>
+
+                  <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-[#DCFCE7] dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                    {skill.confidence || "High"} Confidence
                   </span>
                 </div>
-
-                <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-[#DCFCE7] dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                  {skill.confidence} Confidence
-                </span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* RIGHT: Lagging Gaps to Bridge */}
@@ -123,49 +124,60 @@ export function SkillGapMatrix({
               LAGGING GAPS ({missingSkillsList.length})
             </span>
             <span className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 font-bold">
-              Click to ask AI ↓
+              {missingSkillsList.length > 0 ? "Click to ask AI ↓" : "All cleared ✓"}
             </span>
           </div>
 
-          <div className="space-y-2">
-            {missingSkillsList.map((gap, idx) => {
-              const isCritical = gap.category === "critical";
+          {missingSkillsList.length === 0 ? (
+            <div className="p-4 rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 dark:bg-emerald-950/20 text-center">
+              <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                🎯 All core benchmark skills proven
+              </p>
+              <p className="text-[10px] text-emerald-700 dark:text-emerald-400 mt-1">
+                Your portfolio matches the prerequisites for this career pathway
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {missingSkillsList.slice(0, 6).map((gap, idx) => {
+                const isCritical = gap.category === "critical";
 
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => onAskMentorForGap?.(gap.name)}
-                  className={cn(
-                    "w-full text-left p-2.5 px-3 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all flex items-center justify-between gap-2 cursor-pointer group",
-                    isCritical
-                      ? "bg-[#FFF1F2] dark:bg-rose-950/20 hover:bg-[#FFE4E6] dark:hover:bg-rose-950/40"
-                      : "bg-[#FFFBEB] dark:bg-amber-950/20 hover:bg-[#FEF3C7] dark:hover:bg-amber-950/40"
-                  )}
-                >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs font-black text-zinc-950 dark:text-zinc-100 group-hover:underline transition-all truncate">
-                      {gap.name}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border font-mono shrink-0",
-                        isCritical
-                          ? "bg-[#FECDD3] text-rose-950 border-rose-400 dark:bg-rose-900 dark:text-rose-200 dark:border-rose-700"
-                          : "bg-[#FEF08A] text-amber-950 border-amber-400 dark:bg-amber-900 dark:text-amber-200 dark:border-amber-700"
-                      )}
-                    >
-                      {isCritical ? "CRITICAL" : "GROWTH"}
-                    </span>
-                  </div>
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => onAskMentorForGap?.(gap.name)}
+                    className={cn(
+                      "w-full text-left p-2.5 px-3 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all flex items-center justify-between gap-2 cursor-pointer group",
+                      isCritical
+                        ? "bg-[#FFF1F2] dark:bg-rose-950/20 hover:bg-[#FFE4E6] dark:hover:bg-rose-950/40"
+                        : "bg-[#FFFBEB] dark:bg-amber-950/20 hover:bg-[#FEF3C7] dark:hover:bg-amber-950/40"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-xs font-black text-zinc-950 dark:text-zinc-100 group-hover:underline transition-all truncate">
+                        {gap.name}
+                      </span>
+                      <span
+                        className={cn(
+                          "text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border font-mono shrink-0",
+                          isCritical
+                            ? "bg-[#FECDD3] text-rose-950 border-rose-400 dark:bg-rose-900 dark:text-rose-200 dark:border-rose-700"
+                            : "bg-[#FEF08A] text-amber-950 border-amber-400 dark:bg-amber-900 dark:text-amber-200 dark:border-amber-700"
+                        )}
+                      >
+                        {isCritical ? "CRITICAL" : "GROWTH"}
+                      </span>
+                    </div>
 
-                  <div className="w-5 h-5 rounded-md bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-zinc-900 dark:text-zinc-100 group-hover:bg-[#BAE6FD] group-hover:text-blue-950 group-hover:border-zinc-900 transition-colors shrink-0 shadow-2xs">
-                    <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                    <div className="w-5 h-5 rounded-md bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center text-zinc-900 dark:text-zinc-100 group-hover:bg-[#BAE6FD] group-hover:text-blue-950 group-hover:border-zinc-900 transition-colors shrink-0 shadow-2xs">
+                      <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
       </div>

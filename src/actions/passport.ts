@@ -3,6 +3,48 @@
 import { createClient } from "@/lib/supabase/server";
 import { normalizeSkill } from "@/lib/extractor/taxonomy-normalizer";
 import { revalidatePath } from "next/cache";
+import { careerGoals } from "@/config/career-goals";
+
+const SKILL_NAME_MAP: Record<string, string> = {
+  html: "HTML",
+  css: "CSS",
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  react: "React",
+  nextjs: "Next.js",
+  tailwindcss: "TailwindCSS",
+  git: "Git",
+  nodejs: "Node.js",
+  python: "Python",
+  postgresql: "PostgreSQL",
+  mongodb: "MongoDB",
+  "rest-api": "REST APIs",
+  docker: "Docker",
+  linux: "Linux",
+  "react-native": "React Native",
+  flutter: "Flutter",
+  swift: "Swift",
+  kotlin: "Kotlin",
+  firebase: "Firebase",
+  pandas: "Pandas",
+  numpy: "NumPy",
+  "scikit-learn": "Scikit-Learn",
+  tensorflow: "TensorFlow",
+  pytorch: "PyTorch",
+  kubernetes: "Kubernetes",
+  mlops: "MLOps",
+  sql: "SQL",
+  statistics: "Statistics",
+  jupyter: "Jupyter Notebooks",
+  aws: "AWS",
+  terraform: "Terraform",
+  "ci-cd": "CI/CD",
+  figma: "Figma",
+  prototyping: "Prototyping",
+  "user-research": "User Research",
+  wireframing: "Wireframing",
+  "design-systems": "Design Systems",
+};
 
 export async function generatePassport(skipRevalidate: boolean = false) {
   const supabase = await createClient();
@@ -75,10 +117,17 @@ export async function generatePassport(skipRevalidate: boolean = false) {
       });
     }
 
-    // Fallback top skills if empty
-    if (skillMap.size === 0) {
-      ["TypeScript", "React", "Python", "Next.js", "PostgreSQL", "Node.js"].forEach((s, idx) => {
-        skillMap.set(s, { repoCount: 4 - (idx % 3), certCitations: ["Auto-scanned portfolio skill"] });
+    if (certificates && certificates.length > 0) {
+      certificates.forEach((c: any) => {
+        if (c.status === "flagged" || c.status === "rejected") return;
+        const title = c.title?.trim();
+        if (title) {
+          const current = skillMap.get(title) || { repoCount: 0, certCitations: [] };
+          skillMap.set(title, {
+            ...current,
+            certCitations: [...current.certCitations, `Certificate: ${c.issuer || "Verified"}`],
+          });
+        }
       });
     }
 
@@ -123,23 +172,52 @@ export async function generatePassport(skipRevalidate: boolean = false) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     const verificationUrl = `${appUrl}/verify/passport/${studentId}`;
 
+    // Dynamic role pathway & missing skills derivation
+    const userHeadline = profile?.headline || "Software Engineer";
+    const lowerHeadline = userHeadline.toLowerCase();
+    const matchedGoal =
+      careerGoals.find(
+        (g) =>
+          lowerHeadline.includes(g.title.toLowerCase()) ||
+          lowerHeadline.includes(g.slug) ||
+          g.title.toLowerCase().includes(lowerHeadline)
+      ) ||
+      (lowerHeadline.includes("ai") || lowerHeadline.includes("ml") || lowerHeadline.includes("machine")
+        ? careerGoals.find((g) => g.id === "ml-engineer")
+        : lowerHeadline.includes("data")
+        ? careerGoals.find((g) => g.id === "data-scientist")
+        : lowerHeadline.includes("back")
+        ? careerGoals.find((g) => g.id === "backend-dev")
+        : lowerHeadline.includes("front")
+        ? careerGoals.find((g) => g.id === "frontend-dev")
+        : careerGoals.find((g) => g.id === "fullstack-dev")) ||
+      careerGoals[0];
+
+    const verifiedSkillNames = new Set(topSkills.map((s) => s.name.toLowerCase()));
+    const unverifiedTechStack = (matchedGoal?.requiredSkills || [])
+      .map((slug) => SKILL_NAME_MAP[slug] || slug.charAt(0).toUpperCase() + slug.slice(1))
+      .filter((name) => !verifiedSkillNames.has(name.toLowerCase()))
+      .slice(0, 4);
+
+    const recommendedTechStack = unverifiedTechStack.length > 0
+      ? unverifiedTechStack
+      : ["Docker", "Kubernetes", "CI/CD", "PostgreSQL"].filter((t) => !verifiedSkillNames.has(t.toLowerCase()));
+
     const insights = {
-      gap_analysis_text: `Proficient in full-stack architecture with strong ${topSkills[0]?.name || "TypeScript"} foundation. Next milestone: Advanced Distributed Systems & Cloud Orchestration.`,
-      recommended_tech_stack: ["PostgreSQL", "Go", "Docker", "GraphQL"],
+      gap_analysis_text: topSkills.length > 0
+        ? `Verified proficiency in ${topSkills.slice(0, 3).map((s) => s.name).join(", ")}. Targeted milestone for ${userHeadline}: ${recommendedTechStack.slice(0, 2).join(" & ") || "Advanced Architecture"}.`
+        : `Connect your GitHub account or upload certificates to benchmark your profile for ${userHeadline}.`,
+      recommended_tech_stack: recommendedTechStack,
       suggested_projects: [
         {
-          name: "Real-time Collaboration Workspace",
-          description: "Build using React, Go WebSockets, and PostgreSQL to master full-stack state and concurrency."
+          name: `${userHeadline} Production Service`,
+          description: `Build a production-ready application implementing ${recommendedTechStack[0] || "core protocols"} and modern automated testing.`,
         },
         {
-          name: "Microservices E-Commerce API",
-          description: "Dockerize independent Go services (auth, inventory, payments) to learn container orchestration."
+          name: "Scalable Infrastructure Architecture",
+          description: `Deploy containerized services using ${recommendedTechStack[1] || "Docker"} with continuous integration pipelines.`,
         },
-        {
-          name: "GraphQL Analytics Dashboard",
-          description: "Aggregate complex data via GraphQL into a modern Tailwind dashboard."
-        }
-      ]
+      ],
     };
 
     const snapshotData = {
