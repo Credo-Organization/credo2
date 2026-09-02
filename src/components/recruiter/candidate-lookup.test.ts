@@ -51,6 +51,12 @@ describe("extractPassportId", () => {
     expect(extractPassportId("   !!!   ")).toBe("");
   });
 
+  it("strips card label prefixes like 'Student ID:' or 'ID:'", () => {
+    expect(extractPassportId("Student ID: CDY26S4611")).toBe("CDY26S4611");
+    expect(extractPassportId("ID: CDY2026-0004611")).toBe("CDY2026-0004611");
+    expect(extractPassportId("Card ID - CDY2026-0004611")).toBe("CDY2026-0004611");
+  });
+
   it("does not treat an unrelated URL as a match, falling back to sanitising", () => {
     // No /verify/passport/ or /candidate/ segment, so there is no id to lift.
     // The result is a harmless run-together string rather than a wrong lookup.

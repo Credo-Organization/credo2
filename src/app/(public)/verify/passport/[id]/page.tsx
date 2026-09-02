@@ -15,16 +15,19 @@ export default async function VerifyPassportPage({ params }: Props) {
   // version pulled every passport in the table with the service-role client and
   // filtered in JS, which both ignored is_public and scaled with the whole table.
   const safeId = id.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64);
+  const upperSafeId = safeId.toUpperCase();
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(safeId);
 
   const filters = [
+    `snapshot_data->>student_id.eq.${upperSafeId}`,
+    `snapshot_data->>card_id.eq.${upperSafeId}`,
     `snapshot_data->>student_id.eq.${safeId}`,
     `snapshot_data->>card_id.eq.${safeId}`,
     ...(isUuid ? [`id.eq.${safeId}`] : []),
   ];
 
   const supabase = createAdminClient();
-  const { data: matched } = safeId
+  let { data: matched } = safeId
     ? await supabase
         .from("passports")
         .select("*, profiles(*)")
@@ -33,6 +36,31 @@ export default async function VerifyPassportPage({ params }: Props) {
         .limit(1)
         .maybeSingle()
     : { data: null };
+
+  // Fallback: If not matched by ID/card_id, check if safeId matches a profile username or name
+  if (!matched && safeId) {
+    const { data: profileMatch } = await supabase
+      .from("profiles")
+      .select("id")
+      .or(`username.ilike.${safeId},full_name.ilike.%${safeId}%`)
+      .limit(1)
+      .maybeSingle();
+
+    if (profileMatch?.id) {
+      const { data: matchedPassport } = await supabase
+        .from("passports")
+        .select("*, profiles(*)")
+        .eq("profile_id", profileMatch.id)
+        .eq("is_public", true)
+        .order("generated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (matchedPassport) {
+        matched = matchedPassport;
+      }
+    }
+  }
 
   if (!matched) {
     return (
@@ -124,6 +152,16 @@ export default async function VerifyPassportPage({ params }: Props) {
             <span className="text-zinc-500">Issuer Authority</span>
             <span className="font-semibold text-white">Minskey Global Trust Registry</span>
           </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[420px]">
+          <Link
+            href={`/recruiter/candidate/${studentData.studentId}`}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all border border-blue-400/30 shadow-lg shadow-blue-500/20"
+          >
+            <ShieldCheck className="w-4 h-4 text-white" />
+            <span>Recruiter? Open Technical Dossier & Audits ➔</span>
+          </Link>
         </div>
 
         <Link

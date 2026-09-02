@@ -21,7 +21,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     : `snapshot_data->>student_id.eq.${upperSafeId},snapshot_data->>card_id.eq.${upperSafeId},snapshot_data->>student_id.eq.${safeId},snapshot_data->>card_id.eq.${safeId}`;
 
   const admin = createAdminClient();
-  const { data: passport } = safeId
+  let { data: passport } = safeId
     ? await admin
         .from("passports")
         .select("*, profiles(id, full_name, college_name, degree, headline)")
@@ -30,6 +30,31 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         .limit(1)
         .maybeSingle()
     : { data: null };
+
+  // Fallback: If not matched by passport IDs, check if safeId matches a profile username or name
+  if (!passport && safeId) {
+    const { data: profileMatch } = await admin
+      .from("profiles")
+      .select("id")
+      .or(`username.ilike.${safeId},full_name.ilike.%${safeId}%`)
+      .limit(1)
+      .maybeSingle();
+
+    if (profileMatch?.id) {
+      const { data: matchedPassport } = await admin
+        .from("passports")
+        .select("*, profiles(id, full_name, college_name, degree, headline)")
+        .eq("profile_id", profileMatch.id)
+        .eq("is_public", true)
+        .order("generated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (matchedPassport) {
+        passport = matchedPassport;
+      }
+    }
+  }
 
   if (!passport) {
     return (

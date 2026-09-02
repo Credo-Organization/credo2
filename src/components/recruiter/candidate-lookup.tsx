@@ -6,11 +6,15 @@ import { Search, AlertCircle, QrCode } from "lucide-react";
 import { PassportScannerModal } from "./passport-scanner-modal";
 
 export function extractPassportId(raw: string): string {
-  const trimmed = raw.trim();
+  let trimmed = raw.trim();
+
+  // Strip common label prefixes like "Student ID: CDY26S4611", "ID: CDY2026-0004611", etc.
+  trimmed = trimmed.replace(/^(?:student\s*id|card\s*id|passport\s*id|id)\s*[:\-#]?\s*/i, "");
+
   const fromUrl =
-    trimmed.match(/\/verify\/passport\/([A-Za-z0-9-_]+)/) ??
-    trimmed.match(/\/candidate\/([A-Za-z0-9-_]+)/) ??
-    trimmed.match(/\/p\/([A-Za-z0-9-_]+)/);
+    trimmed.match(/\/verify\/passport\/([A-Za-z0-9-_]+)/i) ??
+    trimmed.match(/\/candidate\/([A-Za-z0-9-_]+)/i) ??
+    trimmed.match(/\/p\/([A-Za-z0-9-_]+)/i);
   const candidate = fromUrl ? fromUrl[1] : trimmed;
 
   return candidate.replace(/[^A-Za-z0-9-_]/g, "").slice(0, 64).toUpperCase();
@@ -22,26 +26,24 @@ export function CandidateLookup() {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const router = useRouter();
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const id = extractPassportId(value);
-
+  const handleLookupId = (targetId: string) => {
+    const id = extractPassportId(targetId);
     if (!id) {
       setError("Enter a passport ID, or paste the link from a scanned QR code.");
       return;
     }
-    if (id.length < 4) {
-      setError(`"${id}" is too short to be a passport ID. They look like MSK26S1104.`);
-      return;
-    }
-
     setError(null);
     router.push(`/recruiter/candidate/${id}`);
   };
 
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleLookupId(value);
+  };
+
   return (
     <>
-      <form onSubmit={submit} className="flex flex-col gap-2">
+      <form onSubmit={submit} className="flex flex-col gap-2.5">
         <div className="flex flex-wrap sm:flex-nowrap gap-2">
           <div className="relative flex-1 min-w-[240px]">
             <Search
@@ -54,7 +56,7 @@ export function CandidateLookup() {
                 setValue(e.target.value);
                 if (error) setError(null);
               }}
-              placeholder="Search candidate by Passport ID or paste scanned link..."
+              placeholder="Paste Student ID, Card ID, or shareable link..."
               aria-label="Passport ID or verification link"
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? "lookup-error" : undefined}
@@ -79,22 +81,41 @@ export function CandidateLookup() {
           </button>
         </div>
 
-      {error && (
-        <p
-          id="lookup-error"
-          role="alert"
-          className="flex items-start gap-1.5 text-xs text-rose-700 dark:text-rose-400 font-bold leading-snug"
-        >
-          <AlertCircle className="w-4 h-4 mt-px shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
-          {error}
-        </p>
-      )}
-    </form>
+        {/* Quick Sample Badges */}
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="font-medium">Quick inspect:</span>
+          <button
+            type="button"
+            onClick={() => handleLookupId("CDY26S4611")}
+            className="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-zinc-300 dark:border-zinc-700 hover:border-blue-500 font-mono font-bold text-zinc-900 dark:text-zinc-200 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            CDY26S4611 (Subham)
+          </button>
+          <button
+            type="button"
+            onClick={() => handleLookupId("CDY26S2668")}
+            className="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-zinc-300 dark:border-zinc-700 hover:border-blue-500 font-mono font-bold text-zinc-900 dark:text-zinc-200 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            CDY26S2668 (Aditya)
+          </button>
+        </div>
 
-    <PassportScannerModal
-      isOpen={isScannerOpen}
-      onClose={() => setIsScannerOpen(false)}
-    />
-  </>
+        {error && (
+          <p
+            id="lookup-error"
+            role="alert"
+            className="flex items-start gap-1.5 text-xs text-rose-700 dark:text-rose-400 font-bold leading-snug"
+          >
+            <AlertCircle className="w-4 h-4 mt-px shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+            {error}
+          </p>
+        )}
+      </form>
+
+      <PassportScannerModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
+      />
+    </>
   );
 }
