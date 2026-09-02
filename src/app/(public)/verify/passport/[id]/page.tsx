@@ -123,28 +123,28 @@ export default async function VerifyPassportPage({ params }: Props) {
   };
 
   return (
-    <div className="min-h-screen bg-[#050811] text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen min-h-[100dvh] bg-[#050811] text-white flex flex-col items-center justify-center p-3.5 sm:p-6 relative overflow-x-hidden">
       {/* Glow Effects */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="w-full max-w-4xl mx-auto flex flex-col items-center gap-8 relative z-10 py-12">
+      <div className="w-full max-w-4xl mx-auto flex flex-col items-center gap-6 sm:gap-8 relative z-10 py-6 sm:py-12">
         {/* Verification Status Banner */}
         <div className="flex flex-col items-center text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold tracking-wide shadow-lg shadow-emerald-500/5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-semibold tracking-wide shadow-lg shadow-emerald-500/5">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>Cryptographically Verified Minskey Credential</span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mt-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white mt-2">
             Official Student Skill Passport
           </h1>
-          <p className="text-sm text-zinc-300 max-w-lg leading-relaxed">
+          <p className="text-xs sm:text-sm text-zinc-300 max-w-lg leading-relaxed">
             Every skill, certificate, and repository on this credential has been verified against real GitHub commit physics. <span className="text-emerald-400 font-bold">100% tamper-proof and fraud-resistant.</span>
           </p>
         </div>
 
         {/* The Authentic Student ID Passport Card */}
-        <div className="shadow-2xl hover:scale-[1.01] transition-transform duration-300">
+        <div className="w-full flex justify-center shadow-2xl hover:scale-[1.01] transition-transform duration-300">
           <StudentPassportIdCard studentData={studentData} />
         </div>
 

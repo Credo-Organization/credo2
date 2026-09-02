@@ -67,7 +67,7 @@ export function DoodleHeroSection() {
                 <BlueSkillRays />
               </div>
 
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-zinc-950">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] text-zinc-950">
                 <span className="relative inline-block text-blue-600 mr-3">
                   Skill
                   <SkillUnderline className="absolute -bottom-1 left-0 w-full" />
@@ -123,10 +123,10 @@ export function DoodleHeroSection() {
           {/* ═════════════════════════════════════════════════════════
               RIGHT COLUMN: ANIMATED DOODLE DEVELOPER STAGE
               ═════════════════════════════════════════════════════════ */}
-          <div className="lg:col-span-6 relative flex items-center justify-center pt-4 lg:pt-0">
+          <div className="lg:col-span-6 relative flex items-center justify-center pt-4 lg:pt-0 overflow-hidden sm:overflow-visible">
             
             {/* The Staged Canvas Container */}
-            <div className="relative w-full max-w-[560px] h-[480px] sm:h-[500px] select-none">
+            <div className="relative w-full max-w-[340px] sm:max-w-[560px] h-[450px] sm:h-[500px] select-none scale-[0.88] sm:scale-100 origin-center transition-transform">
               
               {/* ── PURE ORGANIC WATERCOLOR CLOUD WASHES (Zero Ghosting, 100% Crisp) ── */}
               <div className="absolute inset-0 z-0 pointer-events-none">

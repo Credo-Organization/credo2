@@ -219,7 +219,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
-      className="w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] relative font-sans select-none overflow-hidden transition-all"
+      className="w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-4 sm:p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] relative font-sans select-none overflow-hidden transition-all"
     >
       {/* Background Watermark Security Dot Grid */}
       <div 

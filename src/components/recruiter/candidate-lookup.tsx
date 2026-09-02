@@ -44,8 +44,8 @@ export function CandidateLookup() {
   return (
     <>
       <form onSubmit={submit} className="flex flex-col gap-2.5">
-        <div className="flex flex-wrap sm:flex-nowrap gap-2">
-          <div className="relative flex-1 min-w-[240px]">
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="relative flex-1 min-w-0">
             <Search
               className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
               aria-hidden="true"
@@ -64,21 +64,23 @@ export function CandidateLookup() {
             />
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsScannerOpen(true)}
-            className="h-11 px-4 rounded-xl bg-white dark:bg-zinc-800 hover:bg-zinc-50 text-zinc-900 dark:text-zinc-100 text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
-          >
-            <QrCode className="w-4 h-4 text-blue-600" />
-            <span>Scan QR / ID</span>
-          </button>
+          <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsScannerOpen(true)}
+              className="h-11 px-3 sm:px-4 rounded-xl bg-white dark:bg-zinc-800 hover:bg-zinc-50 text-zinc-900 dark:text-zinc-100 text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer flex items-center justify-center gap-1.5"
+            >
+              <QrCode className="w-4 h-4 text-blue-600" />
+              <span>Scan QR</span>
+            </button>
 
-          <button
-            type="submit"
-            className="h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer shrink-0"
-          >
-            Inspect Dossier
-          </button>
+            <button
+              type="submit"
+              className="h-11 px-4 sm:px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer flex items-center justify-center"
+            >
+              Inspect Dossier
+            </button>
+          </div>
         </div>
 
         {/* Quick Sample Badges */}

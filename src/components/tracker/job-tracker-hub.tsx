@@ -217,60 +217,60 @@ export function JobTrackerHub() {
   return (
     <div className="space-y-6 select-none relative">
       {/* Top Metrics Ribbon */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
-          <span className="text-[11px] font-mono font-black uppercase text-zinc-500 dark:text-zinc-400 block mb-1">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+          <span className="text-[10px] sm:text-[11px] font-mono font-black uppercase text-zinc-500 dark:text-zinc-400 block mb-1">
             Total Pipeline
           </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
+            <span className="text-xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100">
               {stats.total}
             </span>
-            <span className="text-xs font-bold text-zinc-500">Active Applications</span>
+            <span className="text-[11px] sm:text-xs font-bold text-zinc-500 truncate">Active</span>
           </div>
         </div>
 
-        <div className="bg-amber-500/[0.06] dark:bg-amber-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
-          <span className="text-[11px] font-mono font-black uppercase text-amber-900 dark:text-amber-300 block mb-1">
+        <div className="bg-amber-500/[0.06] dark:bg-amber-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+          <span className="text-[10px] sm:text-[11px] font-mono font-black uppercase text-amber-900 dark:text-amber-300 block mb-1">
             Proof Dispatched
           </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-amber-950 dark:text-amber-200">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
+            <span className="text-xl sm:text-3xl font-black text-amber-950 dark:text-amber-200">
               {stats.dispatched}
             </span>
-            <span className="text-xs font-bold text-amber-800 dark:text-amber-300">Under Initial Review</span>
+            <span className="text-[11px] sm:text-xs font-bold text-amber-800 dark:text-amber-300 truncate">In Review</span>
           </div>
         </div>
 
-        <div className="bg-emerald-500/[0.06] dark:bg-emerald-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
-          <span className="text-[11px] font-mono font-black uppercase text-emerald-900 dark:text-emerald-300 block mb-1">
+        <div className="bg-emerald-500/[0.06] dark:bg-emerald-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+          <span className="text-[10px] sm:text-[11px] font-mono font-black uppercase text-emerald-900 dark:text-emerald-300 block mb-1">
             Evidence Audited
           </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-emerald-950 dark:text-emerald-200">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
+            <span className="text-xl sm:text-3xl font-black text-emerald-950 dark:text-emerald-200">
               {stats.audited}
             </span>
-            <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">GitProof Verified</span>
+            <span className="text-[11px] sm:text-xs font-bold text-emerald-800 dark:text-emerald-300 truncate">Verified</span>
           </div>
         </div>
 
-        <div className="bg-purple-500/[0.06] dark:bg-purple-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
-          <span className="text-[11px] font-mono font-black uppercase text-purple-900 dark:text-purple-300 block mb-1">
+        <div className="bg-purple-500/[0.06] dark:bg-purple-950/25 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-3 sm:p-4 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]">
+          <span className="text-[10px] sm:text-[11px] font-mono font-black uppercase text-purple-900 dark:text-purple-300 block mb-1">
             Interview Rounds
           </span>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-purple-950 dark:text-purple-200">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
+            <span className="text-xl sm:text-3xl font-black text-purple-950 dark:text-purple-200">
               {stats.interview}
             </span>
-            <span className="text-xs font-bold text-purple-800 dark:text-purple-300">Technical Sessions</span>
+            <span className="text-[11px] sm:text-xs font-bold text-purple-800 dark:text-purple-300 truncate">Technical</span>
           </div>
         </div>
       </div>
 
       {/* Toolbar: Search, Filters & Action */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         {/* Search */}
-        <div className="relative flex-1 min-w-[220px]">
+        <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
             type="text"
@@ -282,7 +282,7 @@ export function JobTrackerHub() {
         </div>
 
         {/* Stage Filter Chips */}
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
           {STAGE_FILTERS.map((tab) => (
             <button
               key={tab.id}

@@ -31,7 +31,7 @@ export function MobileQuickCTA() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="md:hidden fixed bottom-4 left-4 right-4 z-40 select-none"
+          className="md:hidden fixed bottom-[max(1rem,calc(env(safe-area-inset-bottom,0px)+0.75rem))] left-3 right-3 sm:left-4 sm:right-4 z-40 select-none"
         >
           <div className="bg-white/95 backdrop-blur-md border-2 border-zinc-900 rounded-2xl p-2.5 px-3.5 shadow-[4px_4px_0px_0px_#18181B] flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5 min-w-0">

@@ -356,3 +356,43 @@ html {
 .animate-doodle-drift {
   animation: doodle-drift 7s ease-in-out infinite;
 }
+
+/* ─── Mobile Ergonomics & Safe Area Insets ─── */
+@layer utilities {
+  /* Safe Area Utilities */
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+  .pt-safe {
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+  }
+  .bottom-safe {
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Hide scrollbars for clean horizontal filter strips */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Accessible Touch Target sizing (Apple HIG & WCAG 2.2 min 44x44px) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Smooth mobile touch scrolling */
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Prevent accidental text selection and highlight tap flashes on mobile buttons */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}

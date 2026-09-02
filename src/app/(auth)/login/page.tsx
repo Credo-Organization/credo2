@@ -140,7 +140,7 @@ export default function LoginPage() {
       </div>
 
       {/* Hand-Crafted Tactile Card */}
-      <div className="w-full bg-white border-2 border-zinc-900 rounded-3xl p-7 sm:p-8 space-y-5 shadow-[6px_6px_0px_0px_#18181B] relative">
+      <div className="w-full bg-white border-2 border-zinc-900 rounded-3xl p-5 sm:p-8 space-y-5 shadow-[6px_6px_0px_0px_#18181B] relative">
         {/* Student / Recruiter Tactile Switch */}
         <div className="relative w-full p-1 rounded-2xl bg-zinc-100 border-2 border-zinc-900 grid grid-cols-2 gap-1 shadow-xs">
           <button

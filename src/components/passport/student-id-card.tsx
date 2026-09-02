@@ -147,7 +147,7 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
   return (
     <div
       className={cn(
-        "w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] relative font-sans select-none overflow-hidden transition-all",
+        "w-full max-w-[440px] bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100 rounded-3xl p-4 sm:p-6 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] relative font-sans select-none overflow-hidden transition-all",
         className
       )}
     >
@@ -161,38 +161,38 @@ export function StudentPassportIdCard({ studentData, className }: StudentPasspor
       />
 
       {/* Top Header: ID & Circuit Icon */}
-      <div className="flex items-center justify-between pb-3 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10">
-        <span className="text-xs font-black tracking-wider text-zinc-950 dark:text-zinc-100 uppercase font-mono">
+      <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10">
+        <span className="text-[11px] sm:text-xs font-black tracking-wider text-zinc-950 dark:text-zinc-100 uppercase font-mono">
           ID: {cardId}
         </span>
         <CircuitBadgeIcon />
       </div>
 
       {/* Holder Info */}
-      <div className="pt-3 pb-2 relative z-10">
-        <span className="text-[10px] font-black tracking-widest text-zinc-500 uppercase block mb-0.5 font-mono">
+      <div className="pt-2.5 sm:pt-3 pb-2 relative z-10">
+        <span className="text-[9px] sm:text-[10px] font-black tracking-widest text-zinc-500 uppercase block mb-0.5 font-mono">
           HOLDER
         </span>
-        <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white leading-tight">
+        <h1 className="text-xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white leading-tight">
           {name}
         </h1>
 
-        <div className="flex flex-col gap-0.5 mt-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400">
+        <div className="flex flex-col gap-0.5 mt-1 sm:mt-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <div className="flex items-center gap-1.5">
-            <User className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
+            <User className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 shrink-0" />
             <span className="capitalize">{gender}</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <GraduationCap className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
+            <GraduationCap className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 shrink-0" />
             <span className="truncate">{degree}</span>
           </div>
         </div>
       </div>
 
       {/* Photo & Seal Row */}
-      <div className="grid grid-cols-2 gap-4 items-center my-3 relative z-10">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 items-center my-2.5 sm:my-3 relative z-10">
         {/* Student Portrait in warm butter yellow */}
-        <div className="w-32 h-36 sm:w-36 sm:h-40 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 bg-[#FEF08A] overflow-hidden shadow-[2px_2px_0px_0px_#18181B] flex items-center justify-center p-1">
+        <div className="w-28 h-32 sm:w-36 sm:h-40 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 bg-[#FEF08A] overflow-hidden shadow-[2px_2px_0px_0px_#18181B] flex items-center justify-center p-1">
           <img
             src={avatarUrl}
             alt={name}

@@ -109,7 +109,7 @@ export function AuditBreakdownPanel({
   return (
     <div
       className={cn(
-        "w-full bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl p-6 shadow-[5px_5px_0px_0px_#18181B] dark:shadow-[5px_5px_0px_0px_#000000] font-sans relative overflow-hidden select-none transition-colors",
+        "w-full bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 rounded-3xl p-4 sm:p-6 shadow-[5px_5px_0px_0px_#18181B] dark:shadow-[5px_5px_0px_0px_#000000] font-sans relative overflow-hidden select-none transition-colors",
         className
       )}
     >
@@ -297,7 +297,7 @@ export function AuditBreakdownPanel({
                       : "bg-rose-500/[0.05] hover:bg-rose-500/[0.08] dark:bg-rose-950/25 dark:hover:bg-rose-950/40"
                   )}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-3">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-sm font-black text-zinc-950 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                         {repo.name}
@@ -315,7 +315,7 @@ export function AuditBreakdownPanel({
                     </div>
 
                     {/* Anti-cheat status pill with clean tactile styling */}
-                    <div className="flex items-center gap-2 flex-shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
                       {isVerified ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 border-2 border-zinc-900 dark:border-zinc-600 shadow-[1.5px_1.5px_0px_0px_#18181B] dark:shadow-[1.5px_1.5px_0px_0px_#000000]">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
@@ -487,7 +487,7 @@ export function AuditBreakdownPanel({
                       : "bg-rose-500/[0.05] hover:bg-rose-500/[0.08] dark:bg-rose-950/25 dark:hover:bg-rose-950/40"
                   )}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 sm:gap-3">
                     <div className="flex items-start gap-3">
                       <div className="w-11 h-11 rounded-xl bg-[#BAE6FD] dark:bg-sky-950 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 text-blue-700 dark:text-sky-300 shadow-[2px_2px_0px_0px_#18181B]">
                         <Award className="w-5 h-5 stroke-[2.3]" />

@@ -134,10 +134,10 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
         {children}
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md bg-[#FAF9F6] border-2 border-zinc-900 rounded-3xl p-7 sm:p-8 shadow-[8px_8px_0px_0px_#18181B] text-zinc-900 select-none">
+      <DialogContent className="sm:max-w-md bg-[#FAF9F6] border-2 border-zinc-900 rounded-3xl p-5 sm:p-8 shadow-[6px_6px_0px_0px_#18181B] sm:shadow-[8px_8px_0px_0px_#18181B] text-zinc-900 select-none">
         <DialogHeader className="flex flex-col items-start sm:text-left mt-0 gap-1.5">
           <div className="flex items-center gap-2">
-            <span className="font-doodle text-2xl text-blue-600 font-bold -rotate-1">
+            <span className="font-doodle text-xl sm:text-2xl text-blue-600 font-bold -rotate-1">
               ✨ Sign in to Minskey
             </span>
           </div>

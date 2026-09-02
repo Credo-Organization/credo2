@@ -72,7 +72,7 @@ export function Navbar() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-lg text-zinc-800 hover:bg-zinc-100"
+            className="w-10 h-10 flex items-center justify-center rounded-xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs cursor-pointer"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -82,26 +82,26 @@ export function Navbar() {
 
       {/* ── Mobile Dropdown Menu ── */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#FAF9F6] dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-6 py-5 shadow-lg flex flex-col gap-4 animate-in slide-in-from-top-2">
+        <div className="md:hidden bg-[#FAF9F6] dark:bg-zinc-900 border-b-2 border-zinc-900 dark:border-zinc-800 px-6 py-5 shadow-lg flex flex-col gap-2 animate-in slide-in-from-top-2">
           <a
             href="#how-it-works"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600"
+            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
           >
             How it Works
           </a>
           <a
             href="#features"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600"
+            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
           >
             Features
           </a>
-          <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
             <LoginModal>
               <button
                 type="button"
-                className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B]"
+                className="w-full h-11 rounded-xl bg-blue-600 text-white text-sm font-black border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B] cursor-pointer"
               >
                 Sign In
               </button>

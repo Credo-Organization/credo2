@@ -44,8 +44,8 @@ export function SquadCard({ squad, userSkills = [] }: SquadCardProps) {
 
   return (
     <>
-      <div className="group relative rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#18181B] dark:shadow-[5px_5px_0px_0px_#000000] hover:shadow-[7px_7px_0px_0px_#18181B] dark:hover:shadow-[7px_7px_0px_0px_#000000] hover:-translate-y-1 p-6 transition-all duration-300 flex flex-col justify-between select-none">
-        <div className="space-y-4">
+      <div className="group relative rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-[5px_5px_0px_0px_#18181B] dark:shadow-[5px_5px_0px_0px_#000000] hover:shadow-[7px_7px_0px_0px_#18181B] dark:hover:shadow-[7px_7px_0px_0px_#000000] hover:-translate-y-1 p-4 sm:p-6 transition-all duration-300 flex flex-col justify-between select-none">
+        <div className="space-y-3 sm:space-y-4">
           {/* Header: Track Badge & Stamped Synergy Seal */}
           <div className="flex items-center justify-between gap-2">
             <span className="px-3 py-1 rounded-full text-[11px] font-black tracking-wide uppercase bg-stone-100 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-zinc-100">

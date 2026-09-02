@@ -148,7 +148,7 @@ export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps)
           QUICK MENTOR ACTIONS
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap">
           {TACTICAL_ACTIONS.map((item, idx) => (
             <button
               key={idx}
@@ -156,7 +156,7 @@ export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps)
               disabled={isLoading}
               onClick={() => handleSendQuery(item.prompt)}
               className={cn(
-                "px-3 py-1.5 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] text-xs font-black transition-all cursor-pointer disabled:opacity-50",
+                "px-3 py-1.5 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] text-xs font-black transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0 sm:shrink",
                 item.bgClass
               )}
             >

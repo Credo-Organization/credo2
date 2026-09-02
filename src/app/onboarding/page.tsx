@@ -4,7 +4,7 @@ import { ShieldCheck, CheckCircle2 } from "lucide-react";
 
 export default function OnboardingPage() {
   return (
-    <div className="relative h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-[#FAF9F6] text-zinc-900 overflow-hidden select-none">
+    <div className="relative min-h-screen min-h-[100dvh] flex flex-col items-center justify-center p-3.5 sm:p-8 bg-[#FAF9F6] text-zinc-900 overflow-y-auto touch-scroll select-none">
       {/* ── Background Architectural Dot Grid ── */}
       <div
         className="absolute inset-0 opacity-40 pointer-events-none -z-10"

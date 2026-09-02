@@ -37,13 +37,13 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         className="bg-white dark:bg-zinc-900 overflow-hidden rounded-3xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#18181B] dark:hover:shadow-[6px_6px_0px_0px_#000000] transition-all duration-300 hover:-translate-y-1 group flex flex-col h-full select-none"
       >
         {/* Card Header */}
-        <div className="p-7 pb-5 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10 bg-white dark:bg-zinc-900 transition-colors">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+        <div className="p-4 sm:p-7 pb-3.5 sm:pb-5 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10 bg-white dark:bg-zinc-900 transition-colors">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
             <div className="space-y-2">
-              <h3 className="text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight leading-snug group-hover:text-blue-600 transition-colors">
+              <h3 className="text-lg sm:text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight leading-snug group-hover:text-blue-600 transition-colors">
                 {opportunity.title}
               </h3>
-              <div className="flex flex-wrap items-center gap-2.5 text-xs font-bold text-zinc-600 dark:text-zinc-400">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
                 <span className="flex items-center gap-1.5 bg-zinc-50 dark:bg-zinc-800 px-2.5 py-1 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-xs">
                   <Building className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" /> {opportunity.org_name}
                 </span>
@@ -57,7 +57,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
             </div>
 
             {/* Match Score Stamped Rubber Seal */}
-            <div className="flex items-center sm:flex-col sm:items-end shrink-0 gap-3 sm:gap-0">
+            <div className="flex items-center sm:flex-col sm:items-end shrink-0 gap-3 sm:gap-0 self-start sm:self-auto">
               <div
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-zinc-900 text-xs font-black shadow-xs ${
                   isHighMatch
@@ -73,7 +73,7 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
         </div>
 
         {/* Card Body */}
-        <div className="p-7 space-y-6 flex-1 flex flex-col justify-between relative z-10 bg-white dark:bg-zinc-900 transition-colors">
+        <div className="p-4 sm:p-7 space-y-4 sm:space-y-6 flex-1 flex flex-col justify-between relative z-10 bg-white dark:bg-zinc-900 transition-colors">
           {/* Skills Breakdown */}
           <div className="space-y-4 flex-1">
             {/* Matched Skills */}

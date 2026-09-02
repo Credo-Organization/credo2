@@ -167,7 +167,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
         <Button
           type="submit"
           disabled={isSaving}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-black border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-6 h-11 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-black border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-6 h-11 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] active:translate-y-[1px] transition-all cursor-pointer"
         >
           {isSaving ? (
             <>

@@ -237,13 +237,11 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="w-full min-h-full flex flex-col gap-5 px-4 sm:px-8 py-4 max-w-[1400px] mx-auto">
-
-
+    <div className="w-full min-h-full flex flex-col gap-5 px-3.5 sm:px-8 py-4 max-w-[1400px] mx-auto">
       {/* TOP ROW: Passport Card Switcher + Skill Gap Analysis */}
-      <div className="w-full flex flex-col lg:flex-row items-start justify-start gap-8 lg:gap-12">
+      <div className="w-full flex flex-col lg:flex-row items-start justify-start gap-6 lg:gap-12">
         {/* LEFT: Passport Card Switcher */}
-        <div className="flex-shrink-0 sticky top-6 w-full lg:w-auto flex justify-center">
+        <div className="flex-shrink-0 lg:sticky lg:top-6 w-full lg:w-auto flex justify-center">
           <DashboardViewSwitcher mappedData={mappedData} studentData={studentPassportData} />
         </div>
 

@@ -10,11 +10,11 @@ export function MobileHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden flex flex-row items-center justify-between px-4 py-4 border-b border-stone-200 bg-[#f4f1eb] dark:bg-zinc-900 shadow-sm z-40 w-full shrink-0">
+    <header className="md:hidden sticky top-0 z-30 flex flex-row items-center justify-between px-4 py-3 border-b-2 border-zinc-900 dark:border-zinc-800 bg-[#FAF9F6]/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-xs w-full shrink-0 select-none">
       {/* Mobile Logo */}
-      <Link href="/dashboard" className="flex items-center space-x-3">
-        <div className="w-8 h-8 rounded-xl bg-white/60 dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 flex items-center justify-center">
-          <svg className="w-4 h-4 text-stone-900 dark:text-zinc-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <Link href="/dashboard" className="flex items-center space-x-2.5 touch-target">
+        <div className="w-8 h-8 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 flex items-center justify-center shadow-xs">
+          <svg className="w-4 h-4 text-zinc-950 dark:text-zinc-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
           </svg>
         </div>
@@ -24,18 +24,20 @@ export function MobileHeader() {
       </Link>
 
       <div className="flex items-center gap-2">
-
         {/* Hamburger Menu & Sheet */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger 
             render={
-              <button className="p-2 -mr-2 text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-white/60 dark:hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer">
-                <Menu className="w-6 h-6" />
+              <button 
+                aria-label="Open Navigation Drawer"
+                className="w-10 h-10 flex items-center justify-center text-zinc-700 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl shadow-xs transition-colors cursor-pointer"
+              >
+                <Menu className="w-5 h-5" />
                 <span className="sr-only">Toggle Menu</span>
               </button>
             }
           />
-          <SheetContent side="left" className="p-0 bg-transparent border-none w-[280px]" showCloseButton={false}>
+          <SheetContent side="left" className="p-0 bg-transparent border-none w-[min(300px,85vw)]" showCloseButton={false}>
             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             <SheetDescription className="sr-only">Mobile navigation sidebar for Minskey</SheetDescription>
             <div className="h-full w-full" onClick={(e) => {
@@ -49,6 +51,6 @@ export function MobileHeader() {
           </SheetContent>
         </Sheet>
       </div>
-    </div>
+    </header>
   );
 }

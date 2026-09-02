@@ -130,7 +130,7 @@ export function DoodleProblemSection() {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.4, delay: 0.05 }}
             whileHover={{ y: -6, rotate: 0, scale: 1.02 }}
-            className="relative flex flex-col justify-between bg-[#FEF9C3] rounded-2xl border-2 border-zinc-900 p-6 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-[-1.5deg] transition-transform duration-200"
+            className="relative flex flex-col justify-between bg-[#FEF9C3] rounded-2xl border-2 border-zinc-900 p-5 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-0 sm:rotate-[-1.5deg] transition-transform duration-200"
           >
             <PushPin className="-top-3 left-4" />
             <WashiTape color="bg-amber-300/80" />
@@ -195,7 +195,7 @@ export function DoodleProblemSection() {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.4, delay: 0.15 }}
             whileHover={{ y: -6, rotate: 0, scale: 1.02 }}
-            className="relative flex flex-col justify-between bg-[#E0F2FE] rounded-2xl border-2 border-zinc-900 p-6 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-[1.2deg] transition-transform duration-200"
+            className="relative flex flex-col justify-between bg-[#E0F2FE] rounded-2xl border-2 border-zinc-900 p-5 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-0 sm:rotate-[1.2deg] transition-transform duration-200"
           >
             <PushPin className="-top-3 right-6" />
             <WashiTape color="bg-sky-200/80" />
@@ -260,7 +260,7 @@ export function DoodleProblemSection() {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.4, delay: 0.25 }}
             whileHover={{ y: -6, rotate: 0, scale: 1.02 }}
-            className="relative flex flex-col justify-between bg-[#F3E8FF] rounded-2xl border-2 border-zinc-900 p-6 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-[-1deg] transition-transform duration-200"
+            className="relative flex flex-col justify-between bg-[#F3E8FF] rounded-2xl border-2 border-zinc-900 p-5 sm:p-7 shadow-[4px_4px_0px_0px_#18181B] rotate-0 sm:rotate-[-1deg] transition-transform duration-200"
           >
             <PushPin className="-top-3 left-8" />
             <WashiTape color="bg-purple-300/80" />

@@ -312,16 +312,16 @@ export function PassportScannerModal({ isOpen, onClose }: PassportScannerModalPr
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: 15 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="relative w-full max-w-lg rounded-3xl border-2 border-zinc-900 bg-white dark:bg-zinc-900 shadow-[8px_8px_0px_0px_#18181B] dark:shadow-[8px_8px_0px_0px_#000000] z-10 overflow-hidden flex flex-col"
+          className="relative w-full max-w-lg rounded-3xl border-2 border-zinc-900 bg-white dark:bg-zinc-900 shadow-[8px_8px_0px_0px_#18181B] dark:shadow-[8px_8px_0px_0px_#000000] z-10 overflow-y-auto max-h-[calc(100dvh-2rem)] max-h-[calc(100svh-1.5rem)] touch-scroll flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-5 sm:p-6 border-b-2 border-zinc-900 dark:border-zinc-800 bg-[#FAF9F6] dark:bg-zinc-950">
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b-2 border-zinc-900 dark:border-zinc-800 bg-[#FAF9F6] dark:bg-zinc-950 sticky top-0 z-20">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B]">
-                <QrCode className="w-5 h-5" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center border-2 border-zinc-900 shadow-[2px_2px_0px_0px_#18181B] shrink-0">
+                <QrCode className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
+                <h3 className="text-base sm:text-lg font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
                   Candidate Passport Scanner
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
@@ -385,7 +385,7 @@ export function PassportScannerModal({ isOpen, onClose }: PassportScannerModalPr
             {activeTab === "camera" ? (
               <div className="flex flex-col items-center gap-4">
                 {/* Viewfinder Window with Stable Video Stream */}
-                <div className="relative w-full h-64 rounded-2xl border-2 border-zinc-900 bg-zinc-950 overflow-hidden flex items-center justify-center">
+                <div className="relative w-full h-52 sm:h-64 rounded-2xl border-2 border-zinc-900 bg-zinc-950 overflow-hidden flex items-center justify-center shrink-0">
                   <video
                     ref={videoRef}
                     playsInline
