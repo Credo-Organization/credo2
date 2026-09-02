@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -49,12 +50,17 @@ const PRESET_CANDIDATE_IDS = [
 
 export function PassportScannerModal({ isOpen, onClose }: PassportScannerModalProps) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"camera" | "id">("camera");
   const [passportId, setPassportId] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [cameraPermission, setCameraPermission] = useState<"granted" | "denied" | "prompt">("prompt");
   const [isScanning, setIsScanning] = useState(false);
   const [isAnalyzingFile, setIsAnalyzingFile] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -283,11 +289,11 @@ export function PassportScannerModal({ isOpen, onClose }: PassportScannerModalPr
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 select-none">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -521,6 +527,7 @@ export function PassportScannerModal({ isOpen, onClose }: PassportScannerModalPr
           </div>
         </motion.div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

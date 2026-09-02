@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { QRCodeSVG } from "qrcode.react";
 import {
   X,
@@ -32,14 +33,36 @@ export function SharePassportModal({
 }: SharePassportModalProps) {
   const [copied, setCopied] = useState(false);
   const [origin, setOrigin] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       setOrigin(window.location.origin);
     }
   }, []);
 
-  if (!isOpen) return null;
+  // Lock body scroll and listen for Escape key when open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !mounted) return null;
 
   const targetId = studentId || "CDY26S4611";
   const verificationUrl = `${origin || "https://minskey.dev"}/verify/passport/${targetId}`;
@@ -80,7 +103,7 @@ export function SharePassportModal({
 
       const img = new Image();
       img.onload = () => {
-        // Draw with 32px padding (quiet zone)
+        // Draw with 36px padding (quiet zone)
         const padding = 36;
         ctx.drawImage(img, padding, padding, size - padding * 2, size - padding * 2);
 
@@ -110,12 +133,12 @@ export function SharePassportModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 select-none">
-      {/* Backdrop */}
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 select-none">
+      {/* Backdrop covering whole viewport above all stacking contexts */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-zinc-950/70 backdrop-blur-xs transition-opacity animate-in fade-in"
+        className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm transition-opacity animate-in fade-in"
       />
 
       {/* Modal Window */}
@@ -223,6 +246,7 @@ export function SharePassportModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
