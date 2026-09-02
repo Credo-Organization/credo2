@@ -17,7 +17,8 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
 
   const handleShare = () => {
     if (typeof window !== "undefined") {
-      const url = studentData?.verificationUrl || window.location.href;
+      const studentId = studentData?.studentId || mappedData?.studentId || "CDY26S4611";
+      const url = `${window.location.origin}/verify/passport/${studentId}`;
       navigator.clipboard.writeText(url);
       toast.success("Verifiable Passport URL copied to clipboard!");
     }

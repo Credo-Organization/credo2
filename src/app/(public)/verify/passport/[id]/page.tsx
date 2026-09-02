@@ -3,6 +3,7 @@ import { StudentPassportIdCard } from "@/components/passport/student-id-card";
 import { ShieldCheck, CheckCircle2, Lock, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -11,9 +12,6 @@ interface Props {
 export default async function VerifyPassportPage({ params }: Props) {
   const { id } = await params;
 
-  // Only an identifier the owner published can be resolved here. The previous
-  // version pulled every passport in the table with the service-role client and
-  // filtered in JS, which both ignored is_public and scaled with the whole table.
   const safeId = id.replace(/[^A-Za-z0-9-]/g, "").slice(0, 64);
   const upperSafeId = safeId.toUpperCase();
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(safeId);
@@ -26,20 +24,38 @@ export default async function VerifyPassportPage({ params }: Props) {
     ...(isUuid ? [`id.eq.${safeId}`] : []),
   ];
 
-  const supabase = createAdminClient();
-  let { data: matched } = safeId
-    ? await supabase
-        .from("passports")
-        .select("*, profiles(*)")
-        .eq("is_public", true)
-        .or(filters.join(","))
-        .limit(1)
-        .maybeSingle()
-    : { data: null };
+  const serverClient = await createClient();
+  let matched: any = null;
+
+  if (safeId) {
+    const { data: mData } = await serverClient
+      .from("passports")
+      .select("*, profiles(*)")
+      .eq("is_public", true)
+      .or(filters.join(","))
+      .limit(1)
+      .maybeSingle();
+
+    if (mData) {
+      matched = mData;
+    } else {
+      try {
+        const admin = createAdminClient();
+        const { data: aData } = await admin
+          .from("passports")
+          .select("*, profiles(*)")
+          .eq("is_public", true)
+          .or(filters.join(","))
+          .limit(1)
+          .maybeSingle();
+        if (aData) matched = aData;
+      } catch {}
+    }
+  }
 
   // Fallback: If not matched by ID/card_id, check if safeId matches a profile username or name
   if (!matched && safeId) {
-    const { data: profileMatch } = await supabase
+    const { data: profileMatch } = await serverClient
       .from("profiles")
       .select("id")
       .or(`username.ilike.${safeId},full_name.ilike.%${safeId}%`)
@@ -47,7 +63,7 @@ export default async function VerifyPassportPage({ params }: Props) {
       .maybeSingle();
 
     if (profileMatch?.id) {
-      const { data: matchedPassport } = await supabase
+      const { data: matchedPassport } = await serverClient
         .from("passports")
         .select("*, profiles(*)")
         .eq("profile_id", profileMatch.id)

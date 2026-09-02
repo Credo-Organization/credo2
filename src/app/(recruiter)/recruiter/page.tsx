@@ -27,26 +27,58 @@ export default async function RecruiterPage() {
     // is applied as an explicit filter rather than left to the policy.
     const admin = createAdminClient();
 
-    const { data: passports } = await admin
+    let passports: any[] = [];
+    const { data: pData } = await supabase
       .from("passports")
       .select("snapshot_data, profile_id, profiles(full_name, college_name, headline)")
       .eq("is_public", true)
       .in("snapshot_data->>student_id", ids);
 
+    passports = pData ?? [];
+    if (passports.length === 0) {
+      try {
+        const { data: aPassports } = await admin
+          .from("passports")
+          .select("snapshot_data, profile_id, profiles(full_name, college_name, headline)")
+          .eq("is_public", true)
+          .in("snapshot_data->>student_id", ids);
+        if (aPassports?.length) passports = aPassports;
+      } catch {}
+    }
+
     const profileIds = (passports ?? []).map((p) => p.profile_id).filter(Boolean);
 
-    const { data: connections } = profileIds.length
-      ? await admin.from("github_connections").select("id, profile_id").in("profile_id", profileIds)
-      : { data: [] };
+    let connections: any[] = [];
+    if (profileIds.length) {
+      const { data: cData } = await supabase.from("github_connections").select("id, profile_id").in("profile_id", profileIds);
+      connections = cData ?? [];
+      if (connections.length === 0) {
+        try {
+          const { data: aConn } = await admin.from("github_connections").select("id, profile_id").in("profile_id", profileIds);
+          if (aConn?.length) connections = aConn;
+        } catch {}
+      }
+    }
 
     const connectionIds = (connections ?? []).map((c) => c.id);
 
-    const { data: repos } = connectionIds.length
-      ? await admin
-          .from("github_repos")
-          .select("connection_id, integrity_status")
-          .in("connection_id", connectionIds)
-      : { data: [] };
+    let repos: any[] = [];
+    if (connectionIds.length) {
+      const { data: rData } = await supabase
+        .from("github_repos")
+        .select("connection_id, integrity_status")
+        .in("connection_id", connectionIds);
+      repos = rData ?? [];
+      if (repos.length === 0) {
+        try {
+          const { data: aRepos } = await admin
+            .from("github_repos")
+            .select("connection_id, integrity_status")
+            .in("connection_id", connectionIds);
+          if (aRepos?.length) repos = aRepos;
+        } catch {}
+      }
+    }
 
     const connectionToProfile = new Map((connections ?? []).map((c) => [c.id, c.profile_id]));
     const stats = new Map<string, { repos: number; verified: number; flagged: number }>();

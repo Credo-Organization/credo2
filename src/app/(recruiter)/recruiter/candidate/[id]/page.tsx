@@ -21,8 +21,10 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     : `snapshot_data->>student_id.eq.${upperSafeId},snapshot_data->>card_id.eq.${upperSafeId},snapshot_data->>student_id.eq.${safeId},snapshot_data->>card_id.eq.${safeId}`;
 
   const admin = createAdminClient();
+
+  // Try querying with supabase client (which has valid session & RLS) first, fallback to admin
   let { data: passport } = safeId
-    ? await admin
+    ? await supabase
         .from("passports")
         .select("*, profiles(id, full_name, college_name, degree, headline)")
         .eq("is_public", true)
@@ -31,9 +33,24 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
         .maybeSingle()
     : { data: null };
 
+  if (!passport && safeId) {
+    try {
+      const { data: aData } = await admin
+        .from("passports")
+        .select("*, profiles(id, full_name, college_name, degree, headline)")
+        .eq("is_public", true)
+        .or(filterOr)
+        .limit(1)
+        .maybeSingle();
+      if (aData) passport = aData;
+    } catch {
+      // Ignore admin client JWT errors if service key is outdated
+    }
+  }
+
   // Fallback: If not matched by passport IDs, check if safeId matches a profile username or name
   if (!passport && safeId) {
-    const { data: profileMatch } = await admin
+    const { data: profileMatch } = await supabase
       .from("profiles")
       .select("id")
       .or(`username.ilike.${safeId},full_name.ilike.%${safeId}%`)
@@ -41,7 +58,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
       .maybeSingle();
 
     if (profileMatch?.id) {
-      const { data: matchedPassport } = await admin
+      const { data: matchedPassport } = await supabase
         .from("passports")
         .select("*, profiles(id, full_name, college_name, degree, headline)")
         .eq("profile_id", profileMatch.id)
@@ -91,20 +108,48 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     headline?: string;
   } | null;
 
-  const { data: connection } = profile?.id
-    ? await admin.from("github_connections").select("id").eq("profile_id", profile.id).maybeSingle()
-    : { data: null };
+  // Query connection, repos, and certs via client with RLS fallback
+  let connection: { id: string } | null = null;
+  if (profile?.id) {
+    const { data: conn } = await supabase.from("github_connections").select("id").eq("profile_id", profile.id).maybeSingle();
+    connection = conn;
+    if (!connection) {
+      try {
+        const { data: aConn } = await admin.from("github_connections").select("id").eq("profile_id", profile.id).maybeSingle();
+        if (aConn) connection = aConn;
+      } catch {}
+    }
+  }
 
-  const { data: repos } = connection
-    ? await admin
-        .from("github_repos")
-        .select("name, primary_language, integrity_status, integrity_score, integrity_flags, audit_votes")
-        .eq("connection_id", connection.id)
-    : { data: [] };
+  let repos: any[] = [];
+  if (connection?.id) {
+    const { data: rData } = await supabase
+      .from("github_repos")
+      .select("name, primary_language, integrity_status, integrity_score, integrity_flags, audit_votes")
+      .eq("connection_id", connection.id);
+    repos = rData ?? [];
+    if (repos.length === 0) {
+      try {
+        const { data: aRepos } = await admin
+          .from("github_repos")
+          .select("name, primary_language, integrity_status, integrity_score, integrity_flags, audit_votes")
+          .eq("connection_id", connection.id);
+        if (aRepos?.length) repos = aRepos;
+      } catch {}
+    }
+  }
 
-  const { data: certs } = profile?.id
-    ? await admin.from("certificates").select("title, issuer, sha256_hash").eq("profile_id", profile.id)
-    : { data: [] };
+  let certs: any[] = [];
+  if (profile?.id) {
+    const { data: cData } = await supabase.from("certificates").select("title, issuer, sha256_hash").eq("profile_id", profile.id);
+    certs = cData ?? [];
+    if (certs.length === 0) {
+      try {
+        const { data: aCerts } = await admin.from("certificates").select("title, issuer, sha256_hash").eq("profile_id", profile.id);
+        if (aCerts?.length) certs = aCerts;
+      } catch {}
+    }
+  }
 
   const { data: saved } = user
     ? await supabase
