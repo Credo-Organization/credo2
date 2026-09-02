@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { SkillPassportCard, SkillPassportData } from "@/components/dashboard/skill-passport-card";
 import { StudentPassportIdCard, StudentPassportProps } from "@/components/passport/student-id-card";
-import { CreditCard, LayoutDashboard, Share2, Printer } from "lucide-react";
+import { SharePassportModal } from "@/components/dashboard/share-passport-modal";
+import { CreditCard, LayoutDashboard, Share2, Printer, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -14,14 +15,14 @@ interface Props {
 
 export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
   const [viewMode, setViewMode] = useState<"id-card" | "analytics">("id-card");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const studentId = studentData?.studentId || mappedData?.studentId || "CDY26S4611";
+  const cardId = studentData?.cardId || mappedData?.cardId;
+  const studentName = studentData?.name || mappedData?.name || "Student Candidate";
 
   const handleShare = () => {
-    if (typeof window !== "undefined") {
-      const studentId = studentData?.studentId || mappedData?.studentId || "CDY26S4611";
-      const url = `${window.location.origin}/verify/passport/${studentId}`;
-      navigator.clipboard.writeText(url);
-      toast.success("Verifiable Passport URL copied to clipboard!");
-    }
+    setIsShareModalOpen(true);
   };
 
   const handlePrint = () => {
@@ -100,6 +101,14 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
           </div>
         )}
       </div>
+
+      <SharePassportModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        studentId={studentId}
+        cardId={cardId}
+        studentName={studentName}
+      />
     </div>
   );
 }
