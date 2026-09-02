@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { matchPassportToLiveOpportunities } from "@/lib/matching/opportunity-matcher";
 import { Button } from "@/components/ui/button";
-import { Briefcase, ArrowRight, Sparkles, ShieldCheck, Zap } from "lucide-react";
+import { Briefcase, ArrowRight, Sparkles, ShieldCheck, Zap, FileCheck2 } from "lucide-react";
 import Link from "next/link";
 import { GeneratePassportButton } from "@/components/passport/generate-button";
 import { InternshipsClientHub } from "@/components/opportunities/internships-client-hub";
@@ -94,7 +94,20 @@ export default async function InternshipsPage() {
             <h1 className="text-3xl font-black tracking-tight text-zinc-950 dark:text-zinc-100">
               Internship Opportunities
             </h1>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium mt-1">
+              AI-matched opportunities benchmarked against your cryptographic skill passport.
+            </p>
           </div>
+
+          <Link href="/dashboard/applications">
+            <button
+              type="button"
+              className="h-10 px-4 rounded-xl bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-950 dark:text-zinc-100 text-xs font-black border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] active:translate-y-[1px] active:shadow-none flex items-center gap-2 cursor-pointer transition-all"
+            >
+              <FileCheck2 className="w-4 h-4 text-blue-600" />
+              <span>Open Job Tracker ➔</span>
+            </button>
+          </Link>
         </div>
 
         {errorMsg && (

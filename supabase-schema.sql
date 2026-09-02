@@ -334,3 +334,44 @@ DROP POLICY IF EXISTS "Users can insert their own match jobs" ON public.match_jo
 CREATE POLICY "Users can insert their own match jobs" ON public.match_jobs FOR INSERT TO authenticated WITH CHECK (profile_id = auth.uid());
 DROP POLICY IF EXISTS "Service role can update match jobs" ON public.match_jobs;
 CREATE POLICY "Service role can update match jobs" ON public.match_jobs FOR UPDATE TO service_role USING (true);
+
+-- 9. JOB APPLICATIONS (Evidence-Backed Application Tracker)
+CREATE TABLE IF NOT EXISTS public.job_applications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  profile_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  company TEXT NOT NULL,
+  role TEXT NOT NULL,
+  location TEXT DEFAULT 'Remote / Hybrid',
+  salary TEXT,
+  status TEXT NOT NULL DEFAULT 'dispatched'
+    CHECK (status IN ('dispatched', 'audited', 'shortlisted', 'interview', 'offered', 'rejected')),
+  match_score INT DEFAULT 85,
+  gitproof_score INT DEFAULT 95,
+  passport_id TEXT,
+  verified_skills JSONB DEFAULT '[]'::jsonb,
+  notes TEXT,
+  recruiter_notes TEXT,
+  interview_date TIMESTAMPTZ,
+  timeline JSONB DEFAULT '[]'::jsonb,
+  applied_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.job_applications ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view own applications" ON public.job_applications;
+CREATE POLICY "Users can view own applications" ON public.job_applications
+  FOR SELECT TO authenticated USING (auth.uid() = profile_id);
+
+DROP POLICY IF EXISTS "Users can insert own applications" ON public.job_applications;
+CREATE POLICY "Users can insert own applications" ON public.job_applications
+  FOR INSERT TO authenticated WITH CHECK (auth.uid() = profile_id);
+
+DROP POLICY IF EXISTS "Users can update own applications" ON public.job_applications;
+CREATE POLICY "Users can update own applications" ON public.job_applications
+  FOR UPDATE TO authenticated USING (auth.uid() = profile_id);
+
+DROP POLICY IF EXISTS "Users can delete own applications" ON public.job_applications;
+CREATE POLICY "Users can delete own applications" ON public.job_applications
+  FOR DELETE TO authenticated USING (auth.uid() = profile_id);
+

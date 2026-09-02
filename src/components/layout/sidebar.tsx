@@ -9,11 +9,11 @@ import {
   LayoutDashboard,
   ChevronRight,
   ChevronLeft,
-  Briefcase,
   Users,
   Award,
   Settings,
   LogOut,
+  FileCheck2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -133,19 +133,19 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
             </div>
           </Link>
 
-          {/* Internships Link */}
-          <Link href="/dashboard/internships" className="block">
+          {/* My Applications Link */}
+          <Link href="/dashboard/applications" className="block">
             <div
               className={cn(
                 "flex items-center justify-between rounded-xl p-2.5 transition-all text-xs font-black group cursor-pointer",
-                pathname.startsWith("/dashboard/internships")
+                pathname.startsWith("/dashboard/applications")
                   ? "bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-100 shadow-[2px_2px_0px_0px_#18181B] border-2 border-zinc-900 dark:border-zinc-700"
                   : "text-zinc-700 dark:text-zinc-300 hover:bg-white/80 dark:hover:bg-zinc-800/80 hover:text-zinc-950 dark:hover:text-zinc-100"
               )}
             >
               <div className="flex items-center gap-3">
-                <Briefcase className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
-                {!isCollapsed && <span>Internships</span>}
+                <FileCheck2 className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
+                {!isCollapsed && <span>My Applications</span>}
               </div>
             </div>
           </Link>

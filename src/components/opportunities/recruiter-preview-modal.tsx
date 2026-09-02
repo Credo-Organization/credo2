@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { MatchResult } from "@/lib/matching/opportunity-matcher";
 import { toast } from "sonner";
+import { addApplication } from "@/lib/storage/job-applications";
 
 interface RecruiterPreviewModalProps {
   isOpen: boolean;
@@ -54,10 +55,24 @@ export function RecruiterPreviewModal({
     setIsSubmitting(true);
     // Simulate verifiable dispatch & cryptographic timestamping
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    addApplication({
+      company: opportunity.org_name,
+      role: opportunity.title,
+      location: opportunity.location || "Remote / Hybrid",
+      matchScore: matchScore,
+      passportId: shortToken,
+      status: "dispatched",
+      gitProofScore: 98,
+      verifiedSkills: matchedSkills?.map((s) => s.skill_name) || ["TypeScript", "Full-Stack"],
+      notes: "Submitted via Minskey Blind Passport Dispatch.",
+      recruiterNotes: "Application received with verified credential DID.",
+    });
+
     setIsSubmitting(false);
     setIsSubmitted(true);
     toast.success("Skill Passport Application Dispatched!", {
-      description: `Cryptographic proof bundle submitted to ${opportunity.org_name}.`,
+      description: `Added to your Job Tracker! Cryptographic proof bundle submitted to ${opportunity.org_name}.`,
     });
   };
 

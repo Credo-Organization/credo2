@@ -16,7 +16,6 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { AiCoachInsight } from "./ai-coach-insight";
-import { MultiVectorRadar } from "./multi-vector-radar";
 import { RecruiterPreviewModal } from "./recruiter-preview-modal";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +25,6 @@ interface OpportunityCardProps {
 }
 
 export function OpportunityCard({ result, passportSnapshot }: OpportunityCardProps) {
-  const [showRadar, setShowRadar] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
   const { opportunity, matchScore, matchedSkills, missingSkills } = result;
@@ -76,28 +74,6 @@ export function OpportunityCard({ result, passportSnapshot }: OpportunityCardPro
 
         {/* Card Body */}
         <div className="p-7 space-y-6 flex-1 flex flex-col justify-between relative z-10 bg-white dark:bg-zinc-900 transition-colors">
-          {/* Radar Toggle Button */}
-          <div>
-            <button
-              onClick={() => setShowRadar(!showRadar)}
-              className="w-full flex items-center justify-between text-xs font-black text-zinc-950 dark:text-zinc-100 bg-stone-50 dark:bg-zinc-800 hover:bg-stone-100 dark:hover:bg-zinc-700 border-2 border-zinc-900 dark:border-zinc-700 px-4 py-2 rounded-xl transition-all shadow-xs cursor-pointer"
-            >
-              <span>4-Vector Evidence Balance</span>
-              {showRadar ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-          </div>
-
-          {/* Collapsible Radar View */}
-          {showRadar && (
-            <div className="pt-2 pb-4 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700 animate-fade-in">
-              <MultiVectorRadar
-                matchScore={matchScore}
-                matchedCount={matchedSkills.length}
-                totalRequirements={opportunity.requirements.length}
-              />
-            </div>
-          )}
-
           {/* Skills Breakdown */}
           <div className="space-y-4 flex-1">
             {/* Matched Skills */}
