@@ -119,7 +119,7 @@ export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps)
   };
 
   return (
-    <div className="w-full rounded-3xl bg-[#FAF9F6] dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] p-5 select-none overflow-hidden flex flex-col transition-colors">
+    <div className="w-full rounded-3xl bg-indigo-500/[0.04] dark:bg-indigo-950/20 border-2 border-zinc-900 dark:border-zinc-700 shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#000000] p-5 select-none overflow-hidden flex flex-col transition-colors">
       
       {/* Top Header */}
       <div className="flex items-center justify-between gap-3 pb-3 border-b-2 border-zinc-900 dark:border-zinc-700">

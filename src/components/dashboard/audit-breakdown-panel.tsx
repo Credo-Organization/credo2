@@ -290,7 +290,12 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-zinc-800/80 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
+                  className={cn(
+                    "border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 transition-all duration-200 flex flex-col gap-2.5 group shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]",
+                    isVerified
+                      ? "bg-emerald-500/[0.05] hover:bg-emerald-500/[0.08] dark:bg-emerald-950/25 dark:hover:bg-emerald-950/40"
+                      : "bg-rose-500/[0.05] hover:bg-rose-500/[0.08] dark:bg-rose-950/25 dark:hover:bg-rose-950/40"
+                  )}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2 min-w-0">
@@ -475,7 +480,12 @@ export function AuditBreakdownPanel({
               return (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-zinc-800/80 border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex flex-col gap-3 transition-all shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]"
+                  className={cn(
+                    "border-2 border-zinc-900 dark:border-zinc-700 rounded-2xl p-4 flex flex-col gap-3 transition-all shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000]",
+                    isAccepted
+                      ? "bg-emerald-500/[0.05] hover:bg-emerald-500/[0.08] dark:bg-emerald-950/25 dark:hover:bg-emerald-950/40"
+                      : "bg-rose-500/[0.05] hover:bg-rose-500/[0.08] dark:bg-rose-950/25 dark:hover:bg-rose-950/40"
+                  )}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">

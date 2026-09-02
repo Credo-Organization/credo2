@@ -99,10 +99,10 @@ export function SkillGapMatrix({
               {verifiedSkills.slice(0, 6).map((skill, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 px-3 rounded-xl bg-white dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] flex items-center justify-between"
+                  className="p-2.5 px-3 rounded-xl bg-emerald-500/[0.06] hover:bg-emerald-500/[0.09] dark:bg-emerald-950/30 dark:hover:bg-emerald-950/45 border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] flex items-center justify-between transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 stroke-[2.5]" />
                     <span className="text-xs font-black text-zinc-950 dark:text-zinc-100">
                       {skill.name}
                     </span>
@@ -150,8 +150,8 @@ export function SkillGapMatrix({
                     className={cn(
                       "w-full text-left p-2.5 px-3 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all flex items-center justify-between gap-2 cursor-pointer group",
                       isCritical
-                        ? "bg-[#FFF1F2] dark:bg-rose-950/20 hover:bg-[#FFE4E6] dark:hover:bg-rose-950/40"
-                        : "bg-[#FFFBEB] dark:bg-amber-950/20 hover:bg-[#FEF3C7] dark:hover:bg-amber-950/40"
+                        ? "bg-rose-500/[0.06] hover:bg-rose-500/[0.10] dark:bg-rose-950/30 dark:hover:bg-rose-950/45"
+                        : "bg-amber-500/[0.06] hover:bg-amber-500/[0.10] dark:bg-amber-950/30 dark:hover:bg-amber-950/45"
                     )}
                   >
                     <div className="flex items-center gap-2 min-w-0">

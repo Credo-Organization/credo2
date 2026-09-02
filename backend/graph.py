@@ -159,11 +159,9 @@ def compute_match(state: GraphState):
             # service for as long as nobody read the logs.
             print(
                 "!!! MATCH EVALUATOR DEGRADED: every LLM provider failed; returning a "
-                "keyword-overlap heuristic, not an AI verdict.
-"
+                "keyword-overlap heuristic, not an AI verdict.\n"
                 f"!!! AI_BASE_URL={base_url!r}  api_key_present={bool(api_key)}  "
-                f"google_key_present={bool(os.environ.get('GOOGLE_API_KEY') or os.environ.get('GEMINI_API_KEY'))}
-"
+                f"google_key_present={bool(os.environ.get('GOOGLE_API_KEY') or os.environ.get('GEMINI_API_KEY'))}\n"
                 "!!! A 401 here usually means the key belongs to a different provider "
                 "than AI_BASE_URL points at."
             )
