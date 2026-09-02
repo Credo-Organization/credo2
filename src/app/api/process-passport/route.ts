@@ -248,7 +248,7 @@ export async function POST(request: Request) {
         profile_id: user_id,
         version: (existingPassport?.version || 0) + 1,
         status: "published",
-        is_public: false,
+        is_public: true,
         title: `${profile?.full_name || 'My'} Skill Passport`,
         snapshot_data: snapshotData,
         generated_at: new Date().toISOString()

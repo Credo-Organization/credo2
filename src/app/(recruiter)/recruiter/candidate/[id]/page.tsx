@@ -14,13 +14,19 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     data: { user },
   } = await supabase.auth.getUser();
 
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(safeId);
+  const upperSafeId = safeId.toUpperCase();
+  const filterOr = isUuid
+    ? `id.eq.${safeId},snapshot_data->>student_id.eq.${upperSafeId},snapshot_data->>card_id.eq.${upperSafeId}`
+    : `snapshot_data->>student_id.eq.${upperSafeId},snapshot_data->>card_id.eq.${upperSafeId},snapshot_data->>student_id.eq.${safeId},snapshot_data->>card_id.eq.${safeId}`;
+
   const admin = createAdminClient();
   const { data: passport } = safeId
     ? await admin
         .from("passports")
         .select("*, profiles(id, full_name, college_name, degree, headline)")
         .eq("is_public", true)
-        .or(`snapshot_data->>student_id.eq.${safeId},snapshot_data->>card_id.eq.${safeId}`)
+        .or(filterOr)
         .limit(1)
         .maybeSingle()
     : { data: null };
