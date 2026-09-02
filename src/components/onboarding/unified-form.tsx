@@ -219,7 +219,7 @@ export function UnifiedOnboardingForm() {
   ];
 
   return (
-    <div className="relative w-full max-w-7xl overflow-x-clip overflow-y-visible flex flex-col items-center justify-center min-h-[760px] py-4">
+    <div className="relative w-full max-w-7xl overflow-x-clip overflow-y-visible flex flex-col items-center justify-center py-4 h-full">
       <RealtimeScanModal
         isOpen={isScanModalOpen}
         onClose={() => {
@@ -281,8 +281,7 @@ export function UnifiedOnboardingForm() {
         </div>
       </div>
 
-      {/* ── 3-Step Carousel Stage ── */}
-      <div className="relative w-full max-w-[500px] min-h-[660px] flex items-center justify-center">
+      <div className="relative w-full max-w-[500px] min-h-[560px] flex items-center justify-center mt-4">
         {/* ═══════════════ STEP 1: ABOUT YOURSELF ═══════════════ */}
         <motion.div
           ref={step1CardRef}
@@ -290,7 +289,7 @@ export function UnifiedOnboardingForm() {
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
           onClick={() => step !== 1 && setStep(1)}
           className={cn(
-            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none relative",
+            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none",
             step !== 1 && "cursor-pointer hover:opacity-60 transition-opacity"
           )}
         >
@@ -449,7 +448,7 @@ export function UnifiedOnboardingForm() {
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
           onClick={() => step !== 2 && setStep(2)}
           className={cn(
-            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none min-h-[560px] relative",
+            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none min-h-[560px]",
             step !== 2 && "cursor-pointer hover:opacity-60 transition-opacity"
           )}
         >
@@ -548,7 +547,7 @@ export function UnifiedOnboardingForm() {
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
           onClick={() => step !== 3 && setStep(3)}
           className={cn(
-            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none min-h-[560px] relative",
+            "absolute w-full rounded-3xl bg-white border-2 border-zinc-900 p-7 sm:p-9 shadow-[7px_7px_0px_0px_rgba(24,24,27,0.95)] flex flex-col justify-between select-none min-h-[560px]",
             step !== 3 && "cursor-pointer hover:opacity-60 transition-opacity"
           )}
         >
