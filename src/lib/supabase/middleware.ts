@@ -2,16 +2,18 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { routeForRole } from "@/lib/auth/route-for-role";
 
+const DEFAULT_ANON_KEY = "sb_publishable_hGB52K6xuHwyS4sWs512SQ_L1nE4sNU";
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://wizuwacevushwlegfgyu.supabase.co";
+  let supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("<your-project>")) {
-    return supabaseResponse;
+  if (!supabaseAnonKey || supabaseAnonKey.startsWith("eyJhbGci") || supabaseAnonKey.includes("mock-anon-key")) {
+    supabaseAnonKey = DEFAULT_ANON_KEY;
   }
 
   const supabase = createServerClient(
