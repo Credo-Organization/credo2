@@ -35,22 +35,29 @@ export async function saveCandidate(passportId: string) {
   const id = safeId(passportId);
   if (!id) return { success: false, error: "That passport ID is not valid." };
 
-  // A passport answers to two identifiers - the student id and the card id
-  // printed on the physical card - and the candidate page accepts either. The
-  // shortlist, however, matches on student_id alone, so saving a candidate by
-  // their card id stored a row that the shortlist could never render: the
-  // recruiter saw a success toast and then an empty list. Resolve to the
-  // student id here so one identifier is stored regardless of which was typed.
-  //
-  // Resolving also confirms the passport exists and is shared, which stops the
-  // shortlist accumulating rows for identifiers that match nothing.
-  const { data: passport } = await createAdminClient()
+  const upperId = id.toUpperCase();
+  const filterOr = `snapshot_data->>student_id.eq.${upperId},snapshot_data->>card_id.eq.${upperId},snapshot_data->>student_id.eq.${id},snapshot_data->>card_id.eq.${id}`;
+
+  let { data: passport } = await supabase
     .from("passports")
     .select("snapshot_data")
     .eq("is_public", true)
-    .or(`snapshot_data->>student_id.eq.${id},snapshot_data->>card_id.eq.${id}`)
+    .or(filterOr)
     .limit(1)
     .maybeSingle();
+
+  if (!passport) {
+    try {
+      const { data: aData } = await createAdminClient()
+        .from("passports")
+        .select("snapshot_data")
+        .eq("is_public", true)
+        .or(filterOr)
+        .limit(1)
+        .maybeSingle();
+      if (aData) passport = aData;
+    } catch {}
+  }
 
   const canonicalId = (passport?.snapshot_data as { student_id?: string } | null)?.student_id;
   if (!canonicalId) {

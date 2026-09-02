@@ -26,11 +26,10 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error && data?.user) {
       // Redirect based on onboarding status
-      const { data: { user } } = await supabase.auth.getUser();
-      const onboardingCompleted = user?.user_metadata?.onboarding_completed;
+      const onboardingCompleted = data.user.user_metadata?.onboarding_completed;
 
       const target = safeNext(next);
       const destination = target
