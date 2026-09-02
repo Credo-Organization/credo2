@@ -49,14 +49,14 @@ export function SkillGapMatrix({
       
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b-2 border-zinc-900 dark:border-zinc-700">
-        <div>
-          <h3 className="text-lg sm:text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
-            Target Benchmark: <span className="underline decoration-zinc-900 dark:decoration-zinc-400 decoration-2 underline-offset-4">{careerGoal}</span>
+        <div className="min-w-0 flex-1 mr-3">
+          <h3 className="text-lg sm:text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight truncate">
+            Target Benchmark: <span>{careerGoal}</span>
           </h3>
         </div>
 
         {/* Tactile Pastel Stamp Badge */}
-        <div className="self-start sm:self-center border-2 border-zinc-900 dark:border-zinc-700 bg-[#FEF08A] dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 px-3 py-1 rounded-2xl -rotate-1 shadow-[2px_2px_0px_0px_#18181B] flex items-center gap-1.5">
+        <div className="shrink-0 self-start sm:self-center border-2 border-zinc-900 dark:border-zinc-700 bg-[#FEF08A] dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 px-3 py-1 rounded-2xl -rotate-1 shadow-[2px_2px_0px_0px_#18181B] flex items-center gap-1.5">
           <Target className="w-4 h-4 text-amber-900 dark:text-amber-300" />
           <span className="text-xs sm:text-sm font-black tracking-tight">
             {readinessPercent}% Role Readiness
@@ -137,7 +137,7 @@ export function SkillGapMatrix({
                   type="button"
                   onClick={() => onAskMentorForGap?.(gap.name)}
                   className={cn(
-                    "w-full text-left p-2 px-3 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all flex items-center justify-between gap-2 cursor-pointer group",
+                    "w-full text-left p-2.5 px-3 rounded-xl border-2 border-zinc-900 dark:border-zinc-700 shadow-[2px_2px_0px_0px_#18181B] dark:shadow-[2px_2px_0px_0px_#000000] hover:shadow-[3px_3px_0px_0px_#18181B] active:translate-x-[1px] active:translate-y-[1px] transition-all flex items-center justify-between gap-2 cursor-pointer group",
                     isCritical
                       ? "bg-[#FFF1F2] dark:bg-rose-950/20 hover:bg-[#FFE4E6] dark:hover:bg-rose-950/40"
                       : "bg-[#FFFBEB] dark:bg-amber-950/20 hover:bg-[#FEF3C7] dark:hover:bg-amber-950/40"

@@ -116,10 +116,7 @@ export function AuditBreakdownPanel({
       {/* Top Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b-2 border-zinc-900 dark:border-zinc-700 relative z-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#BAE6FD] dark:bg-blue-950/60 border-2 border-zinc-900 dark:border-zinc-700 text-zinc-950 dark:text-blue-300 text-xs font-black mb-1.5 shadow-[2px_2px_0px_0px_#18181B]">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-700 dark:text-blue-400 stroke-[2.5]" />
-            GitProof™ Deep Audit Engine
-          </div>
+
           <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-zinc-100 flex items-center gap-2">
             Verification & Evidence Breakdown
           </h2>

@@ -48,22 +48,12 @@ export function SquadApplyModal({ squad, isOpen, onClose, userSkills = [] }: Squ
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-xl bg-white dark:bg-zinc-900 border-2 border-zinc-900 dark:border-zinc-700 text-stone-900 dark:text-zinc-100 p-6 rounded-3xl shadow-[6px_6px_0px_0px_#18181B] dark:shadow-[6px_6px_0px_0px_#000000] transition-colors">
         <DialogHeader className="space-y-2 text-left">
-          <div className="flex items-center gap-2">
-            <div className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900/60 text-blue-950 dark:text-blue-300 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldCheck className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-              Cryptographic Handshake
-            </div>
-            <span className="text-xs text-stone-500 dark:text-zinc-400 font-mono font-bold">
-              SIH-SQUAD-{squad.id}
-            </span>
-          </div>
+
 
           <DialogTitle className="text-xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
             Apply to Join {squad.name}
           </DialogTitle>
-          <DialogDescription className="text-xs text-zinc-600 dark:text-zinc-400">
-            Send your verified Skill Passport and GitProof code metrics to squad lead <strong className="text-zinc-950 dark:text-zinc-100">{squad.leader}</strong>.
-          </DialogDescription>
+
         </DialogHeader>
 
         {isSuccess ? (

@@ -22,22 +22,22 @@ interface AiMentorConsoleProps {
 
 const TACTICAL_ACTIONS = [
   { 
-    label: "🎯 14-Day Gap Plan", 
+    label: "14-Day Gap Plan", 
     prompt: "Give me a step-by-step 14-day study & project roadmap to close my top lagging skill gap.",
     bgClass: "bg-[#FCE7F3] dark:bg-pink-950/40 text-pink-950 dark:text-pink-200 hover:bg-[#FBCFE8] dark:hover:bg-pink-900/60",
   },
   { 
-    label: "🏗️ Project Blueprint", 
+    label: "Project Blueprint", 
     prompt: "Generate a production-grade portfolio project blueprint designed to impress hiring managers for my target role.",
     bgClass: "bg-[#FEF9C3] dark:bg-amber-950/40 text-amber-950 dark:text-amber-200 hover:bg-[#FEF08A] dark:hover:bg-amber-900/60",
   },
   { 
-    label: "🎙️ Mock Interview", 
+    label: "Mock Interview", 
     prompt: "Simulate a technical interview for my target role: ask me 3 challenging questions based on my verified skills.",
     bgClass: "bg-[#DCFCE7] dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 hover:bg-[#BBF7D0] dark:hover:bg-emerald-900/60",
   },
   { 
-    label: "📦 GitHub Audit", 
+    label: "GitHub Audit", 
     prompt: "How should I structure my GitHub repositories and READMEs to stand out to engineering recruiters?",
     bgClass: "bg-[#E0F2FE] dark:bg-sky-950/40 text-blue-950 dark:text-sky-200 hover:bg-[#BAE6FD] dark:hover:bg-sky-900/60",
   },
@@ -47,9 +47,7 @@ export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps)
   const [messages, setMessages] = useState<MentorMessage[]>([
     {
       role: "assistant",
-      content: `👋 Hi **${context.studentName || "there"}**! I am your **AI Career Mentor**, grounded directly in your **${context.verifiedSkills?.length || 0} verified skills** and audited GitHub repositories.
-
-I'm ready to help you bridge your lagging gaps for the **${context.careerGoal || "Engineering"}** benchmark. Click a prompt above or ask me about system architecture, projects, or interview prep!`,
+      content: `Hi **${context.studentName || "Soumya"}**! Let’s work on your next career milestone.`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -132,10 +130,6 @@ I'm ready to help you bridge your lagging gaps for the **${context.careerGoal ||
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEF08A] dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 border-2 border-zinc-900 dark:border-zinc-700 text-xs font-black shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-800 dark:text-amber-300" />
-            Grounded in your passport
-          </span>
           <button
             type="button"
             onClick={handleResetChat}

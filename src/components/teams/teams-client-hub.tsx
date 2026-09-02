@@ -213,11 +213,7 @@ export function TeamsClientHub({
       {/* Top Header: Clean Editorial Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="font-doodle text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-bold -rotate-1 select-none">
-              ✨ SIH 2026 Dream Team Matcher
-            </span>
-          </div>
+
           <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 dark:text-zinc-100 tracking-tight">
             Hackathon Squad Matcher
           </h1>
@@ -278,51 +274,23 @@ export function TeamsClientHub({
                 )}
               </div>
 
-              {/* Controls: Sorter */}
+              {/* Controls: Track */}
               <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-bold">Sort:</span>
+                  <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-bold">Track:</span>
                   <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
+                    value={selectedTrack}
+                    onChange={(e) => setSelectedTrack(e.target.value)}
                     className="bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-950 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-600 font-bold cursor-pointer"
                   >
-                    <option value="synergy" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">Top Synergy Fit</option>
-                    <option value="members" className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">Most Open Slots</option>
+                    {TRACK_CHIPS.map((chip) => (
+                      <option key={chip} value={chip} className="bg-white dark:bg-zinc-900 text-zinc-950 dark:text-zinc-100">
+                        {chip}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
-            </div>
-
-            {/* Tier 2: Track Filter Chips with Icons */}
-            <div className="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mr-1">
-                Tracks:
-              </span>
-              {TRACK_CHIPS.map((chip) => {
-                const isSelected = selectedTrack === chip;
-                let icon = "🌐";
-                if (chip.includes("AI")) icon = "🤖";
-                if (chip.includes("Blockchain")) icon = "🔐";
-                if (chip.includes("AgriTech")) icon = "🌾";
-                if (chip.includes("MedTech")) icon = "🏥";
-
-                return (
-                  <button
-                    key={chip}
-                    onClick={() => setSelectedTrack(chip)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer border-2 border-zinc-900 dark:border-zinc-700 ${
-                      isSelected
-                        ? "bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,0.9)] dark:shadow-[2px_2px_0px_0px_#000000]"
-                        : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 shadow-xs"
-                    }`}
-                  >
-                    <span className="text-xs">{icon}</span>
-                    <span>{chip}</span>
-                  </button>
-                );
-              })}
             </div>
           </div>
 
