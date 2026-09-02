@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minskey — Candidate Verification & Architecture Dossier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #FAF9F6;
+      color: #09090B;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      padding: 2.5rem 1.5rem;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .max-w-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Top Back Link & Print */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #52525B;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .back-btn:hover {
+      color: #09090B;
+    }
+
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid #18181B;
+      background: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #18181B;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: all 0.15s ease;
+    }
+    .print-btn:hover {
+      background: #F4F4F5;
+    }
+
+    /* Recruiter Header Card (Pixel-Matched to Screenshot) */
+    .recruiter-card {
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      border-radius: 1.5rem; /* rounded-3xl */
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (min-width: 640px) {
+      .recruiter-card {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+    }
+
+    .kicker {
+      font-size: 0.625rem; /* text-[10px] */
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #2563EB;
+      margin-bottom: 0.25rem;
+    }
+
+    .title {
+      font-size: 1.75rem; /* text-2xl/3xl */
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #09090B;
+      line-height: 1.2;
+    }
+
+    .sub-meta {
+      font-size: 0.75rem; /* text-xs */
+      color: #71717A;
+      font-weight: 500;
+      margin-top: 0.35rem;
+    }
+
+    .sub-meta strong {
+      color: #09090B;
+      font-weight: 800;
+    }
+
+    /* Saved to Shortlist Button (Exact Match) */
+    .saved-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 1rem; /* rounded-2xl */
+      border: 1px solid #BFDBFE;
+      background-color: #EFF6FF;
+      color: #1E3A8A;
+      padding: 0.625rem 1.15rem;
+      font-size: 0.875rem; /* text-sm */
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      cursor: default;
+    }
+
+    .saved-badge svg {
+      width: 1rem;
+      height: 1rem;
+      stroke-width: 2.2;
+    }
+
+    /* Connected Metrics Ribbon (4 Cells) */
+    .metrics-ribbon {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-radius: 1rem; /* rounded-2xl */
+      border: 1.5px solid #18181B;
+      background: #FFFFFF;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (min-width: 768px) {
+      .metrics-ribbon {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .metric-cell {
+      padding: 1.15rem 1.25rem;
+      background: #FFFFFF;
+    }
+
+    .metric-cell:nth-child(1), .metric-cell:nth-child(3) {
+      border-right: 1.5px solid #18181B;
+    }
+
+    .metric-cell:nth-child(1), .metric-cell:nth-child(2) {
+      border-bottom: 1.5px solid #18181B;
+    }
+
+    @media (min-width: 768px) {
+      .metric-cell:nth-child(1), .metric-cell:nth-child(2), .metric-cell:nth-child(3) {
+        border-right: 1.5px solid #18181B;
+        border-bottom: none;
+      }
+    }
+
+    .metric-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #09090B;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-val.green {
+      color: #059669;
+    }
+
+    .metric-val.red {
+      color: #E11D48;
+    }
+
+    .metric-lbl {
+      font-size: 0.625rem; /* text-[10px] */
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: #71717A;
+      margin-top: 0.4rem;
+    }
+
+    /* Section Headers */
+    .section-headline-group {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .section-headline {
+      font-size: 0.75rem; /* text-xs */
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #09090B;
+    }
+
+    .section-subtext {
+      font-size: 0.6875rem; /* text-[11px] */
+      color: #71717A;
+      font-weight: 500;
+    }
+
+    /* Recruiter Table Card */
+    .table-card {
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      border-radius: 1.25rem; /* rounded-2xl */
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.625rem; /* text-[10px] */
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #71717A;
+      border-bottom: 1.5px solid #18181B;
+      background: #FFFFFF;
+    }
+
+    td {
+      padding: 1.15rem 1.25rem;
+      font-size: 0.8125rem;
+      border-bottom: 1px solid #E4E4E7;
+      vertical-align: top;
+      color: #27272A;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .row-title {
+      font-size: 0.9375rem;
+      font-weight: 800;
+      color: #09090B;
+      line-height: 1.3;
+    }
+
+    .row-desc-list {
+      margin-top: 0.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .row-desc-item {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #52525B;
+    }
+
+    .row-desc-item.red-note {
+      color: #E11D48;
+      font-weight: 600;
+    }
+
+    .row-desc-item.blue-analogy {
+      color: #1D4ED8;
+      font-weight: 600;
+    }
+
+    .score-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.875rem;
+    }
+
+    /* Soft Pill Badges (Matched to Screenshot) */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .pill-flagged {
+      background: #FFF1F2;
+      border: 1px solid #FECDD3;
+      color: #E11D48;
+    }
+
+    .pill-verified {
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      color: #059669;
+    }
+
+    .pill-blue-tag {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      color: #1D4ED8;
+    }
+
+    .panel-consensus {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      color: #09090B;
+      font-size: 0.75rem;
+    }
+
+    .panel-consensus span {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #71717A;
+      font-weight: 500;
+      font-size: 0.75rem;
+    }
+
+    /* Grid for 2-column cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .content-box {
+      background: #FFFFFF;
+      border: 1.5px solid #18181B;
+      border-radius: 1.25rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .content-box-title {
+      font-size: 0.9375rem;
+      font-weight: 900;
+      color: #09090B;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .content-box-body {
+      font-size: 0.75rem;
+      color: #52525B;
+      line-height: 1.6;
+    }
+
+    .content-box-body strong {
+      color: #09090B;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #FFFFFF;
+      }
+      .top-nav {
+        display: none;
+      }
+      .table-card, .recruiter-card, .metrics-ribbon, .content-box {
+        page-break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="max-w-container">
+
+    <!-- Top Nav -->
+    <div class="top-nav">
+      <a href="/recruiter" class="back-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+        Back to Shortlist
+      </a>
+
+      <button class="print-btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        Export PDF / Print
+      </button>
+    </div>
+
+    <!-- Recruiter Header Card (Pixel-Matched to Screenshot) -->
+    <header class="recruiter-card">
+      <div>
+        <div class="kicker">CANDIDATE VERIFICATION DOSSIER & ARCHITECTURE DEFENSE</div>
+        <h1 class="title">Subham Sarangi</h1>
+        <p class="sub-meta">
+          AI Engineer · <strong>SOA University</strong> · <span style="font-family: 'JetBrains Mono'; font-weight: 700; color: #09090B;">CDY26S4611</span>
+        </p>
+      </div>
+
+      <!-- Exact "Saved to shortlist" Button from Screenshot -->
+      <div class="saved-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          <path d="m9 10 2 2 4-4"></path>
+        </svg>
+        Saved to shortlist
+      </div>
+    </header>
+
+    <!-- Metrics Ribbon (Connected 4-Cells Matched to Screenshot) -->
+    <div class="metrics-ribbon">
+      <div class="metric-cell">
+        <div class="metric-val">14</div>
+        <div class="metric-lbl">Repositories Audited</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-val green">11</div>
+        <div class="metric-lbl">Verified Clean</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-val red">3</div>
+        <div class="metric-lbl">Integrity Flags Caught</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-val">1</div>
+        <div class="metric-lbl">W3C Credential Passport</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Technical Terms Table (Pixel-Matched to Repo Audit Table) -->
+    <section>
+      <div class="section-headline-group">
+        <h2 class="section-headline">GITPROOF™ REPOSITORY INGESTION & INTEGRITY ARCHITECTURE</h2>
+        <span class="section-subtext">Plain-English translation for evaluators & judges</span>
+      </div>
+
+      <div class="table-card" style="margin-top: 0.625rem;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 48%;">CONCEPT & ARCHITECTURAL MODULE</th>
+              <th style="width: 14%;">CATEGORY</th>
+              <th style="width: 12%;">INTEGRITY</th>
+              <th style="width: 14%;">VERDICT</th>
+              <th style="width: 12%;">PANEL</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <!-- 1. Skill Passport -->
+            <tr>
+              <td>
+                <div class="row-title">1. Skill Passport (Verifiable Credential)</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item">Digital card encoding coding skills from real GitHub commits and university certs.</div>
+                  <div class="row-desc-item">Replaces unverified text claims with mathematically authenticated proof.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: Like a government travel passport with visa stamps, but for code.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">W3C Credential</span></td>
+              <td><span class="score-mono" style="color: #059669;">100</span></td>
+              <td>
+                <span class="status-pill pill-verified">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  verified
+                </span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+            <!-- 2. DID Identifier -->
+            <tr>
+              <td>
+                <div class="row-title">2. DID (Decentralized Identifier — did:cdy:CDY26S4611)</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item">Globally unique, permanent digital serial number belonging to the student for life.</div>
+                  <div class="row-desc-item">Survives college graduation; can be verified worldwide without central database dependency.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: A developer's permanent Aadhaar or Social Security Number.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">Identity</span></td>
+              <td><span class="score-mono" style="color: #059669;">100</span></td>
+              <td>
+                <span class="status-pill pill-verified">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  verified
+                </span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+            <!-- 3. Ed25519 Cryptographic Signatures -->
+            <tr>
+              <td>
+                <div class="row-title">3. Ed25519 Cryptographic Signatures</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item">Public-key encryption locking the credential. Any tampering shatters the signature.</div>
+                  <div class="row-desc-item">Prevents students from modifying skills, scores, or grades using browser Inspect Element.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: A tamper-proof wax seal on a legal deed that breaks if opened.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">Security</span></td>
+              <td><span class="score-mono" style="color: #059669;">100</span></td>
+              <td>
+                <span class="status-pill pill-verified">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  tamper-proof
+                </span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+            <!-- 4. GitProof & Commit Physics -->
+            <tr>
+              <td>
+                <div class="row-title">4. GitProof & Commit Physics (Anti-Cheat)</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item red-note">Detects suspicious 1-day commits, automated commit farming, and tutorial forks.</div>
+                  <div class="row-desc-item">Analyzes commit velocity and AST entropy over time to prove genuine human authoring.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: Odometer checking if a car drove 500 miles naturally or was rolled back.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">Commit Math</span></td>
+              <td><span class="score-mono" style="color: #059669;">98</span></td>
+              <td>
+                <span class="status-pill pill-verified">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  verified
+                </span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+            <!-- 5. 3-Model AI Consensus Engine -->
+            <tr>
+              <td>
+                <div class="row-title">5. Multi-Model AI Consensus Engine (Llama-3, Gemini, Grok)</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item">Routes verification audits through 3 distinct model families simultaneously.</div>
+                  <div class="row-desc-item">Requires 2/3 majority agreement to approve a skill, eliminating AI hallucinations.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: A 3-judge jury panel overruling individual judicial bias.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">AI Ensemble</span></td>
+              <td><span class="score-mono" style="color: #059669;">95</span></td>
+              <td>
+                <span class="status-pill pill-blue-tag">consensus</span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+            <!-- 6. Zero-Knowledge Blind Matching -->
+            <tr>
+              <td>
+                <div class="row-title">6. Zero-Knowledge Blind Matching (PII Sanitization)</div>
+                <div class="row-desc-list">
+                  <div class="row-desc-item">Strips candidate name, gender, age, photo, and college name before matching algorithms.</div>
+                  <div class="row-desc-item">Eliminates unconscious recruitment bias, allowing non-elite college coders to win on merit.</div>
+                  <div class="row-desc-item blue-analogy">💡 Analogy: Blind orchestra auditions behind a screen to judge purely on acoustic skill.</div>
+                </div>
+              </td>
+              <td><span style="font-weight: 700; color: #52525B;">DEI & Ethics</span></td>
+              <td><span class="score-mono" style="color: #059669;">100</span></td>
+              <td>
+                <span class="status-pill pill-verified">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  unbiased
+                </span>
+              </td>
+              <td><span class="panel-consensus">3/3 <span>agreed</span></span></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 2: Business Motive & Revenue -->
+    <section>
+      <div class="section-headline-group">
+        <h2 class="section-headline">THE $50 BILLION RECRUITMENT CRISIS & BUSINESS REVENUE MODEL</h2>
+        <span class="section-subtext">Aligning the financial incentives of Universities, Recruiters & Students</span>
+      </div>
+
+      <div class="table-card" style="margin-top: 0.625rem;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">STAKEHOLDER</th>
+              <th style="width: 35%;">CRISIS / PAIN POINT</th>
+              <th style="width: 20%;">MINSKEY SOLUTION</th>
+              <th style="width: 20%;">MONETIZATION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Colleges & Universities</strong><br><span style="font-size: 0.6875rem; color: #71717A;">Tier 2 & 3 Campuses</span></td>
+              <td>Tech companies skip campus visits due to screening costs. Low placement % damages NAAC & NIRF institutional rankings.</td>
+              <td>Automated skill audits + direct pipeline connecting student coders to hiring tech partners.</td>
+              <td><strong style="color: #09090B;">₹500 to ₹1,000 / student / yr</strong><br><span style="font-size: 0.6875rem; color: #059669;">₹25L–₹50L ARR per campus</span></td>
+            </tr>
+            <tr>
+              <td><strong>Tech Recruiters & HR</strong><br><span style="font-size: 0.6875rem; color: #71717A;">Startups & Enterprises</span></td>
+              <td>Drowning in 2,000+ AI-generated spam resumes. Cost-per-hire is $4,000+ and 40+ hours/week wasted giving manual coding tests.</td>
+              <td>Skip first-round screening. Search pre-vetted candidates by verified GitProof score (>90%).</td>
+              <td><strong style="color: #09090B;">$199/mo search seat</strong><br><span style="font-size: 0.6875rem; color: #059669;">OR $500 per verified hire</span></td>
+            </tr>
+            <tr>
+              <td><strong>Engineering Students</strong><br><span style="font-size: 0.6875rem; color: #71717A;">1.5M Annual Graduates</span></td>
+              <td>Resumes filtered out by automated ATS bots simply because they lack an IIT/NIT brand name.</td>
+              <td>Free verifiable skill passport unlocking blind interview invitations on pure code merit.</td>
+              <td><strong style="color: #059669;">100% Free Lifetime Pass</strong><br><span style="font-size: 0.6875rem; color: #71717A;">Viral bottom-up flywheel</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3: Six-Month Strategic Plan -->
+    <section>
+      <div class="section-headline-group">
+        <h2 class="section-headline">SIX-MONTH STRATEGIC EXECUTION PLAN</h2>
+        <span class="section-subtext">Milestone-driven roadmap from campus pilot to enterprise scaling</span>
+      </div>
+
+      <div class="grid-2" style="margin-top: 0.625rem;">
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>Phase 1: Campus Alpha Pilot</span>
+            <span class="status-pill pill-blue-tag">Month 1 – 2</span>
+          </div>
+          <p class="content-box-body">
+            Partner with our university placement cell as the initial testbed with <strong>500–1,000 engineering students</strong>. Calibrate GitProof commit scoring on real student repositories, handling edge cases (monorepos, private repos). Collect feedback on the application tracker.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>Phase 2: Recruiter Network & Direct Hiring</span>
+            <span class="status-pill pill-verified">Month 3 – 4</span>
+          </div>
+          <p class="content-box-body">
+            Onboard <strong>15–25 tech startups and hiring partners</strong> onto the Recruiter Console. Launch direct blind recruitment drives where candidates are filtered strictly by verified skill thresholds (>90% GitProof). Target: reduce time-to-hire from 21 days to 5 days.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>Phase 3: Decentralized Nodes & Async Queue</span>
+            <span class="status-pill pill-blue-tag">Month 5</span>
+          </div>
+          <p class="content-box-body">
+            Provide colleges with their own <strong>Ed25519 signing keys</strong> so universities sign degree endorsements directly onto student passports. Move heavy LangGraph audits to asynchronous background queues (<code style="font-family: 'JetBrains Mono';">Celery / Redis</code>) for 50,000 concurrent students.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>Phase 4: Mobile Passes & State Rollout</span>
+            <span class="status-pill pill-verified">Month 6</span>
+          </div>
+          <p class="content-box-body">
+            Generate native <strong>Apple & Google Wallet passes</strong> (<code style="font-family: 'JetBrains Mono';">.pkpass</code>) so students can tap their phone on an NFC scanner at physical career fairs to share their verified profile. Expand to 10+ colleges across the state.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: What We Are Improving -->
+    <section>
+      <div class="section-headline-group">
+        <h2 class="section-headline">WHAT WE WOULD BE IMPROVING (ENGINEERING HONEST CRITIQUE)</h2>
+        <span class="section-subtext">Technical roadmap to scale from hackathon to enterprise production</span>
+      </div>
+
+      <div class="grid-2" style="margin-top: 0.625rem;">
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>1. Asynchronous Worker Queue</span>
+            <span class="status-pill pill-blue-tag">Architecture</span>
+          </div>
+          <p class="content-box-body">
+            <strong>Current State:</strong> Matching and LangGraph audits run synchronously over HTTP, taking 5–8s during model latency spikes.<br>
+            <strong>Improvement:</strong> Move to an event-driven queue using Redis and Supabase <code style="font-family: 'JetBrains Mono';">match_jobs</code> table. The UI updates instantly with optimistic UI while background workers process commit physics asynchronously.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>2. In-Browser Sandboxed Coding Challenges</span>
+            <span class="status-pill pill-verified">Anti-Cheat</span>
+          </div>
+          <p class="content-box-body">
+            <strong>Current State:</strong> GitProof evaluates existing repositories on GitHub.<br>
+            <strong>Improvement:</strong> Add an in-browser coding sandbox (WebContainers) where students complete a live 15-minute challenge to prove live problem-solving, eliminating cases where an older repo was built by a friend.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>3. Line-Level AST Code Attribution</span>
+            <span class="status-pill pill-blue-tag">Precision</span>
+          </div>
+          <p class="content-box-body">
+            <strong>Current State:</strong> GitProof analyzes commit frequency, file diffs, and repository metadata.<br>
+            <strong>Improvement:</strong> Integrate deep Abstract Syntax Tree (AST) parsing with tree-sitter to inspect individual code syntax, distinguishing between handwritten architecture and auto-generated boilerplate or AI prompt dumps.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>4. Academic Registry Integrations</span>
+            <span class="status-pill pill-verified">Government</span>
+          </div>
+          <p class="content-box-body">
+            <strong>Current State:</strong> Course certificates are verified via OCR and issuer metadata.<br>
+            <strong>Improvement:</strong> Connect directly to national student databases (such as India's DigiLocker & National Academic Depository) to verify college degree enrollments with 100% official institutional backing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Evaluator Defense Q&A -->
+    <section>
+      <div class="section-headline-group">
+        <h2 class="section-headline">TEACHER & EVALUATOR DEFENSE SCRIPTS</h2>
+        <span class="section-subtext">Exact verbal answers to high-difficulty jury questions</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.625rem;">
+        
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>❓ Why can't students or recruiters just use LinkedIn or GitHub?</span>
+          </div>
+          <p class="content-box-body">
+            <strong>The Defense:</strong> LinkedIn is an unverified honor system—anyone can claim to be a Senior Architect, so recruiters still waste weeks manually screening candidates. GitHub is a code storage tool for developers, not a recruitment platform; it doesn't tell a recruiter whether code was copied, farmed by a bot, or matches specific job requirements. <strong>Minskey bridges the two:</strong> we take raw GitHub code, run it through fraud and commit physics audits, and convert it into a tamper-proof credential employers can hire from with zero manual testing.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>❓ What if a student uses ChatGPT to write all their code on GitHub?</span>
+          </div>
+          <p class="content-box-body">
+            <strong>The Defense:</strong> Our GitProof engine analyzes commit physics and code entropy. When someone copies code from ChatGPT without understanding, they typically commit huge blocks of syntactically complete code in minutes with zero iterative debugging, refactoring, or organic commit history. GitProof detects these unnatural commit physics and flags the repository as suspicious.
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>❓ What if your AI models hallucinate or disagree?</span>
+          </div>
+          <p class="content-box-body">
+            <strong>The Defense:</strong> That is why Minskey does not rely on a single model. We built a 3-model consensus engine (Google Gemini, Meta Llama-3, and Grok). A verdict is only certified if at least 2 out of 3 models independently agree. Furthermore, the AI evaluation is grounded in deterministic heuristics: if all external AI gateways fail, the system falls back to a mathematical AST keyword-overlap model.
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>❓ Why do you need both Next.js AND a Python FastAPI backend?</span>
+          </div>
+          <p class="content-box-body">
+            <strong>The Defense:</strong> It represents a clean separation of concerns: Next.js delivers bank-grade authentication, Supabase SSR queries, and high-performance user interfaces. FastAPI Python is purpose-built for heavy AI and data science compute: running LangGraph state machines, Git AST parsers, PyTorch math, and cryptographic Ed25519 verification.
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="content-box-title">
+            <span>❓ Is this legally compliant with privacy laws (GDPR, DPDP Act)?</span>
+          </div>
+          <p class="content-box-body">
+            <strong>The Defense:</strong> Yes, by design through Zero-Knowledge Blind Matching. Candidate profiles are stripped of all PII (name, gender, age, photo, college) before reaching matching algorithms. Furthermore, credentials belong to the student under W3C DID standards, meaning students have complete sovereignty over who they share their verification links with.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
