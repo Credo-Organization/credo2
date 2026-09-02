@@ -138,8 +138,8 @@ export default async function VerifyPassportPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mt-2">
             Official Student Skill Passport
           </h1>
-          <p className="text-sm text-zinc-400 max-w-md">
-            This verifiable passport is authenticated via Minskey GitProof integrity checks and Ed25519-compatible proof signatures.
+          <p className="text-sm text-zinc-300 max-w-lg leading-relaxed">
+            Every skill, certificate, and repository on this credential has been verified against real GitHub commit physics. <span className="text-emerald-400 font-bold">100% tamper-proof and fraud-resistant.</span>
           </p>
         </div>
 

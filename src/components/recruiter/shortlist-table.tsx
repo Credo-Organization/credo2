@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ShieldCheck, ShieldAlert, ShieldQuestion, ArrowUpRight, Users } from "lucide-react";
+import { ShieldCheck, ShieldAlert, ShieldQuestion, ArrowUpRight, ArrowRight, Users } from "lucide-react";
 import { CandidateLookup } from "./candidate-lookup";
 
 export interface ShortlistRow {
@@ -77,13 +77,21 @@ export function ShortlistTable({ rows }: { rows: ShortlistRow[] }) {
               ))}
             </ol>
 
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 pt-3.5 font-medium">
-              Passport IDs look like{" "}
-              <span className="font-mono text-zinc-950 dark:text-zinc-100 font-bold bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-900 dark:border-zinc-700">
-                MSK26S1104
-              </span>
-              . You can also paste a full verification link.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 pt-3.5">
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+                Example Passport ID:{" "}
+                <span className="font-mono text-zinc-950 dark:text-zinc-100 font-bold bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-900 dark:border-zinc-700">
+                  CDY26S4611
+                </span>
+              </p>
+              <Link
+                href="/recruiter/candidate/CDY26S4611"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-bold border border-blue-200 dark:border-blue-800 transition-all cursor-pointer shadow-xs"
+              >
+                <span>Inspect Demo Dossier</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

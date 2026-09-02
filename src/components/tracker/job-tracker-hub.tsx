@@ -171,9 +171,20 @@ export function JobTrackerHub() {
   };
 
   const handleDelete = (id: string, company: string) => {
+    const appToRestore = applications.find((a) => a.id === id);
     deleteApplication(id);
     if (selectedApp?.id === id) setSelectedApp(null);
-    toast.success(`Removed application for ${company}`);
+    toast.success(`Removed application for ${company}`, {
+      action: appToRestore
+        ? {
+            label: "Undo",
+            onClick: () => {
+              addApplication(appToRestore);
+              toast.success(`Restored application for ${company}`);
+            },
+          }
+        : undefined,
+    });
   };
 
   const handleCreateCustom = async (e: React.FormEvent) => {
