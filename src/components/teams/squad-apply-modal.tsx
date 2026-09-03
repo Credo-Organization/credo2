@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { ShieldCheck, Send, CheckCircle2, Terminal } from "lucide-react";
 import { toast } from "sonner";
 
+import { applyToSquadAction } from "@/actions/teams";
+
 interface SquadApplyModalProps {
   squad: any;
   isOpen: boolean;
@@ -31,17 +33,28 @@ export function SquadApplyModal({ squad, isOpen, onClose, userSkills = [] }: Squ
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate sending cryptographic passport handshake to team leader
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    try {
+      const res = await applyToSquadAction({
+        squadId: squad.id,
+        targetRole: selectedRole,
+        pitch: pitch.trim(),
+      });
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    toast.success(`Application sent to ${squad.name} with your verified W3C DID proof!`);
-
-    setTimeout(() => {
-      setIsSuccess(false);
-      onClose();
-    }, 1800);
+      if (res.success) {
+        setIsSuccess(true);
+        toast.success(`Application sent to ${squad.name} with your verified W3C DID proof!`);
+        setTimeout(() => {
+          setIsSuccess(false);
+          onClose();
+        }, 1800);
+      } else {
+        toast.error(res.error || "Failed to submit application.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to submit application.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

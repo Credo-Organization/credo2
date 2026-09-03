@@ -13,7 +13,7 @@ export default async function CreateTeammatesPage() {
   // Fetch student profile & skills
   const { data: profile } = await supabase
     .from("profiles")
-    .select("headline, experience_level")
+    .select("full_name, headline, experience_level")
     .eq("id", user.id)
     .single();
 
@@ -30,12 +30,15 @@ export default async function CreateTeammatesPage() {
     "PostgreSQL"
   ];
 
+  const studentName = profile?.full_name || user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Team Lead");
+
   return (
     <div className="w-full min-h-full px-4 sm:px-8 py-8 max-w-[1400px] mx-auto">
       <TeamsClientHub
         initialTab="create"
         userSkills={skillsList}
         careerGoal={profile?.headline || "Full Stack Engineer"}
+        studentName={studentName}
       />
     </div>
   );

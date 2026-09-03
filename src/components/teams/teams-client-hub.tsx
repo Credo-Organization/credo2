@@ -5,6 +5,7 @@ import { Users, Search, PlusCircle, Sparkles, Filter, ShieldCheck, Flag, AlignLe
 import { Squad, SquadCard } from "./squad-card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { fetchLiveSquadsAction, createSquadAction } from "@/actions/teams";
 
 const INITIAL_SQUADS: Squad[] = [
   {
@@ -101,12 +102,14 @@ interface TeamsClientHubProps {
   initialTab?: "browse" | "create";
   userSkills?: string[];
   careerGoal?: string;
+  studentName?: string;
 }
 
 export function TeamsClientHub({
   initialTab = "browse",
   userSkills = ["React", "TypeScript", "Python", "FastAPI", "PostgreSQL"],
-  careerGoal = "Full Stack Engineer"
+  careerGoal = "Full Stack Engineer",
+  studentName = "Team Lead"
 }: TeamsClientHubProps) {
   const [activeTab, setActiveTab] = useState<"browse" | "create">(initialTab);
   const [squads, setSquads] = useState(INITIAL_SQUADS);
@@ -120,9 +123,24 @@ export function TeamsClientHub({
   const [description, setDescription] = useState("");
   const [openRoles, setOpenRoles] = useState("");
   const [requiredSkills, setRequiredSkills] = useState("");
-  const [leaderName, setLeaderName] = useState("Subham Sarangi");
+  const [leaderName, setLeaderName] = useState(studentName);
   const [discord, setDiscord] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Load live squads from Supabase directory on mount
+  useEffect(() => {
+    const loadLiveSquads = async () => {
+      try {
+        const live = await fetchLiveSquadsAction();
+        if (live && live.length > 0) {
+          setSquads(live);
+        }
+      } catch (err) {
+        console.warn("Using benchmark showcase squads fallback");
+      }
+    };
+    loadLiveSquads();
+  }, []);
 
   // Sync synergy scores from FastAPI backend
   useEffect(() => {
@@ -135,7 +153,8 @@ export function TeamsClientHub({
           body: JSON.stringify({
             user_skills: userSkills,
             career_goal: careerGoal
-          })
+          }),
+          signal: AbortSignal.timeout(3500)
         });
         if (res.ok) {
           const data = await res.json();
@@ -144,7 +163,7 @@ export function TeamsClientHub({
           }
         }
       } catch (err) {
-        console.log("FastAPI synergy match fallback active");
+        console.log("FastAPI synergy match fallback active (using verified Supabase squads)");
       }
     };
     fetchBackendSynergy();
@@ -170,7 +189,7 @@ export function TeamsClientHub({
     });
   }, [squads, selectedTrack, searchQuery, sortBy]);
 
-  const handleCreateSquad = (e: React.FormEvent) => {
+  const handleCreateSquad = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!teamName || !description || !openRoles) {
       toast.error("Please fill in team name, description, and open roles.");
@@ -179,33 +198,32 @@ export function TeamsClientHub({
 
     setIsSubmitting(true);
 
-    const newSquad: Squad = {
-      id: `squad-${Date.now().toString(36)}`,
-      name: teamName,
-      track: track,
-      problem: description,
-      leader: leaderName,
-      avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
-      current_members: [{ name: leaderName, role: "Team Lead", skills: userSkills.slice(0, 3) }],
-      open_roles: openRoles.split(",").map((s) => s.trim()).filter(Boolean),
-      required_skills: requiredSkills.split(",").map((s) => s.trim()).filter(Boolean),
-      max_members: 4,
-      discord: discord || "discord.gg/credo-team",
-      synergy_score: 99,
-      complementary_note: "Your squad is now live on the SIH Team Matcher network."
-    };
+    try {
+      const res = await createSquadAction({
+        name: teamName,
+        track,
+        problem: description,
+        open_roles: openRoles.split(",").map((s) => s.trim()).filter(Boolean),
+        required_skills: requiredSkills.split(",").map((s) => s.trim()).filter(Boolean),
+        discord_link: discord || "discord.gg/credo-team",
+      });
 
-    setTimeout(() => {
-      setSquads([newSquad, ...squads]);
+      if (res.success && res.squad) {
+        setSquads((prev) => [res.squad!, ...prev]);
+        toast.success("Squad published to live Supabase directory!");
+        setActiveTab("browse");
+        setTeamName("");
+        setDescription("");
+        setOpenRoles("");
+        setRequiredSkills("");
+      } else {
+        toast.error(res.error || "Failed to publish squad.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to publish squad.");
+    } finally {
       setIsSubmitting(false);
-      toast.success("Squad requirement published successfully!");
-      setActiveTab("browse");
-      // Reset form
-      setTeamName("");
-      setDescription("");
-      setOpenRoles("");
-      setRequiredSkills("");
-    }, 600);
+    }
   };
 
   return (
