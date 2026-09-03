@@ -33,7 +33,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
         const rawAvatar = profile?.avatar_url || "";
         const isUnsplashOrEmpty = !rawAvatar || rawAvatar.includes("unsplash.com");
         setUserProfile({
-          name: profile?.full_name || user.email?.split('@')[0] || "Subham Sarangi",
+          name: profile?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || "Student Developer",
           avatar: !isUnsplashOrEmpty 
             ? rawAvatar
             : (isFemale ? "/avatar-female.webp" : "/avatar-male.webp"),
@@ -223,7 +223,7 @@ export function Sidebar({ isMobile = false }: { isMobile?: boolean }) {
             {!isCollapsed && (
               <div className="flex flex-col overflow-hidden whitespace-nowrap">
                 <span className="text-xs font-black text-zinc-950 dark:text-zinc-100 truncate">
-                  {userProfile?.name || "Subham Sarangi"}
+                  {userProfile?.name || "Student Developer"}
                 </span>
                 <span className="text-[10px] text-zinc-600 dark:text-zinc-400 font-medium truncate">
                   {userProfile?.headline || "Software Engineer"}

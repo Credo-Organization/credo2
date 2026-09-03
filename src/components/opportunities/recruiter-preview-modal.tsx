@@ -17,6 +17,7 @@ import {
   Send,
   Loader2,
   Check,
+  Copy,
   EyeOff,
   Fingerprint,
   MapPin,
@@ -40,6 +41,7 @@ export function RecruiterPreviewModal({
 }: RecruiterPreviewModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [hasCopiedLink, setHasCopiedLink] = useState(false);
 
   const { opportunity, matchScore, matchedSkills } = result;
 
@@ -51,10 +53,25 @@ export function RecruiterPreviewModal({
     { name: "distributed-state-sync", language: "Python", stars: 8 },
   ];
 
+  const dossierUrl = typeof window !== "undefined"
+    ? `${window.location.origin}/verify/passport/${shortToken}`
+    : `/verify/passport/${shortToken}`;
+
+  const handleCopyDossierUrl = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(dossierUrl);
+      setHasCopiedLink(true);
+      toast.success("Verified Dossier URL copied to clipboard!", {
+        description: "Attach this link to your job application for verifiable cryptographic proof.",
+      });
+      setTimeout(() => setHasCopiedLink(false), 2500);
+    }
+  };
+
   const handleApply = async () => {
     setIsSubmitting(true);
-    // Simulate verifiable dispatch & cryptographic timestamping
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Persist verified application to user's database tracker
+    await new Promise((resolve) => setTimeout(resolve, 400));
     
     addApplication({
       company: opportunity.org_name,
@@ -65,14 +82,14 @@ export function RecruiterPreviewModal({
       status: "dispatched",
       gitProofScore: 98,
       verifiedSkills: matchedSkills?.map((s) => s.skill_name) || ["TypeScript", "Full-Stack"],
-      notes: "Submitted via Minskey Blind Passport Dispatch.",
-      recruiterNotes: "Application received with verified credential DID.",
+      notes: `Recorded for ${opportunity.org_name}. Cryptographic Dossier Token: ${shortToken}`,
+      recruiterNotes: "Application logged with verifiable DID passport proof.",
     });
 
     setIsSubmitting(false);
     setIsSubmitted(true);
-    toast.success("Skill Passport Application Dispatched!", {
-      description: `Added to your Job Tracker! Cryptographic proof bundle submitted to ${opportunity.org_name}.`,
+    toast.success("Application Tracked & Dossier Ready!", {
+      description: `Added to your tracker. Copy your cryptographic dossier link to submit to ${opportunity.org_name}.`,
     });
   };
 
@@ -258,13 +275,23 @@ export function RecruiterPreviewModal({
           </Button>
 
           {isSubmitted ? (
-            <Button
-              disabled
-              className="bg-emerald-100 text-emerald-950 border-2 border-zinc-900 rounded-xl px-8 h-12 font-black flex items-center justify-center gap-2 w-full sm:w-auto shadow-xs"
-            >
-              <Check className="w-4 h-4 text-emerald-600" />
-              Application Sent ({shortToken})
-            </Button>
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+              <Button
+                type="button"
+                onClick={handleCopyDossierUrl}
+                className="bg-zinc-950 hover:bg-zinc-800 text-white border-2 border-zinc-900 rounded-xl px-5 h-11 font-bold flex items-center justify-center gap-2 w-full sm:w-auto shadow-xs cursor-pointer text-xs"
+              >
+                {hasCopiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {hasCopiedLink ? "Dossier Link Copied!" : "Copy Cryptographic Dossier Link"}
+              </Button>
+              <Button
+                disabled
+                className="bg-emerald-100 text-emerald-950 border-2 border-zinc-900 rounded-xl px-5 h-11 font-black flex items-center justify-center gap-2 w-full sm:w-auto shadow-xs text-xs"
+              >
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                Tracked in Dashboard
+              </Button>
+            </div>
           ) : (
             <Button
               onClick={handleApply}

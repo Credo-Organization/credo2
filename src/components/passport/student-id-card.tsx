@@ -122,16 +122,16 @@ export interface StudentPassportProps {
 }
 
 export function StudentPassportIdCard({ studentData, className }: StudentPassportProps) {
-  const cardId = studentData?.cardId || "CDY2026-0004611";
-  const studentId = studentData?.studentId || "CDY26S4611";
-  const name = studentData?.name || "Subham Sarangi";
+  const cardId = studentData?.cardId || "CDY2026-PENDING";
+  const studentId = studentData?.studentId || "PENDING";
+  const name = studentData?.name || "Student Developer";
   const gender = studentData?.gender || "Male";
-  const degree = studentData?.degree || "Bachelor of Technology";
-  const issueDate = studentData?.issueDate || "01 SEP 2026";
-  const expiryDate = studentData?.expiryDate || "01 SEP 2028";
-  const coursesCompleted = studentData?.coursesCompleted ?? 14;
-  const skillsVerified = studentData?.skillsVerified ?? 6;
-  const certificatesEarned = studentData?.certificatesEarned ?? 1;
+  const degree = studentData?.degree || "Engineering & Technology";
+  const issueDate = studentData?.issueDate || "PENDING AUDIT";
+  const expiryDate = studentData?.expiryDate || "—";
+  const coursesCompleted = studentData?.coursesCompleted ?? 0;
+  const skillsVerified = studentData?.skillsVerified ?? 0;
+  const certificatesEarned = studentData?.certificatesEarned ?? 0;
 
   // Default Illustrated Doodle Avatar if none provided
   const fallbackFemale = "/avatar-female.webp";

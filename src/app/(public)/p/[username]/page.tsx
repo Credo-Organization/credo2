@@ -8,6 +8,8 @@ interface PageProps {
   params: Promise<{ username: string }>;
 }
 
+export const revalidate = 120; // 2-minute Edge CDN stale-while-revalidate caching
+
 export default async function PublicPassportPage({ params }: PageProps) {
   const { username } = await params;
   const supabase = await createClient();

@@ -178,27 +178,10 @@ export async function syncApplicationsFromSupabase(): Promise<JobApplication[]> 
     }
 
     if (data.length === 0) {
-      // Seed default applications into Supabase for this user so their initial experience is populated
-      for (const def of DEFAULT_APPLICATIONS) {
-        await supabase.from("job_applications").insert({
-          profile_id: user.id,
-          company: def.company,
-          role: def.role,
-          location: def.location,
-          salary: def.salary,
-          status: def.status,
-          match_score: def.matchScore,
-          gitproof_score: def.gitProofScore,
-          passport_id: def.passportId,
-          verified_skills: def.verifiedSkills,
-          notes: def.notes,
-          recruiter_notes: def.recruiterNotes,
-          interview_date: def.interviewDate,
-          timeline: def.timeline,
-          applied_at: def.appliedAt,
-        });
-      }
-      return DEFAULT_APPLICATIONS;
+      // Do not auto-seed fake corporate applications for real users.
+      // An authentic account displays 0 applications until user dispatches one.
+      saveStoredApplications([]);
+      return [];
     }
 
     const mapped = data.map(mapDbRowToApplication);
@@ -211,17 +194,16 @@ export async function syncApplicationsFromSupabase(): Promise<JobApplication[]> 
 }
 
 export function getStoredApplications(): JobApplication[] {
-  if (typeof window === "undefined") return DEFAULT_APPLICATIONS;
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_APPLICATIONS));
-      return DEFAULT_APPLICATIONS;
+      return [];
     }
     return JSON.parse(raw);
   } catch (err) {
     console.error("Failed to read applications from localStorage:", err);
-    return DEFAULT_APPLICATIONS;
+    return [];
   }
 }
 

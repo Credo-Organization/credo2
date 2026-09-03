@@ -44,18 +44,49 @@ const TACTICAL_ACTIONS = [
 ];
 
 export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps) {
-  const [messages, setMessages] = useState<MentorMessage[]>([
-    {
-      role: "assistant",
-      content: `Hi **${context.studentName || "Soumya"}**! Let’s work on your next career milestone.`,
-    },
-  ]);
+  const studentSlug = (context.studentName || "student").toLowerCase().replace(/[^a-z0-9]/g, "_");
+  const storageKey = `minskey_ai_mentor_${studentSlug}`;
+
+  const defaultGreeting: MentorMessage = {
+    role: "assistant",
+    content: `Hi ${context.studentName ? `**${context.studentName}**` : "there"}! Let’s work on your next career milestone.`,
+  };
+
+  const [messages, setMessages] = useState<MentorMessage[]>([defaultGreeting]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
   
   // Scoped ref for the chat container to prevent global window scrolling
   const chatScrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Load chat history from localStorage on initial render
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      }
+    } catch (e) {
+      console.warn("Could not load stored mentor chat:", e);
+    } finally {
+      setHasLoadedStorage(true);
+    }
+  }, [storageKey]);
+
+  // Persist messages whenever updated after initial storage load
+  useEffect(() => {
+    if (!hasLoadedStorage) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    } catch (e) {
+      console.warn("Could not persist mentor chat to localStorage:", e);
+    }
+  }, [messages, hasLoadedStorage, storageKey]);
 
   // Scroll ONLY the internal chat container, NEVER the global document window
   useEffect(() => {
@@ -101,12 +132,15 @@ export function AiMentorConsole({ context, initialQuery }: AiMentorConsoleProps)
   };
 
   const handleResetChat = () => {
-    setMessages([
-      {
-        role: "assistant",
-        content: `Conversation reset. Ready to analyze your **${context.careerGoal || "career"}** path or architect new portfolio milestones.`,
-      },
-    ]);
+    const resetMsg: MentorMessage = {
+      role: "assistant",
+      content: `Conversation reset. Ready to analyze your **${context.careerGoal || "career"}** path or architect new portfolio milestones.`,
+    };
+    setMessages([resetMsg]);
+    try {
+      localStorage.removeItem(storageKey);
+      toast.success("Mentor chat history cleared");
+    } catch {}
   };
 
   const handleCopyMessage = (content: string, idx: number) => {

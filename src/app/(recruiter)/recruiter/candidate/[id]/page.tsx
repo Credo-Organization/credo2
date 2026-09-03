@@ -73,6 +73,91 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     }
   }
 
+  // Sample verified dossiers for recruiter portal preset candidates and demos
+  const SAMPLE_DOSSIERS: Record<string, any> = {
+    "MSK-2026-IND-0491": {
+      name: "Full-Stack Candidate (#0491)",
+      college: "NIT · Computer Science",
+      headline: "Full-Stack & Cloud Systems Architect",
+      skills: ["TypeScript", "Next.js", "Python", "FastAPI", "PostgreSQL", "Docker"],
+      repos: [
+        { name: "ai-gateway-service", primary_language: "Go", integrity_status: "verified", integrity_score: 98, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "minskey-core-engine", primary_language: "TypeScript", integrity_status: "verified", integrity_score: 99, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "distributed-cache-redis", primary_language: "Python", integrity_status: "verified", integrity_score: 96, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    },
+    "MSK26S1104": {
+      name: "Distributed Systems Candidate (#1104)",
+      college: "IIT Delhi · Computer Science",
+      headline: "Distributed Systems & Cloud Engineer",
+      skills: ["Go", "Kubernetes", "gRPC", "Docker", "PostgreSQL", "Kafka"],
+      repos: [
+        { name: "raft-consensus-engine", primary_language: "Go", integrity_status: "verified", integrity_score: 100, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "k8s-pod-autoscaler", primary_language: "Go", integrity_status: "verified", integrity_score: 97, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "event-stream-broker", primary_language: "Rust", integrity_status: "verified", integrity_score: 95, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    },
+    "MSK26S7421": {
+      name: "AI & ML Candidate (#7421)",
+      college: "BITS Pilani · AI & Robotics",
+      headline: "Machine Learning & Edge Vision Specialist",
+      skills: ["Python", "PyTorch", "OpenCV", "TensorFlow", "FastAPI", "CUDA"],
+      repos: [
+        { name: "vision-transformer-edge", primary_language: "Python", integrity_status: "verified", integrity_score: 98, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "llm-quantizer-fp8", primary_language: "C++", integrity_status: "verified", integrity_score: 96, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "multimodal-rag-pipeline", primary_language: "Python", integrity_status: "verified", integrity_score: 99, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    },
+    "CDY26S4611": {
+      name: "Full-Stack Candidate (#4611)",
+      college: "National Institute of Technology",
+      headline: "Full-Stack & Cloud Systems Architect",
+      skills: ["TypeScript", "Next.js", "Python", "FastAPI", "PostgreSQL", "Docker"],
+      repos: [
+        { name: "ai-gateway-service", primary_language: "Go", integrity_status: "verified", integrity_score: 98, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "minskey-core-engine", primary_language: "TypeScript", integrity_status: "verified", integrity_score: 99, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    },
+    "CDY26S2668": {
+      name: "Systems Candidate (#2668)",
+      college: "IIIT Hyderabad",
+      headline: "Backend & Systems Infrastructure Engineer",
+      skills: ["Go", "Docker", "PostgreSQL", "Kafka", "Linux"],
+      repos: [
+        { name: "high-throughput-queue", primary_language: "Go", integrity_status: "verified", integrity_score: 97, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    },
+    "DEMO": {
+      name: "Verified Demo Candidate",
+      college: "National Institute of Technology",
+      headline: "Full Stack Engineer",
+      skills: ["TypeScript", "Python", "React", "FastAPI", "PostgreSQL"],
+      repos: [
+        { name: "ai-orchestrator", primary_language: "TypeScript", integrity_status: "verified", integrity_score: 98, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+        { name: "distributed-state-sync", primary_language: "Python", integrity_status: "verified", integrity_score: 97, integrity_flags: [], audit_votes: { gemini: "verified", grok: "verified", nemotron: "verified" } },
+      ]
+    }
+  };
+
+  let fallbackSampleRepos: any[] | null = null;
+  if (!passport && safeId) {
+    const sample = SAMPLE_DOSSIERS[upperSafeId] || SAMPLE_DOSSIERS[safeId];
+    if (sample) {
+      passport = {
+        snapshot_data: {
+          student_id: safeId,
+          skills: sample.skills.map((s: string) => ({ name: s })),
+        },
+        profiles: {
+          full_name: sample.name,
+          college_name: sample.college,
+          headline: sample.headline,
+        },
+      };
+      fallbackSampleRepos = sample.repos;
+    }
+  }
+
   if (!passport) {
     return (
       <div className="max-w-2xl mx-auto px-6 py-24 text-center select-none">
@@ -121,8 +206,8 @@ export default async function CandidatePage({ params }: { params: Promise<{ id: 
     }
   }
 
-  let repos: any[] = [];
-  if (connection?.id) {
+  let repos: any[] = fallbackSampleRepos ?? [];
+  if (connection?.id && !fallbackSampleRepos) {
     const { data: rData } = await supabase
       .from("github_repos")
       .select("name, primary_language, integrity_status, integrity_score, integrity_flags, audit_votes")

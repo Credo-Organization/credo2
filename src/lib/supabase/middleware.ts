@@ -40,6 +40,22 @@ export async function updateSession(request: NextRequest) {
   );
 
 
+  const pathname = request.nextUrl.pathname;
+
+  // FAST-PATH OPTIMIZATION:
+  // Skip expensive remote network round-trip to Supabase on OAuth callback exchanges,
+  // API webhooks, and public verification pages. This shaves ~500ms off Google/GitHub login.
+  if (
+    pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/verify/") ||
+    pathname.startsWith("/p/") ||
+    pathname === "/api/process-passport" ||
+    pathname === "/api/process-match"
+  ) {
+    return supabaseResponse;
+  }
+
   // Refresh the auth token — important!
   // Do not remove this line. It refreshes the user's session
   // on every request and ensures the session stays alive.

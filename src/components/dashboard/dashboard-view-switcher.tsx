@@ -108,6 +108,8 @@ export function DashboardViewSwitcher({ mappedData, studentData }: Props) {
         studentId={studentId}
         cardId={cardId}
         studentName={studentName}
+        careerGoal={mappedData?.careerGoal}
+        verifiedSkillsCount={mappedData?.verifiedSkillsCount || mappedData?.verifiedSkills?.length || 0}
       />
     </div>
   );

@@ -9,6 +9,8 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+export const revalidate = 120; // 2-minute Edge CDN stale-while-revalidate caching
+
 export default async function VerifyPassportPage({ params }: Props) {
   const { id } = await params;
 
@@ -78,6 +80,33 @@ export default async function VerifyPassportPage({ params }: Props) {
     }
   }
 
+  // Handle demo preview link gracefully so landing page link always works
+  const isDemo = safeId.toLowerCase() === "demo";
+  if (!matched && isDemo) {
+    matched = {
+      is_demo_preview: true,
+      snapshot_data: {
+        card_id: "CDY2026-DEMO",
+        student_id: "CDY26SDEMO",
+        profile: {
+          name: "Verified Demo Student",
+          college: "National Institute of Technology",
+          headline: "Full Stack Engineer",
+        },
+        gender: "Male",
+        degree: "Bachelor of Technology – Computer Science",
+        courses_completed: 6,
+        skills_verified: 5,
+        certificates_earned: 2,
+        verification_url: "https://minskey.dev/verify/passport/demo",
+      },
+      profiles: {
+        full_name: "Verified Demo Student",
+        college_name: "National Institute of Technology",
+      },
+    };
+  }
+
   if (!matched) {
     return (
       <div className="min-h-screen bg-[#050811] text-white flex flex-col items-center justify-center p-6 text-center">
@@ -104,18 +133,22 @@ export default async function VerifyPassportPage({ params }: Props) {
   const snap = matched?.snapshot_data;
   const profile = matched?.profiles;
 
+  const now = new Date();
+  const dynamicIssue = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+  const twoYears = new Date(now.getFullYear() + 2, now.getMonth(), now.getDate()).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+
   const studentData = {
-    cardId: snap?.card_id || `CDY2025-${id.slice(-6)}`,
+    cardId: snap?.card_id || `CDY${now.getFullYear()}-${id.slice(-6)}`,
     studentId: snap?.student_id || id,
-    name: snap?.profile?.name || profile?.full_name || "Unnamed Student",
+    name: snap?.profile?.name || profile?.full_name || "Verified Student",
     gender: snap?.gender || profile?.gender || "male",
-    degree: snap?.degree || profile?.degree || "B.Tech – Computer Science Engineering",
-    college: snap?.profile?.college || profile?.college_name || "",
+    degree: snap?.degree || profile?.degree || "Engineering & Computer Science",
+    college: snap?.profile?.college || profile?.college_name || "College not set",
     avatarUrl: snap?.profile?.avatar_url && !snap.profile.avatar_url.includes("unsplash.com")
       ? snap.profile.avatar_url 
       : ((snap?.gender || profile?.gender || "male").toLowerCase() === "female" ? "/avatar-female.webp" : "/avatar-male.webp"),
-    issueDate: snap?.issue_date || "18 MAY 2025",
-    expiryDate: snap?.expiry_date || "17 MAY 2027",
+    issueDate: snap?.issue_date || dynamicIssue,
+    expiryDate: snap?.expiry_date || twoYears,
     coursesCompleted: snap?.courses_completed ?? 0,
     skillsVerified: snap?.skills_verified ?? 0,
     certificatesEarned: snap?.certificates_earned ?? 0,

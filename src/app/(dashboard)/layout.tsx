@@ -22,7 +22,7 @@ export default function DashboardLayout({
       <div className="hidden md:flex h-full relative z-0">
         <Sidebar />
       </div>
-      <main className="flex-1 overflow-y-auto relative z-0 rounded-none md:rounded-[28px] border-0 md:border md:border-stone-200/80 dark:md:border-zinc-800 shadow-xs bg-[#FAF9F6] dark:bg-[#050507] transition-colors pb-24 md:pb-0 touch-scroll">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden relative z-0 rounded-none md:rounded-[28px] border-0 md:border md:border-stone-200/80 dark:md:border-zinc-800 shadow-xs bg-[#FAF9F6] dark:bg-[#050507] transition-colors pb-24 md:pb-0 touch-scroll w-full min-w-0">
         {children}
       </main>
       <MobileBottomNav />

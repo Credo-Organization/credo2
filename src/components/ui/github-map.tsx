@@ -81,10 +81,10 @@ export function GitHubCalendar({
     y: number;
   } | null>(null);
 
-  // Fallback mock generation if no data provided
+  // Truthful fallback: if no data provided, render honest empty calendar (0 commits)
   const calendarData = useMemo(() => {
     if (data && data.length > 0) return data;
-    return generateMockContributions();
+    return generateEmptyContributions();
   }, [data]);
 
   const totalContributions = useMemo(() => {
@@ -160,7 +160,7 @@ export function GitHubCalendar({
   return (
     <div
       className={cn(
-        "w-full bg-white dark:bg-zinc-900 border-2 border-zinc-900 rounded-3xl p-6 shadow-[4px_4px_0px_0px_#18181B] select-none transition-colors relative",
+        "w-full min-w-0 max-w-full bg-white dark:bg-zinc-900 border-2 border-zinc-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-[3px_3px_0px_0px_#18181B] sm:shadow-[4px_4px_0px_0px_#18181B] select-none transition-colors relative overflow-hidden",
         className
       )}
     >
@@ -195,7 +195,7 @@ export function GitHubCalendar({
       )}
 
       {/* Calendar Grid Container */}
-      <div className="overflow-x-auto pb-1 custom-scrollbar">
+      <div className="w-full max-w-full min-w-0 overflow-x-auto pb-1 custom-scrollbar">
         <div className="min-w-fit flex flex-col gap-1">
           {/* Month Labels Row */}
           <div className="flex text-[10px] font-bold text-zinc-500 font-mono pl-7 h-4 relative">
@@ -330,6 +330,16 @@ export function GitHubCalendar({
       )}
     </div>
   );
+}
+
+export function generateEmptyContributions(): { date: string; count: number }[] {
+  const result: { date: string; count: number }[] = [];
+  const today = new Date();
+  for (let i = 365; i >= 0; i--) {
+    const day = subDays(today, i);
+    result.push({ date: format(day, "yyyy-MM-dd"), count: 0 });
+  }
+  return result;
 }
 
 export function generateMockContributions(): { date: string; count: number }[] {

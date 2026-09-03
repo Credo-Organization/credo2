@@ -154,9 +154,9 @@ const DEFAULT_MALE_STUDENT_AVATAR = "/avatar-male.webp";
 const DEFAULT_FEMALE_STUDENT_AVATAR = "/avatar-female.webp";
 
 const DUMMY_DATA: SkillPassportData = {
-  cardId: "CDY2026-0004611",
-  studentId: "CDY26S4611",
-  name: "Subham Sarangi",
+  cardId: "CDY2026-PREVIEW",
+  studentId: "CDY26S0000",
+  name: "Verified Developer",
   gender: "male",
   careerGoal: "AI Engineer",
   profileImage: DEFAULT_MALE_STUDENT_AVATAR,

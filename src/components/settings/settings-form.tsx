@@ -49,7 +49,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 w-full min-w-0">
       {/* Interactive Avatar Preview */}
       <div className="p-4 rounded-2xl border-2 border-zinc-900 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 flex items-center gap-4 transition-colors">
         <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-zinc-900 dark:border-zinc-600 bg-white dark:bg-zinc-900 shrink-0 shadow-xs">
@@ -78,7 +78,7 @@ export function SettingsForm({ profile }: { profile: Profile }) {
           id="full_name" 
           name="full_name" 
           defaultValue={profile.full_name || ""} 
-          placeholder="e.g. Subham Singh"
+          placeholder="e.g. Alex Chen"
           className="h-11 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-900 dark:border-zinc-700 rounded-xl text-zinc-950 dark:text-zinc-100 placeholder:text-zinc-500 font-medium focus-visible:ring-2 focus-visible:ring-blue-600 shadow-xs"
         />
       </div>

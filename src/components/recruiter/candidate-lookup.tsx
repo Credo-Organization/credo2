@@ -88,17 +88,24 @@ export function CandidateLookup() {
           <span className="font-medium">Quick inspect:</span>
           <button
             type="button"
-            onClick={() => handleLookupId("CDY26S4611")}
+            onClick={() => handleLookupId("MSK-2026-IND-0491")}
             className="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-zinc-300 dark:border-zinc-700 hover:border-blue-500 font-mono font-bold text-zinc-900 dark:text-zinc-200 hover:text-blue-600 transition-colors cursor-pointer"
           >
-            CDY26S4611 (Subham)
+            MSK-0491 (Full-Stack & AI)
           </button>
           <button
             type="button"
-            onClick={() => handleLookupId("CDY26S2668")}
+            onClick={() => handleLookupId("MSK26S1104")}
             className="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-zinc-300 dark:border-zinc-700 hover:border-blue-500 font-mono font-bold text-zinc-900 dark:text-zinc-200 hover:text-blue-600 transition-colors cursor-pointer"
           >
-            CDY26S2668 (Aditya)
+            MSK26S1104 (Distributed Systems)
+          </button>
+          <button
+            type="button"
+            onClick={() => handleLookupId("MSK26S7421")}
+            className="px-2 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-zinc-300 dark:border-zinc-700 hover:border-blue-500 font-mono font-bold text-zinc-900 dark:text-zinc-200 hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            MSK26S7421 (AI & ML Engineer)
           </button>
         </div>
 

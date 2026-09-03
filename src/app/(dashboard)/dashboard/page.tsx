@@ -157,12 +157,24 @@ export default async function DashboardPage() {
       const studentId = snap.student_id || `CDY${currentYear.toString().slice(2)}S${shortHash}`;
       const cardId = snap.card_id || `CDY${currentYear}-000${shortHash}`;
 
+      const userName =
+        snap.profile?.name ||
+        profile?.full_name ||
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        (user.email ? user.email.split("@")[0] : "Student Developer");
+
+      const now = new Date();
+      const dynamicIssueDate = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+      const twoYearsLater = new Date(now.getFullYear() + 2, now.getMonth(), now.getDate());
+      const dynamicExpiryDate = twoYearsLater.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).toUpperCase();
+
       mappedData = {
         cardId,
         studentId,
-        name: snap.profile?.name || profile?.full_name || "Subham Sarangi",
+        name: userName,
         gender: studentGender,
-        careerGoal: snap.profile?.headline || profile?.headline || "AI Engineer",
+        careerGoal: snap.profile?.headline || profile?.headline || "Software Engineer",
         profileImage: studentAvatar,
         verifiedSkills: (snap.skills || []).map((s: any) => ({
           name: s.name,
@@ -200,11 +212,11 @@ export default async function DashboardPage() {
         studentId,
         name: mappedData.name,
         gender: mappedData.gender,
-        degree: snap.degree || profile?.degree || "B.Tech – Computer Science Engineering",
+        degree: snap.degree || profile?.degree || "Engineering & Computer Science",
         college: snap.profile?.college || profile?.college_name || "College not set",
         avatarUrl: mappedData.profileImage,
-        issueDate: snap.issue_date || "18 MAY 2025",
-        expiryDate: snap.expiry_date || "17 MAY 2027",
+        issueDate: snap.issue_date || dynamicIssueDate,
+        expiryDate: snap.expiry_date || dynamicExpiryDate,
         // `||` treated a real count of 0 as missing and substituted 14/12/3, so a
         // brand-new account displayed a passport full of achievements it did not
         // have. `??` keeps a genuine zero.
