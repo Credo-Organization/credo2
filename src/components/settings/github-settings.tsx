@@ -79,6 +79,7 @@ export function GitHubSettings({ connection }: { connection: GitHubConnection | 
       {/* Synchronized GitHub Contribution Heatmap */}
       <div className="pt-2 w-full min-w-0 max-w-full overflow-hidden">
         <GitHubCalendar
+          username={connection?.github_username}
           title={connection ? `${connection.github_username}'s Git Activity Heatmap` : "Live Commit Velocity Preview"}
           className="border-2 border-zinc-900 dark:border-zinc-700 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000] w-full min-w-0 max-w-full overflow-hidden"
         />

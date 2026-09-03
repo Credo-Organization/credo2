@@ -19,6 +19,7 @@ export default async function DashboardPage() {
   let certificateItems: CertificateItem[] = [];
   let topMatches: { title: string; orgName?: string; matchScore: number }[] = [];
   let hasPassport = false;
+  let connectedGithubUsername: string | undefined = undefined;
 
   if (user) {
     const [passportRes, certsRes, profileRes, connectionRes] = await Promise.all([
@@ -48,6 +49,7 @@ export default async function DashboardPage() {
     const certs = certsRes.data;
     const profile = profileRes.data;
     const connection = connectionRes.data;
+    connectedGithubUsername = connection?.github_username;
     hasPassport = Boolean(passport && passport.length > 0);
 
     // Compute live deterministic internship matches for preview card
@@ -173,6 +175,7 @@ export default async function DashboardPage() {
         cardId,
         studentId,
         name: userName,
+        githubUsername: connection?.github_username || snap.github?.username,
         gender: studentGender,
         careerGoal: snap.profile?.headline || profile?.headline || "Software Engineer",
         profileImage: studentAvatar,
@@ -274,6 +277,7 @@ export default async function DashboardPage() {
           repos={repoItems}
           languages={languageScores}
           certificates={certificateItems}
+          githubUsername={connectedGithubUsername}
         />
       </div>
     </div>

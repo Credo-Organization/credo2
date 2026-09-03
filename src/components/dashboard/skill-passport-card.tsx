@@ -143,6 +143,7 @@ export type SkillPassportData = {
     recommendedTechStack: string[];
     suggestedProjects?: { name: string; description: string }[];
   };
+  githubUsername?: string;
   githubHeatmap?: number[][];
   evidence: {
     githubRepos: { name: string; url: string; language: string; stars: number }[];
@@ -352,6 +353,7 @@ export function SkillPassportCard({ data = DUMMY_DATA }: { data?: SkillPassportD
       <div className="pt-1 pb-1 relative z-10">
         <SectionTitle>Deterministic Code Contribution</SectionTitle>
         <GitHubCalendar
+          username={data.githubUsername}
           showSummary={false}
           showLegend={true}
           maxWeeks={31}

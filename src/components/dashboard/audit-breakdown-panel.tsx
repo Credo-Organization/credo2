@@ -57,6 +57,7 @@ interface AuditBreakdownProps {
   repos?: RepoItem[];
   languages?: LanguageScore[];
   certificates?: CertificateItem[];
+  githubUsername?: string;
   className?: string;
 }
 
@@ -91,6 +92,7 @@ export function AuditBreakdownPanel({
   repos = [],
   languages = [],
   certificates = [],
+  githubUsername,
   className,
 }: AuditBreakdownProps) {
   const [activeTab, setActiveTab] = useState<"repos" | "languages" | "certificates" | "activity">("repos");
@@ -551,6 +553,7 @@ export function AuditBreakdownPanel({
       {activeTab === "activity" && (
         <div className="pt-6 space-y-4 relative z-10 animate-fade-in">
           <GitHubCalendar
+            username={githubUsername}
             title="365-Day Verified Commit Velocity & Pull Request Activity"
             className="border-2 border-zinc-900 dark:border-zinc-700 shadow-[3px_3px_0px_0px_#18181B] dark:shadow-[3px_3px_0px_0px_#000000]"
           />
