@@ -18,7 +18,12 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
-export function LoginModal({ children }: { children: React.ReactNode }) {
+interface LoginModalProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function LoginModal({ children, className }: LoginModalProps) {
   const router = useRouter();
   const [role, setRole] = useState<"student" | "recruiter">("student");
   const [email, setEmail] = useState("");
@@ -130,7 +135,7 @@ export function LoginModal({ children }: { children: React.ReactNode }) {
 
   return (
     <Dialog>
-      <DialogTrigger render={<div className="inline-block" />} nativeButton={false}>
+      <DialogTrigger render={<div className={cn("inline-block", className)} />} nativeButton={false}>
         {children}
       </DialogTrigger>
 

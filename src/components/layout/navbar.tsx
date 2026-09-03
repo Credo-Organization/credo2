@@ -40,19 +40,31 @@ export function Navbar() {
         </Link>
 
         {/* ── Center Nav Links ── */}
-        <nav className="hidden md:flex items-center gap-8">
-          <a
-            href="#how-it-works"
+        <nav className="hidden md:flex items-center gap-7">
+          <Link
+            href="/#how-it-works"
             className="text-sm font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 transition-colors"
           >
             How it Works
-          </a>
-          <a
-            href="#features"
+          </Link>
+          <Link
+            href="/#features"
             className="text-sm font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 transition-colors"
           >
             Features
-          </a>
+          </Link>
+          <Link
+            href="/teams"
+            className="text-sm font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 transition-colors"
+          >
+            Teams
+          </Link>
+          <Link
+            href="/pricing"
+            className="text-sm font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 transition-colors"
+          >
+            Pricing
+          </Link>
         </nav>
 
         {/* ── Right Action: Login Pill Button ── */}
@@ -83,20 +95,34 @@ export function Navbar() {
       {/* ── Mobile Dropdown Menu ── */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#FAF9F6] dark:bg-zinc-900 border-b-2 border-zinc-900 dark:border-zinc-800 px-6 py-5 shadow-lg flex flex-col gap-2 animate-in slide-in-from-top-2">
-          <a
-            href="#how-it-works"
+          <Link
+            href="/#how-it-works"
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
           >
             How it Works
-          </a>
-          <a
-            href="#features"
+          </Link>
+          <Link
+            href="/#features"
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
           >
             Features
-          </a>
+          </Link>
+          <Link
+            href="/teams"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
+          >
+            Teams
+          </Link>
+          <Link
+            href="/pricing"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-sm font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 py-2 flex items-center"
+          >
+            Pricing
+          </Link>
           <div className="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
             <LoginModal>
               <button

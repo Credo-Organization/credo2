@@ -45,18 +45,19 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { name: "Skill Passport", href: "#preview" },
-                { name: "How It Works", href: "#how-it-works" },
-                { name: "Features", href: "#features" },
-                { name: "Team Matcher", href: "/teams" },
+                { name: "Skill Passport", href: "/#preview" },
+                { name: "How It Works", href: "/#how-it-works" },
+                { name: "Features", href: "/#features" },
+                { name: "Hackathon Teams", href: "/teams" },
+                { name: "SaaS Pricing", href: "/pricing" },
               ].map((item) => (
                 <li key={item.name}>
-                  <a
+                  <Link
                     href={item.href}
                     className="text-sm text-zinc-600 hover:text-blue-600 font-medium transition-colors"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
