@@ -12,9 +12,7 @@ export function GitHubSettings({ connection }: { connection: GitHubConnection | 
   const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   const handleConnect = () => {
-    const backendUrl = process.env.NEXT_PUBLIC_PYTHON_BACKEND_URL || "http://localhost:8000";
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.href = `${backendUrl}/auth/login`;
+    window.location.href = "/api/auth/github";
   };
 
   const handleDisconnect = async () => {
