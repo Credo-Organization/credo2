@@ -140,17 +140,40 @@ def compute_match(state: GraphState):
                 except Exception as e:
                     print(f"--- Gateway model {model_candidate} failed: {e} ---")
 
-        # 2. Try Direct Gemini API (Google Generative AI)
+        # 2. Try Direct Gemini API (Google Generative AI) with Key Pooling
         if res is None:
-            google_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
-            if google_key and google_key != "mock_key_for_now":
+            try:
+                from gitproof.llm.key_pool import get_key_pool
+            except ImportError:
                 try:
-                    print("--- Attempting Match Evaluator via Native Gemini (gemini-2.5-flash) ---")
-                    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=google_key, timeout=10)
-                    structured_llm = llm.with_structured_output(MatchResultSchema)
-                    res = structured_llm.invoke(prompt)
-                except Exception as e:
-                    print(f"--- Native Gemini failed: {e} ---")
+                    from llm.key_pool import get_key_pool
+                except ImportError:
+                    get_key_pool = None
+
+            pool = get_key_pool() if get_key_pool else None
+            key_candidates = pool.get_key_candidates() if pool else []
+            keys_to_try = [k.key for k in key_candidates] or [
+                k for k in [os.environ.get("GOOGLE_API_KEY"), os.environ.get("GEMINI_API_KEY")]
+                if k and k != "mock_key_for_now"
+            ]
+
+            for google_key in keys_to_try:
+                if res is not None:
+                    break
+                for gem_model in ["gemini-flash-latest", "gemini-pro-latest", "gemini-flash-lite-latest"]:
+                    try:
+                        print(f"--- Attempting Match Evaluator via Native Gemini ({gem_model}) ---")
+                        llm = ChatGoogleGenerativeAI(model=gem_model, google_api_key=google_key, timeout=10)
+                        structured_llm = llm.with_structured_output(MatchResultSchema)
+                        res = structured_llm.invoke(prompt)
+                        if res:
+                            if pool:
+                                pool.mark_success(google_key)
+                            break
+                    except Exception as e:
+                        if pool:
+                            pool.mark_failure(google_key, status_code=429 if ("429" in str(e) or "quota" in str(e).lower()) else 500)
+                        print(f"--- Native Gemini ({gem_model}) note: {e} ---")
 
         # 3. Deterministic scoring fallback if all LLMs are unreachable
         if res is None:

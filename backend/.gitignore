@@ -1,0 +1,12 @@
+# Backend ignore
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.db
+gitproof_memory.db
+.env*
+!*.env.example

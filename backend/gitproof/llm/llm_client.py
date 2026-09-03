@@ -67,19 +67,23 @@ def _extract_json_object(raw_text: str) -> Optional[dict]:
     return None
 
 
+try:
+    from llm.key_pool import get_key_pool, get_response_cache, mask_key
+except ImportError:
+    from gitproof.llm.key_pool import get_key_pool, get_response_cache, mask_key
+
+
 class LLMClient:
-    GEMINI_MODELS = ["gemini-flash-latest", "gemini-pro-latest", "gemini-2.5-flash"]
+    GEMINI_MODELS = ["gemini-flash-latest", "gemini-pro-latest", "gemini-flash-lite-latest"]
     GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 
     NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
     NVIDIA_DEFAULT_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 
     def __init__(self):
-        self.gemini_api_key = (
-            os.getenv("GEMINI_API_KEY")
-            or os.getenv("VITE_GEMINI_API_KEY")
-            or os.getenv("GOOGLE_API_KEY")
-        )
+        self.key_pool = get_key_pool()
+        self.cache = get_response_cache()
+
         self.nvidia_api_key = (
             os.getenv("NVIDIA_API_KEY")
             or os.getenv("NVAPI_KEY")
@@ -87,7 +91,7 @@ class LLMClient:
         self.nvidia_base_url = os.getenv("NVIDIA_BASE_URL", self.NVIDIA_BASE_URL)
         self.nvidia_model = os.getenv("NVIDIA_MODEL", self.NVIDIA_DEFAULT_MODEL)
 
-        self.gemini_available = bool(self.gemini_api_key and not self.gemini_api_key.startswith("paste_"))
+        self.gemini_available = self.key_pool.has_keys
         self.nvidia_available = bool(self.nvidia_api_key and not self.nvidia_api_key.startswith("paste_"))
         self.available = self.gemini_available or self.nvidia_available
 
@@ -104,7 +108,7 @@ class LLMClient:
         else:
             providers = []
             if self.gemini_available:
-                providers.append(f"Gemini ({self.MODEL})")
+                providers.append(f"Gemini Pool ({self.key_pool.key_count} active keys, primary={self.MODEL})")
             if self.nvidia_available:
                 providers.append(f"NVIDIA Nemotron ({self.nvidia_model})")
             logger.info("LLM client ready with provider(s): %s", ", ".join(providers))
@@ -118,30 +122,64 @@ class LLMClient:
             return None
 
         for model in self.GEMINI_MODELS:
-            url = f"{self.GEMINI_BASE_URL}/{model}:generateContent?key={self.gemini_api_key}"
-            payload = {
-                "contents": [
-                    {
-                        "role": "user",
-                        "parts": [{"text": prompt}],
-                    }
-                ]
-            }
-            try:
-                resp = requests.post(url, json=payload, timeout=20)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    candidates = data.get("candidates", [])
-                    if candidates:
-                        parts = candidates[0].get("content", {}).get("parts", [])
-                        if parts:
-                            self.MODEL = model
-                            self.active_provider = "gemini"
-                            return parts[0].get("text", "")
-                else:
-                    logger.debug("Gemini model %s returned HTTP %s: %s", model, resp.status_code, resp.text[:120])
-            except Exception as exc:
-                logger.warning("Gemini request failed for model %s: %s", model, exc)
+            # 1. Check in-memory cache
+            cached = self.cache.get(model, prompt)
+            if cached:
+                self.MODEL = model
+                self.active_provider = "gemini"
+                return cached
+
+            # 2. Iterate through healthy keys in the pool
+            key_candidates = self.key_pool.get_key_candidates()
+            for candidate in key_candidates:
+                # Use clean URL (no key in query string to prevent access log leakage)
+                url = f"{self.GEMINI_BASE_URL}/{model}:generateContent"
+                headers = {
+                    "x-goog-api-key": candidate.key,
+                    "Content-Type": "application/json",
+                }
+                payload = {
+                    "contents": [
+                        {
+                            "role": "user",
+                            "parts": [{"text": prompt}],
+                        }
+                    ]
+                }
+                try:
+                    resp = requests.post(url, headers=headers, json=payload, timeout=20)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        candidates = data.get("candidates", [])
+                        if candidates:
+                            parts = candidates[0].get("content", {}).get("parts", [])
+                            if parts:
+                                text = parts[0].get("text", "")
+                                self.MODEL = model
+                                self.active_provider = "gemini"
+                                self.key_pool.mark_success(candidate.key)
+                                self.cache.set(model, prompt, text)
+                                return text
+                    elif resp.status_code in (429, 403):
+                        logger.warning(
+                            "Gemini key %s throttled (HTTP %d) on %s. Failing over to next key...",
+                            candidate.masked,
+                            resp.status_code,
+                            model,
+                        )
+                        self.key_pool.mark_failure(candidate.key, status_code=resp.status_code)
+                        continue  # Try next key in the pool immediately!
+                    else:
+                        logger.debug(
+                            "Gemini model %s returned HTTP %s with key %s: %s",
+                            model,
+                            resp.status_code,
+                            candidate.masked,
+                            resp.text[:120],
+                        )
+                except Exception as exc:
+                    logger.warning("Gemini request failed for model %s with key %s: %s", model, candidate.masked, exc)
+                    self.key_pool.mark_failure(candidate.key, status_code=500)
 
         return None
 
