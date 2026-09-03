@@ -3,7 +3,7 @@ import { randomBytes } from "crypto";
 
 export const OAUTH_STATE_COOKIE = "gh_oauth_state";
 
-export async function GET() {
+export async function GET(request: Request) {
   const clientId = process.env.GITHUB_CLIENT_ID;
   if (!clientId) {
     return NextResponse.json({ error: "Missing GitHub Client ID" }, { status: 500 });
@@ -17,9 +17,16 @@ export async function GET() {
     state: state,
   };
 
-  if (process.env.GITHUB_REDIRECT_URI) {
-    params["redirect_uri"] = process.env.GITHUB_REDIRECT_URI;
+  // Determine redirect_uri: explicit env override or dynamically from request host
+  let redirectUri = process.env.GITHUB_REDIRECT_URI;
+  if (!redirectUri) {
+    const url = new URL(request.url);
+    const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || url.host;
+    const proto = request.headers.get("x-forwarded-proto") || (url.protocol.replace(":", ""));
+    redirectUri = `${proto}://${host}/api/auth/github/callback`;
   }
+
+  params["redirect_uri"] = redirectUri;
 
   const searchParams = new URLSearchParams(params);
   const githubAuthUrl = `https://github.com/login/oauth/authorize?${searchParams.toString()}`;
